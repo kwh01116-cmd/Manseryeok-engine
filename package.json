@@ -1,0 +1,19 @@
+{
+  "name": "@manseryeok/engine",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Evidence-driven Korean Manseryeok and Myeongli engine",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "check": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
