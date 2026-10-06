@@ -37,8 +37,19 @@ test("1987 DST transition has explicit gap and overlap instead of silently guess
   assert.equal(resolveKoreanDst1987To1988("1987-10-11T03:00:00").status, "STANDARD");
 });
 
-test("1988 follows the same legal second-Sunday rule and other years are quarantined", () => {
+test("1988 DST transition boundaries expose the full spring gap and autumn overlap", () => {
+  assert.equal(resolveKoreanDst1987To1988("1988-05-08T01:59:59").status, "STANDARD");
+  assert.throws(() => resolveKoreanDst1987To1988("1988-05-08T02:00:00"), /Nonexistent/);
+  assert.throws(() => resolveKoreanDst1987To1988("1988-05-08T02:59:59"), /Nonexistent/);
   assert.equal(resolveKoreanDst1987To1988("1988-05-08T03:00:00").status, "DAYLIGHT");
+
+  assert.equal(resolveKoreanDst1987To1988("1988-10-09T01:59:59").status, "DAYLIGHT");
+  assert.throws(() => resolveKoreanDst1987To1988("1988-10-09T02:00:00"), /Ambiguous/);
+  assert.throws(() => resolveKoreanDst1987To1988("1988-10-09T02:59:59"), /Ambiguous/);
   assert.equal(resolveKoreanDst1987To1988("1988-10-09T03:00:00").status, "STANDARD");
+});
+
+test("DST resolver quarantines years outside the explicitly encoded legal period", () => {
   assert.deepEqual(resolveKoreanDst1987To1988("1958-07-01T12:00:00"), { status: "UNSUPPORTED_YEAR" });
+  assert.deepEqual(resolveKoreanDst1987To1988("1989-01-01T00:00:00"), { status: "UNSUPPORTED_YEAR" });
 });
