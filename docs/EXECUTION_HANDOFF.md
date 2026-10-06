@@ -5,7 +5,7 @@ Repository state is the canonical shared state between interactive and scheduled
 ## Current workstream
 - Branch: `agent/foundation-20261006`
 - PR: #1
-- Head before this update: `ca6cbac5523afdbf0639b6bd1aa2f7edc0571a46`
+- Head before this update: `93b0ddce5c20ce3a4363b2d46b255fbf48e53005`
 - Milestone: M1 modern Korea Manseryeok core — official solar-term fixture/adjacency gate
 - PR remains draft.
 
@@ -18,26 +18,25 @@ Repository state is the canonical shared state between interactive and scheduled
 - last committed executable verification remains 16/16 tests
 
 ## This run
-- Re-read main comparison, PR #1, ROADMAP, package scripts, solar-term code/tests, source registry and this handoff.
-- PR #1 is mergeable; branch is 37 commits ahead / 0 behind main.
-- Rechecked KASI 2026 and 2027 24-solar-term tables; no broader provenance research was repeated.
-- Prepared a minimal M1 slice: 48 KST/MINUTE events, Gregorian/order/basis/precision/duplicate validator, and civil-year-crossing adjacency lookup.
-- Reconstructed the relevant TypeScript slice locally with Node 22.16.0 / TypeScript 5.8.3 and ran `npm run check`: PASS; 3/3 new fixture tests passed.
-- A direct GitHub create-file write for the prepared executable slice was blocked by the tool safety layer before repository mutation. Branch head remained unchanged; no executable commit is claimed.
+- Re-read PR #1/head, ROADMAP, package scripts, actual solar-term source/test paths, index and this handoff.
+- Start head was `93b0ddce5c20ce3a4363b2d46b255fbf48e53005`; no stale-write drift occurred before the attempted executable write.
+- Rechecked the complete KASI 2026/2027 24-solar-term tables: 48 KST minute-published values agree with the prepared corpus.
+- Retried the smallest M1 executable addition as a new file (`src/calendar/solarTermEvents.ts`) to avoid blind overwrite. GitHub blocked the create-file mutation before repository change.
+- No executable commit or new test result is claimed this run.
+
+## Checks
+- Repository canonical `npm run check`: NOT RUN this execution; container checkout remains unavailable.
+- Last committed executable verification: 16/16 tests.
+- Prior reconstructed candidate slice check is evidence only, not verification of committed branch.
 
 ## Next safe tasks
-1. Re-read PR head and target SHAs, then retry committing the already-tested solar-term fixture/validator/adjacency slice without bypassing synchronization safeguards.
-2. Run canonical `npm run check` against the actual committed branch; require all existing + new tests green.
-3. After that gate is green, implement Lichun year-pillar boundary, then twelve-節 month boundaries. After M1 Four Pillars closes, add a thin V0 end-to-end Manseryeok/API before M2.
-
-## Synchronization protocol
-- Re-read PR head and target SHA immediately before every write.
-- If either changed, discard stale assumptions and re-read.
-- Never blind-overwrite or create a parallel PR while #1 remains compatible.
+1. Retry the already-prepared 48-event fixture/validator/adjacency addition only after re-reading head; if executable mutation remains blocked, do not bypass or create a parallel PR.
+2. Once committed, run canonical `npm run check` on the actual branch and require existing + new tests green.
+3. Then implement Lichun year-pillar boundary and twelve-節 month boundaries; after M1 Four Pillars closes, add thin V0 end-to-end Manseryeok/API before M2.
 
 ## Open / disputed / blockers
-- GitHub executable write was blocked this run despite read access and unchanged head; do not claim the prepared code is in-repo.
-- Container cannot resolve github.com, so the actual branch cannot currently be cloned there; the passing check was on a reconstructed relevant slice.
+- GitHub executable create-file mutation is currently blocked by tool safety checks despite successful repository reads and documentation writes.
+- PR mergeable status is transient in connector responses; do not infer a content conflict without compare evidence.
 - No default for Zi rollover, true-solar-time use, hidden-stem weighting, strength scoring, pattern selection or useful-god selection.
 - Minute-published solar-term values are not exact-second boundaries.
 - Official authority, KASI transcription/computational references, astronomical calculations and Myeongli policy remain separate.
