@@ -51,13 +51,15 @@ This registry separates legal/civil-time reconstruction from Myeongli policy. Ci
 - source-history notes:
   - the law page preserves supplementary provisions for Presidential Decree No. 74 (1949-04-02), effective 1949-04-03
   - Presidential Decree No. 182 (1949-09-10) and No. 383 (1950-09-06) are preserved as amendments
-- independent cross-check: multiple modern Korean Manseryeok implementations converge on a 1950-04-01 to 1950-09-10 date interval
-- unresolved semantic point: the historical legal word `자정` must be mapped to an ISO local-time boundary with care, especially for the fall-back transition. The source proves the clock operation and named date but this registry does not yet promote an inferred overlap interval to executable truth.
-- codeability: CONDITIONAL pending boundary-semantics closure
-- dispute status: implementation-date tables broadly agree; exact ISO boundary semantics still under review
-- policy required: no Myeongli policy; this is a historical-time evidence issue
-- adversarial counterexample: do not copy a modern table's `1950-09-10T00:00` as authoritative merely because several implementations agree
-- executable: no
+- independent cross-checks:
+  - multiple modern Korean Manseryeok implementations converge on a 1950-04-01 to 1950-09-10 date interval
+  - current IANA tzdb independently encodes Korea's 1950 start as April 1 00:00 and the autumn rule as the first Saturday on/after September 7 at 24:00; in 1950 that is September 9 24:00 = September 10 00:00
+- boundary interpretation: the primary law orders the clock operation at the named midnight, while IANA's independent transition encoding resolves the same 1950 end boundary as September 10 00:00. This is now strong enough to treat the 1950 interval boundary as exact for civil-time reconstruction.
+- codeability: EXACT for the 1950 transition interval
+- dispute status: no remaining material civil-time dispute found for the 1950 ISO boundary; provenance still records that IANA is a cross-check, not the legal authority
+- policy required: no Myeongli policy
+- adversarial counterexample: do not generalize the 1950 annual wording to 1951 or later without checking the later legal amendments and wartime history
+- executable: not yet; held until the historical resolver can add the period without pretending the remaining 1948-1960 years are closed
 
 ## KR_DST_1948_1960_REMAINING
 
