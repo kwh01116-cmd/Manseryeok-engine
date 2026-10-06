@@ -31,4 +31,4 @@ The first coded slice intentionally covers only:
 - sexagenary cycle
 - stem-to-stem ten-god relation
 
-Future slices should add Korean historical-time reconstruction and official solar-term fixtures before expanding into interpretation.
+Critical-path correction: historical Korean time remains isolated infrastructure but is not an M1 blocker. Future slices prioritize official KASA/KASI solar-term and lunisolar golden fixtures, then a complete modern-Korea Four-Pillars pipeline and deterministic ChartFacts. Historical DST/pre-1908 work returns after that vertical slice unless a required fixture depends on it. See `docs/ROADMAP.md`.
