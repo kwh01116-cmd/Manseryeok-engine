@@ -8,6 +8,8 @@ import {
   ganZhiAt,
   ganZhiIndex,
   tenGod,
+  resolveKoreanStandardTime,
+  resolveKoreanDst1987To1988,
 } from "../dist/index.js";
 
 test("甲 day-master ten-god row matches the canonical deterministic mapping", () => {
@@ -53,4 +55,22 @@ test("invalid parity stem-branch combinations are rejected by index lookup", () 
 test("base cardinalities remain canonical", () => {
   assert.equal(HEAVENLY_STEMS.length, 10);
   assert.equal(EARTHLY_BRANCHES.length, 12);
+});
+
+
+test("Korean standard-time boundaries do not assume modern UTC+9 retroactively", () => {
+  assert.equal(resolveKoreanStandardTime("1908-03-31"), null);
+  assert.equal(resolveKoreanStandardTime("1908-04-01").utcOffsetMinutes, 510);
+  assert.equal(resolveKoreanStandardTime("1912-01-01").utcOffsetMinutes, 540);
+  assert.equal(resolveKoreanStandardTime("1954-03-21").utcOffsetMinutes, 510);
+  assert.equal(resolveKoreanStandardTime("1961-08-10").utcOffsetMinutes, 540);
+});
+
+test("1987 DST transition gaps and folds are explicit instead of guessed", () => {
+  assert.equal(resolveKoreanDst1987To1988("1987-05-10T01:59:59").status, "STANDARD");
+  assert.throws(() => resolveKoreanDst1987To1988("1987-05-10T02:30:00"), /Nonexistent Korean civil time/);
+  assert.equal(resolveKoreanDst1987To1988("1987-05-10T03:00:00").status, "DAYLIGHT");
+  assert.throws(() => resolveKoreanDst1987To1988("1987-10-11T02:30:00"), /Ambiguous Korean civil time/);
+  assert.equal(resolveKoreanDst1987To1988("1987-10-11T03:00:00").status, "STANDARD");
+  assert.equal(resolveKoreanDst1987To1988("1989-01-01T00:00:00").status, "UNSUPPORTED_YEAR");
 });
