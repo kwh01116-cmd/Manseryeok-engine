@@ -48,3 +48,12 @@ Caution: this validates cycle arithmetic, not 子時換日.
 
 ## Registry rule
 Store normalized facts with source ID, edition/publication, retrieval date, time basis and source precision. Distinguish (1) official publication authority from (2) the exact surface used to transcribe a value. Source files are not required in-repository for a fact to be traceable.
+
+
+## CLASSICAL-YUANHAIZIPING-RISHANGQISHI
+Work: 增補淵海子平音義評註 / 淵海子平 tradition, 卷一, 論日上起時例.
+Evidence class: DIRECT_PRIMARY_SCAN.
+Retrieved: 2026-10-07.
+Directly inspected scan evidence: the page headed 論日上起時例 prints the Five-Rat sequence beginning 甲己還加甲、乙庚丙作初、丙辛從戊起、丁壬庚子居、戊癸何方發. Independent digitized scans/editions expose the same section heading and sequence.
+Use: primary-text provenance for the deterministic mapping from an explicitly supplied day stem and hour branch to the hour stem.
+Caution: this passage supports 日上起時/Five-Rat mapping. It does not by itself settle whether the civil day changes at 23:00 or 00:00, nor which day stem a late-子 policy must supply.

@@ -27,7 +27,7 @@ For 23:00–23:59, hour branch can be 子 while implementations may differ over 
 Once a day stem and hour branch are explicitly supplied, Five-Rat lookup can be modeled as a deterministic table. Keep that pure lookup separate from effective-time conversion, day-date selection, and late-Zi day-stem reference.
 
 ## Evidence state
-Modern Korean/Chinese implementation surfaces independently confirm that 23:00-vs-00:00 rollover conventions coexist. They demonstrate present-day disagreement, not authority for a default. Secondary material reproduces the Five-Rat mnemonic beginning 甲己還加甲 / 乙庚丙作初, but primary-text genealogy is not yet pinned strongly enough for a canonical classical-source claim.
+Modern Korean/Chinese implementation surfaces independently confirm that 23:00-vs-00:00 rollover conventions coexist. They demonstrate present-day disagreement, not authority for a default. Directly inspected scans of 《淵海子平》卷一, section 論日上起時例, print the Five-Rat sequence beginning 甲己還加甲 / 乙庚丙作初 / 丙辛從戊起 / 丁壬庚子居 / 戊癸何方發. This closes provenance for the pure day-stem + hour-branch mapping, but does not settle 子時 day rollover or late-子 day-stem selection.
 
 Claims that early Zi-ping texts uniformly mandate one rollover convention remain UNVERIFIED until directly inspected primary editions/passages are pinned.
 
@@ -36,4 +36,4 @@ Claims that early Zi-ping texts uniformly mandate one rollover convention remain
 - 23:00 and 23:30: CIVIL_MIDNIGHT vs ZI_START may diverge by one sexagenary day.
 - 00:00 and 00:30: both rollover policies agree on the new civil date.
 - Changing TIME_BASIS may move an instant across a 子 boundary; test independently from DAY_ROLLOVER.
-- Five-Rat table tests should cover all ten day stems and all twelve hour branches only after provenance is pinned.
+- Five-Rat table tests cover all ten day stems and all twelve hour branches; time-basis and rollover remain outside the pure lookup.
