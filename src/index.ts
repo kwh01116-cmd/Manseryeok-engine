@@ -1,4 +1,5 @@
 export * from "./calendar/dayPillar.js";
+export * from "./calendar/dayRollover.js";
 export * from "./calendar/hourPillar.js";
 export * from "./calendar/solarTerms.js";
 export * from "./domain/branches.js";
