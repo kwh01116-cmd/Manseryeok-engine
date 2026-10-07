@@ -2,16 +2,16 @@
 
 Branch: agent/foundation-20261006
 PR: #1 draft/open
-Head at run start: af3fa21553df5a21eaad416921f19967d2735457
-Executable commit this run: f48fe996355acfc75b354bb9dc68828cb0e95e38
-Repository-head invariant: this handoff is committed immediately on top of the executable commit and the branch ref is moved with expected-head lease.
+Head at run start: ba5344cd4f59db8299593c4d189655b9cc4828be
+Test commit this run: 796df7e188f90039c3b79a28bb27eeac43d74ce7
+Repository-head invariant: target file blob SHAs and PR head were re-read immediately before each write; no blind overwrite.
 
-This run: added policy-explicit day/hour composition without choosing a Korean-service default. resolveDayHourPillars consumes an already-selected effective clock, applies caller-selected DAY_ROLLOVER, and separately selects whether Five-Rat hour stem uses the selected day pillar or civil-date day pillar. TIME_BASIS remains upstream.
+This run: advanced M1 gate 12 with a deterministic metamorphic corpus for the policy-explicit day/hour composition. Across 400 consecutive Gregorian dates and boundary-relevant clocks, the test requires hour-stem-reference variants to diverge only for ZI_START at 23:00-23:59, and to converge otherwise. It also requires effectiveDate to advance exactly in that same late-Zi window. No production executable logic or policy default changed.
 
-Checks: direct fresh clone/full npm run check attempted and blocked before checkout by github.com DNS resolution. Reconstructed the exact relevant composition slice with Node 22.16.0 / TypeScript 5.8.3: strict compile PASS; runtime late-Zi divergence PASS (2000-01-07 23:30 + ZI_START => 乙丑日/丙子時 under SELECTED_DAY_PILLAR vs 乙丑日/甲子時 under CIVIL_DATE_DAY_PILLAR). Full PR is not claimed green.
+Checks: direct fresh clone / npm run check was retried and blocked before checkout by github.com DNS resolution (Could not resolve host). Because the repository could not be materialized, the new test commit is NOT claimed canonical-green. Previous verified slice results remain historical evidence only, not a substitute for this run's canonical check.
 
-Current milestone/gate: M1 Four Pillars composition. Date-only day pillar, explicit day rollover, effective-clock hour branch, Five-Rat lookup, and explicit day/hour composition now exist. Canonical full check remains verification debt; no policy default has been chosen.
+Current milestone/gate: M1 randomized/metamorphic Four-Pillars invariants (ROADMAP immediate queue #12). Day/hour metamorphic coverage is now present but canonical verification debt remains open. Year/month randomized invariants and full Four-Pillars composition properties remain to be added after the check environment is available.
 
-Next safe tasks: (1) retry full npm run check; (2) add randomized/metamorphic Four-Pillars invariants, especially that hour-stem-reference changes output only when the referenced day stem differs; (3) then move to lunar/solar and leap-month fixtures per ROADMAP.
+Next safe tasks: (1) retry canonical npm run check before any production executable change; (2) add year/month boundary-preserving metamorphic invariants without inventing exact-instant semantics inside published-minute ambiguity; (3) after M1 randomized invariants are green, move to lunar/solar and leap-month fixtures.
 
-Unresolved/disputed/blockers: Zi rollover remains caller-selected. Korean civil vs local mean/apparent solar time remains policy-dependent and upstream. Late-Zi hour-stem reference remains disputed; both variants are represented, neither is privileged. Historical timezone/DST stays backlog unless it blocks a modern-Korea fixture.
+Unresolved/disputed/blockers: Zi rollover, time basis, and late-Zi hour-stem reference remain caller-selected; neither variant is privileged. Full repository check is blocked by transient github.com DNS failure. Historical timezone/DST stays backlog unless it blocks a modern-Korea fixture.
