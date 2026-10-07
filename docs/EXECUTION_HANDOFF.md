@@ -4,39 +4,37 @@ Repository state is the canonical shared state between interactive and scheduled
 
 ## Current workstream
 - Branch: `agent/foundation-20261006`
-- PR: #1
-- Head before this update: `fe9cebf3e4f405a335b2aac8f2ce0ad48b8584b9`
-- Milestone: M1 modern Korea Manseryeok core — solar-term timeline/official fixture gate
-- PR remains draft.
+- PR: #1 (draft)
+- Head before this update: `e973a32c272ac7ae119c92856314b0a7a406c908`
+- Milestone: M1 modern Korea Manseryeok core — year-pillar verification gate before month-pillar work.
 
 ## Verified branch state
 - deterministic stem/branch, five-element, yin-yang, sexagenary and stem ten-god primitives
 - isolated Korean standard-time and 1987-1988 DST handling
-- TypeScript 5.8.3 exact pin and lockfile
 - factual 24-solar-term taxonomy and source-aware SolarTermEvent
-- research/source/rule/test-vector registries
-- last fully executed canonical verification remains 16/16 tests
+- 2026/2027 Korea solar-term fixture corpus and timeline validation are committed
+- last fully executed canonical verification remains 16/16 tests from before the newer timeline/year-pillar commits
 
 ## This run
-- Re-read PR #1, main comparison, ROADMAP, package scripts, solar-term source and this handoff.
-- Start head `cd1663216e149a343f4c42707d110f796cd0e954`; branch was 39 ahead / 0 behind main and mergeable.
-- Resolved the prior executable-write blocker by using Git object blob/tree/commit plus expected-head ref update rather than Contents create-file.
-- Commit `fe9cebf3e4f405a335b2aac8f2ce0ad48b8584b9` adds `src/calendar/solarTermTimeline.ts` and `test/solar-term-timeline.test.mjs`.
-- Timeline validation enforces real Gregorian minute values, KST basis, MINUTE source precision and strict ordering/no duplicates; adjacency lookup crosses civil-year boundaries without year partition assumptions.
+- Re-read PR #1, current head, package scripts, timeline, official fixture corpus, year-pillar implementation/tests, and this handoff.
+- Found a concrete unverified-test defect: domain GanZhi uses canonical Hanja symbols (甲子, 丙午, 丁未), while the new year-pillar tests incorrectly expected English transliterations (JIA/ZI, BING/WU, DING/WEI).
+- Prepared and committed the test correction only. Month-pillar implementation was intentionally not started because the dependency gate requires the year-pillar slice to pass canonical checks first.
+- Five-Tiger month-stem research was sampled and is consistent across independent implementations: 甲/己→丙寅, 乙/庚→戊寅, 丙/辛→庚寅, 丁/壬→壬寅, 戊/癸→甲寅. Treat this as research input, not yet a verified/canonical rule entry.
 
 ## Checks
-- Fresh clone + `npm run check`: attempted, but container DNS could not resolve github.com; no new canonical verification is claimed.
-- New tests are committed but are NOT marked verified until the actual branch check can run.
-- Last fully executed canonical verification: 16/16 tests before this commit.
+- Static repository audit: FAIL found in committed year-pillar expectations; corrected in this commit.
+- Fresh actual-branch `npm run check`: not completed in this run; do not claim the new year-pillar/timeline tests green.
+- Last fully executed canonical verification remains 16/16 tests before the newer executable commits.
 
 ## Next safe tasks
-1. Re-read head, then add the normalized 2026/2027 official solar-term fixture corpus with authority/transcription provenance and tests against the committed timeline validator.
-2. Run canonical `npm run check` on the actual branch as soon as checkout/network permits; do not merge while the new executable commit is unverified.
-3. Only after green, implement Lichun year-pillar boundary and twelve-節 month boundaries; after M1 Four Pillars closes, add thin V0 end-to-end Manseryeok/API before M2.
+1. Run `npm run check` on the actual branch; fix only concrete failures until green.
+2. After green, add a provenance-bearing rule-registry entry for the twelve 節 month boundaries and Five-Tiger month-stem mapping, with explicit distinction between traditional rule provenance and modern implementation.
+3. Then implement the smallest month-pillar resolver with published-minute ambiguity at 立春/驚蟄/etc. and boundary/adversarial tests.
 
 ## Open / disputed / blockers
-- Executable GitHub mutation is no longer blocked when using atomic Git object writes with an expected-head lease.
-- Actual-branch canonical check remains blocked by container github.com DNS resolution; commit `fe9cebf3...` is therefore unverified.
-- No default for Zi rollover, true-solar-time use, hidden-stem weighting, strength scoring, pattern selection or useful-god selection.
+- Canonical check for timeline/fixture/year-pillar commits is still outstanding.
+- 1984=甲子 anchor still needs canonical source-registry provenance.
+- Five-Tiger mapping has independent agreement but primary/classical genealogy has not yet been pinned in the repository.
+- No default for 子時換日, true-solar-time use, hidden-stem weighting, strength scoring, pattern selection or useful-god selection.
 - Minute-published solar-term values are not exact-second boundaries.
 - Official authority, KASI transcription/computational references, astronomical calculations and Myeongli policy remain separate.
