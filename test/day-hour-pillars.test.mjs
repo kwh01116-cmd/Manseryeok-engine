@@ -42,3 +42,42 @@ test("composition preserves effective date provenance", () => {
     "2000-01-07",
   );
 });
+
+test("metamorphic corpus confines hour-stem-reference divergence to Zi-start late-Zi", () => {
+  const start = Date.UTC(1999, 10, 1);
+  const dayMs = 86_400_000;
+  const clocks = ["00:00", "00:59", "01:00", "10:30", "21:00", "22:59", "23:00", "23:30", "23:59"];
+
+  for (let offset = 0; offset < 400; offset += 1) {
+    const date = new Date(start + offset * dayMs).toISOString().slice(0, 10);
+
+    for (const rollover of ["CIVIL_MIDNIGHT", "ZI_START"]) {
+      for (const clock of clocks) {
+        const selected = resolveDayHourPillars(date, clock, rollover, "SELECTED_DAY_PILLAR");
+        const civil = resolveDayHourPillars(date, clock, rollover, "CIVIL_DATE_DAY_PILLAR");
+        const shouldDiverge = rollover === "ZI_START" && clock >= "23:00";
+
+        assert.equal(
+          selected.effectiveDate !== date,
+          shouldDiverge,
+          date + " " + clock + " " + rollover + " effective-date divergence",
+        );
+        assert.deepEqual(selected.dayPillar, civil.dayPillar, date + " " + clock + " day");
+
+        if (shouldDiverge) {
+          assert.notDeepEqual(
+            selected.hourPillar,
+            civil.hourPillar,
+            date + " " + clock + " expected hour divergence",
+          );
+        } else {
+          assert.deepEqual(
+            selected.hourPillar,
+            civil.hourPillar,
+            date + " " + clock + " expected hour convergence",
+          );
+        }
+      }
+    }
+  }
+});
