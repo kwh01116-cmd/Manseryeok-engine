@@ -1,38 +1,13 @@
 # Execution handoff
 
-## Current workstream
-- Branch: `agent/foundation-20261006`
-- PR: #1 (draft/open)
-- Head at start of this run: `b5be8d7738d46075b86976caa7ff8edd1e566b90`
-- Milestone: M1 — year/month/day arithmetic implemented; time-policy research gate decomposed; full canonical check and hour pillar outstanding.
+Branch: agent/foundation-20261006
+PR: #1 draft/open
+Executable head: ea810f3c16bc5b2c513b8fa1f9cbd54ec77d0197
 
-## This run
-- Re-read PR/head, main comparison, roadmap, package scripts, current source/research docs, tests, and this handoff from repository truth.
-- Researched Zi-hour rollover and Five-Rat material; modern implementations confirm competing 23:00/00:00 conventions, but this is not sufficient to choose a canonical default.
-- Added `docs/research/FOUR_PILLARS_TIME_POLICY.md` defining TIME_BASIS, DAY_ROLLOVER, and LATE_ZI_HOUR_STEM_REFERENCE as independent axes.
-- Deliberately made no executable change: primary-text genealogy for rollover and Five-Rat is not yet pinned strongly enough, and the full branch canonical check remains outstanding.
+This run: primary scan of Yuanhai Ziping volume 1, Ri Shang Qi Shi Li directly confirms the Five-Rat sequence. Implemented pure day-stem plus hour-branch lookup and exhaustive tests. No time-basis or Zi-rollover default was chosen.
 
-## Checks
-- Repository synchronization before write: PASS; PR head and target blob SHA were re-read before mutation.
-- No executable files changed, so no new executable verification claim is made.
-- Full branch `npm run check`: still outstanding from prior runs; do not call the whole PR green.
+Checks: isolated TypeScript 5.8.3 strict typecheck PASS; exhaustive 10 x 12 runtime cases PASS. Full npm run check remains blocked by transient repository checkout DNS failure and the PR is not claimed green.
 
-## Current gate
-- Year/month composition preserves published-minute ambiguity.
-- Date-only day-pillar arithmetic remains policy-free.
-- Time-policy architecture is documented without inventing a default.
-- Five-Rat pure lookup is the next candidate executable slice only after provenance pinning.
+Next safe tasks: run full canonical check when checkout works; model effective-time to hour-branch boundaries independently; add 22:59, 23:00, 23:30, 00:00 composition fixtures.
 
-## Next safe tasks
-1. Pin directly inspected primary/early textual evidence for Five-Rat and Zi-hour treatment; keep later-practice disagreement separate.
-2. Run full branch `npm run check` as soon as a complete checkout is available; fix concrete failures before merge.
-3. If Five-Rat provenance closes, implement pure day-stem + hour-branch lookup with exhaustive finite-table tests, leaving time-basis/rollover selection outside it.
-
-## Open / disputed / blockers
-- Full canonical branch check remains outstanding.
-- Zi-hour rollover has no default; 23:00 and 00:00 conventions coexist in modern practice.
-- Local mean solar time and local apparent solar time remain distinct and unset.
-- Late-Zi hour-stem reference remains policy-dependent and unset.
-- Five-Rat mnemonic is well-attested secondarily but primary-text genealogy is not yet pinned in the repository.
-- 2025 Daxue guard is KASI computational data, not yet pinned to the edition-specific official 2025 Wolryeok notice.
-- 1984=Jia-Zi anchor provenance and Twelve-Jie/Five-Tiger primary-text registry pinning remain open.
+Open: Zi rollover, mean versus apparent solar time, and late-Zi day-stem reference remain policy-dependent. Five-Rat primary provenance is closed for the pure lookup only.
