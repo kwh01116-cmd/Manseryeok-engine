@@ -5,20 +5,19 @@ Repository state is the canonical shared state between interactive and scheduled
 ## Current workstream
 - Branch: `agent/foundation-20261006`
 - PR: #1 (draft)
-- Executable head before this handoff update: `e89a22cb670b46f9a11bd00c6daf14a9055b7b00`
+- Head at run start and immediately before this handoff write: `1512eb0de0ff41470d73cfe15b318ee363cfafe2`
 - Milestone: M1 modern Korea Manseryeok core — active-Jie month-boundary resolver implemented; full canonical verification still outstanding.
 
 ## This run
-- Re-read PR #1, main comparison, ROADMAP, handoff, package scripts, solar-term fixtures/timeline, year/month implementations and month tests.
-- Start head was `b68d6f2a72245f591a9c1ddf1c6376248db988a4`; compare showed 47 ahead / 0 behind main. PR metadata reported mergeable=false, but no branch divergence was present, so that flag alone was not treated as a content conflict.
-- Fresh clone + canonical `npm run check` was attempted first and failed before checkout because the container could not resolve github.com.
-- Commit `e89a22cb670b46f9a11bd00c6daf14a9055b7b00` connects the chronological solar-term event stream to the twelve-Jie month taxonomy. It resolves the active month branch across civil-year boundaries and preserves published-minute equality as an explicit before/after ambiguity.
-- New adversarial coverage includes 2027-01-01 Daxue→Zi continuity, 2027 Xiaohan boundary minute, Yushui not changing the month, 2027 Jingzhe boundary minute, and malformed Gregorian input rejection.
-- Contents-API update was blocked by the mutation safety layer; Git-object blob/tree/commit plus expected-head ref lease succeeded without stale write.
+- Re-read PR #1, main comparison, handoff, package scripts, year/month implementations and month tests from repository truth.
+- Compare at run start: 49 ahead / 0 behind main; PR remained draft/open. PR mergeability was re-read as true before the handoff write.
+- Re-attempted a fresh clone of the actual branch followed by `npm ci && npm run check`.
+- Clone again failed before checkout because the execution container could not resolve `github.com`.
+- No executable code was changed. This is intentional: the unverified year/month stack should not be broadened until canonical branch checks can actually run.
 
 ## Checks
-- Actual-branch canonical `npm run check`: BLOCKED by transient github.com DNS failure at clone; no green claim.
-- No test result is claimed for commit `e89a22c...`; tests were added but could not be executed on the actual branch in this run.
+- Actual-branch canonical `npm run check`: BLOCKED before checkout by `Could not resolve host: github.com`; no green claim.
+- No new executable test result is claimed in this run.
 - Last fully executed canonical branch verification remains the older 16/16 run; newer timeline/year/month commits remain unverified as a whole.
 
 ## Current gate
@@ -29,12 +28,13 @@ Repository state is the canonical shared state between interactive and scheduled
 
 ## Next safe tasks
 1. Run actual-branch `npm run check` as soon as checkout/network permits; fix concrete failures before broadening.
-2. Pin primary-text provenance for twelve-Jie/Five-Tiger in canonical rule/source registry.
-3. Compose year/month boundary candidates at Lichun, then move to independent day-cycle anchors/day pillar after the month gate is green.
+2. After green, compose year/month boundary candidates at Lichun with explicit ambiguity propagation.
+3. Then pin independent day-cycle anchors and implement the day pillar before hour-pillar policy work.
 
 ## Open / disputed / blockers
 - Canonical branch check remains blocked by container DNS, so PR stays draft and must not merge.
 - 1984=Jia-Zi anchor still needs canonical source-registry provenance.
+- Twelve-Jie/Five-Tiger primary-text provenance still needs canonical registry pinning.
 - Exact equality within minute-published solar-term values remains intentionally ambiguous.
 - No default for Zi-hour day rollover, true-solar-time use, hidden-stem weighting, strength scoring, pattern selection or useful-god selection.
 - Official calendar authority, KASI transcription, historical/classical rule provenance, and modern implementation policy remain separate.
