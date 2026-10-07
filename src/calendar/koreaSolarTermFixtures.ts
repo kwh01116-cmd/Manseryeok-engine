@@ -45,12 +45,16 @@ function yearEvents(year: keyof typeof VALUES): readonly SolarTermEvent[] {
   }));
 }
 
-/**
- * Korea-first golden corpus transcribed from KASI's year-specific calendar-data
- * tables and authority-linked to the corresponding KASA annual Wolryeok Yohang.
- * Source precision is intentionally preserved at MINUTE.
- */
+export const KOREA_SOLAR_TERM_GUARD_2025_DAXUE: SolarTermEvent = Object.freeze({
+  term: "DAXUE",
+  displayedDateTime: "2025-12-07T06:05",
+  timeBasis: "KST",
+  sourcePrecision: "MINUTE",
+  sourceIds: [KASI_TRANSCRIPTION_SOURCE_ID],
+});
+
 export const KOREA_SOLAR_TERM_EVENTS_2026_2027: readonly SolarTermEvent[] = [
+  KOREA_SOLAR_TERM_GUARD_2025_DAXUE,
   ...yearEvents(2026),
   ...yearEvents(2027),
 ];

@@ -27,7 +27,8 @@ Issuer: Korea Astronomy and Space Science Institute.
 Evidence class: COMPUTATIONAL_REFERENCE.
 Use: direct transcription/cross-check source for year-specific calendar values such as the displayed 24-solar-term date/hour/minute table.
 Caution: the calendar-data surface explicitly distinguishes itself from the official 월력요항 even when the corresponding annual official notice already exists. Do not infer authority from issuer alone, and do not describe values transcribed from this surface as directly transcribed from KASA.
-Known edition metadata: the 2027 page reports data generation V1.0a at 2026-06-30 12:33.
+Known edition metadata: the 2025 page reports data generation V1.0a at 2024-05-07 14:23; the 2027 page reports V1.0a at 2026-06-30 12:33.
+2025 guard fact: the 2025 table displays DAXUE at 2025-12-07 06:05 (minute precision). The page explicitly states that it is not an official announcement, so this guard may carry KR-KASI-CALENDAR-DATA but must not inherit KR-KASA-WOLRYEOK authority until the edition-specific official source is pinned.
 Time-basis note: KASI's 월력요항 explanatory surface labels the 24-solar-term date/time column as 한국표준시. A fixture must still record its own time basis explicitly rather than inheriting it silently.
 
 
