@@ -5,34 +5,36 @@ Repository state is the canonical shared state between interactive and scheduled
 ## Current workstream
 - Branch: `agent/foundation-20261006`
 - PR: #1 (draft)
-- Executable head before this handoff update: `a90a1fd07b7677f164508d1c350c695f6439c73e`
-- Milestone: M1 modern Korea Manseryeok core — month-pillar deterministic-rule slice; full canonical verification still outstanding.
+- Executable head before this handoff update: `e89a22cb670b46f9a11bd00c6daf14a9055b7b00`
+- Milestone: M1 modern Korea Manseryeok core — active-Jie month-boundary resolver implemented; full canonical verification still outstanding.
 
 ## This run
-- Re-read PR #1, main comparison, ROADMAP, handoff, package scripts, year-pillar implementation/tests and all executable source/test files needed for audit.
-- Start head was `a583062063171538d3933d0792a3b066a64baf16`; branch was 45 ahead / 0 behind main and mergeable.
-- Fresh clone + `npm run check` was attempted first and failed before checkout because the container could not resolve github.com.
-- Primary-text research upgraded Five-Tiger provenance: 《三命通會》卷二 directly records `月從年` and the Five-Tiger verse / 正月起丙寅 sequence. A separate scanned historical text explicitly describes month derivation `以節令為綱`; keep these genealogies separate.
-- Commit `a90a1fd07b7677f164508d1c350c695f6439c73e` adds only deterministic twelve-節 month-boundary taxonomy and Five-Tiger stem derivation plus tests. It does not yet choose exact equality at published-minute boundaries or compose year/month ambiguity.
+- Re-read PR #1, main comparison, ROADMAP, handoff, package scripts, solar-term fixtures/timeline, year/month implementations and month tests.
+- Start head was `b68d6f2a72245f591a9c1ddf1c6376248db988a4`; compare showed 47 ahead / 0 behind main. PR metadata reported mergeable=false, but no branch divergence was present, so that flag alone was not treated as a content conflict.
+- Fresh clone + canonical `npm run check` was attempted first and failed before checkout because the container could not resolve github.com.
+- Commit `e89a22cb670b46f9a11bd00c6daf14a9055b7b00` connects the chronological solar-term event stream to the twelve-Jie month taxonomy. It resolves the active month branch across civil-year boundaries and preserves published-minute equality as an explicit before/after ambiguity.
+- New adversarial coverage includes 2027-01-01 Daxue→Zi continuity, 2027 Xiaohan boundary minute, Yushui not changing the month, 2027 Jingzhe boundary minute, and malformed Gregorian input rejection.
+- Contents-API update was blocked by the mutation safety layer; Git-object blob/tree/commit plus expected-head ref lease succeeded without stale write.
 
 ## Checks
 - Actual-branch canonical `npm run check`: BLOCKED by transient github.com DNS failure at clone; no green claim.
-- Focused reconstructed candidate using Node 22.16.0 / TypeScript 5.8.3: typecheck PASS; build PASS; 3/3 month-rule tests PASS.
+- No test result is claimed for commit `e89a22c...`; tests were added but could not be executed on the actual branch in this run.
 - Last fully executed canonical branch verification remains the older 16/16 run; newer timeline/year/month commits remain unverified as a whole.
 
 ## Current gate
-- Twelve month-boundary 節 mapping: Lichun→寅, Jingzhe→卯, Qingming→辰, Lixia→巳, Mangzhong→午, Xiaoshu→未, Liqiu→申, Bailu→酉, Hanlu→戌, Lidong→亥, Daxue→子, Xiaohan→丑.
-- Five-Tiger deterministic start: 甲/己→丙寅, 乙/庚→戊寅, 丙/辛→庚寅, 丁/壬→壬寅, 戊/癸→甲寅.
-- Boundary-time resolver is intentionally not implemented until published-minute ambiguity composition is explicit.
+- Twelve month-boundary Jie mapping and Five-Tiger deterministic stem derivation are implemented.
+- Active-Jie month branch resolution is implemented with civil-year-independent chronology.
+- Exact equality at a MINUTE-precision boundary returns `PUBLISHED_MINUTE_AMBIGUOUS` with before/after branches; it does not invent an exact second.
+- Full month-pillar composition with year-pillar ambiguity is intentionally not yet collapsed to a single pillar.
 
 ## Next safe tasks
 1. Run actual-branch `npm run check` as soon as checkout/network permits; fix concrete failures before broadening.
-2. Pin primary-text provenance for twelve-節/Five-Tiger in canonical rule/source registry.
-3. Implement active-節 month resolver with cross-year adjacency and published-minute ambiguity, including Lichun and Jingzhe adversarial vectors.
+2. Pin primary-text provenance for twelve-Jie/Five-Tiger in canonical rule/source registry.
+3. Compose year/month boundary candidates at Lichun, then move to independent day-cycle anchors/day pillar after the month gate is green.
 
 ## Open / disputed / blockers
 - Canonical branch check remains blocked by container DNS, so PR stays draft and must not merge.
-- 1984=甲子 anchor still needs canonical source-registry provenance.
+- 1984=Jia-Zi anchor still needs canonical source-registry provenance.
 - Exact equality within minute-published solar-term values remains intentionally ambiguous.
-- No default for 子時換日, true-solar-time use, hidden-stem weighting, strength scoring, pattern selection or useful-god selection.
+- No default for Zi-hour day rollover, true-solar-time use, hidden-stem weighting, strength scoring, pattern selection or useful-god selection.
 - Official calendar authority, KASI transcription, historical/classical rule provenance, and modern implementation policy remain separate.
