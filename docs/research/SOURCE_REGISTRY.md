@@ -30,5 +30,20 @@ Caution: the calendar-data surface explicitly distinguishes itself from the offi
 Known edition metadata: the 2027 page reports data generation V1.0a at 2026-06-30 12:33.
 Time-basis note: KASI's 월력요항 explanatory surface labels the 24-solar-term date/time column as 한국표준시. A fixture must still record its own time basis explicitly rather than inheriting it silently.
 
+
+## DAY-CYCLE-CROSSCHECK-2000-01-07
+Evidence class: INDEPENDENT_CALENDAR_CROSSCHECK.
+Retrieved: 2026-10-07.
+Observed fact: Gregorian 2000-01-07 is reported as 甲子日 by multiple independent Korean, Japanese, and Chinese calendar surfaces.
+Use: anchor/cross-check evidence for the date-only 60-day arithmetic cycle.
+Caution: these are not Korean official calendar authorities and do not establish Myeongli rollover policy.
+
+## DAY-CYCLE-CROSSCHECK-2025-12-07
+Evidence class: INDEPENDENT_CALENDAR_CROSSCHECK.
+Retrieved: 2026-10-07.
+Observed fact: Gregorian 2025-12-07 is reported as 庚戌日 by independent calendar records.
+Use: distant arithmetic check. The dates are 9466 civil days apart; 9466 mod 60 = 46, and cycle index 46 is 庚戌.
+Caution: this validates cycle arithmetic, not 子時換日.
+
 ## Registry rule
 Store normalized facts with source ID, edition/publication, retrieval date, time basis and source precision. Distinguish (1) official publication authority from (2) the exact surface used to transcribe a value. Source files are not required in-repository for a fact to be traceable.

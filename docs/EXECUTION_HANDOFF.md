@@ -3,33 +3,34 @@
 ## Current workstream
 - Branch: `agent/foundation-20261006`
 - PR: #1 (draft/open)
-- Head at start of this run: `14b9e60829dab1fec770e480d2aa90e2a0f544fe`
-- Milestone: M1 — year/month boundary composition implemented; early-2026 guard and full canonical check outstanding.
+- Head at start of this run: `d911b0b405b1cab584b998f26467fc10afc5138d`
+- Milestone: M1 — year/month boundary composition implemented; date-only day-pillar cycle added; early-2026 guard and full canonical check outstanding.
 
 ## This run
-- No executable code was changed.
-- Re-read PR/head, roadmap, package scripts, solar-term fixtures, month/year-month resolvers, tests, and this handoff from repository truth.
-- Investigated the missing 2025 Daxue guard. KASA 2025 Wolryeok authority/publication is independently confirmed, and multiple secondary/independent astronomical surfaces agree on 2025-12-07, but an official KASI minute value was not retrievable in this run. One independent DE441/KASI-derived surface gives 06:04 KST; another non-authoritative implementation surfaced a conflicting 00:14 value. The guard was therefore NOT encoded.
-- Investigated a day-cycle anchor. Independent Korean/Japanese calendar surfaces agree that Gregorian 2000-01-07 is 甲子 day; 2025-12-07 is independently reported as 庚戌. These are research candidates only until provenance is pinned in the rule/source registry.
+- Re-read PR/head, main comparison, recent commits, roadmap, package scripts, research registries, tests, and this handoff from repository truth.
+- Added a policy-free Gregorian-date day-pillar cycle anchored at 2000-01-07=甲子.
+- Cross-checked the anchor across independent Korean, Japanese, and Chinese calendar surfaces; retained 2025-12-07=庚戌 as a distant independent arithmetic check.
+- Explicitly kept 子時換日/time-basis policy out of the date-only resolver.
+- Did not encode the 2025 Daxue guard because the official KASI/KASA 2025 minute remains unpinned.
 
 ## Checks
-- Repository reads and PR/head synchronization: PASS.
-- Full branch `npm run check`: not run in this execution environment.
-- No executable change, so no new verification claim.
+- Repository synchronization before write: PASS; PR head remained `d911b0b405b1cab584b998f26467fc10afc5138d`.
+- Direct fresh clone / full `npm run check`: BLOCKED by transient container DNS failure resolving github.com.
+- Reconstructed day-pillar slice with Node 22.16.0 / TypeScript 5.8.3: strict typecheck PASS, build PASS, runtime checks PASS for anchor, ±1 day, +60 days, 2025-12-07 distant check, and invalid-date rejection.
+- Full branch canonical check is still outstanding; do not call the whole PR green.
 
 ## Current gate
-- Jie mapping, Five-Tiger derivation, active-Jie resolution, and correlated year/month composition remain implemented.
-- MINUTE-published boundary equality remains explicit ambiguity.
-- Do not fabricate a 2025 Daxue minute from secondary sources.
+- Year/month composition remains implemented with published-minute ambiguity preserved.
+- Date-only day-pillar arithmetic is implemented without selecting a Zi-hour rollover policy.
+- Early-2026 month coverage still lacks the preceding official 2025 Daxue minute.
 
 ## Next safe tasks
-1. Retrieve the official KASI/KASA 2025 Daxue minute (or an archived official calendar table) and add only that guard event plus Jan 1/first-Xiaohan regression tests.
-2. Pin 2000-01-07=甲子 with source genealogy and at least one additional independent day-cycle check, then implement a date-only day-pillar cycle before choosing any Zi-hour rollover policy.
-3. Run the full branch `npm run check` as soon as a complete checkout/runtime is available.
+1. Run full branch `npm run check` as soon as complete checkout is available; fix concrete failures before broadening.
+2. Retrieve/pin the official KASI/KASA 2025 Daxue minute and add Jan-1/first-Xiaohan guard regressions.
+3. Research and model Zi-hour/day-rollover + time-basis as explicit policy interfaces before composing date-only day pillar into birth-time Four Pillars.
 
 ## Open / disputed / blockers
 - Full canonical branch check remains outstanding.
-- Current corpus starts at 2026 Xiaohan, so Jan 1 through the first Xiaohan lacks the preceding 2025 Daxue boundary.
-- 2025 Daxue date is well supported, but its official minute was not verified this run; secondary minute values conflict, so no executable fixture was added.
+- 2025 Daxue official minute is not yet verified; conflicting secondary minute values must not be encoded.
 - 1984=Jia-Zi anchor provenance and Twelve-Jie/Five-Tiger primary-text registry pinning remain open.
-- Zi-hour rollover and other disputed policies remain unset.
+- Zi-hour rollover, true/local solar time, and late-Zi hour-stem reference remain policy-dependent and unset.
