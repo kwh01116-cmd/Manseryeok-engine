@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { EARTHLY_BRANCHES, HEAVENLY_STEMS, hourPillarFromDayStem } from "../dist/index.js";
+import {
+  EARTHLY_BRANCHES,
+  HEAVENLY_STEMS,
+  hourBranchForEffectiveClock,
+  hourPillarFromDayStem,
+} from "../dist/index.js";
 
 const EXPECTED_ZI_STEM = {
   甲: "甲", 己: "甲",
@@ -10,6 +15,23 @@ const EXPECTED_ZI_STEM = {
   丁: "庚", 壬: "庚",
   戊: "壬", 癸: "壬",
 };
+
+test("effective clock maps traditional double-hour boundaries without choosing day rollover", () => {
+  const cases = [
+    ["00:00", "子"], ["00:59", "子"], ["01:00", "丑"], ["02:59", "丑"],
+    ["03:00", "寅"], ["20:59", "戌"], ["21:00", "亥"], ["22:59", "亥"],
+    ["23:00", "子"], ["23:30", "子"], ["23:59", "子"],
+  ];
+  for (const [clock, expected] of cases) {
+    assert.equal(hourBranchForEffectiveClock(clock), expected, clock);
+  }
+});
+
+test("effective clock rejects malformed or impossible HH:MM values", () => {
+  for (const value of ["1:00", "24:00", "23:60", "-1:00", "aa:bb"]) {
+    assert.throws(() => hourBranchForEffectiveClock(value), value);
+  }
+});
 
 test("Five-Rat 子-hour starts match 日上起時例 for all ten day stems", () => {
   for (const dayStem of HEAVENLY_STEMS) {
