@@ -2,7 +2,7 @@ import type { SolarTermEvent } from "./solarTerms.js";
 
 const MINUTE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;
 
-function isGregorianMinute(value: string): boolean {
+export function isGregorianMinute(value: string): boolean {
   const match = MINUTE_PATTERN.exec(value);
   if (!match) return false;
   const [, yearText, monthText, dayText, hourText, minuteText] = match;

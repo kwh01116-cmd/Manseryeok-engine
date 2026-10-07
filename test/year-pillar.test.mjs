@@ -28,3 +28,9 @@ test("does not use Lunar New Year as the year-pillar boundary", () => {
   const feb6 = resolveYearPillarAtLichun(KOREA_SOLAR_TERM_EVENTS_2026_2027, "2027-02-06T12:00");
   assert.deepEqual(feb6.selected, { stem: "DING", branch: "WEI" });
 });
+
+test("rejects malformed query minutes before lexical boundary comparison", () => {
+  for (const value of ["2027-02-30T10:45", "2027-13-04T10:45", "2027-02-04T24:00", "2027-02-04T10:60", "2027-2-04T10:45"]) {
+    assert.throws(() => resolveYearPillarAtLichun(KOREA_SOLAR_TERM_EVENTS_2026_2027, value), /invalid Gregorian minute/);
+  }
+});
