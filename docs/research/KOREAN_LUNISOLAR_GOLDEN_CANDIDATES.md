@@ -11,6 +11,22 @@ Reviewed: 2026-10-08 (Asia/Seoul). Scope: modern Korean Gregorian civil dates an
 - Registry ID: `KR-KASI-CALENDAR-DATA`, evidence layer `COMPUTATIONAL_REFERENCE`. These KASI pages explicitly say **not the official announcement**. `KR-KASA-WOLRYEOK-2025/2026/2027` edition-specific official notice or gazette must be compared before upgrading to OFFICIAL_GOLDEN. Do not assign a KASA transcription source to KASI-only values.
 - KASI rows give lunar month-1 Gregorian dates and 大 (30 days) / 小 (29 days). Last-day vectors below are **derived**, not directly quoted; each next-month start is cross-checked against the adjacent published row.
 
+## Independent Korean authority cross-checks (2026-10-08)
+
+These are **two narrow, directly supported dates**, not verification of the entire lunar-month table or of any second-level astronomical boundary.
+
+| Gregorian date | KASI computational calendar row | Separate KASA public statement | Status |
+| --- | --- | --- | --- |
+| 2026-02-17 | lunar 2026-01-01 | KASA 2026 월력요항 announcement (2025-06-30) explicitly identifies 설날 as lunar 1/1 on February 17 | **AUTHORITY-CORROBORATED DAY**, edition-specific attachment comparison still pending |
+| 2027-02-07 | lunar 2027-01-01 | KASA 2027 월력요항 announcement (2026-06-29) explicitly identifies 설날 as lunar 1/1 on February 7 | **AUTHORITY-CORROBORATED DAY**, edition-specific attachment comparison still pending |
+
+KASA source URLs (issuer-owned):
+- 2026 announcement, published 2025-06-30: https://www.kasa.go.kr/prog/bbsArticle/BBSMSTR_000000000010/view.do?bbsId=BBSMSTR_000000000010&nttId=B000000001860Pe2zT3
+- 2027 announcement, published 2026-06-29: https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431
+- 2027 edition notice, KASA notice 2026-0078 (PDF/HWPX attached, **attachment contents not yet transcribed**): https://www.kasa.go.kr/bbs/BBSMSTR_000000000018/view.do?nttId=B000000003234Li6nD2
+
+**Evidence separation:** The KASA public announcements independently corroborate the **two lunar New Year's Day dates**; they do **not** independently establish 2025 leap-sixth-month dates, 2026/2027 preceding-month lengths, or the complete bidirectional converter. The 2025 leap-month and all month-end vectors remain KASI-only or arithmetic-derived research candidates. KASI's 2027 calendar-data page reports generation on 2026-06-30, one day *after* the 2027 KASA notice dated 2026-06-29; do not assume the page was the literal source transcribed into that notice without checking the attached edition. No fixture or source-ID upgrade to `OFFICIAL_GOLDEN` is authorized by these two press statements alone.
+
 ## Month-start facts transcribed from KASI
 
 | Gregorian first day | Lunar year | Lunar month | Leap? | Month length | Next Gregorian month start |
