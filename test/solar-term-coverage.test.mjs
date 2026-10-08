@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { validateFullYearSolarTermCoverage } from "../dist/calendar/solarTermCoverage.js";
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 as full } from "../dist/calendar/koreaSolarTermFixtures.js";
+import { validateKstMinuteSolarTermTimeline as checkTermTimeline } from "../dist/calendar/solarTermTimeline.js";
 
 const manifest = Object.freeze({
   schemaVersion: "m1-solar-term-coverage-v1",
@@ -56,4 +57,25 @@ test("source provenance cannot be silently empty", () => {
   const broken = full.map((event) => event.term === "DAXUE" && event.displayedDateTime.startsWith("2027-")
     ? { ...event, sourceIds: [] } : event);
   assert.throws(() => check(broken), /missing solar-term source provenance/);
+});
+
+
+test("24-term sequence rejects label transpositions without missing entries", () => {
+  for (const [firstTime, secondTime] of [
+    ["2027-01-05T23:10", "2027-01-20T16:30"], // Xiaohan / Dahan
+    ["2027-02-04T10:46", "2027-02-19T06:33"], // Lichun / Yushui
+    ["2027-12-07T17:38", "2027-12-22T11:42"], // Daxue / Dongzhi
+  ]) {
+    const first = full.find((event) => event.displayedDateTime === firstTime);
+    const second = full.find((event) => event.displayedDateTime === secondTime);
+    assert.ok(first && second);
+    const swapped = full.map((event) =>
+      event === first ? { ...event, term: second.term } :
+      event === second ? { ...event, term: first.term } : event
+    );
+    // Complete, valid, chronological, and unique: the previous guards pass.
+    assert.equal(swapped.length, full.length);
+    assert.doesNotThrow(() => checkTermTimeline(swapped));
+    assert.throws(() => check(swapped), /noncanonical solar-term order/);
+  }
 });

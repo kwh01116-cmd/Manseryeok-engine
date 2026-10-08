@@ -57,10 +57,11 @@ export function validateFullYearSolarTermCoverage(
     throw new RangeError("full-year coverage interval and prior DAXUE guard must align");
   }
   validateKstMinuteSolarTermTimeline(events);
-  const expected = new Set<string>([`${first - 1}:DAXUE`]);
+  const canonicalOrder: string[] = [`${first - 1}:DAXUE`];
   for (const year of years) {
-    for (const term of SOLAR_TERM_CODES) expected.add(`${year}:${term}`);
+    for (const term of SOLAR_TERM_CODES) canonicalOrder.push(`${year}:${term}`);
   }
+  const expected = new Set<string>(canonicalOrder);
   const actual = new Set<string>();
   for (const event of events) {
     const year = Number(event.displayedDateTime.slice(0, 4));
@@ -74,5 +75,15 @@ export function validateFullYearSolarTermCoverage(
   }
   for (const key of expected) {
     if (!actual.has(key)) throw new Error(`missing required solar term: ${key}`);
+  }
+  // A complete set can still be mislabeled: e.g. swapping Xiaohan and Dahan
+  // preserves uniqueness, chronology and coverage but corrupts month selection.
+  // Validate the entire 24-term cycle, including the prior-year Daxue guard.
+  for (let i = 0; i < canonicalOrder.length; i++) {
+    const event = events[i];
+    const observed = event ? `${event.displayedDateTime.slice(0, 4)}:${event.term}` : "<missing>";
+    if (observed !== canonicalOrder[i]) {
+      throw new Error(`noncanonical solar-term order at ${i}: expected ${canonicalOrder[i]}, got ${observed}`);
+    }
   }
 }
