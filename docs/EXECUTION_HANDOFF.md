@@ -1,34 +1,33 @@
 # Execution handoff
 
-## Repository truth (2026-10-08, Asia/Seoul)
+## Latest repository truth (2026-10-08, Asia/Seoul)
 - Branch: `agent/foundation-20261006`
-- PR: #1, draft/open, base `main`
-- Main SHA at start: `39b6653e4f93169a4b5b51412b72d4710e9da91f`
-- Head SHA at start: `998320f09ee0c536ecd5ad87d4ac7a11e8a26302`
-- Head SHA immediately before this handoff write: `91e5d5e19791656b6bd4d63ab748b620ac0f46ed`
-- The handoff update itself creates a subsequent commit: read the PR head before the next write; do not treat the pre-handoff SHA as the final branch head.
+- PR: #1, draft/open, base `main`.
+- Main SHA at read: `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
+- PR head before this run's write: `43b8ff1d74b11928fe9bf195725f9ee9e775a6e7`.
+- Final head: the commit containing **this handoff**; query the branch/PR head for its exact SHA (the commit cannot self-embed its own hash). Never use the pre-write head for a subsequent write.
 
-## Commits actually applied this run
-- `91e5d5e19791656b6bd4d63ab748b620ac0f46ed`: test-only, `test/year-month-boundaries.test.mjs`. This pre-existing orphan commit was inspected, confirmed to be a direct child of the starting head, then attached with an expected-head lease. No production logic changed.
-- This handoff documentation commit (see current branch head in GitHub).
+## Commits actually applied in this run
+- One documentation-only commit: this handoff and `docs/research/KOREAN_LUNISOLAR_GOLDEN_CANDIDATES.md`. No production code or tests modified. Exact commit SHA is the branch head after the successful expected-head ref update.
 
 ## Checks actually run
-- Fresh `git clone --branch agent/foundation-20261006` attempted: BLOCKED before checkout by `Could not resolve host: github.com`.
-- `node --check` on a locally authored equivalent 60-line boundary test: PASS with Node v22.16.0. This is **not** a check of the exact committed 66-line test file.
-- Canonical `npm run check`: NOT RUN; checkout unavailable. Neither the new test nor the full PR is claimed canonical-green. Do not merge on this evidence.
+- `git ls-remote` against GitHub: **BLOCKED** by `Could not resolve host: github.com`.
+- Direct `curl --resolve` network fallback: **BLOCKED** (connection failed); no exact checkout.
+- Local Python `datetime.date` adjacency check of 4 KASI month-length intervals: **4/4 PASS** (not a repo test).
+- `npm ci` / canonical `npm run check`: **NOT RUN**. Previously added year/month test remains unverified. No merge.
 
 ## Current milestone / gate
-- M1, ROADMAP immediate queue #12: Four-Pillars metamorphic invariants.
-- Day/hour deterministic corpus already in branch. Newly attached year/month exhaustive fixture boundary test covers all 24 2026/2027 Jie at -1/0/+1 displayed minutes, including Lichun year/month correlation, and 24 Zhongqi negative boundaries.
-- Gate #12 is **not closed** until canonical checks run and pass. No school-dependent defaults introduced.
+- M1 immediate queue #12: year/month exhaustive boundary tests and day/hour property corpus exist, but canonical check remains blocked; **#12 NOT CLOSED**.
+- M1 #13 research-only start: 2025 leap-sixth-month and 2026/2027 lunar-new-year candidates documented from KASI with derived boundaries, pending official KASA edition comparison.
 
 ## Next 1-3 safe tasks
-1. Re-read main/PR/head/handoff; obtain a runnable exact checkout, then run `npm ci && npm run check` and resolve genuine failures without weakening tests.
-2. If green, review remaining Four-Pillars composition invariant coverage and close #12 only with explicit evidence.
-3. Start #13 Korean official solar/lunar/leap-month golden fixtures (year/month/day, leap flag, boundaries), retaining KASA/KASI edition and transcription provenance.
+1. Re-read main/PR/head/handoff, recover exact checkout, run `npm ci && npm run check`; investigate failures without weakening tests.
+2. If green, review Four-Pillars invariant coverage and close #12 only on recorded evidence.
+3. Verify #13 provisional vectors against edition-specific official 월력요항, then add typed, provenance-bearing fixtures/tests as the smallest slice.
 
 ## Unresolved / disputed / blockers
-- Blocker: `github.com` DNS resolution in execution container prevents canonical verification. Test-only commit is unverified.
-- Caller-selected policies: Zi day rollover, effective time basis, late-Zi hour-stem reference. Published-minute solar-term ambiguity is not converted into invented second-level precision.
-- Historical Korean timezone/DST remains a separate backlog unless needed by an M1 fixture.
-- Repository head and target file blob SHAs were checked immediately before the branch lease and handoff write; any future concurrent changes require re-read/replan, never blind overwrite.
+- **Verification blocker:** GitHub DNS/network unavailable in the execution container. This is an environment problem, not proof of test failure or success.
+- KASI calendar-data pages explicitly say they are not official announcements. The new candidate document is not an official golden corpus; commercial reuse review pending.
+- Zi rollover, effective time basis, late-Zi hour-stem reference remain caller-selected. Minute-precision solar-term uncertainty stays explicit.
+- Historical Korean timezone/DST remains backlog unless an M1 fixture depends on it.
+- The old handoff is preserved in Git history; this file is the latest operational state. All future writes must use fresh PR head + target blob SHA checks and an expected-head lease.
