@@ -33,3 +33,10 @@
 - KASI calendar-data explicitly non-official; KASA 2025 edition attachment still not compared for leap-sixth-month.
 - Zi rollover, effective time basis, late-Zi hour-stem reference remain caller-selected; Jie published-minute ambiguity preserved.
 - All subsequent writes require fresh PR head + target blob SHA and expected-head lease. Repository state, not chat, is authoritative.
+
+## 2026-10-08 research-only follow-up (pending repository write)
+- Direct KASI 2027 table and KASA 2027 public notice corroborate 2027-02-07 lunar New Year; KASI prints Lichun 2027-02-04 10:46 (minute precision). These differ: lunar calendar year ganji is NOT a Lichun/Jie-based Myeongli year pillar.
+- Secondary reproductions of KASA directive no. 66 (2026-02-02) report lunar new-moon, month-length and leap rules plus 1896 anchor; official legal text and annexes NOT directly retrieved. No normative golden promotion.
+- Independent Node 22.16.0 date-only arithmetic: 1896-01-01 to 2000-01-07 = 37991 days; backwards sexagenary index 49 = 癸丑. NOT a repository check.
+- Exact checkout: git ls-remote DNS failure; npm ci / npm run check NOT RUN; M1 #12 OPEN, M1 #13 research only.
+- Attempt to commit a small provenance note + registry + handoff was blocked by safety checks before branch update; no commit verified. Next: recover canonical checkout, obtain directive original/annexes and 2025 official annual edition, add leap fixtures only after evidence.
