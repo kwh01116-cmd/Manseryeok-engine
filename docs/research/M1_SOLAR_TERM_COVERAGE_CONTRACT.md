@@ -1,6 +1,6 @@
-# M1 solar-term coverage manifest contract (candidate, non-executable)
+# M1 solar-term coverage manifest contract (partially executable, not enforced by chart API)
 
-Status: DESIGN / NOT ENFORCED / M1 #12 OPEN. Reviewed 2026-10-09 KST.
+Status: PARTIAL VALIDATOR / NOT ENFORCED BY CHART API / M1 #12 OPEN. Reviewed 2026-10-09 KST.
 This document defines the next reversible gate; it does **not** certify the current public API, introduce a policy default, or promote KASI minute transcriptions to official KASA golden data.
 
 ## Newly demonstrated terminal-gap failure
@@ -69,3 +69,11 @@ For the **current KASI-transcribed corpus only**, a candidate coverage interval 
 1. Recover exact checkout and run canonical `npm ci && npm run check` against PR HEAD.
 2. Introduce a separate versioned manifest validator + tests for terminal deletion, partial guard and out-of-range queries, keeping existing resolver behavior explicit until the API migration is reviewed.
 3. Bind certified API output to the validated manifest and source edition; compare official KASA attachments before any `OFFICIAL_GOLDEN` promotion.
+
+## Executable finite-set slice — 2026-10-09 KST
+
+- Added `src/calendar/solarTermCoverage.ts` with an **opt-in, full-calendar-year-only** `validateFullYearSolarTermCoverage` function. It requires an explicit manifest and query minute, checks consecutive declared years, a half-open year-aligned interval, the prior DAXUE guard, all 24 codes in every declared year, chronological uniqueness, KST/MINUTE tags and nonempty source-ID fields. It rejects undeclared extra events.
+- This is **not connected to the public Four-Pillars resolver** and cannot make its `DEFINITE` result certified. Existing partial fixtures remain unchanged. The proposed `MONTH_PILLAR_12_JIE` / partial profiles, immutable fixture digest, canonical serialization, trusted edition verification and birth-record precision policy are **NOT implemented**. A valid code set with a changed minute can still pass this validator.
+- `test/solar-term-coverage.test.mjs` adds 7 regression groups: full 49-event fixture, terminal DAXUE omission, interior Jie/Zhongqi omissions, missing prior guard, unsupported half-open query, malformed manifests/extras, and missing source provenance.
+- **Checks:** local Node 22.16.0 / TypeScript 5.8.3 isolated reconstruction (validator + copied calendar fixture/timeline shapes) strict compile and 7/7 targeted tests PASS. This was **not** the exact GitHub checkout. `git ls-remote` failed DNS and canonical `npm ci && npm run check` was NOT RUN. This slice is UNVERIFIED and PR must remain draft/unmerged.
+- **Taxonomy:** finite set/cardinality = EXACT software invariant; supported interval and KASA edition = CONDITIONAL human-curated declaration; no school interpretation. Counterexample: remove only 2027 DAXUE -> coverage rejects, whereas the existing chart resolver may still select the previous LIDONG. No claim of astronomical seconds precision, data licensing clearance or official KASA golden authority.
