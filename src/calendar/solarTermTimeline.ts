@@ -18,11 +18,15 @@ export function isGregorianMinute(value: string): boolean {
 
 export function validateKstMinuteSolarTermTimeline(events: readonly SolarTermEvent[]): void {
   let previous = "";
+  const seenTermYears = new Set<string>();
   for (const event of events) {
     if (event.timeBasis !== "KST") throw new Error("solar-term timeline requires KST events");
     if (event.sourcePrecision !== "MINUTE") throw new Error("solar-term timeline requires MINUTE source precision");
     if (!isGregorianMinute(event.displayedDateTime)) throw new Error(`invalid Gregorian minute: ${event.displayedDateTime}`);
     if (previous && event.displayedDateTime <= previous) throw new Error("solar-term timeline must be strictly increasing without duplicates");
+    const termYear = `${event.displayedDateTime.slice(0, 4)}:${event.term}`;
+    if (seenTermYears.has(termYear)) throw new Error(`duplicate solar term within civil year: ${termYear}`);
+    seenTermYears.add(termYear);
     previous = event.displayedDateTime;
   }
 }
