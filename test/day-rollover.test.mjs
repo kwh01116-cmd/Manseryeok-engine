@@ -37,3 +37,12 @@ test("day-rollover selection validates both date and effective clock", () => {
   assert.throws(() => selectDayPillarByRollover("2000-02-30", "23:30", "ZI_START"));
   assert.throws(() => selectDayPillarByRollover("2000-01-07", "24:00", "ZI_START"));
 });
+
+test("unknown or missing DAY_ROLLOVER policy fails closed at runtime", () => {
+  for (const invalid of ["ZI_STRAT", "", undefined, null, 0, "civil_midnight"]) {
+    assert.throws(
+      () => selectDayPillarByRollover("2000-01-07", "23:30", invalid),
+      { name: "RangeError", message: "Unsupported DAY_ROLLOVER policy." },
+    );
+  }
+});

@@ -27,6 +27,9 @@ export function selectDayPillarByRollover(
   effectiveClock: string,
   policy: DayRolloverPolicy,
 ): SelectedDayPillar {
+  if (!DAY_ROLLOVER_POLICIES.includes(policy)) {
+    throw new RangeError("Unsupported DAY_ROLLOVER policy.");
+  }
   dayPillarForGregorianDate(date);
   hourBranchForEffectiveClock(effectiveClock);
 

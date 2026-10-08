@@ -24,3 +24,11 @@ Codeability: EXACT for cardinality; CONDITIONAL for official-minute attribution.
 1. Obtain exact checkout and run npm ci && npm run check; correct any additional genuine failures.
 2. Audit public Four-Pillars composition and differential fixtures before closing M1 #12.
 3. Compare KASA official attachments to KASI transcriptions before promoting M1 #13 golden fixtures.
+
+## Runtime policy validation slice (2026-10-08)
+- Confirmed from source: invalid DAY_ROLLOVER values previously fell through to the civil-date branch; invalid HOUR_STEM_REFERENCE values fell through to the civil-date stem. TypeScript unions cannot validate untyped JavaScript/JSON at runtime.
+- Change: both policy parameters now reject unknown/missing values with `RangeError`, before calculation. No implicit default or interpretation rule was added.
+- Adversarial vectors: `ZI_STRAT`, `AUTO`, empty string, `undefined`, `null`, numeric `0`, and lower-case policy spellings. Existing late-Zi policy-divergence tests remain unchanged.
+- Source genealogy: direct code audit of `src/calendar/dayRollover.ts` and `src/calendar/dayHourPillars.ts`; software input-safety fact, not a classical or KASA/KASI astronomical claim.
+- Codeability: EXACT (enum membership); dispute: NONE for validation; policy selection itself remains DISPUTED/explicit. Preconditions: effective civil/effective-clock input and caller-supplied policy IDs. Exception: invalid ID throws. Boundary: 23:00 late-Zi remains governed by the selected policies.
+- Validation: isolated exact-logic Node 22.16.0 / TypeScript 5.8.3 strict check + three targeted tests PASS; full repository `npm run check` NOT RUN because GitHub checkout DNS failed. Keep M1 #12 OPEN and PR draft.

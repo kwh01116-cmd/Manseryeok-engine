@@ -81,3 +81,18 @@ test("metamorphic corpus confines hour-stem-reference divergence to Zi-start lat
     }
   }
 });
+
+test("unknown or missing policies never silently select a day/hour convention", () => {
+  for (const invalid of ["ZI_STRAT", "", undefined, null, 0]) {
+    assert.throws(
+      () => resolveDayHourPillars("2000-01-07", "23:30", invalid, "SELECTED_DAY_PILLAR"),
+      { name: "RangeError", message: "Unsupported DAY_ROLLOVER policy." },
+    );
+  }
+  for (const invalid of ["AUTO", "", undefined, null, 0, "selected_day_pillar"]) {
+    assert.throws(
+      () => resolveDayHourPillars("2000-01-07", "23:30", "ZI_START", invalid),
+      { name: "RangeError", message: "Unsupported HOUR_STEM_REFERENCE policy." },
+    );
+  }
+});

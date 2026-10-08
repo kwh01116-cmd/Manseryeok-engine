@@ -23,6 +23,9 @@ export function resolveDayHourPillars(
   dayRolloverPolicy: DayRolloverPolicy,
   hourStemReferencePolicy: HourStemReferencePolicy,
 ): ResolvedDayHourPillars {
+  if (!HOUR_STEM_REFERENCE_POLICIES.includes(hourStemReferencePolicy)) {
+    throw new RangeError("Unsupported HOUR_STEM_REFERENCE policy.");
+  }
   const selectedDay = selectDayPillarByRollover(date, effectiveClock, dayRolloverPolicy);
   const civilDateDay = dayPillarForGregorianDate(date);
   const hourBranch = hourBranchForEffectiveClock(effectiveClock);
