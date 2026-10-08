@@ -56,7 +56,11 @@ test("KASI-transcribed 2026/2027 fixture corpus includes prior-year guard", () =
   const lichun2027 = KOREA_SOLAR_TERM_EVENTS_2026_2027.find((x) => x.term === "LICHUN" && x.displayedDateTime.startsWith("2027-"));
   assert.equal(lichun2026?.displayedDateTime, "2026-02-04T05:02");
   assert.equal(lichun2027?.displayedDateTime, "2027-02-04T10:46");
-  assert.deepEqual(lichun2027?.sourceIds, ["KR-KASA-WOLRYEOK-2027", "KR-KASI-CALENDAR-DATA"]);
+  assert.deepEqual(lichun2027?.sourceIds, ["KR-KASI-CALENDAR-DATA"]);
+  // Authority of a published calendar is distinct from the surface actually transcribed.
+  for (const event of annual) {
+    assert.deepEqual(event.sourceIds, ["KR-KASI-CALENDAR-DATA"], event.displayedDateTime + " direct source");
+  }
   const crossYear = adjacentSolarTerms(KOREA_SOLAR_TERM_EVENTS_2026_2027, "2027-01-01T00:00");
   assert.equal(crossYear.previous?.displayedDateTime, "2026-12-22T05:50");
   assert.equal(crossYear.next?.displayedDateTime, "2027-01-05T23:10");

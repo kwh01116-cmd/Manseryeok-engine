@@ -1,6 +1,7 @@
 import type { SolarTermCode, SolarTermEvent } from "./solarTerms.js";
 import { validateKstMinuteSolarTermTimeline } from "./solarTermTimeline.js";
 
+// Official annual publication IDs are authority references, not proof of direct annex transcription.
 export const KASA_AUTHORITY_SOURCE_IDS = {
   2026: "KR-KASA-WOLRYEOK-2026",
   2027: "KR-KASA-WOLRYEOK-2027",
@@ -35,13 +36,12 @@ const VALUES = {
 } as const;
 
 function yearEvents(year: keyof typeof VALUES): readonly SolarTermEvent[] {
-  const authority = KASA_AUTHORITY_SOURCE_IDS[year];
   return VALUES[year].map((monthDayTime, index) => ({
     term: TERM_ORDER[index]!,
     displayedDateTime: `${year}-${monthDayTime}`,
     timeBasis: "KST",
     sourcePrecision: "MINUTE",
-    sourceIds: [authority, KASI_TRANSCRIPTION_SOURCE_ID],
+    sourceIds: [KASI_TRANSCRIPTION_SOURCE_ID],
   }));
 }
 
