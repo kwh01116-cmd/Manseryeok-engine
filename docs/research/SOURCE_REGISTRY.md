@@ -74,3 +74,9 @@ Sources: https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html and https://
 Retrieved: 2026-10-08.
 Use: 48 published-minute term/date-time crosschecks. NAOJ Japan Central Standard Time and modern KST are UTC+09:00 for these dates; 48/48 match KASI transcriptions. See test/naoj-solar-term-differential.test.mjs.
 Caution: two institutions may share computational methods; rounding rule and second-level instant are unverified. Not a substitute for KASA annex verification.
+
+## KASA-PUBLICATION-RIGHTS-2027 (commercial-product reuse review)
+Evidence layer: PUBLICATION_RIGHTS_METADATA (not an astronomical fact, source authority, or legal opinion).
+Direct issuer page: https://www.kasa.go.kr/bbs/BBSMSTR_000000000018/B000000003234Li6nD2.do?mno=sub01_03_03
+Checked: 2026-10-09. KASA's 2027 월력요항 official notice (2026-06-29, notice 2026-0078) explicitly labels the notice/attached work **공공누리 2유형: 출처표시 + 상업적 이용금지**. The KASA 2026 announcement page also displays the same type-2 label: https://www.kasa.go.kr/prog/bbsArticle/BBSMSTR_000000000010/view.do?bbsId=BBSMSTR_000000000010&nttId=B000000001860Pe2zT3 ; this is a press page, **not** proof of the exact 2026 official annex's licensing metadata.
+Practical boundary: do not copy, embed, or redistribute the KASA 2027 PDF/HWPX or protected presentation/table wholesale in a commercial app on the assumption that official publication implies commercial reuse permission. Conversely, this label alone does **not** establish that isolated calendar facts, independently calculated astronomical results, or independently compiled factual records are copyright-restricted. Seek source-specific legal/licensing review (including KASI data terms) before production reuse. Source attribution and a citation are not a license grant. No commercial-rights clearance is asserted.
