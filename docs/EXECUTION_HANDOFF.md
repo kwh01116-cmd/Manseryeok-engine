@@ -1,5 +1,15 @@
 # Execution handoff
 
+## Repository truth — 2026-10-09 KST (opt-in coverage-checked Four Pillars)
+- Exact branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; main at prewrite: `39b6653e4f93169a4b5b51412b72d4710e9da91f`. Parent HEAD `ef943e310066b860a65215e9fb925f9df042b498`; live PR head after this commit is canonical (commit cannot embed its own SHA).
+- Commit this run: one conditional commit `feat(m1): gate an opt-in Four-Pillars API with explicit full-year coverage` (verify after update). No main merge; no new branch/PR.
+- Modified paths: `src/calendar/fourPillars.ts`, `src/index.ts`, `test/four-pillars-coverage.test.mjs`, `docs/research/FOUR_PILLARS_COMPOSITION_SCOPE.md`, `docs/research/M1_SOLAR_TERM_COVERAGE_CONTRACT.md`, this handoff.
+- Checks actually run: `git ls-remote` FAILED (github.com DNS); exact repo `npm ci && npm run check` NOT RUN. Local isolated Node 22.16.0 + TypeScript 5.8.3 strict compilation and 6/6 focused tests PASS using synthetic 49-event corpus and stubbed pillar collaborators. First mock-harness run 5/6 due incorrect default-argument test; fixed harness and reran 6/6 PASS. New repo tests remain UNVERIFIED, not merged.
+- Milestone/gate: M1 #12 OPEN; M1 #13 lunar/leap conversion OPEN. New guarded API is opt-in and proves STRUCTURAL_COVERAGE_ONLY; legacy API remains unchecked.
+- Next 1–3 safe tasks: (1) get exact checkout, run canonical npm checks and fix any failure; (2) add fixture digest and official KASA minute-edition comparison without hidden policies; (3) implement finite, provenance-tagged lunar/leap-month converter with adversarial boundaries.
+- Unresolved / disputed / blocker: DNS prevents exact checkout; official annex comparison/source rights, minute rounding semantics, digest binding, historical Korean DST/time normalization and Zi policies remain open.
+
+
 ## Repository truth — 2026-10-09 KST (24-term full-year order integrity)
 - Branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; main HEAD: `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
 - Prewrite PR HEAD: `7ffee5964b74a6e09b4030f70fa46535ee3ed099`; base tree: `e1e25d5cd866eac0fcd4fbf264622341981670bd`. The new HEAD is the commit that contains this handoff; resolve PR HEAD live (self-referential commit SHA cannot be embedded).

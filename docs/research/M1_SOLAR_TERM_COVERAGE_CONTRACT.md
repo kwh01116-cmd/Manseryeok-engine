@@ -77,3 +77,8 @@ For the **current KASI-transcribed corpus only**, a candidate coverage interval 
 - `test/solar-term-coverage.test.mjs` adds 7 regression groups: full 49-event fixture, terminal DAXUE omission, interior Jie/Zhongqi omissions, missing prior guard, unsupported half-open query, malformed manifests/extras, and missing source provenance.
 - **Checks:** local Node 22.16.0 / TypeScript 5.8.3 isolated reconstruction (validator + copied calendar fixture/timeline shapes) strict compile and 7/7 targeted tests PASS. This was **not** the exact GitHub checkout. `git ls-remote` failed DNS and canonical `npm ci && npm run check` was NOT RUN. This slice is UNVERIFIED and PR must remain draft/unmerged.
 - **Taxonomy:** finite set/cardinality = EXACT software invariant; supported interval and KASA edition = CONDITIONAL human-curated declaration; no school interpretation. Counterexample: remove only 2027 DAXUE -> coverage rejects, whereas the existing chart resolver may still select the previous LIDONG. No claim of astronomical seconds precision, data licensing clearance or official KASA golden authority.
+
+
+## 2026-10-09 opt-in API integration
+
+An additional coverage-checked Four Pillars entry point is implemented in \`src/calendar/fourPillars.ts\`. It takes a caller-supplied full-year manifest (no default) and invokes \`validateFullYearSolarTermCoverage\` before existing chart calculation. It returns \`coverage.validation=STRUCTURAL_COVERAGE_ONLY\`. The older chart resolver remains available and unchecked. Canonical fixture digest, edition verification, partial-month profile and full exact-repo check remain open.

@@ -4,6 +4,7 @@ import { isGregorianMinute } from "./solarTermTimeline.js";
 import { resolveYearMonthPillars, type YearMonthConfidence } from "./yearMonthPillars.js";
 import { resolveDayHourPillars, type HourStemReferencePolicy } from "./dayHourPillars.js";
 import type { DayRolloverPolicy } from "./dayRollover.js";
+import { validateFullYearSolarTermCoverage, type FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
 
 /** This first integration supports only post-DST Korean civil-clock births. */
 export interface ModernKoreanCivilTimePolicy {
@@ -70,5 +71,40 @@ export function resolveModernKoreanCivilFourPillars(
     candidates: yearMonth.candidates.map(({ year, month }) => ({
       year, month, day: dayHour.dayPillar, hour: dayHour.hourPillar,
     })),
+  };
+}
+
+
+/**
+ * Opt-in composition with a fail-closed, explicit FULL_24_TERM_YEAR coverage gate.
+ * Structural coverage is not official KASA verification, astronomical second-level
+ * accuracy, birth-record precision, or a certification of sourceIds.
+ * The legacy unguarded composer remains available for intentionally partial data.
+ */
+export interface CoverageCheckedModernKoreanFourPillarsResolution extends ModernKoreanFourPillarsResolution {
+  readonly coverage: {
+    readonly validation: "STRUCTURAL_COVERAGE_ONLY";
+    readonly requirementProfile: "FULL_24_TERM_YEAR";
+    readonly supportedFromInclusive: string;
+    readonly supportedUntilExclusive: string;
+  };
+}
+
+export function resolveCoverageCheckedModernKoreanCivilFourPillars(
+  events: readonly SolarTermEvent[],
+  recordedBirthKstMinute: string,
+  policies: ModernKoreanCivilTimePolicy,
+  manifest: FullYearSolarTermCoverageManifest,
+): CoverageCheckedModernKoreanFourPillarsResolution {
+  validateFullYearSolarTermCoverage(events, manifest, recordedBirthKstMinute);
+  const result = resolveModernKoreanCivilFourPillars(events, recordedBirthKstMinute, policies);
+  return {
+    ...result,
+    coverage: {
+      validation: "STRUCTURAL_COVERAGE_ONLY",
+      requirementProfile: manifest.requirementProfile,
+      supportedFromInclusive: manifest.supportedFromInclusive,
+      supportedUntilExclusive: manifest.supportedUntilExclusive,
+    },
   };
 }

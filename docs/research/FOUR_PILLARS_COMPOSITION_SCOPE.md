@@ -26,3 +26,15 @@ Status: IMPLEMENTED ON DRAFT BRANCH, CANONICAL VERIFICATION PENDING. This is a n
 - Local isolated TypeScript 5.8.3 strict contract compilation PASS using typed dependency stubs; new Node test file syntax check PASS.
 - NOT run: exact-repository npm ci / npm run check; shell git ls-remote still fails github.com DNS. Tests are added to the draft branch but are NOT certified green.
 - No merge until canonical checks and further time-precision review.
+
+
+## Opt-in structurally coverage-checked Four Pillars — 2026-10-09
+
+\`resolveCoverageCheckedModernKoreanCivilFourPillars(events, birthMinute, explicitPolicies, manifest)\` now runs the full-year manifest check before composing the existing chart. The legacy entry point is preserved for intentionally partial fixtures and remains **unchecked**. M1 #12 is still OPEN; product integrations should choose the checked entry point explicitly.
+
+- Classification: EXACT software composition, CONDITIONAL source-minute values, DISPUTED late-Zi/time policies unchanged. No classical interpretation or defaults added.
+- Preconditions: explicit KST/MINUTE full-24-term manifest for a declared half-open supported period; post-DST Korean civil birth minute; explicit day/hour policies.
+- Errors: missing left/interior/terminal solar terms, label transpositions, out-of-range birth, missing manifest and invalid policy fail closed. Query at minute-exact Lichun still returns 2 correlated candidates.
+- Output \`coverage.validation=STRUCTURAL_COVERAGE_ONLY\` is **not** official-KASA, digest-certified, or astronomical-seconds accuracy; never treat \`DEFINITE\` as a seconds-level claim.
+- Test vector: remove 2027 DAXUE and query 2027-12-31T12:00; the checked API must throw before a stale 亥-month can escape. Swap 2027 XIAOHAN/DAHAN, also throws.
+- Provenance: existing KASI-transcribed fixtures, source taxonomy and M1 full-year validator; not a new celestial assertion. Checks: Node v22.16.0 / TypeScript v5.8.3 isolated strict test harness with stubbed pillar collaborators 6/6 PASS after correcting a test-harness default-argument mistake; exact repository \`npm run check\` NOT RUN due GitHub DNS.
