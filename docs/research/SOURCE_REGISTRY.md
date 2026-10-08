@@ -46,6 +46,14 @@ Observed fact: Gregorian 2025-12-07 is reported as 庚戌日 by independent cale
 Use: distant arithmetic check. The dates are 9466 civil days apart; 9466 mod 60 = 46, and cycle index 46 is 庚戌.
 Caution: this validates cycle arithmetic, not 子時換日.
 
+## DAY-CYCLE-KASI-2025-LEAP-SIXTH
+Evidence class: KOREAN_COMPUTATIONAL_CALENDAR_CROSSCHECK (not official KASA edition).
+Retrieved: 2026-10-08.
+Direct source: https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2025
+Observed 日辰 on Gregorian lunar-month starts: 2025-06-25 乙丑, 2025-07-25 乙未 (leap sixth), 2025-08-23 甲子.
+Use: independently printed date-only day-cycle golden vectors across a leap lunar month; these day pillars are **not** computed by the engine.
+Caution: same KASI table also supplies the lunar month-start candidates, so this is not an independent lunar-conversion verification. Page explicitly disclaims official announcement status. Neither source settles Zi rollover.
+
 ## Registry rule
 Store normalized facts with source ID, edition/publication, retrieval date, time basis and source precision. Distinguish (1) official publication authority from (2) the exact surface used to transcribe a value. Source files are not required in-repository for a fact to be traceable.
 

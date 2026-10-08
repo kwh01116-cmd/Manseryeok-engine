@@ -14,6 +14,18 @@ test("day cycle advances and wraps every sixty civil dates", () => {
 test("distant independent check matches 2025-12-07 Geng-Xu", () => {
   assert.deepEqual(dayPillarForGregorianDate("2025-12-07"), { stem: "庚", branch: "戌" });
 });
+test("KASI 2025 leap-sixth-month starts independently cross-check day-cycle arithmetic", () => {
+  // KASI 2025 calendar-data table, 日辰 column (not inferred from this engine).
+  // https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2025
+  for (const [date, pillar] of [
+    ["2025-06-25", { stem: "乙", branch: "丑" }], // regular sixth month day 1
+    ["2025-07-25", { stem: "乙", branch: "未" }], // leap sixth month day 1
+    ["2025-08-23", { stem: "甲", branch: "子" }], // seventh month day 1
+  ]) {
+    assert.deepEqual(dayPillarForGregorianDate(date), pillar, date);
+  }
+});
+
 test("date-only resolver rejects malformed and impossible Gregorian dates", () => {
   assert.throws(() => dayPillarForGregorianDate("2000-02-30"), RangeError);
   assert.throws(() => dayPillarForGregorianDate("2000/01/07"), TypeError);
