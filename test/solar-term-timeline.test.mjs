@@ -38,8 +38,19 @@ test("finds adjacent terms across a civil-year boundary", () => {
   assert.equal(result.next?.term, "XIAOHAN");
 });
 
-test("official 2026/2027 Korea fixture corpus is complete, ordered, and provenance-bearing", () => {
-  assert.equal(KOREA_SOLAR_TERM_EVENTS_2026_2027.length, 48);
+test("KASI-transcribed 2026/2027 fixture corpus includes prior-year guard", () => {
+  const annual = KOREA_SOLAR_TERM_EVENTS_2026_2027.filter(
+    ({ displayedDateTime }) => /^(2026|2027)-/.test(displayedDateTime),
+  );
+  const guards = KOREA_SOLAR_TERM_EVENTS_2026_2027.filter(
+    ({ displayedDateTime }) => displayedDateTime.startsWith("2025-"),
+  );
+  assert.equal(annual.length, 48);
+  assert.equal(guards.length, 1);
+  assert.equal(KOREA_SOLAR_TERM_EVENTS_2026_2027.length, 49);
+  assert.equal(guards[0]?.term, "DAXUE");
+  assert.equal(guards[0]?.displayedDateTime, "2025-12-07T06:05");
+  assert.deepEqual(guards[0]?.sourceIds, ["KR-KASI-CALENDAR-DATA"]);
   assert.doesNotThrow(() => validateKstMinuteSolarTermTimeline(KOREA_SOLAR_TERM_EVENTS_2026_2027));
   const lichun2026 = KOREA_SOLAR_TERM_EVENTS_2026_2027.find((x) => x.term === "LICHUN" && x.displayedDateTime.startsWith("2026-"));
   const lichun2027 = KOREA_SOLAR_TERM_EVENTS_2026_2027.find((x) => x.term === "LICHUN" && x.displayedDateTime.startsWith("2027-"));
