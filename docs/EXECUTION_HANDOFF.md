@@ -1,31 +1,29 @@
 # Execution handoff
 
-## Repository truth — 2026-10-09 03:00 KST (research/documentation run)
-- Workstream: `agent/foundation-20261006`, PR #1 draft/open. main read at `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
-- Exact pre-write PR HEAD / parent: `ef4be06a3378e9afbcbd7a04023f64c94f186a03`. This file is written **inside** the new commit; a Git commit cannot contain its own SHA. Read PR #1 head_sha for the exact post-write HEAD and verify its parent is the pre-write SHA above.
-- GitHub PR and target-file blob SHAs were re-read immediately before creating the conditional atomic documentation commit.
+## Repository truth — 2026-10-09 04:00 KST (interior-Jie guard)
+- Workstream: `agent/foundation-20261006`, PR #1 draft/open. main last read `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
+- Pre-write PR HEAD / expected parent: `6cf2dd6fd9aeee04845505f09de58cade854f37d`. A commit cannot contain its own SHA: re-read PR head_sha after the atomic update and verify this parent and changed blobs before treating the commit as applied.
+- Before writing, PR HEAD and all existing target-file blob SHAs were re-read; ref update must use expected_sha lease. Never assume a failed ref update succeeded.
 
 ## Commits actually applied
-- One documentation-only commit intended in this atomic update: M1 interior-Jie omission counterexample, KASA publication-rights caveat in source registry, and this handoff. **Only treat it as applied if PR HEAD advanced and the files are present.** No executable code changed; no main change/merge.
+- Intended single conditional commit: `fix(m1): reject missing interior month-boundary Jie before chart resolution`, changing `src/calendar/monthPillar.ts`, adding `test/month-boundary-jie-continuity.test.mjs`, updating the M1 audit and this handoff. **Only count it after final PR HEAD/file verification.** No main merge.
 
 ## Checks actually run
-- Direct GitHub connector: main/PR/branch/recent commits/tree/roadmap/handoff, exact source and tests; target SHA and PR head checks.
-- Local Node 22.16.0 minimal source-loop reproduction: deleting 2027 JINGZHE changes active Jie on 2027-03-10 from JINGZHE to LICHUN (PASS as a counterexample); **not** an exact-checkout test.
-- KASA official 2027 notice and 2026 announcement rights labels checked directly on issuer webpages.
-- Shell `git ls-remote`: FAIL (github.com DNS). `npm ci`, `npm run check`: NOT RUN. No executable change in this run.
+- Direct GitHub connector: main, PR #1, current branch, recent commits, tree, docs, source, tests and SHA reads.
+- Local isolated Node 22.16.0 / TypeScript 5.8.3: strict compilation PASS; focused synthetic interior-Jie/partial-guard tests 4/4 PASS. The reconstructed test uses minimal domain stubs and is **not** a canonical repository run.
+- Shell `git ls-remote`: FAIL (github.com DNS). Exact checkout `npm ci` / `npm run check`: NOT RUN. Do not claim full verification or merge.
 
 ## Current milestone/gate
-- M1 #12 Four Pillars: OPEN; canonical tests not run; incomplete-Jie data can yield a silently wrong month pillar.
-- M1 #13 lunar/leap-month official-annex comparison: OPEN; no fixture promotion.
-- Product reuse rights: KASA 2027 official publication page says KOGL type 2 (noncommercial); factual-data status and KASI licensing require review.
+- M1 #12 Four Pillars: OPEN. Interior missing-Jie detection implemented provisionally; edge coverage and exact-checkout tests still unresolved.
+- M1 #13 lunar/leap-month official-annex comparison: OPEN; no golden fixture promoted.
 
 ## Next 1–3 safe tasks
-1. Obtain exact PR checkout, run `npm ci && npm run check` and diagnose failures; do not merge before green.
-2. Add missing-interior-Jie regression and coverage-aware validation (without rejecting legitimate partial guard data), then run canonical checks.
-3. Inspect official KASA lunar annex vs KASI fixtures; resolve rights/attribution separately before commercial reuse.
+1. Obtain exact checkout and run `npm ci && npm run check`; investigate failures without weakening tests.
+2. Specify explicit supported-interval/fixture-manifest semantics and adversarial terminal-missing-Jie tests before enabling full coverage claims.
+3. Verify KASA official lunar annex against KASI and review commercial data reuse/attribution separately.
 
 ## Unresolved/disputed/blockers
-- Shell GitHub DNS prevents canonical checkout/checks; PR remains draft.
-- Published-minute rounding/truncation and true second-level solar-term boundaries unverified.
-- Zi rollover/hour-stem reference remain explicit school policies; historical time normalization not integrated.
-- Rights label concerns publication reuse; it does not itself prove that bare calendar facts cannot be used commercially.
+- Shell GitHub DNS blocks canonical checks; PR stays draft/unmerged.
+- A missing terminal Jie or sparse single-Jie input is not detectable by adjacency alone; coverage manifest not implemented.
+- Published-minute rounding/truncation, true second-level solar boundaries, Zi rollover/hour-stem policy, historical time normalization remain unresolved or explicitly policy-gated.
+- KASA publication rights notice is not itself a determination of whether individual independently sourced calendar facts are copyrightable.

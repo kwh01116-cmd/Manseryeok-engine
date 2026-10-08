@@ -29,6 +29,24 @@ function isMonthBoundaryJie(event: SolarTermEvent): event is SolarTermEvent & { 
   return (MONTH_BOUNDARY_JIE as readonly string[]).includes(event.term);
 }
 
+/** Detect omitted interior Jie in a contiguous month-boundary input sequence.
+ * This does not prove coverage at either end of the supplied timeline.
+ */
+function validateConsecutiveMonthBoundaryJie(
+  boundaries: readonly (SolarTermEvent & { readonly term: MonthBoundaryJie })[],
+): void {
+  for (let i = 1; i < boundaries.length; i++) {
+    const previous = boundaries[i - 1]!;
+    const current = boundaries[i]!;
+    const expected = MONTH_BOUNDARY_JIE[
+      (MONTH_BOUNDARY_JIE.indexOf(previous.term) + 1) % MONTH_BOUNDARY_JIE.length
+    ]!;
+    if (current.term !== expected) {
+      throw new Error(`nonconsecutive month-boundary Jie: expected ${expected} after ${previous.term}, got ${current.term}`);
+    }
+  }
+}
+
 export function resolveMonthBranchAtJie(
   events: readonly SolarTermEvent[],
   displayedDateTime: string,
@@ -36,6 +54,7 @@ export function resolveMonthBranchAtJie(
   if (!isGregorianMinute(displayedDateTime)) throw new Error(`invalid Gregorian minute: ${displayedDateTime}`);
   validateKstMinuteSolarTermTimeline(events);
   const boundaries = events.filter(isMonthBoundaryJie);
+  validateConsecutiveMonthBoundaryJie(boundaries);
   let previous: (typeof boundaries)[number] | undefined;
   for (const boundary of boundaries) {
     if (boundary.displayedDateTime > displayedDateTime) break;
