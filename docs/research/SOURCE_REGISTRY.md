@@ -65,3 +65,12 @@ Retrieved: 2026-10-07.
 Directly inspected scan evidence: the page headed 論日上起時例 prints the Five-Rat sequence beginning 甲己還加甲、乙庚丙作初、丙辛從戊起、丁壬庚子居、戊癸何方發. Independent digitized scans/editions expose the same section heading and sequence.
 Use: primary-text provenance for the deterministic mapping from an explicitly supplied day stem and hour branch to the hour stem.
 Caution: this passage supports 日上起時/Five-Rat mapping. It does not by itself settle whether the civil day changes at 23:00 or 00:00, nor which day stem a late-子 policy must supply.
+
+## JP-NAOJ-REKIYOU-2026 / JP-NAOJ-REKIYOU-2027
+Issuer: National Astronomical Observatory of Japan, Calendar and Ephemeris Computation Office.
+Publications: 2026 Reki Yoko (released 2025-02-03), 2027 Reki Yoko (released 2026-02-02).
+Evidence class: INDEPENDENT_PUBLISHED_SOLAR_TERM_DIFFERENTIAL; not Korean official calendar authority.
+Sources: https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html and https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou272.html
+Retrieved: 2026-10-08.
+Use: 48 published-minute term/date-time crosschecks. NAOJ Japan Central Standard Time and modern KST are UTC+09:00 for these dates; 48/48 match KASI transcriptions. See test/naoj-solar-term-differential.test.mjs.
+Caution: two institutions may share computational methods; rounding rule and second-level instant are unverified. Not a substitute for KASA annex verification.
