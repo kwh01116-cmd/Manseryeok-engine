@@ -1,30 +1,28 @@
 # Execution handoff
 
-## Repository truth — 2026-10-08 22:56 KST
-- Branch: agent/foundation-20261006; PR #1 draft/open; main at read: 39b6653e4f93169a4b5b51412b72d4710e9da91f.
-- Expected parent/head before this execution: 6d64e98bba3f1cf4e0a6d568466e30f19d776755.
-- This file is included in the same atomic commit as the change. A commit cannot embed its own SHA; fetch PR #1 head_sha for the exact resulting SHA, and verify its parent is 6d64e98bba3f1cf4e0a6d568466e30f19d776755.
+## Repository truth — 2026-10-09 02:00 KST (approximate)
+- Branch: `agent/foundation-20261006`; PR #1 draft/open; main at read: `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
+- Exact verified pre-write PR HEAD / commit parent: `6abb396ddaa35d89893a6cc4d5a658449e4403f1`. This handoff is included in the same atomic commit as the change, so it cannot contain its own resulting commit SHA. **Fetch PR #1 head_sha** for the exact post-write HEAD and confirm its parent is the SHA above.
 
 ## Commits actually applied
-- One expected-head atomic candidate commit: timeline year/term uniqueness guard, new adversarial Node tests, M1 gate audit, and this handoff. No main change or merge. If the expected-head ref update fails, this text is not authoritative; re-read PR HEAD.
+- One conditional, expected-head atomic commit for Five-Rat/Five-Tiger runtime validation, a new adversarial test, `docs/research/M1_PILLAR_INPUT_VALIDATION.md`, and this handoff **only if PR HEAD advanced**. No main change or merge. If the ref update failed, use the actual branch state instead of this text.
 
 ## Checks actually run
-- GitHub connector read: main/base, open PR, branch head, recent commits, docs/ROADMAP.md, source/test/docs and prior handoff; pre-write PR HEAD and three target-file blob SHAs matched.
-- Local shell git ls-remote: FAIL (github.com DNS resolution). Exact checkout, npm ci, repository npm run check: NOT RUN.
-- Isolated TypeScript 5.8.3 strict compilation of exact modified timeline logic with minimal SolarTermEvent declaration: PASS.
-- Isolated Node.js 22.16.0 new regression test logic: 2/2 PASS; new test syntax PASS. These are NOT canonical repository checks.
+- GitHub connector: main, open PR, branch head/recent commits, `docs/ROADMAP.md`, source/test files, previous handoff; fresh pre-write PR head and target blob SHAs checked.
+- Isolated Node.js 22.16.0 test: **3/3 PASS**; TypeScript 5.8.3 strict compile: **PASS** with minimal dependency stubs. These are not canonical repository checks.
+- Local `git ls-remote`: **FAIL** (github.com DNS). Exact checkout / `npm ci` / `npm run check`: **NOT RUN**.
 
 ## Current milestone/gate
-- M1 #12 Four-Pillars OPEN: integrated post-DST Korean civil-time API and timeline integrity guard on draft PR; canonical verification and boundary precision unresolved.
-- M1 #13 lunar/leap-month annex comparison not complete.
+- M1 #12 Four-Pillars: **OPEN**. Input-safety slice is draft-only, not canonical verified.
+- M1 #13 lunar/leap-month annex comparison: not complete.
 
 ## Next 1–3 safe tasks
-1. Obtain exact branch checkout, npm ci && npm run check; investigate any failures without weakening tests.
-2. Audit full Four-Pillars fixture integrity and published-minute versus birth-record precision before M1 #12 signoff.
-3. Compare KASA official lunar annex against KASI leap-month candidates for M1 #13.
+1. Restore exact branch checkout and run `npm ci && npm run check`; resolve failures without weakening tests.
+2. Audit published-minute vs birth-record precision and Four-Pillars end-to-end invariants before M1 #12 signoff.
+3. Compare official KASA lunar annex with KASI 2025 leap-month fixtures for M1 #13.
 
-## Unresolved / disputed / blockers
-- Exact repository verification blocked by shell github.com DNS; no merge.
-- Publisher rounding/truncation and actual boundary seconds remain UNVERIFIED.
-- DAY_ROLLOVER, hour-stem reference and time basis remain explicit policies; historical civil-time conversion not integrated.
-- Read actual PR head and target-file SHA before any next write. Repository truth outranks chat memory.
+## Unresolved/disputed/blockers
+- Shell github.com DNS prevents canonical checks; **do not merge**.
+- Published-minute rounding/truncation and true boundary seconds UNVERIFIED.
+- Zi rollover, hour-stem reference and time basis remain explicit policies; historical civil-time conversion not integrated.
+- Before any future write, re-read actual PR head and every target-file SHA; repo state outranks chat history.

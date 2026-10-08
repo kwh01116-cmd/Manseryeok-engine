@@ -27,6 +27,8 @@ export function hourBranchForEffectiveClock(value: string): EarthlyBranch {
 export function hourPillarFromDayStem(dayStem: HeavenlyStem, hourBranch: EarthlyBranch): GanZhi {
   const dayStemIndex = HEAVENLY_STEMS.indexOf(dayStem);
   const hourBranchIndex = EARTHLY_BRANCHES.indexOf(hourBranch);
+  if (dayStemIndex < 0) throw new RangeError("Unsupported day stem.");
+  if (hourBranchIndex < 0) throw new RangeError("Unsupported hour branch.");
   const ziStemIndex = (dayStemIndex % 5) * 2;
   return {
     stem: HEAVENLY_STEMS[(ziStemIndex + hourBranchIndex) % 10]!,

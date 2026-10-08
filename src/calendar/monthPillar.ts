@@ -64,6 +64,7 @@ const TIGER_START_INDEX: Readonly<Record<HeavenlyStem, number>> = {
 };
 const MONTH_BRANCHES: readonly EarthlyBranch[] = ["寅","卯","辰","巳","午","未","申","酉","戌","亥","子","丑"];
 export function monthPillarFromYearStem(yearStem: HeavenlyStem, monthBranch: EarthlyBranch): GanZhi {
+  if (HEAVENLY_STEMS.indexOf(yearStem) < 0) throw new RangeError("Unsupported year stem.");
   const offset = MONTH_BRANCHES.indexOf(monthBranch);
   if (offset < 0) throw new Error(`unsupported month branch: ${monthBranch}`);
   return { stem: HEAVENLY_STEMS[(TIGER_START_INDEX[yearStem] + offset) % 10]!, branch: monthBranch };
