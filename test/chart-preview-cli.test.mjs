@@ -43,4 +43,10 @@ test('invalid flags and unsupported dates fail closed without outputting a chart
   const outside = run(base.map(x => x.replace('2027-02-05', '2028-01-01')));
   assert.equal(outside.status, 2);
   assert.equal(outside.stdout, '');
+  assert.deepEqual(JSON.parse(outside.stderr), { status: 'OUT_OF_COVERAGE' });
+  const invalidLunar = run(base.map(x => x === '--calendar=GREGORIAN' ? '--calendar=KOREAN_LUNAR' :
+    x === '--date=2027-02-05' ? '--date=2026-06-01' : x).concat('--leap=true'));
+  assert.equal(invalidLunar.status, 2);
+  assert.equal(invalidLunar.stdout, '');
+  assert.deepEqual(JSON.parse(invalidLunar.stderr), { status: 'INVALID_LUNAR_DATE' });
 });

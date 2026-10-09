@@ -41,8 +41,10 @@ export function adjacentSolarTerms(events: readonly SolarTermEvent[], displayedD
   validateKstMinuteSolarTermTimeline(events);
   let previous: SolarTermEvent | undefined;
   for (const event of events) {
-    if (event.displayedDateTime > displayedDateTime) return { previous, next: event };
+    if (event.displayedDateTime > displayedDateTime) {
+      return previous === undefined ? { next: event } : { previous, next: event };
+    }
     previous = event;
   }
-  return { previous };
+  return previous === undefined ? {} : { previous };
 }

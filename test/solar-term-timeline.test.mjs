@@ -38,6 +38,16 @@ test("finds adjacent terms across a civil-year boundary", () => {
   assert.equal(result.next?.term, "XIAOHAN");
 });
 
+test("adjacent terms omit absent optional properties at both coverage edges", () => {
+  const winter = [event("DONGZHI", "2026-12-22T05:50"), event("XIAOHAN", "2027-01-05T23:10")];
+  assert.deepEqual(adjacentSolarTerms(winter, "2026-12-21T23:59"), { next: winter[0] });
+  assert.deepEqual(adjacentSolarTerms(winter, "2027-01-06T00:00"), { previous: winter[1] });
+  assert.deepEqual(adjacentSolarTerms([], "2027-01-01T00:00"), {});
+  assert.deepEqual(adjacentSolarTerms(winter, "2026-12-22T05:50"), {
+    previous: winter[0], next: winter[1],
+  });
+});
+
 test("KASI-transcribed 2026/2027 fixture corpus includes prior-year guard", () => {
   const annual = KOREA_SOLAR_TERM_EVENTS_2026_2027.filter(
     ({ displayedDateTime }) => /^(2026|2027)-/.test(displayedDateTime),

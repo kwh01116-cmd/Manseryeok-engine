@@ -34,8 +34,13 @@ try {
     const result = resolveKoreanBirthChartPreview(
       input, clock, policies, converter, KOREA_SOLAR_TERM_EVENTS_2026_2027, manifest,
     );
-    process.stdout.write(JSON.stringify(result) + '\n');
-    if (result.status !== 'OK') process.exitCode = 2;
+    if (result.status === 'OK') {
+      process.stdout.write(JSON.stringify(result) + '\n');
+    } else {
+      // Only a resolved chart belongs on stdout; supported failure statuses use stderr.
+      process.stderr.write(JSON.stringify(result) + '\n');
+      process.exitCode = 2;
+    }
   }
 } catch (error) {
   const invalid = error instanceof RangeError || error instanceof TypeError;
