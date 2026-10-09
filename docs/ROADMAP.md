@@ -52,6 +52,23 @@ Gate: gaps/folds are explicit and no instant is guessed.
 ### M10 Production app
 Explanation UX, privacy, saved charts, API/schema versioning, observability, accessibility, rollback and deployment. Account/payment/growth follow chart correctness.
 
+
+## Parallel track U — explainable storytelling / mobile scroll-comic
+
+**Priority is unchanged:** M1 accurate modern Korean Four-Pillars + V0 integration → M2 deterministic ChartFacts → verified interpretation. U is an optional, separately gated **presentation track**, not an excuse to delay exact checkout, `npm run check`, KASA/Gazette comparison, independent differential or supported-year expansion. See [product UX design and QA gates](PRODUCT_STORYTELLING_UX_ROADMAP.md).
+
+| Track | Dependency | Deliverable | Exit gate |
+| --- | --- | --- | --- |
+| **U0: structured presentation mapping** | Existing M1/V0 preview contract | Map computed chart/policy/coverage/source to versioned story beats, disclosure labels, error/uncertainty states | No second computation path; chart fact → source/policy trace; unsupported inputs fail closed |
+| **U1: first read-only scroll chapter** | U0 + working V0 within declared calendar support | Extend **existing** `web/` prototype: four pillars → day stem → month branch/season → deterministic five-element labels; expandable "why?" | Gregorian/lunar equivalence, Lichun 2-candidate boundary, explicit Zi policy, 360px/mobile/reduced-motion/accessibility and real-engine UI tests |
+| **U2: modular ChartFacts stories** | Each respective M2 finite-table/schema gate | Ten gods, hidden stems, twelve stages and raw branch relations, only once verified | rule_id/source/policy provenance; no unsupported strength scoring |
+| **U3: interpretation narratives** | Corresponding verified M3–M8 resolvers | school-specific strength/pattern/useful-god/climate/luck chapters with visible disagreement | separate COMPUTED/CONDITIONAL/INTERPRETIVE findings; no guaranteed prediction |
+| **U4: optional character AI and business** | U1/U2 user tests + privacy/legal/licensing/release checks | Grounded story dialogue and paid **extra content**, not hidden facts | hallucination/unsafe-claim tests, consent, IP and refund/commercial-use gates |
+
+**Technology guardrail:** the existing read-only local HTML + Node web adapter is the default starting point. Next.js/React, Rive/Lottie, Ink, accounts, public deployment and payments are **not required technologies or approved work**; adopt only against measured need. Character/LLM must only present already-verified `ChartFacts`/`InterpretationFinding` records. Source confidence is not scientific predictive validity. 6–8-week / KRW budget claims in the supplied research are unverified estimates, **not schedules or commitments**.
+
+**Unattended sequencing:** only U0 documentation/interface mapping may run in parallel while M1 validation is pending, if it does not conflict with the critical path. Implement U1 as a small reversible functional slice after M1/V0 canonical checks; U2–U4 stay dependency-blocked. Do not repeatedly add design documents in place of code/tests.
+
 ## Verification ladder
 
 Use the relevant levels for every executable slice: unit/table -> property/metamorphic -> boundary -> official Korean golden -> pinned differential implementations -> adversarial classical cases -> regression corpus -> randomized corpus. Library consensus is never calendar authority.
@@ -62,7 +79,13 @@ Every run reads main/open PR/head/tests/roadmap first, selects the first unmet c
 
 If a rule cannot be closed after two focused passes, mark it DISPUTED/UNVERIFIED, create the policy boundary, and continue. Do not spend consecutive runs on P2 while M1/M2 is open unless P2 blocks them.
 
-## Immediate queue
+## Current execution cursor (2026-10-10; `EXECUTION_HANDOFF.md` overrides this summary)
+
+1. Exact branch checkout and `npm ci && npm run check` — never weaken failing tests.
+2. KASA/Gazette official calendar-minute edition, KASI differential and commercial data-rights review; separate facts from publication license.
+3. Expand modern Korean birth-year coverage and verified M2 ChartFacts. U0 mapping may proceed only without displacing these gates.
+
+## Original dependency inventory (historical checklist, not the live queue)
 
 1. structured rule/test-vector schema
 2. dependency lock and repository verification

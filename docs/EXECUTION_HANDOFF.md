@@ -1,3 +1,11 @@
+## Latest 2026-10-10 KST — storytelling UX track incorporated (documentation-only)
+- Exact working branch `agent/foundation-20261006`, existing PR #1 DRAFT/OPEN, verified parent HEAD `b59f57dc9c424e130dbdf706c0f9c32894eaf6be`; main observed at `39b6653e4f93169a4b5b51412b72d4710e9da91f`. Postwrite HEAD is the *live* GitHub PR head (a commit cannot embed its own hash).
+- Actual work: one reversible atomic docs commit updating `docs/ROADMAP.md`, creating `docs/PRODUCT_STORYTELLING_UX_ROADMAP.md`, and updating this handoff. Added U0–U4 dependency gates, implementation and adversarial UX test criteria. No application code, new dependencies, tests, production deployment, new branch, or merge.
+- Actually checked: current PR/branch ref, affected file blob SHA, roadmap anchor/coverage and new-path absence; docs consistency spot-check. `npm run check`, `npm ci`, HTTP/browser tests were **NOT RUN** for this docs-only change; all previous verification restrictions remain.
+- Milestone: M1/V0 official-evidence/clean-check gates **OPEN**. U0–U4 = planned; **no webtoon implementation or release claimed**.
+- Safe next 1–3: (1) exact networked checkout and canonical checks; (2) KASA/Gazette vs KASI minutes and source rights + independent differential; (3) expand modern birth coverage / M2 ChartFacts; U0 schema mapping may proceed only if it does not displace critical gates.
+- Blockers/disputed: source rights/edition/precision, unknown-time and Zi policies, historic timezone backlog. User-supplied 2026 market/legal assertions and cost/period estimates **not independently verified**. No merge.
+
 ## Latest 2026-10-10 KST — published KASI month-start 日辰 cross-check (focused regression)
 - Exact branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; prewrite HEAD `cfbaf724daaa8ca2c2c5961c23795b3aa32f37e9`; main prewrite `39b6653e4f93169a4b5b51412b72d4710e9da91f`. Final HEAD is the live PR ref after conditional commit (a commit cannot contain its own SHA).
 - This run: one reversible atomic commit adds `test/day-pillar-kasi-month-starts.test.mjs` (24 published 2026/2027 lunar month-first-day Gregorian-date + 日辰 witnesses, plus 2 tests) and this handoff. No main merge.
