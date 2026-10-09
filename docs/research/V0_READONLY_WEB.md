@@ -36,3 +36,6 @@ The response displays four pillars in Hangul and Hanja, plus alternative correla
 1. Restore exact checkout; run `npm ci && npm run check` at current PR head; run actual local server, interact with desktop/mobile browser, and fix discovered problems.
 2. Compare KASA official annual annexes with KASI-transcribed source minutes and assess material reuse rights; do not treat fixture digest or structural coverage as astronomical authority.
 3. Only after all M1/V0 gates and PR review: consider merge. A local proof-of-concept screen does not require a merge to `main`.
+## Static browser render after UI commit (2026-10-09)
+
+Chromium/Playwright `page.set_content()` rendered the exported HTML at desktop (1240 px) and mobile (390 px) widths and verified that the example-fill button populates an explicit day-rollover policy. Static PNG previews produced. This is a **static UI smoke pass only**; the Node HTTP server / compiled engine were **not** browser-tested, and `npm run check` remains blocked by shell GitHub DNS. The prior browser file/http navigation failure is not a failure of this static `set_content` test.

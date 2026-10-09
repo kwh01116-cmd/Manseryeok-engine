@@ -1,5 +1,12 @@
 # Execution handoff
 
+## Postwrite verification — 2026-10-09 KST (screen preview)
+- Confirmed PR #1 branch head after UI commit: `735b2c31fc2a44152b2de6844a5bfd5fb2f4b210`; six changed file blob SHAs matched GitHub; `main` remained at `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
+- Additional actual checks: Chromium via Playwright `page.set_content` loaded exported V0 HTML at 1240px and 390px viewports; title/date fields rendered; example-button interaction set the explicit CIVIL_MIDNIGHT policy; desktop/mobile static screenshots generated. PASS for **static browser rendering only**, NOT the real engine/API or network navigation.
+- File/http browser navigation was blocked by administrator; `git ls-remote` failed DNS; `npm ci && npm run check` and server HTTP integration tests were NOT RUN. No merge authorized. Current milestone remains M1/V0 OPEN.
+- This documentation-only commit updates evidence/hand-off after the UI commit; newest exact HEAD must be resolved live from PR before any subsequent write.
+
+
 ## Latest 2026-10-09 — V0 browser preview on the existing Draft PR
 - Branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; parent HEAD `6318c1aa2da9541bc59cbb3473a15edbeecb396c`; main at prewrite `39b6653e4f93169a4b5b51412b72d4710e9da91f`. The final HEAD is the GitHub branch ref following conditional update; a commit cannot embed its own SHA.
 - This run's intended single commit: `feat(v0): local read-only Korean chart web preview` including HTML, local HTTP adapter, real-engine integration tests, README/documentation, and this handoff. Count only after checking GitHub branch HEAD.
