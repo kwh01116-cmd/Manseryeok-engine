@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>만세력 · 사주 명식 미리보기</title>
+  <style>
+    :root{color-scheme:light;--ink:#1f2925;--muted:#69746e;--line:#dce3db;--leaf:#275444;--paper:#f5f7f2;--white:#fff}
+    *{box-sizing:border-box}body{margin:0;font:15px/1.6 system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:var(--paper);color:var(--ink)}
+    .shell{max-width:1040px;margin:auto;padding:34px 22px 70px}.brand{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.1em;color:var(--leaf)}.brand span:last-child{font-weight:500;letter-spacing:0;color:var(--muted)}
+    header{padding:62px 0 34px}h1{font-family:Georgia,"Noto Serif KR",serif;font-size:clamp(32px,5vw,51px);line-height:1.22;letter-spacing:-.04em;margin:12px 0}header p{color:var(--muted);max-width:620px;margin:0}.eyebrow{font-size:12px;color:var(--leaf);font-weight:700;letter-spacing:.18em}
+    .layout{display:grid;grid-template-columns:minmax(290px,390px) 1fr;gap:22px;align-items:start}.panel{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 14px 44px rgba(28,50,34,.035)}.panel h2{font-size:19px;margin:0 0 19px;letter-spacing:-.025em}fieldset{border:0;margin:0;padding:0}.switch{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:19px;background:#f6f8f6}.switch label{cursor:pointer;text-align:center;padding:8px;border-radius:8px}.switch input{position:absolute;opacity:0}.switch label:has(input:checked){background:var(--leaf);color:white;font-weight:700}.field{display:block;margin-bottom:16px}.field span,.field legend{display:block;font-size:13px;font-weight:650;margin-bottom:7px}.field input,.field select{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:white;color:var(--ink)}.field input:focus,.field select:focus{outline:2px solid #78a18a;outline-offset:1px}.note{color:var(--muted);font-size:12px;margin:-7px 0 18px}.checkline{display:flex;align-items:center;gap:9px;margin:-1px 0 19px}.checkline input{width:18px;height:18px;accent-color:var(--leaf)}.checkline label{cursor:pointer}.actions{display:flex;gap:9px}.primary,.secondary{font:inherit;font-weight:700;border-radius:11px;padding:12px;border:1px solid var(--leaf);cursor:pointer}.primary{background:var(--leaf);color:white;flex:1}.secondary{background:white;color:var(--leaf)}.primary:hover{background:#163e31}.secondary:hover{background:#f1f7f2}
+    .result{min-height:418px}.state{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--leaf);margin-bottom:16px}.dot{width:7px;height:7px;border-radius:50%;background:#69a18a}.placeholder{border:1px dashed var(--line);border-radius:15px;text-align:center;padding:60px 28px;background:#fafbf9;color:var(--muted)}.placeholder b{display:block;color:var(--ink);font-size:18px;margin-bottom:8px}.candidate{border:1px solid var(--line);border-radius:15px;padding:18px;margin:15px 0}.candidate h3{font-size:14px;font-weight:650;margin:0 0 16px}.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.pillar{border:1px solid var(--line);background:#f9fbf8;text-align:center;border-radius:10px;padding:14px 6px}.pillar small{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}.pillar strong{display:block;font-family:Georgia,serif;font-size:clamp(22px,3.2vw,33px);font-weight:500;line-height:1.25}.pillar em{display:block;font-style:normal;font-size:13px;color:var(--leaf);margin-top:6px}.meta{font-size:12px;color:var(--muted);line-height:1.85;margin-top:15px}.warning{margin-top:16px;border-left:3px solid #af9460;background:#faf8f0;padding:12px 15px;color:#65553e;border-radius:4px;font-size:13px}.error{color:#a13a35;background:#fff3f1;border:1px solid #efd3ce;padding:12px;border-radius:10px;margin-top:14px}.footer{font-size:12px;line-height:1.9;color:var(--muted);padding-top:23px}.hide{display:none!important}
+    @media(max-width:750px){.layout{grid-template-columns:1fr}header{padding:38px 0 26px}.shell{padding:24px 16px 60px}.panel{padding:21px}.result{min-height:300px}}
+  </style>
+</head>
+<body>
+<div class="shell"><nav class="brand"><span>萬歲曆 / MANSE RYEOK</span><span>한국형 명식 계산 · V0</span></nav>
+<header><span class="eyebrow">KOREAN FOUR PILLARS</span><h1>태어난 시간을,<br>네 기둥으로 읽다.</h1><p>양력·음력 생년월일과 한국 민간시를 바탕으로 사주 원국을 확인합니다. 해석보다 정확한 계산과 출처 표기를 우선합니다.</p></header>
+<main class="layout"><section class="panel"><h2>출생 정보</h2>
+<form id="birth-form">
+<fieldset class="switch" aria-label="달력 종류"><label><input type="radio" name="calendar" value="GREGORIAN" checked>양력</label><label><input type="radio" name="calendar" value="KOREAN_LUNAR">음력</label></fieldset>
+<label class="field"><span>생년월일</span><input id="birth-date" required placeholder="YYYY-MM-DD" inputmode="numeric" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" value="2027-02-05" aria-describedby="supported"/></label>
+<label class="checkline hide" id="leap-wrap"><input id="leap" type="checkbox"/><span>윤달(윤월)에 태어났어요</span></label>
+<label class="field"><span>태어난 시각 · 한국 표준시</span><input id="birth-time" type="time" value="12:00" required /></label>
+<p class="note" id="supported">계산 가능한 출생 날짜는 현재 주로 2026~2027년입니다. 시각은 분 단위로 입력합니다.</p>
+<label class="field"><span>일주 변경 기준</span><select id="rollover" required><option value="">기준을 선택하세요</option><option value="CIVIL_MIDNIGHT">자정(00:00)에 변경</option><option value="ZI_START">자시 시작(23:00)에 변경</option></select></label>
+<label class="field"><span>야자시 시주 천간 기준</span><select id="hourref" required><option value="">기준을 선택하세요</option><option value="SELECTED_DAY_PILLAR">선택한 일주의 천간</option><option value="CIVIL_DATE_DAY_PILLAR">민간 날짜의 일주 천간</option></select></label>
+<div class="actions"><button class="primary" type="submit">사주 명식 계산</button><button class="secondary" type="button" id="example">예시 입력</button></div>
+</form></section>
+<section class="panel result" aria-live="polite" aria-atomic="false"><div class="state"><span class="dot"></span>출처·정책을 구분한 계산 결과</div><h2>나의 사주 원국</h2><div id="output"><div class="placeholder"><b>명식을 계산해 볼까요?</b>왼쪽에서 시간 정책을 선택하고 계산 버튼을 눌러주세요.<br><br><small>‘예시 입력’을 누르면 2027년 양력 샘플이 채워집니다.</small></div></div><div class="warning">연·월 경계의 발표 시각에 해당하면 가능한 명식이 둘 이상 표시됩니다. 자료는 KASI 계산 참고자료이며 공식 역법 인증·미래 예측을 뜻하지 않습니다.</div></section></main>
+<footer class="footer">V0 연구용 화면 · 출생정보는 이 화면에서 저장하지 않습니다. · 한국 민간시 / 분 단위 출생시각만 지원<br>절입시각의 초 단위 불확실성, 역사적 시각 복원, 해석 학파 선택은 추후 확장합니다.</footer></div>
+<script>
+(() => {
+ const $ = id => document.getElementById(id);
+ const form = $('birth-form'), output = $('output');
+ const calendar = () => form.querySelector('input[name="calendar"]:checked').value;
+ for (const el of form.querySelectorAll('input[name="calendar"]')) el.addEventListener('change', () => $('leap-wrap').classList.toggle('hide', calendar() !== 'KOREAN_LUNAR'));
+ $('example').addEventListener('click', () => {form.querySelector('input[value="GREGORIAN"]').checked=true;$('leap-wrap').classList.add('hide');$('birth-date').value='2027-02-05';$('birth-time').value='12:00';$('rollover').value='CIVIL_MIDNIGHT';$('hourref').value='SELECTED_DAY_PILLAR';$('birth-date').focus();});
+ const element=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
+ const error = message => {output.replaceChildren(element('div','error',message));};
+ function render(data) {
+   if(data.status!=='OK'){error(data.status==='OUT_OF_COVERAGE'?'현재 검증된 역법 적용 범위를 벗어납니다.':'유효하지 않은 음력 날짜입니다.');return;}
+   const p=data.preview, frag=document.createDocumentFragment();
+   if(p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS')frag.append(element('div','warning','절입 발표 시각과 일치해 가능한 두 명식을 함께 표시합니다.'));
+   p.candidates.forEach((c,i)=>{const card=element('article','candidate');card.append(element('h3','',p.candidates.length>1?`가능한 명식 ${i+1}`:'연 · 월 · 일 · 시'));
+     const grid=element('div','pillars');for (const [name,part] of [['연주',c.year],['월주',c.month],['일주',c.day],['시주',c.hour]]){const box=element('div','pillar');box.append(element('small','',name),element('strong','',part.hanja),element('em','',part.hangul));grid.append(box);}card.append(grid);frag.append(card);});
+   frag.append(element('div','meta',`한국 민간시 ${p.recordedBirthKstMinute.replace('T',' ')} · 적용 일자 ${p.effectiveDayDate}\n시간 정책: ${p.policies.dayRollover} / ${p.policies.hourStemReference}\n검증: ${p.coverage.validation} · ${p.confidenceScope}`));output.replaceChildren(frag);
+ }
+ form.addEventListener('submit',async e=>{e.preventDefault();const request={calendar:calendar(),date:$('birth-date').value,time:$('birth-time').value,timeBasis:'KOREAN_CIVIL_TIME',dayRollover:$('rollover').value,hourStemReference:$('hourref').value};if(request.calendar==='KOREAN_LUNAR')request.leap=$('leap').checked;
+   const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent='계산 중…';
+   try{const response=await fetch('/api/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(request),cache:'no-store'});const data=await response.json();if(!response.ok&&data.status==='ERROR')error(data.message==='Invalid request'?'입력값을 확인해 주세요.':(data.message||'계산 오류가 발생했습니다.'));else render(data);}catch{error('계산 서버에 연결할 수 없습니다. 로컬 미리보기 파일이라면 저장소에서 npm run build 후 npm run web 명령으로 실행하세요.');}finally{button.disabled=false;button.textContent='사주 명식 계산';}
+ });
+})();
+</script>
+</body></html>

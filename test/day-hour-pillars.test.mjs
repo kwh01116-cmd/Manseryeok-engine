@@ -1,0 +1,98 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { resolveDayHourPillars } from "../dist/index.js";
+
+test("late-Zi hour-stem reference is explicit when Zi-start changes the selected day", () => {
+  const selected = resolveDayHourPillars(
+    "2000-01-07", "23:30", "ZI_START", "SELECTED_DAY_PILLAR",
+  );
+  const civil = resolveDayHourPillars(
+    "2000-01-07", "23:30", "ZI_START", "CIVIL_DATE_DAY_PILLAR",
+  );
+
+  assert.deepEqual(selected.dayPillar, { stem: "乙", branch: "丑" });
+  assert.deepEqual(civil.dayPillar, { stem: "乙", branch: "丑" });
+  assert.deepEqual(selected.hourPillar, { stem: "丙", branch: "子" });
+  assert.deepEqual(civil.hourPillar, { stem: "甲", branch: "子" });
+});
+
+test("hour-stem references converge when selected and civil-date day stems coincide", () => {
+  const cases = [
+    ["2000-01-07", "22:59", "ZI_START"],
+    ["2000-01-08", "00:00", "ZI_START"],
+    ["2000-01-07", "23:30", "CIVIL_MIDNIGHT"],
+  ];
+
+  for (const [date, clock, rollover] of cases) {
+    const selected = resolveDayHourPillars(date, clock, rollover, "SELECTED_DAY_PILLAR");
+    const civil = resolveDayHourPillars(date, clock, rollover, "CIVIL_DATE_DAY_PILLAR");
+    assert.deepEqual(selected.dayPillar, civil.dayPillar, date + " " + clock + " day");
+    assert.deepEqual(selected.hourPillar, civil.hourPillar, date + " " + clock + " hour");
+  }
+});
+
+test("composition preserves effective date provenance", () => {
+  assert.equal(
+    resolveDayHourPillars("1999-12-31", "23:30", "ZI_START", "SELECTED_DAY_PILLAR").effectiveDate,
+    "2000-01-01",
+  );
+  assert.equal(
+    resolveDayHourPillars("2000-01-07", "23:30", "CIVIL_MIDNIGHT", "SELECTED_DAY_PILLAR").effectiveDate,
+    "2000-01-07",
+  );
+});
+
+test("metamorphic corpus confines hour-stem-reference divergence to Zi-start late-Zi", () => {
+  const start = Date.UTC(1999, 10, 1);
+  const dayMs = 86_400_000;
+  const clocks = ["00:00", "00:59", "01:00", "10:30", "21:00", "22:59", "23:00", "23:30", "23:59"];
+
+  for (let offset = 0; offset < 400; offset += 1) {
+    const date = new Date(start + offset * dayMs).toISOString().slice(0, 10);
+
+    for (const rollover of ["CIVIL_MIDNIGHT", "ZI_START"]) {
+      for (const clock of clocks) {
+        const selected = resolveDayHourPillars(date, clock, rollover, "SELECTED_DAY_PILLAR");
+        const civil = resolveDayHourPillars(date, clock, rollover, "CIVIL_DATE_DAY_PILLAR");
+        const shouldDiverge = rollover === "ZI_START" && clock >= "23:00";
+
+        assert.equal(
+          selected.effectiveDate !== date,
+          shouldDiverge,
+          date + " " + clock + " " + rollover + " effective-date divergence",
+        );
+        assert.deepEqual(selected.dayPillar, civil.dayPillar, date + " " + clock + " day");
+
+        if (shouldDiverge) {
+          assert.notDeepEqual(
+            selected.hourPillar,
+            civil.hourPillar,
+            date + " " + clock + " expected hour divergence",
+          );
+        } else {
+          assert.deepEqual(
+            selected.hourPillar,
+            civil.hourPillar,
+            date + " " + clock + " expected hour convergence",
+          );
+        }
+      }
+    }
+  }
+});
+
+test("unknown or missing policies never silently select a day/hour convention", () => {
+  for (const invalid of ["ZI_STRAT", "", undefined, null, 0]) {
+    assert.throws(
+      () => resolveDayHourPillars("2000-01-07", "23:30", invalid, "SELECTED_DAY_PILLAR"),
+      { name: "RangeError", message: "Unsupported DAY_ROLLOVER policy." },
+    );
+  }
+  for (const invalid of ["AUTO", "", undefined, null, 0, "selected_day_pillar"]) {
+    assert.throws(
+      () => resolveDayHourPillars("2000-01-07", "23:30", "ZI_START", invalid),
+      { name: "RangeError", message: "Unsupported HOUR_STEM_REFERENCE policy." },
+    );
+  }
+});
