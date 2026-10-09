@@ -1,5 +1,14 @@
 # Execution handoff
 
+## Latest 2026-10-09 — V0 browser preview on the existing Draft PR
+- Branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; parent HEAD `6318c1aa2da9541bc59cbb3473a15edbeecb396c`; main at prewrite `39b6653e4f93169a4b5b51412b72d4710e9da91f`. The final HEAD is the GitHub branch ref following conditional update; a commit cannot embed its own SHA.
+- This run's intended single commit: `feat(v0): local read-only Korean chart web preview` including HTML, local HTTP adapter, real-engine integration tests, README/documentation, and this handoff. Count only after checking GitHub branch HEAD.
+- Checks ACTUALLY run: Node 22.16.0 `node --check` of new server and HTTP test PASS; inline UI script syntax PASS. Browser navigation/screenshot blocked by administrator; `git ls-remote` FAIL because github.com DNS unavailable; exact checkout `npm ci && npm run check` NOT RUN. HTTP tests have been added, NOT VERIFIED, no merge.
+- Milestones: M1 calendar/four-pillars integration gate OPEN; V0 browser UI implemented but real built-engine HTTP path UNVERIFIED. Existing time policies explicit; KASI transcriptions only.
+- Next 1–3 safe tasks: (1) exact branch checkout and `npm ci && npm run check` (fix actual failures, do not weaken tests); (2) run local web server and inspect desktop/mobile with real 2027 Gregorian/lunar/LICHUN inputs; (3) KASA edition-level calendar comparison and scoped PR review before merge.
+- Disputed/blockers: checkout DNS; KASA official annex and commercial-use rights, published-minute rounding/seconds, historical DST and Zi rollover policy. Local browser preview is not a production endpoint; no user data storage, authentication or public deployment added.
+
+
 ## Latest 2026-10-09 — V0 CLI date-shape validation (canonical check BLOCKED)
 - Exact branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; prewrite head `9c8b906002fcd90bfc4506d37267301e57c4627e`; resulting head is the live branch ref (commit SHA cannot self-reference its own content). Main prewrite head `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
 - Commits this run: one small atomic commit updating CLI parser, its regression test, and this handoff. No main merge.
