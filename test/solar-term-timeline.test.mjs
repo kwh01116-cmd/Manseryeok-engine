@@ -65,3 +65,23 @@ test("KASI-transcribed 2026/2027 fixture corpus includes prior-year guard", () =
   assert.equal(crossYear.previous?.displayedDateTime, "2026-12-22T05:50");
   assert.equal(crossYear.next?.displayedDateTime, "2027-01-05T23:10");
 });
+
+
+test("KASI shared fixture cannot be modified at runtime, but test copies remain mutable", () => {
+  const fixture = KOREA_SOLAR_TERM_EVENTS_2026_2027;
+  assert.equal(fixture.length, 49);
+  assert.ok(Object.isFrozen(fixture));
+  for (const event of fixture) {
+    assert.ok(Object.isFrozen(event), event.displayedDateTime);
+    assert.ok(Object.isFrozen(event.sourceIds), event.displayedDateTime + " sourceIds");
+  }
+  assert.throws(() => fixture.push(fixture[0]), TypeError);
+  assert.throws(() => { fixture[0] = fixture[1]; }, TypeError);
+  assert.throws(() => { fixture[0].displayedDateTime = "2025-12-07T06:06"; }, TypeError);
+  assert.throws(() => { fixture[0].sourceIds[0] = "FAKE"; }, TypeError);
+  const copy = fixture.map(event => ({ ...event, sourceIds: [...event.sourceIds] }));
+  copy[0].displayedDateTime = "2025-12-07T06:06";
+  assert.equal(copy[0].displayedDateTime, "2025-12-07T06:06");
+  assert.equal(fixture[0].displayedDateTime, "2025-12-07T06:05");
+  assert.doesNotThrow(() => validateKstMinuteSolarTermTimeline(fixture));
+});

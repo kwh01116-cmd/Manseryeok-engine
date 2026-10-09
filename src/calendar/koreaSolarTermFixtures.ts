@@ -36,12 +36,12 @@ const VALUES = {
 } as const;
 
 function yearEvents(year: keyof typeof VALUES): readonly SolarTermEvent[] {
-  return VALUES[year].map((monthDayTime, index) => ({
+  return VALUES[year].map((monthDayTime, index) => Object.freeze({
     term: TERM_ORDER[index]!,
     displayedDateTime: `${year}-${monthDayTime}`,
     timeBasis: "KST",
     sourcePrecision: "MINUTE",
-    sourceIds: [KASI_TRANSCRIPTION_SOURCE_ID],
+    sourceIds: Object.freeze([KASI_TRANSCRIPTION_SOURCE_ID]),
   }));
 }
 
@@ -50,13 +50,14 @@ export const KOREA_SOLAR_TERM_GUARD_2025_DAXUE: SolarTermEvent = Object.freeze({
   displayedDateTime: "2025-12-07T06:05",
   timeBasis: "KST",
   sourcePrecision: "MINUTE",
-  sourceIds: [KASI_TRANSCRIPTION_SOURCE_ID],
+  sourceIds: Object.freeze([KASI_TRANSCRIPTION_SOURCE_ID]),
 });
 
-export const KOREA_SOLAR_TERM_EVENTS_2026_2027: readonly SolarTermEvent[] = [
+// Freeze the shared fixture at every nested level, not only at the type level.
+export const KOREA_SOLAR_TERM_EVENTS_2026_2027: readonly SolarTermEvent[] = Object.freeze([
   KOREA_SOLAR_TERM_GUARD_2025_DAXUE,
   ...yearEvents(2026),
   ...yearEvents(2027),
-];
+]);
 
 validateKstMinuteSolarTermTimeline(KOREA_SOLAR_TERM_EVENTS_2026_2027);
