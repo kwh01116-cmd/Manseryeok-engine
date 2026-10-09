@@ -1,5 +1,17 @@
 # Execution handoff
 
+## Latest 2026-10-09 — cross-year lunar golden witness
+- Exact branch: `agent/foundation-20261006`; PR: #1 DRAFT/OPEN; prewrite PR HEAD: `748dfbf01798be323fabf049c4c6df26843056fb`; main HEAD: `39b6653e4f93169a4b5b51412b72d4710e9da91f`. The resulting commit HEAD is the live GitHub branch ref (self-referential SHA cannot be embedded in its own commit); re-read before continuing.
+- Commits this run: one small reversible commit adding `test/korean-lunisolar-next-year-boundary.test.mjs`, `docs/research/M1_2028_BOUNDARY_WITNESS.md`, and this handoff. No main merge.
+- Checks actually executed: local Node v22.16.0 `node --check` of staged test PASS; standalone 2027-12-28 + 30-day arithmetic PASS. Exact checkout `git ls-remote` FAILED (github.com DNS/network); `npm ci && npm run check` NOT RUN; new repository test NOT verified.
+- Milestone/gate: M1 full integration + KASA official source gate OPEN; V0 CLI integrated test OPEN.
+- Newly confirmed: KASI 2028 calendar V1.0a explicitly places lunar 2028-01-01 on Gregorian 2028-01-27, corroborating terminal 2027 lunar 12/30 on 2028-01-26. KASI is NOT the official KASA annex.
+- Safe next 1–3 tasks: (1) obtain exact branch checkout and run canonical check + CLI integration; (2) reconcile official KASA Gazette edition with KASI 2026/2027 fixtures; (3) only after green checks, implement the next minimal M1/V0 integration slice.
+- Unresolved/disputed/blocker: GitHub checkout unavailable from this runtime; official annex/rights, published-minute precision, Zi rollover/time-basis, real CLI run. Structural corpus validation cannot detect a coordinated final-month+coverage-bound mutation; the new external golden protects this boundary.
+
+## Previous handoff (preserved)
+# Execution handoff
+
 ## Latest 2026-10-09 — deterministic nature-table safety
 - Branch: agent/foundation-20261006; PR #1 DRAFT/OPEN; main SHA: 39b6653e4f93169a4b5b51412b72d4710e9da91f.
 - Prewrite HEAD: bc5f96f2aa5cfe4b4d537d8c115a78420c4a2404. Final commit SHA is not self-referentially representable inside this same commit; the live GitHub branch ref is authoritative and must be re-read after the ref update.
