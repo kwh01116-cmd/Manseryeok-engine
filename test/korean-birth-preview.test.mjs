@@ -18,6 +18,8 @@ test("60 sexagenary labels have distinct Korean and Hanja forms",()=>{
  assert.equal(hanja.size,60);assert.equal(hangul.size,60);
  assert.deepEqual(labelKoreanGanZhi({stem:"丁",branch:"未"}),{stem:"丁",branch:"未",hanja:"丁未",hangul:"정미"});
  assert.throws(()=>labelKoreanGanZhi({stem:"?",branch:"未"}),RangeError);
+ assert.throws(()=>labelKoreanGanZhi({stem:"甲",branch:"丑"}),RangeError);
+ assert.throws(()=>labelKoreanGanZhi({stem:"乙",branch:"子"}),RangeError);
 });
 test("Gregorian chart preview carries four Korean labels and limited confidence",()=>{
  const r=run(solar("2027-02-05"));

@@ -1,4 +1,4 @@
-import type { GanZhi } from "../domain/sexagenary.js";
+import { ganZhiIndex, type GanZhi } from "../domain/sexagenary.js";
 import type { HeavenlyStem } from "../domain/stems.js";
 import type { EarthlyBranch } from "../domain/branches.js";
 import type { KoreanLunarDate } from "./koreanLunisolarTypes.js";
@@ -13,7 +13,7 @@ const BRANCH_HANGUL: Readonly<Record<EarthlyBranch,string>> = { 子:"자",丑:"�
 export interface KoreanGanZhiLabel extends GanZhi { readonly hanja:string;readonly hangul:string; }
 export function labelKoreanGanZhi(pillar:GanZhi):KoreanGanZhiLabel {
   const s=STEM_HANGUL[pillar?.stem],b=BRANCH_HANGUL[pillar?.branch];
-  if(!s||!b)throw new RangeError("Unsupported sexagenary pillar glyph.");
+  if(!s||!b||ganZhiIndex(pillar.stem,pillar.branch)===null)throw new RangeError("Unsupported sexagenary pillar pair.");
   return {stem:pillar.stem,branch:pillar.branch,hanja:pillar.stem+pillar.branch,hangul:s+b};
 }
 export type KoreanBirthDateInput =
