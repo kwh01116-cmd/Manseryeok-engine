@@ -1,5 +1,14 @@
 # Execution handoff
 
+## Latest 2026-10-09 KST — V0 preview launch correctness (DRAFT; canonical check BLOCKED)
+- Exact branch: `agent/foundation-20261006`, PR #1 DRAFT/OPEN; verified prewrite HEAD `a206a0eb0194349e24ad10720e525b71af831e60`, main at `39b6653e4f93169a4b5b51412b72d4710e9da91f`. New HEAD must be checked live after conditional update; commit cannot contain its own SHA.
+- Applied this run: one reversible commit adding a portable direct-entrypoint check for Windows/macOS/Linux, a real `npm run web` build-and-launch command, 2 regression tests and this handoff/doc update. No main merge.
+- Checks actually run: Node v22.16.0 `node --test test/web-entrypoint.test.mjs` 2/2 PASS in isolated workspace using the exact new helper/test code; `node --check` of modified local server/helper PASS; repository `git ls-remote` FAILED (github.com DNS and direct IP connection); full exact-checkout `npm ci && npm run check` NOT RUN; real M1/V0 HTTP engine NOT VERIFIED; Windows runtime NOT EXECUTED.
+- Gate: M1 official calendar/differential/full tests OPEN; V0 browser entrypoint regression addressed, integrated engine/render gate OPEN.
+- Next safe tasks: (1) exact repository checkout and `npm ci && npm run check`, exercise `npm run web` with real Gregorian/lunar/LICHUN inputs; (2) resolve discovered integration failures, if any; (3) compare KASA official annual annex edition with KASI fixtures before scoped merge review.
+- Unresolved: full checkout/network/DNS, official calendar attribution/rights and minute precision, explicit Zi rollover policy, historical/overseas time. No unsupported calendar or Myeongli claims introduced.
+
+
 ## Postwrite verification — 2026-10-09 KST (screen preview)
 - Confirmed PR #1 branch head after UI commit: `735b2c31fc2a44152b2de6844a5bfd5fb2f4b210`; six changed file blob SHAs matched GitHub; `main` remained at `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
 - Additional actual checks: Chromium via Playwright `page.set_content` loaded exported V0 HTML at 1240px and 390px viewports; title/date fields rendered; example-button interaction set the explicit CIVIL_MIDNIGHT policy; desktop/mobile static screenshots generated. PASS for **static browser rendering only**, NOT the real engine/API or network navigation.

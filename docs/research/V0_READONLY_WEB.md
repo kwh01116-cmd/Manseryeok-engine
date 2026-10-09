@@ -9,10 +9,10 @@ After an exact checkout of `agent/foundation-20261006`:
 ```bash
 npm ci
 npm run check
-node scripts/chart-preview-web.mjs
+npm run web
 ```
 
-Open http://127.0.0.1:4173/ in a browser. The server binds only to loopback; `PORT=0 node scripts/chart-preview-web.mjs` can select an ephemeral test port. This preview is deliberately **not** a public production web service. It needs the compiled `dist/` directory, created by `npm run check` or `npm run build`.
+Open http://127.0.0.1:4173/ in a browser. The server binds only to loopback; `PORT=0 node scripts/chart-preview-web.mjs` can select an ephemeral test port. This preview is deliberately **not** a public production web service. The `npm run web` command builds the `dist/` directory and starts the loopback-only server. It also works in a normal Windows Node.js shell.
 
 No new npm dependencies, public deployment, accounts, persistence or analytics are introduced. Birth inputs are handled in memory for the request only, without server-side logging or cache. Do not expose the local server to the Internet; the preview does not include authentication, abuse protection, or privacy/security certification.
 
