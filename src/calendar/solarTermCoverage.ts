@@ -48,10 +48,6 @@ export function validateFullYearSolarTermCoverage(
   if (manifest.supportedFromInclusive >= manifest.supportedUntilExclusive) {
     throw new RangeError("invalid solar-term coverage interval");
   }
-  if (queryKstMinute < manifest.supportedFromInclusive ||
-      queryKstMinute >= manifest.supportedUntilExclusive) {
-    throw new SolarTermQueryOutOfCoverageError();
-  }
   const years = manifest.requiredYears;
   if (!Array.isArray(years) || years.length === 0 ||
       years.some((year, i) => !Number.isInteger(year) || year < 1000 || year > 9998 ||
@@ -65,6 +61,10 @@ export function validateFullYearSolarTermCoverage(
       manifest.requiredPriorBoundary?.year !== first - 1 ||
       manifest.requiredPriorBoundary?.term !== "DAXUE") {
     throw new RangeError("full-year coverage interval and prior DAXUE guard must align");
+  }
+  if (queryKstMinute < manifest.supportedFromInclusive ||
+      queryKstMinute >= manifest.supportedUntilExclusive) {
+    throw new SolarTermQueryOutOfCoverageError();
   }
   validateKstMinuteSolarTermTimeline(events);
   const canonicalOrder: string[] = [`${first - 1}:DAXUE`];

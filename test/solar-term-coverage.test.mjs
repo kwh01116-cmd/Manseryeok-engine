@@ -84,7 +84,11 @@ test("coverage distinguishes valid out-of-range queries from invalid manifest co
   for (const minute of ["2025-12-31T23:59", "2028-01-01T00:00"]) {
     assert.throws(() => check(full, minute), SolarTermQueryOutOfCoverageError);
   }
-  assert.throws(() => check(full, "2027-02-05T12:00", {
-    ...manifest, supportedUntilExclusive: manifest.supportedFromInclusive,
-  }), (error) => error instanceof RangeError && !(error instanceof SolarTermQueryOutOfCoverageError));
+  for (const broken of [
+    { ...manifest, supportedUntilExclusive: manifest.supportedFromInclusive },
+    { ...manifest, requiredYears: [2026] },
+  ]) {
+    assert.throws(() => check(full, "2028-01-01T00:00", broken),
+      (error) => error instanceof RangeError && !(error instanceof SolarTermQueryOutOfCoverageError));
+  }
 });
