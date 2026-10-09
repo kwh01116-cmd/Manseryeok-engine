@@ -66,7 +66,10 @@ export function projectKoreanV0Story(result: KoreanBirthChartPreviewResult): V0S
       chart.locale !== "ko-KR" ||
       chart.coverage.validation !== "STRUCTURAL_COVERAGE_ONLY" ||
       chart.confidenceScope !== "PUBLISHED_MINUTE_COMPARISON_ONLY" ||
-      chart.policies.timeBasis !== "KOREAN_CIVIL_TIME") {
+      chart.policies.timeBasis !== "KOREAN_CIVIL_TIME" ||
+      !["CIVIL_MIDNIGHT", "ZI_START"].includes(chart.policies.dayRollover) ||
+      !["SELECTED_DAY_PILLAR", "CIVIL_DATE_DAY_PILLAR"].includes(chart.policies.hourStemReference) ||
+      !["DEFINITE", "PUBLISHED_MINUTE_AMBIGUOUS"].includes(chart.confidence)) {
     throw new RangeError("Unsupported chart provenance or policy for story projection.");
   }
   const boundary = chart.confidence === "PUBLISHED_MINUTE_AMBIGUOUS";

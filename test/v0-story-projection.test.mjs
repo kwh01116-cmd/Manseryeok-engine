@@ -39,6 +39,9 @@ test('inconsistent candidate count and provenance fail closed', () => {
   assert.throws(() => projectKoreanV0Story({ ...base, preview: { ...base.preview, candidates: [a, b] } }), RangeError);
   assert.throws(() => projectKoreanV0Story({ ...base, preview: { ...base.preview, coverage: { ...base.preview.coverage, validation: 'CERTIFIED' } } }), RangeError);
   assert.throws(() => projectKoreanV0Story({ ...base, preview: { ...base.preview, policies: { ...base.preview.policies, timeBasis: 'AUTO' } } }), RangeError);
+  assert.throws(() => projectKoreanV0Story({ ...base, preview: { ...base.preview, policies: { ...base.preview.policies, dayRollover: 'AUTO' } } }), RangeError);
+  assert.throws(() => projectKoreanV0Story({ ...base, preview: { ...base.preview, policies: { ...base.preview.policies, hourStemReference: 'AUTO' } } }), RangeError);
+  assert.throws(() => projectKoreanV0Story({ ...base, preview: { ...base.preview, confidence: 'UNVERIFIED' } }), RangeError);
 });
 
 test('equivalent computed candidates yield identical presentation, no input calendar leakage', () => {
