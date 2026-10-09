@@ -4,6 +4,7 @@ export * from "./calendar/dayRollover.js";
 export * from "./calendar/fourPillars.js";
 export * from "./calendar/hourPillar.js";
 export * from "./calendar/koreanLunisolar.js";
+export * from "./calendar/koreanLunarBirthFourPillars.js";
 export * from "./calendar/solarTermCoverage.js";
 export * from "./calendar/solarTerms.js";
 export * from "./domain/branches.js";
