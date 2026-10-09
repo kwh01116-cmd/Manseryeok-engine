@@ -39,3 +39,7 @@ The response displays four pillars in Hangul and Hanja, plus alternative correla
 ## Static browser render after UI commit (2026-10-09)
 
 Chromium/Playwright `page.set_content()` rendered the exported HTML at desktop (1240 px) and mobile (390 px) widths and verified that the example-fill button populates an explicit day-rollover policy. Static PNG previews produced. This is a **static UI smoke pass only**; the Node HTTP server / compiled engine were **not** browser-tested, and `npm run check` remains blocked by shell GitHub DNS. The prior browser file/http navigation failure is not a failure of this static `set_content` test.
+
+## Out-of-coverage status (2026-10-09)
+
+Valid Gregorian or lunar dates outside the declared 2026–2027 solar-term interval return OUT_OF_COVERAGE, not a generic malformed-input error. A dedicated typed exception distinguishes an unsupported query interval from a malformed manifest. Added Gregorian 2025-12-31/2028-01-01, lunar 2027-12-10, and invalid Gregorian 2027-02-30 regressions. This does not extend calendar coverage or verify official calendar minutes.

@@ -13,6 +13,14 @@ export interface FullYearSolarTermCoverageManifest {
   readonly requiredPriorBoundary: { readonly year: number; readonly term: "DAXUE" };
 }
 
+/** A valid query beyond a declared finite calendar interval, not malformed input. */
+export class SolarTermQueryOutOfCoverageError extends RangeError {
+  constructor() {
+    super("solar-term query is outside declared coverage");
+    this.name = "SolarTermQueryOutOfCoverageError";
+  }
+}
+
 function requireCivilMinute(value: unknown, label: string): asserts value is string {
   if (typeof value !== "string" || !isGregorianMinute(value)) {
     throw new RangeError(`${label} must be a valid Gregorian minute`);
@@ -37,10 +45,12 @@ export function validateFullYearSolarTermCoverage(
   requireCivilMinute(manifest.supportedFromInclusive, "supportedFromInclusive");
   requireCivilMinute(manifest.supportedUntilExclusive, "supportedUntilExclusive");
   requireCivilMinute(queryKstMinute, "queryKstMinute");
-  if (manifest.supportedFromInclusive >= manifest.supportedUntilExclusive ||
-      queryKstMinute < manifest.supportedFromInclusive ||
+  if (manifest.supportedFromInclusive >= manifest.supportedUntilExclusive) {
+    throw new RangeError("invalid solar-term coverage interval");
+  }
+  if (queryKstMinute < manifest.supportedFromInclusive ||
       queryKstMinute >= manifest.supportedUntilExclusive) {
-    throw new RangeError("solar-term query is outside declared coverage");
+    throw new SolarTermQueryOutOfCoverageError();
   }
   const years = manifest.requiredYears;
   if (!Array.isArray(years) || years.length === 0 ||

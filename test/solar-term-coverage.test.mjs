@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateFullYearSolarTermCoverage } from "../dist/calendar/solarTermCoverage.js";
+import { validateFullYearSolarTermCoverage, SolarTermQueryOutOfCoverageError } from "../dist/calendar/solarTermCoverage.js";
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 as full } from "../dist/calendar/koreaSolarTermFixtures.js";
 import { validateKstMinuteSolarTermTimeline as checkTermTimeline } from "../dist/calendar/solarTermTimeline.js";
 
@@ -78,4 +78,13 @@ test("24-term sequence rejects label transpositions without missing entries", ()
     assert.doesNotThrow(() => checkTermTimeline(swapped));
     assert.throws(() => check(swapped), /noncanonical solar-term order/);
   }
+});
+
+test("coverage distinguishes valid out-of-range queries from invalid manifest configuration", () => {
+  for (const minute of ["2025-12-31T23:59", "2028-01-01T00:00"]) {
+    assert.throws(() => check(full, minute), SolarTermQueryOutOfCoverageError);
+  }
+  assert.throws(() => check(full, "2027-02-05T12:00", {
+    ...manifest, supportedUntilExclusive: manifest.supportedFromInclusive,
+  }), (error) => error instanceof RangeError && !(error instanceof SolarTermQueryOutOfCoverageError));
 });

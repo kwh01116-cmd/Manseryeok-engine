@@ -58,3 +58,20 @@ test('V0 web preserves Lichun candidates and rejects invalid policies', async ()
     assert.equal(extra.status, 422);
   } finally { server.stop(); }
 });
+
+test('V0 HTTP distinguishes out-of-coverage dates from invalid birth dates', async () => {
+  const server = await start();
+  try {
+    for (const request of [
+      { ...sample, date: '2028-01-01' },
+      { ...sample, calendar: 'KOREAN_LUNAR', date: '2027-12-10', leap: false },
+    ]) {
+      const response = await submit(server.origin, request);
+      assert.equal(response.status, 422);
+      assert.equal(response.body.status, 'OUT_OF_COVERAGE');
+    }
+    const invalid = await submit(server.origin, { ...sample, date: '2027-02-30' });
+    assert.equal(invalid.status, 422);
+    assert.equal(invalid.body.status, 'ERROR');
+  } finally { server.stop(); }
+});

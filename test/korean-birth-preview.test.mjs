@@ -55,5 +55,10 @@ test("invalid calendar, time, policy, manifest and out-of-range dates fail close
  assert.throws(()=>run(solar("2027-02-05"),"24:00"),TypeError);
  assert.throws(()=>run(solar("2027-02-05"),"12:00",{...policy,dayRollover:"AUTO"}),RangeError);
  assert.throws(()=>resolveKoreanBirthChartPreview(solar("2027-02-05"),"12:00",policy,converter,events,undefined),RangeError);
- assert.throws(()=>run(solar("2028-01-01")),RangeError);
+ assert.deepEqual(run(solar("2028-01-01")),{status:"OUT_OF_COVERAGE"});
+});
+
+test("valid Gregorian and lunar dates outside the solar-term interval return an explicit status",()=>{
+ assert.deepEqual(run(solar("2025-12-31")),{status:"OUT_OF_COVERAGE"});
+ assert.deepEqual(run(lunar(2027,12,10,false)),{status:"OUT_OF_COVERAGE"});
 });

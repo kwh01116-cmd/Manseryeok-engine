@@ -1,3 +1,11 @@
+## Latest 2026-10-09 — V0 finite-coverage error semantics
+- Branch: agent/foundation-20261006; PR #1 DRAFT. Parent HEAD: e83040deccc3c0761bd777b0524f7410049bfd6d; resulting commit SHA must be read from the branch after write.
+- Change: distinguish valid dates beyond 2026–2027 solar-term coverage from invalid inputs; add Gregorian/lunar/HTTP regression tests and source note. No main merge.
+- Actual checks: Node 22.16.0 isolated boundary tests 2/2 PASS; isolated syntax PASS. Exact checkout blocked by GitHub DNS. Canonical npm ci, npm run check, compiled engine and live HTTP/browser tests NOT RUN. New repository tests UNVERIFIED.
+- Gate: M1 official/differential and V0 integrated runtime remain OPEN.
+- Next: exact checkout and canonical check; real npm run web HTTP/browser test; KASA official annex minute comparison.
+- Blockers: DNS/network checkout; KASA edition/source precision and reuse rights; explicit Zi/time-basis policies unresolved. No astronomical authority or interpretive claim added.
+
 # Execution handoff
 
 ## Latest 2026-10-09 KST — V0 preview launch correctness (DRAFT; canonical check BLOCKED)

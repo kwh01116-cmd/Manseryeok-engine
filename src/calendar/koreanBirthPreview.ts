@@ -4,7 +4,7 @@ import type { EarthlyBranch } from "../domain/branches.js";
 import type { KoreanLunarDate } from "./koreanLunisolarTypes.js";
 import type { createKoreanLunisolarConverter } from "./koreanLunisolarConverter.js";
 import type { SolarTermEvent } from "./solarTerms.js";
-import type { FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
+import { SolarTermQueryOutOfCoverageError, type FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
 import { resolveCoverageCheckedModernKoreanCivilFourPillars, type CoverageCheckedModernKoreanFourPillarsResolution, type ModernKoreanCivilTimePolicy } from "./fourPillars.js";
 import { resolveKoreanLunarBirthFourPillars } from "./koreanLunarBirthFourPillars.js";
 
@@ -53,12 +53,17 @@ export function resolveKoreanBirthChartPreview(
   throw new TypeError("Birth clock must be HH:MM Korean civil time.");
  let chart:CoverageCheckedModernKoreanFourPillarsResolution;
  let source:KoreanBirthChartPreview["lunarConversionSource"];
- if(input.calendar==="KOREAN_LUNAR"){
-  const result=resolveKoreanLunarBirthFourPillars(input.lunarDate,clock,policies,converter,events,manifest);
-  if(result.status!=="OK")return {status:result.status};
-  chart=result.chart;source=result.conversionSource;
- }else{
-  chart=resolveCoverageCheckedModernKoreanCivilFourPillars(events,input.gregorianDate+"T"+clock,policies,manifest);
+ try {
+  if(input.calendar==="KOREAN_LUNAR"){
+   const result=resolveKoreanLunarBirthFourPillars(input.lunarDate,clock,policies,converter,events,manifest);
+   if(result.status!=="OK")return {status:result.status};
+   chart=result.chart;source=result.conversionSource;
+  }else{
+   chart=resolveCoverageCheckedModernKoreanCivilFourPillars(events,input.gregorianDate+"T"+clock,policies,manifest);
+  }
+ }catch(error){
+  if(error instanceof SolarTermQueryOutOfCoverageError)return {status:"OUT_OF_COVERAGE"};
+  throw error;
  }
  return {status:"OK",preview:{
   schemaVersion:"v0-korean-birth-chart-preview-v1",locale:"ko-KR",
