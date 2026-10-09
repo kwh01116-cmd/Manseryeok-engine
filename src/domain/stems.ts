@@ -15,15 +15,15 @@ export interface StemNature {
   readonly polarity: YinYang;
 }
 
-export const STEM_NATURE: Readonly<Record<HeavenlyStem, StemNature>> = {
-  甲: { element: "WOOD", polarity: "YANG" },
-  乙: { element: "WOOD", polarity: "YIN" },
-  丙: { element: "FIRE", polarity: "YANG" },
-  丁: { element: "FIRE", polarity: "YIN" },
-  戊: { element: "EARTH", polarity: "YANG" },
-  己: { element: "EARTH", polarity: "YIN" },
-  庚: { element: "METAL", polarity: "YANG" },
-  辛: { element: "METAL", polarity: "YIN" },
-  壬: { element: "WATER", polarity: "YANG" },
-  癸: { element: "WATER", polarity: "YIN" },
-};
+export const STEM_NATURE: Readonly<Record<HeavenlyStem, StemNature>> = Object.freeze({
+  甲: Object.freeze({ element: "WOOD", polarity: "YANG" }),
+  乙: Object.freeze({ element: "WOOD", polarity: "YIN" }),
+  丙: Object.freeze({ element: "FIRE", polarity: "YANG" }),
+  丁: Object.freeze({ element: "FIRE", polarity: "YIN" }),
+  戊: Object.freeze({ element: "EARTH", polarity: "YANG" }),
+  己: Object.freeze({ element: "EARTH", polarity: "YIN" }),
+  庚: Object.freeze({ element: "METAL", polarity: "YANG" }),
+  辛: Object.freeze({ element: "METAL", polarity: "YIN" }),
+  壬: Object.freeze({ element: "WATER", polarity: "YANG" }),
+  癸: Object.freeze({ element: "WATER", polarity: "YIN" }),
+});

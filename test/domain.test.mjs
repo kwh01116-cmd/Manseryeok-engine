@@ -4,6 +4,9 @@ import test from "node:test";
 import {
   EARTHLY_BRANCHES,
   HEAVENLY_STEMS,
+  STEM_NATURE,
+  BRANCH_NATURE,
+  TEN_GODS,
   SEXAGENARY_CYCLE,
   ganZhiAt,
   ganZhiIndex,
@@ -89,4 +92,28 @@ test("shared sexagenary tables and returned GanZhi resist runtime mutation", () 
   assert.deepEqual(ganZhiAt(0), { stem: "甲", branch: "子" });
   assert.equal(ganZhiIndex("甲", "子"), 0);
   assert.equal(ganZhiIndex("乙", "子"), null);
+});
+
+
+test("exported nature tables are runtime immutable and ten-god relations remain stable", () => {
+  for (const table of [STEM_NATURE, BRANCH_NATURE]) {
+    assert.equal(Object.isFrozen(table), true);
+    for (const nature of Object.values(table)) assert.equal(Object.isFrozen(nature), true);
+  }
+  assert.equal(Object.isFrozen(TEN_GODS), true);
+  assert.throws(() => { STEM_NATURE.甲.element = "FIRE"; }, TypeError);
+  assert.throws(() => { STEM_NATURE.甲 = { element: "FIRE", polarity: "YANG" }; }, TypeError);
+  assert.throws(() => { BRANCH_NATURE.子.principalElement = "FIRE"; }, TypeError);
+  assert.throws(() => TEN_GODS.push("CORRUPTION"), TypeError);
+  assert.equal(tenGod("甲", "丙"), "食神");
+  for (const dayMaster of HEAVENLY_STEMS) {
+    assert.deepEqual(new Set(HEAVENLY_STEMS.map(stem => tenGod(dayMaster, stem))), new Set(TEN_GODS));
+  }
+});
+
+test("tenGod rejects malformed runtime stems, including prototype keys", () => {
+  for (const invalid of ["__proto__", "constructor", "甲子", "", null, undefined, 0]) {
+    assert.throws(() => tenGod(invalid, "甲"), RangeError);
+    assert.throws(() => tenGod("甲", invalid), RangeError);
+  }
 });

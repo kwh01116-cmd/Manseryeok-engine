@@ -20,3 +20,13 @@ Pre-fix local corruption reproduced. Reconstructed 3-file domain slice compiled 
 
 ## Next
 Recover exact checkout and canonical tests; KASA official-annex/KASI fixture comparison and rights; then V0 read-only integration after green checks.
+
+
+## 2026-10-09 continuation: five-element and ten-god map protection
+
+- Finding: the preceding commit froze the sexagenary cycle but left exported STEM_NATURE and BRANCH_NATURE maps mutable at runtime. A JavaScript caller could change STEM_NATURE.甲.element and corrupt tenGod("甲","丙") on subsequent calls. A malformed prototype key such as "__proto__" was not rejected at the tenGod API boundary.
+- Change: freeze each nature record and its containing map, freeze TEN_GODS, and explicitly validate both heavenly-stem arguments against the canonical finite tuple before reading the map. No mappings or interpretation policies were changed.
+- Classification: EXACT deterministic software integrity and runtime validation; source genealogy = src/domain/stems.ts, branches.ts, tenGods.ts and existing domain tests; dispute NONE about validation. No new astronomical/classical interpretation rule.
+- Preconditions: ES2022 strict runtime, canonical heavenly stems. Exceptions: mutation attempts throw TypeError; invalid stems (including prototype keys, null, undefined, numeric) throw RangeError. Boundary: each day master still maps all ten stems bijectively to ten gods.
+- Adversarial counterexample: mutate STEM_NATURE.甲.element to FIRE and then calculate tenGod("甲","丙"); the pre-fix exported map allowed output corruption, the new map rejects mutation and retains 食神.
+- Checks: Node v22.16.0 / TypeScript v5.8.3 strict compilation PASS and 3/3 focused tests PASS on a manually reconstructed three-module domain slice. Canonical repository npm ci && npm run check NOT RUN (github.com DNS unresolved). New repository tests added but NOT certified. Draft PR remains open; M1/V0 gates OPEN.

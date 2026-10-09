@@ -1,12 +1,13 @@
 import {
+  HEAVENLY_STEMS,
   STEM_NATURE,
   type FiveElement,
   type HeavenlyStem,
 } from "./stems.js";
 
-export const TEN_GODS = [
+export const TEN_GODS = Object.freeze([
   "比肩", "劫財", "食神", "傷官", "偏財", "正財", "七殺", "正官", "偏印", "正印",
-] as const;
+] as const);
 
 export type TenGod = (typeof TEN_GODS)[number];
 
@@ -44,6 +45,9 @@ function relation(dayMaster: FiveElement, target: FiveElement): ElementRelation 
 }
 
 export function tenGod(dayMaster: HeavenlyStem, target: HeavenlyStem): TenGod {
+  if (!HEAVENLY_STEMS.includes(dayMaster) || !HEAVENLY_STEMS.includes(target)) {
+    throw new RangeError("Unsupported heavenly stem.");
+  }
   const dm = STEM_NATURE[dayMaster];
   const other = STEM_NATURE[target];
   const samePolarity = dm.polarity === other.polarity;
