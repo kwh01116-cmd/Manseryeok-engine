@@ -1,3 +1,11 @@
+## Latest 2026-10-10 KST — U0 executable presentation projection (isolated verification)
+- Branch `agent/foundation-20261006`, PR #1 DRAFT/OPEN; prewrite HEAD `ebb43885867127e6fcb00434186aa62114741e9f`; main last checked `39b6653e4f93169a4b5b51412b72d4710e9da91f`. New commit/head is authoritative in GitHub ref, not self-embedded.
+- This run: one atomic proposed commit adds `src/story/v0StoryProjection.ts`, export via `src/index.ts`, `test/v0-story-projection.test.mjs`, research note and this handoff. Does NOT modify M1 calendar engine, web renderer, time policies, source fixtures or main.
+- Actual checks: attempted `git ls-remote` failed DNS; Node 22.16.0 and TypeScript 5.8.3 `tsc -p tsconfig.json` on **isolated source with small supporting stubs PASS**; 5/5 isolated Node tests PASS. Full repo checkout/`npm ci`/`npm run check` **NOT RUN**. New change is **NOT canonical verified**.
+- Gate: U0 typed projection added (full integration pending). M1 official calendar/independent differential/clean-install gates still OPEN. U1 visually rendered scroll chapter NOT implemented.
+- Safe next: (1) exact checkout and `npm ci && npm run check`; (2) actual engine boundary/lunar projection integration assertions; (3) KASA official edition/source rights check and supported birth-year expansion; only then one scoped U1 DOM scene.
+- Blockers: repo network, official edition/rights and published-minute precision, unknown time/Zi policy, historical timezone backlog; no PR merge.
+
 ## Latest 2026-10-10 KST — storytelling UX track incorporated (documentation-only)
 - Exact working branch `agent/foundation-20261006`, existing PR #1 DRAFT/OPEN, verified parent HEAD `b59f57dc9c424e130dbdf706c0f9c32894eaf6be`; main observed at `39b6653e4f93169a4b5b51412b72d4710e9da91f`. Postwrite HEAD is the *live* GitHub PR head (a commit cannot embed its own hash).
 - Actual work: one reversible atomic docs commit updating `docs/ROADMAP.md`, creating `docs/PRODUCT_STORYTELLING_UX_ROADMAP.md`, and updating this handoff. Added U0–U4 dependency gates, implementation and adversarial UX test criteria. No application code, new dependencies, tests, production deployment, new branch, or merge.
