@@ -1,5 +1,14 @@
 # Execution handoff
 
+## Latest 2026-10-09 — V0 CLI date-shape validation (canonical check BLOCKED)
+- Exact branch: `agent/foundation-20261006`; PR #1 DRAFT/OPEN; prewrite head `9c8b906002fcd90bfc4506d37267301e57c4627e`; resulting head is the live branch ref (commit SHA cannot self-reference its own content). Main prewrite head `39b6653e4f93169a4b5b51412b72d4710e9da91f`.
+- Commits this run: one small atomic commit updating CLI parser, its regression test, and this handoff. No main merge.
+- Checks actually run: exact fetched parser evaluated in isolated V8, 10/10 date-shape vectors PASS after patch; `git ls-remote` FAILED due github.com DNS; `npm ci && npm run check` NOT RUN; new repository tests NOT verified.
+- Milestone/gate: M1 full integration + KASA official-source comparison OPEN; V0 actual CLI integration OPEN. Parser now rejects impossible Gregorian days and out-of-shape lunar dates before conversion; real lunar leap/month existence remains converter-owned.
+- Safe next tasks: (1) exact checkout and canonical check + real V0 CLI execution; (2) fix any actual integration failures; (3) compare KASA official annual annex to KASI fixture minutes.
+- Unresolved/disputed/blocker: checkout DNS/network; canonical tests, official edition/rights, published-minute precision, Zi rollover/time basis, historical/overseas support. Rule class: software input validation EXACT, no new astronomical or classical claim.
+
+## Prior handoff (verbatim)
 ## Latest 2026-10-09 — cross-year lunar golden witness
 - Exact branch: `agent/foundation-20261006`; PR: #1 DRAFT/OPEN; prewrite PR HEAD: `748dfbf01798be323fabf049c4c6df26843056fb`; main HEAD: `39b6653e4f93169a4b5b51412b72d4710e9da91f`. The resulting commit HEAD is the live GitHub branch ref (self-referential SHA cannot be embedded in its own commit); re-read before continuing.
 - Commits this run: one small reversible commit adding `test/korean-lunisolar-next-year-boundary.test.mjs`, `docs/research/M1_2028_BOUNDARY_WITNESS.md`, and this handoff. No main merge.

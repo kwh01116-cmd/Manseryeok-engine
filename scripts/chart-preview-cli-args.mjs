@@ -6,6 +6,24 @@ const REQUIRED = ['calendar', 'date', 'time', 'time-basis', 'day-rollover', 'hou
 const DAY_ROLLOVERS = new Set(['CIVIL_MIDNIGHT', 'ZI_START']);
 const HOUR_REFERENCES = new Set(['SELECTED_DAY_PILLAR', 'CIVIL_DATE_DAY_PILLAR']);
 
+
+/** Calendar-shape checks only; lunar month existence/leap status belongs to the converter. */
+function validateBirthDateShape(calendar, year, month, day) {
+  if (year < 1 || month < 1 || month > 12 || day < 1 || day > 31) {
+    throw new RangeError('Invalid birth date components.');
+  }
+  if (calendar === 'KOREAN_LUNAR') {
+    if (day > 30) throw new RangeError('Lunar day must be between 1 and 30.');
+    return;
+  }
+  const date = new Date(0);
+  date.setUTCFullYear(year, month - 1, day);
+  date.setUTCHours(0, 0, 0, 0);
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
+    throw new RangeError('Invalid Gregorian birth date.');
+  }
+}
+
 export function parseKoreanChartCliArgs(argv) {
   if (!Array.isArray(argv)) throw new TypeError('CLI arguments must be an array.');
   const options = new Map();
@@ -31,6 +49,7 @@ export function parseKoreanChartCliArgs(argv) {
   const date = options.get('date');
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
   if (!match) throw new RangeError('Date must be YYYY-MM-DD.');
+  validateBirthDateShape(calendar, Number(match[1]), Number(match[2]), Number(match[3]));
   const clock = options.get('time');
   if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(clock)) {
     throw new RangeError('Time must be HH:MM Korean civil clock time.');

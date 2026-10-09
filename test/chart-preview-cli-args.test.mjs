@@ -51,3 +51,20 @@ test('bad dates, times and calendar declarations are rejected', () => {
   assert.throws(() => parse(required.map(x => x.replace('GREGORIAN', 'AUTO'))), RangeError);
   assert.throws(() => parse([...required, '--leap=false']), /forbidden/);
 });
+
+
+test('Gregorian dates are real calendar days; lunar input shape is bounded before corpus lookup', () => {
+  const withDate = (date, calendar = 'GREGORIAN') => required.map(x =>
+    x.startsWith('--date=') ? '--date=' + date :
+    x.startsWith('--calendar=') ? '--calendar=' + calendar : x,
+  ).concat(calendar === 'KOREAN_LUNAR' ? ['--leap=false'] : []);
+  assert.equal(parse(withDate('2028-02-29')).input.gregorianDate, '2028-02-29');
+  for (const date of ['2027-02-29', '2027-02-30', '2027-00-12', '2027-13-01', '0000-01-01']) {
+    assert.throws(() => parse(withDate(date)), RangeError, date);
+  }
+  assert.equal(parse(withDate('2027-02-30', 'KOREAN_LUNAR')).input.lunarDate.lunarDay, 30);
+  for (const date of ['2027-02-31', '2027-13-01', '0000-01-01']) {
+    assert.throws(() => parse(withDate(date, 'KOREAN_LUNAR')), RangeError, date);
+  }
+  // Actual lunar month existence/leap status is still checked by the converter.
+});
