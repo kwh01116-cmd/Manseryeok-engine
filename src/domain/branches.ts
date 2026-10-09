@@ -1,8 +1,8 @@
 import type { FiveElement, YinYang } from "./stems.js";
 
-export const EARTHLY_BRANCHES = [
+export const EARTHLY_BRANCHES = Object.freeze([
   "子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥",
-] as const;
+] as const);
 
 export type EarthlyBranch = (typeof EARTHLY_BRANCHES)[number];
 

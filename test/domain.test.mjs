@@ -74,3 +74,19 @@ test("1987 DST transition gaps and folds are explicit instead of guessed", () =>
   assert.equal(resolveKoreanDst1987To1988("1987-10-11T03:00:00").status, "STANDARD");
   assert.equal(resolveKoreanDst1987To1988("1989-01-01T00:00:00").status, "UNSUPPORTED_YEAR");
 });
+
+test("shared sexagenary tables and returned GanZhi resist runtime mutation", () => {
+  for (const array of [HEAVENLY_STEMS, EARTHLY_BRANCHES, SEXAGENARY_CYCLE]) {
+    assert.equal(Object.isFrozen(array), true);
+    assert.throws(() => array.push("CORRUPTION"), TypeError);
+    assert.throws(() => { array[0] = "CORRUPTION"; }, TypeError);
+  }
+  for (const pillar of SEXAGENARY_CYCLE) {
+    assert.equal(Object.isFrozen(pillar), true);
+    assert.throws(() => { pillar.stem = "乙"; }, TypeError);
+    assert.throws(() => { pillar.branch = "丑"; }, TypeError);
+  }
+  assert.deepEqual(ganZhiAt(0), { stem: "甲", branch: "子" });
+  assert.equal(ganZhiIndex("甲", "子"), 0);
+  assert.equal(ganZhiIndex("乙", "子"), null);
+});

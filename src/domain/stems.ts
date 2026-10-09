@@ -1,13 +1,13 @@
-export const HEAVENLY_STEMS = [
+export const HEAVENLY_STEMS = Object.freeze([
   "甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸",
-] as const;
+] as const);
 
 export type HeavenlyStem = (typeof HEAVENLY_STEMS)[number];
 
-export const FIVE_ELEMENTS = ["WOOD", "FIRE", "EARTH", "METAL", "WATER"] as const;
+export const FIVE_ELEMENTS = Object.freeze(["WOOD", "FIRE", "EARTH", "METAL", "WATER"] as const);
 export type FiveElement = (typeof FIVE_ELEMENTS)[number];
 
-export const YIN_YANG = ["YANG", "YIN"] as const;
+export const YIN_YANG = Object.freeze(["YANG", "YIN"] as const);
 export type YinYang = (typeof YIN_YANG)[number];
 
 export interface StemNature {

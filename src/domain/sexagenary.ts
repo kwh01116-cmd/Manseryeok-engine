@@ -6,10 +6,10 @@ export interface GanZhi {
   readonly branch: EarthlyBranch;
 }
 
-export const SEXAGENARY_CYCLE: readonly GanZhi[] = Array.from({ length: 60 }, (_, index) => ({
+export const SEXAGENARY_CYCLE: readonly GanZhi[] = Object.freeze(Array.from({ length: 60 }, (_, index) => Object.freeze({
   stem: HEAVENLY_STEMS[index % HEAVENLY_STEMS.length]!,
   branch: EARTHLY_BRANCHES[index % EARTHLY_BRANCHES.length]!,
-}));
+})));
 
 export function ganZhiAt(index: number): GanZhi {
   if (!Number.isInteger(index)) {
