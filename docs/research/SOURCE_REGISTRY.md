@@ -4,6 +4,7 @@
 Issuer: Korea AeroSpace Administration.
 Publication: 2026년 월력요항.
 Published: 2025-06-30.
+Notice: 우주항공청공고 제2025-0044호.
 Evidence class: OFFICIAL_KOREAN_CALENDAR.
 Use: official-authority anchor for normalized 2026 calendar facts. KASA describes the annual 월력요항 as the Korean calendar-production standard published under the Astronomy Act.
 
@@ -84,6 +85,20 @@ Practical boundary: do not copy, embed, or redistribute the KASA 2027 PDF/HWPX o
 ## 2026-10-09 direct-transcription source attribution audit
 - Scope: all 48 annual solar-term minute values (2026/2027) and the 2025 DAXUE guard were copied from the KASI calendar-data surface. Previously, 2026/2027 `SolarTermEvent.sourceIds` included both `KR-KASA-WOLRYEOK-20xx` and `KR-KASI-CALENDAR-DATA`, despite no direct comparison of the official KASA annex. This conflated a publication authority with the actual transcription source.
 - Correction: `sourceIds` in the current 49-event fixture now records only `KR-KASI-CALENDAR-DATA`. Exported `KASA_AUTHORITY_SOURCE_IDS` constants remain as authority *references*, not as assertions of direct annex transcription. No minute value, time basis, precision or pillar algorithm was altered. This is a source-metadata compatibility change.
-- Direct source: KASI 2027 data https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2027 explicitly says '이 자료는 공식 발표 자료가 아닙니다'. KASA's 2027 notice https://www.kasa.go.kr/bbs/BBSMSTR_000000000018/B000000003234Li6nD2.do?mno=sub01_03_03 (2026-06-29) attaches the official PDF/HWPX, but its term-minute table has NOT been transcribed and compared in this workstream. NAOJ 48/48 differential agreement is independent comparison, not KASA annex verification.
+- Direct source: KASI 2027 data https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2027 explicitly says '이 자료는 공식 발표 자료가 아닙니다'. KASA's 2027 notice https://www.kasa.go.kr/bbs/BBSMSTR_000000000018/B000000003234Li6nD2.do?mno=sub01_03_03 (2026-06-29) attaches the official PDF/HWPX. Subsequent direct Gazette verification (below) established date-only official tables; no official term-minute table was found in these editions. NAOJ 48/48 minute agreement remains independent comparison, not official minute certification.
 - Preconditions: record directly consulted source surfaces, editions and precision separately from legal authority and usage rights. Boundary/adversarial case: an unchanged minute with an unverified KASA source ID must fail the fixture provenance regression. Codeability EXACT for metadata provenance, CONDITIONAL for later official-golden certification; no school dispute. Published-minute rounding and KASA commercial rights remain unresolved.
 - Checks: isolated synthetic Node 22.16.0 provenance-shape assertion 49/49 PASS (not compiled repository source); exact checkout blocked by github.com DNS, canonical `npm run check` NOT RUN. Do not mark verified or merge.
+
+## KASA-GAZETTE-SOLAR-TERM-DATES-2026-2027 (direct edition verification)
+Checked: 2026-10-11. Rule layer: OFFICIAL_KOREAN_CALENDAR_DATE_CROSSCHECK, codeability EXACT for printed Gregorian dates only; no Myeongli policy.
+Direct source: edition-specific Gazette PDFs linked by the KASI official publication index, https://astro.kasi.re.kr/kor/life/post/almanac?search_year=2026 and https://astro.kasi.re.kr/kor/life/post/almanac?search_year=2027 . Each PDF page 1 identifies the notice/date; page 2 contains the 24절기 table. Download through the viewer's public POST `/user/common/ofcttCntntDownload.do` with `cntnt_seq_no`; exact viewer URLs, form IDs and original SHA-256 hashes are pinned in `test/fixtures/kasa-solar-term-dates-2026-2027.json`.
+
+| Calendar year | Notice | Published | Original PDF SHA-256 |
+| --- | --- | --- | --- |
+| 2026 | 2025-0044 | 2025-06-30 | `6b42224a6a993e846426a20a841dbe3e5e1bc7436142786b969fcc0df4852aff` |
+| 2027 | 2026-0078 | 2026-06-29 | `10412c8632ab2e8e9937cbd3a8fa6ee184e08cbd9aa541dd4d44229cb11a67b3` |
+
+Method: verify PDF magic/header; extract with `pdftotext -layout`; isolate page-2 24절기 section; extract the two name/month/day columns and map Korean names to term codes; visually inspect both rendered pages. Golden values were extracted from those PDFs without reading production values. All 48 official dates agree with the date projection of the existing KASI minute events. Midnight-adjacent 2027 SHUANGJIANG (Oct 24) and LIDONG (Nov 8) are included.
+Precision finding: both official tables have **month/day only**, without hour/minute columns. Fixture precision is DAY; no time, rounding rule or uncertainty interval is invented. Direct official date evidence is now verified; official minute certification cannot be obtained from these editions. Existing KASI/NAOJ minute evidence remains separate, and second-level instant/rounding verification remains OPEN. Production minute `sourceIds` stay KASI-only; 2025 DAXUE is outside this official comparison.
+Reproduction: obtain the exact two PDFs via the pinned viewer/form metadata, check SHA-256, render page 2 and compare extracted dates. Repository checks use the fixed normalized JSON offline and do not fetch changing remote pages. Original PDFs/layout are not committed; the normalized fixture contains only isolated term/date facts and provenance. Source-use rights review remains OPEN, as documented above.
+Next smallest evidence task: pin the original KASI/NAOJ minute-table editions and their explicit rounding/precision statements; preserve ambiguity wherever a sub-minute instant is not independently known. Do not keep an impossible “official annex minute match” gate for these date-only tables, expand supported years, or make disputed policy defaults in this slice.

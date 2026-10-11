@@ -1,0 +1,240 @@
+{
+  "schemaVersion": 1,
+  "evidenceClass": "OFFICIAL_KOREAN_CALENDAR_DATE_CROSSCHECK",
+  "calendar": "GREGORIAN",
+  "jurisdiction": "KR",
+  "sourcePrecision": "DAY",
+  "retrievedOn": "2026-10-11",
+  "editions": [
+    {
+      "year": 2026,
+      "sourceId": "KR-KASA-WOLRYEOK-2026",
+      "notice": "우주항공청공고 제2025-0044호",
+      "publishedOn": "2025-06-30",
+      "gazetteViewerUrl": "https://gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001750933230079000&tocId=I0000000000000001750814485377000&isTocOrder=N&name=%25EC%259A%25B0%25EC%25A3%25BC%25ED%2595%25AD%25EA%25B3%25B5%25EC%25B2%25AD%25EA%25B3%25B5%25EA%25B3%25A0%25EC%25A0%259C2025-0044%25ED%2598%25B8(2026%25EB%2585%2584%25EC%259B%2594%25EB%25A0%25A5%25EC%259A%2594%25ED%2595%25AD)",
+      "download": {
+        "url": "https://www.gwanbo.go.kr/user/common/ofcttCntntDownload.do",
+        "method": "POST",
+        "form": {
+          "cntnt_seq_no": "I0000000000000001750814485377000"
+        }
+      },
+      "originalPdfSha256": "6b42224a6a993e846426a20a841dbe3e5e1bc7436142786b969fcc0df4852aff",
+      "pdfPage": 2,
+      "section": "24절기",
+      "events": [
+        {
+          "term": "XIAOHAN",
+          "displayedDate": "2026-01-05"
+        },
+        {
+          "term": "DAHAN",
+          "displayedDate": "2026-01-20"
+        },
+        {
+          "term": "LICHUN",
+          "displayedDate": "2026-02-04"
+        },
+        {
+          "term": "YUSHUI",
+          "displayedDate": "2026-02-19"
+        },
+        {
+          "term": "JINGZHE",
+          "displayedDate": "2026-03-05"
+        },
+        {
+          "term": "CHUNFEN",
+          "displayedDate": "2026-03-20"
+        },
+        {
+          "term": "QINGMING",
+          "displayedDate": "2026-04-05"
+        },
+        {
+          "term": "GUYU",
+          "displayedDate": "2026-04-20"
+        },
+        {
+          "term": "LIXIA",
+          "displayedDate": "2026-05-05"
+        },
+        {
+          "term": "XIAOMAN",
+          "displayedDate": "2026-05-21"
+        },
+        {
+          "term": "MANGZHONG",
+          "displayedDate": "2026-06-06"
+        },
+        {
+          "term": "XIAZHI",
+          "displayedDate": "2026-06-21"
+        },
+        {
+          "term": "XIAOSHU",
+          "displayedDate": "2026-07-07"
+        },
+        {
+          "term": "DASHU",
+          "displayedDate": "2026-07-23"
+        },
+        {
+          "term": "LIQIU",
+          "displayedDate": "2026-08-07"
+        },
+        {
+          "term": "CHUSHU",
+          "displayedDate": "2026-08-23"
+        },
+        {
+          "term": "BAILU",
+          "displayedDate": "2026-09-07"
+        },
+        {
+          "term": "QIUFEN",
+          "displayedDate": "2026-09-23"
+        },
+        {
+          "term": "HANLU",
+          "displayedDate": "2026-10-08"
+        },
+        {
+          "term": "SHUANGJIANG",
+          "displayedDate": "2026-10-23"
+        },
+        {
+          "term": "LIDONG",
+          "displayedDate": "2026-11-07"
+        },
+        {
+          "term": "XIAOXUE",
+          "displayedDate": "2026-11-22"
+        },
+        {
+          "term": "DAXUE",
+          "displayedDate": "2026-12-07"
+        },
+        {
+          "term": "DONGZHI",
+          "displayedDate": "2026-12-22"
+        }
+      ]
+    },
+    {
+      "year": 2027,
+      "sourceId": "KR-KASA-WOLRYEOK-2027",
+      "notice": "우주항공청공고 제2026-0078호",
+      "publishedOn": "2026-06-29",
+      "gazetteViewerUrl": "https://www.gwanbo.go.kr/ezpdf/customLayout.jsp?contentId=I0000000000000001782374733940000&tocId=I0000000000000001782199865342000&isTocOrder=N&name=%25EC%259A%25B0%25EC%25A3%25BC%25ED%2595%25AD%25EA%25B3%25B5%25EC%25B2%25AD%25EA%25B3%25B5%25EA%25B3%25A0%25EC%25A0%259C2026-0078%25ED%2598%25B8(2027%25EB%2585%2584%25EC%259B%2594%25EB%25A0%25A5%25EC%259A%2594%25ED%2595%25AD)",
+      "download": {
+        "url": "https://www.gwanbo.go.kr/user/common/ofcttCntntDownload.do",
+        "method": "POST",
+        "form": {
+          "cntnt_seq_no": "I0000000000000001782199865342000"
+        }
+      },
+      "originalPdfSha256": "10412c8632ab2e8e9937cbd3a8fa6ee184e08cbd9aa541dd4d44229cb11a67b3",
+      "pdfPage": 2,
+      "section": "24절기",
+      "events": [
+        {
+          "term": "XIAOHAN",
+          "displayedDate": "2027-01-05"
+        },
+        {
+          "term": "DAHAN",
+          "displayedDate": "2027-01-20"
+        },
+        {
+          "term": "LICHUN",
+          "displayedDate": "2027-02-04"
+        },
+        {
+          "term": "YUSHUI",
+          "displayedDate": "2027-02-19"
+        },
+        {
+          "term": "JINGZHE",
+          "displayedDate": "2027-03-06"
+        },
+        {
+          "term": "CHUNFEN",
+          "displayedDate": "2027-03-21"
+        },
+        {
+          "term": "QINGMING",
+          "displayedDate": "2027-04-05"
+        },
+        {
+          "term": "GUYU",
+          "displayedDate": "2027-04-20"
+        },
+        {
+          "term": "LIXIA",
+          "displayedDate": "2027-05-06"
+        },
+        {
+          "term": "XIAOMAN",
+          "displayedDate": "2027-05-21"
+        },
+        {
+          "term": "MANGZHONG",
+          "displayedDate": "2027-06-06"
+        },
+        {
+          "term": "XIAZHI",
+          "displayedDate": "2027-06-21"
+        },
+        {
+          "term": "XIAOSHU",
+          "displayedDate": "2027-07-07"
+        },
+        {
+          "term": "DASHU",
+          "displayedDate": "2027-07-23"
+        },
+        {
+          "term": "LIQIU",
+          "displayedDate": "2027-08-08"
+        },
+        {
+          "term": "CHUSHU",
+          "displayedDate": "2027-08-23"
+        },
+        {
+          "term": "BAILU",
+          "displayedDate": "2027-09-08"
+        },
+        {
+          "term": "QIUFEN",
+          "displayedDate": "2027-09-23"
+        },
+        {
+          "term": "HANLU",
+          "displayedDate": "2027-10-08"
+        },
+        {
+          "term": "SHUANGJIANG",
+          "displayedDate": "2027-10-24"
+        },
+        {
+          "term": "LIDONG",
+          "displayedDate": "2027-11-08"
+        },
+        {
+          "term": "XIAOXUE",
+          "displayedDate": "2027-11-22"
+        },
+        {
+          "term": "DAXUE",
+          "displayedDate": "2027-12-07"
+        },
+        {
+          "term": "DONGZHI",
+          "displayedDate": "2027-12-22"
+        }
+      ]
+    }
+  ]
+}
