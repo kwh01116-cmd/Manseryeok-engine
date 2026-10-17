@@ -1,3 +1,4 @@
+export * from "./calendar/coverageIslandRegistry.js";
 export * from "./calendar/dayHourPillars.js";
 export * from "./calendar/dayPillar.js";
 export * from "./calendar/dayRollover.js";
