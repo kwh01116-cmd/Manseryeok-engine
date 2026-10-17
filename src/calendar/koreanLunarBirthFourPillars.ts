@@ -1,6 +1,6 @@
 import type { SolarTermEvent } from "./solarTerms.js";
 import type { FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
-import type { KoreanLunarDate } from "./koreanLunisolarTypes.js";
+import type { KoreanLunarDate, KoreanLunisolarProvenance } from "./koreanLunisolarTypes.js";
 import type { createKoreanLunisolarConverter } from "./koreanLunisolarConverter.js";
 import {
   resolveCoverageCheckedModernKoreanCivilFourPillars,
@@ -13,11 +13,7 @@ export type KoreanLunarBirthFourPillarsResult =
       readonly status: "OK";
       readonly inputLunarDate: KoreanLunarDate;
       readonly recordedBirthKstMinute: string;
-      readonly conversionSource: {
-        readonly corpusId: string;
-        readonly sourceId: "KR-KASI-CALENDAR-DATA";
-        readonly authorityLevel: "KASI_COMPUTATIONAL_REFERENCE_NOT_OFFICIAL_KASA";
-      };
+      readonly conversionSource: KoreanLunisolarProvenance & { readonly corpusId: string };
       readonly chart: CoverageCheckedModernKoreanFourPillarsResolution;
     }
   | { readonly status: "OUT_OF_COVERAGE" | "INVALID_LUNAR_DATE" };
@@ -51,11 +47,17 @@ export function resolveKoreanLunarBirthFourPillars(
     status: "OK",
     inputLunarDate: { ...lunarBirthDate },
     recordedBirthKstMinute,
-    conversionSource: {
-      corpusId: conversion.corpusId,
-      sourceId: conversion.sourceId,
-      authorityLevel: conversion.authorityLevel,
-    },
+    conversionSource: conversion.sourceId === "KR-KASI-CALENDAR-DATA"
+      ? {
+          corpusId: conversion.corpusId,
+          sourceId: conversion.sourceId,
+          authorityLevel: conversion.authorityLevel,
+        }
+      : {
+          corpusId: conversion.corpusId,
+          sourceId: conversion.sourceId,
+          authorityLevel: conversion.authorityLevel,
+        },
     chart,
   };
 }

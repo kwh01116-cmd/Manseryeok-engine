@@ -2,4 +2,4 @@
 export { createKoreanLunisolarConverter } from "./koreanLunisolarConverter.js";
 export { KASI_KOREAN_LUNISOLAR_2025_2027 } from "./koreanLunisolarFixtures.js";
 export { validateKoreanLunisolarCorpus } from "./koreanLunisolarValidation.js";
-export type { KoreanLunarDate, KoreanLunarMonthRecord, KoreanLunisolarCorpus, KoreanLunisolarResult } from "./koreanLunisolarTypes.js";
+export type { KoreanLunarDate, KoreanLunarMonthRecord, KoreanLunisolarCorpus, KoreanLunisolarProvenance, KoreanLunisolarResult } from "./koreanLunisolarTypes.js";

@@ -1,7 +1,7 @@
 import { ganZhiIndex, type GanZhi } from "../domain/sexagenary.js";
 import type { HeavenlyStem } from "../domain/stems.js";
 import type { EarthlyBranch } from "../domain/branches.js";
-import type { KoreanLunarDate } from "./koreanLunisolarTypes.js";
+import type { KoreanLunarDate, KoreanLunisolarProvenance } from "./koreanLunisolarTypes.js";
 import type { createKoreanLunisolarConverter } from "./koreanLunisolarConverter.js";
 import type { SolarTermEvent } from "./solarTerms.js";
 import { SolarTermQueryOutOfCoverageError, type FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
@@ -29,10 +29,7 @@ export interface KoreanBirthChartPreview {
  readonly confidence:CoverageCheckedModernKoreanFourPillarsResolution["confidence"];
  readonly confidenceScope:"PUBLISHED_MINUTE_COMPARISON_ONLY";
  readonly coverage:CoverageCheckedModernKoreanFourPillarsResolution["coverage"];
- readonly lunarConversionSource?:{
-  readonly corpusId:string;readonly sourceId:"KR-KASI-CALENDAR-DATA";
-  readonly authorityLevel:"KASI_COMPUTATIONAL_REFERENCE_NOT_OFFICIAL_KASA";
- };
+ readonly lunarConversionSource?:KoreanLunisolarProvenance & { readonly corpusId:string };
  readonly candidates:readonly {
   readonly year:KoreanGanZhiLabel;readonly month:KoreanGanZhiLabel;
   readonly day:KoreanGanZhiLabel;readonly hour:KoreanGanZhiLabel;

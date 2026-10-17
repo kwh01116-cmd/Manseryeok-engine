@@ -22,9 +22,14 @@ export function monthKey(year: number, month: number, leap: boolean): string {
 
 /** Validate the ENTIRE declared finite corpus; a missing terminal month must not pass. */
 export function validateKoreanLunisolarCorpus(corpus: KoreanLunisolarCorpus): void {
+  const validProvenance = corpus && (
+    (corpus.sourceId === "KR-KASI-CALENDAR-DATA" &&
+      corpus.authorityLevel === "KASI_COMPUTATIONAL_REFERENCE_NOT_OFFICIAL_KASA") ||
+    (corpus.sourceId === "ORG-USINGSKY-KOREAN-LUNAR-CALENDAR-PY-0.3.1" &&
+      corpus.authorityLevel === "INDEPENDENT_OPEN_SOURCE_IMPLEMENTATION_NOT_OFFICIAL_KASA")
+  );
   if (!corpus || corpus.schemaVersion !== "m1-korean-lunisolar-months-v1" ||
-      corpus.authorityLevel !== "KASI_COMPUTATIONAL_REFERENCE_NOT_OFFICIAL_KASA" ||
-      corpus.sourceId !== "KR-KASI-CALENDAR-DATA" ||
+      !validProvenance ||
       typeof corpus.corpusId !== "string" || !corpus.corpusId ||
       !corpus.sourceEditions || !Array.isArray(corpus.months) || corpus.months.length === 0) {
     throw new RangeError("Invalid Korean lunisolar corpus metadata.");
