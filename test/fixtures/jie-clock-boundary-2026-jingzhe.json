@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "m1-jie-clock-boundary-witness-v1",
+  "gregorianDate": "2026-03-05",
+  "boundary": {
+    "term": "JINGZHE",
+    "displayedDateTime": "2026-03-05T22:59",
+    "timeBasis": "KST",
+    "sourcePrecision": "MINUTE",
+    "sourceIds": ["KR-KASI-CALENDAR-DATA"]
+  },
+  "provenance": {
+    "sourceUrl": "https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2026",
+    "sourceEdition": "V1.0a",
+    "authorityLevel": "KASI_COMPUTATIONAL_REFERENCE_NOT_OFFICIAL_KASA",
+    "publishedDayAnchor": { "gregorianDate": "2026-03-19", "dayPillar": "壬辰" },
+    "dayCycleDerivation": "March 5 and March 6 are 14 and 13 days before the published anchor: 戊寅 and 己卯.",
+    "yearMonthContractReferences": ["src/calendar/yearPillar.ts", "test/month-pillar.test.mjs"],
+    "hourRuleReference": "docs/research/FOUR_PILLARS_TIME_POLICY.md",
+    "expectationScope": "Existing published-minute convention and explicitly selected policies; not second-level astronomical certainty or a policy default."
+  },
+  "profiles": [
+    {
+      "id": "CIVIL_MIDNIGHT_SELECTED_DAY",
+      "policy": { "timeBasis": "KOREAN_CIVIL_TIME", "dayRollover": "CIVIL_MIDNIGHT", "hourStemReference": "SELECTED_DAY_PILLAR" },
+      "vectors": [
+        { "clock": "22:58", "effectiveDayDate": "2026-03-05", "confidence": "DEFINITE", "candidates": [["丙午", "庚寅", "戊寅", "癸亥"]] },
+        { "clock": "22:59", "effectiveDayDate": "2026-03-05", "confidence": "PUBLISHED_MINUTE_AMBIGUOUS", "candidates": [["丙午", "庚寅", "戊寅", "癸亥"], ["丙午", "辛卯", "戊寅", "癸亥"]] },
+        { "clock": "23:00", "effectiveDayDate": "2026-03-05", "confidence": "DEFINITE", "candidates": [["丙午", "辛卯", "戊寅", "壬子"]] }
+      ]
+    },
+    {
+      "id": "ZI_START_SELECTED_DAY",
+      "policy": { "timeBasis": "KOREAN_CIVIL_TIME", "dayRollover": "ZI_START", "hourStemReference": "SELECTED_DAY_PILLAR" },
+      "vectors": [
+        { "clock": "22:58", "effectiveDayDate": "2026-03-05", "confidence": "DEFINITE", "candidates": [["丙午", "庚寅", "戊寅", "癸亥"]] },
+        { "clock": "22:59", "effectiveDayDate": "2026-03-05", "confidence": "PUBLISHED_MINUTE_AMBIGUOUS", "candidates": [["丙午", "庚寅", "戊寅", "癸亥"], ["丙午", "辛卯", "戊寅", "癸亥"]] },
+        { "clock": "23:00", "effectiveDayDate": "2026-03-06", "confidence": "DEFINITE", "candidates": [["丙午", "辛卯", "己卯", "甲子"]] }
+      ]
+    },
+    {
+      "id": "ZI_START_CIVIL_DATE_DAY",
+      "policy": { "timeBasis": "KOREAN_CIVIL_TIME", "dayRollover": "ZI_START", "hourStemReference": "CIVIL_DATE_DAY_PILLAR" },
+      "vectors": [
+        { "clock": "22:58", "effectiveDayDate": "2026-03-05", "confidence": "DEFINITE", "candidates": [["丙午", "庚寅", "戊寅", "癸亥"]] },
+        { "clock": "22:59", "effectiveDayDate": "2026-03-05", "confidence": "PUBLISHED_MINUTE_AMBIGUOUS", "candidates": [["丙午", "庚寅", "戊寅", "癸亥"], ["丙午", "辛卯", "戊寅", "癸亥"]] },
+        { "clock": "23:00", "effectiveDayDate": "2026-03-06", "confidence": "DEFINITE", "candidates": [["丙午", "辛卯", "己卯", "壬子"]] }
+      ]
+    }
+  ]
+}
