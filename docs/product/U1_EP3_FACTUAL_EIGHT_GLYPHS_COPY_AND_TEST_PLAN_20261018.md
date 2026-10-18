@@ -1,5 +1,13 @@
 # U1 EP3 script + accessibility acceptance (ready for implementation, NOT built)
 
+Execution update (2026-10-19 KST): EP3 is now locally implemented at
+`28eef27835749f5d53ac86b3a9d7b0355c91c918`, **261/261 Node + actual Chromium PASS**.
+See `../engineering/U1_EP3_EXECUTION_20261019.md` for the exact contract,
+source refs, acceptance coverage and remaining manual screen-reader/comprehension
+gates. No new classical rule ID is claimed; existing nature-table implementation
+references are shown. The original pre-implementation specification below is
+preserved as historical design context, not a current execution-status claim.
+
 Source state: committed U1 EP0/EP1/EP2 local-only frontend `web/index.html` and `projectKoreanV0Story` read at Draft PR HEAD `ba1d1909bb0f53dc41f9c280a287624f711ba98f`; last browser-verified code commit `891967bfd2883e4aed8296a27b96d9be8a94ee11`. This is **copy + binding spec**, not rendered HTML or new executable code.
 
 ## Chapter purpose and boundaries

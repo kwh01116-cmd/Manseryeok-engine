@@ -1,3 +1,12 @@
+## Latest local execution checkpoint — 2026-10-19 KST, S4 review/CSS + U1 EP3
+
+- Separate work branch `agent/m1-applied-jie-slice1-20261019`, continued from `1bb89f77ea44f9f90c624764b38c7cd670293371`; no main/foundation update, Actions or force push.
+- S4 month-style regression reproduced with Chromium `getComputedStyle` and corrected in `d60417cd09c43c9d5af9e082319cfae9047fe796`: **253/253** Node tests and browser PASS. Applied Jie source/candidate separation and Korean copy reviewed; no further demonstrated defect bundled.
+- **U1 EP3 local engine/UI GREEN** at `28eef27835749f5d53ac86b3a9d7b0355c91c918`: candidate-specific eight glyphs and existing traditional element names, exact fact refs and native proof controls. Original beat/schema contracts retained; no strength, fortune, personality or useful-god inference. Fresh Node 22 locked install, typecheck/build and **261/261** Node tests PASS, 0 fail/skip; actual Chromium EP0–EP3 PASS.
+- Browser checks include Gregorian/lunar parity, sixteen labels for two Lichun candidates, malformed/swapped chapter rejection, 320/360/390px, keyboard and accessibility-tree structure, reduced motion/system fonts, source text safety, stale/date/time/policy invalidation and no browser persistence/external requests. Manual VoiceOver/NVDA and human Korean comprehension review remain open.
+- Full source/file/runtime evidence: `engineering/U1_EP3_EXECUTION_20261019.md`. Exact executable evidence belongs to the code SHA above; later report commits are docs only. All delivery uses ordinary fast-forward pushes to the work branch.
+- Next priorities: human meaning/accessibility review, independent M1 source-authority/commercial-rights and production privacy/security clearance, and large foundation-PR review/split. EP4/EP5 stay separately scoped to verified M2 source/policy gates. No consumer year expansion, public release or M3 implementation is implied.
+
 ## Additional offline research checkpoint — 2026-10-18 (actual code review + executable slice plan)
 
 - **GitHub Actions remains PAUSED by owner report.** This revision is documentation-only and has **no new executable-test evidence**.
