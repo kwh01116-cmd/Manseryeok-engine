@@ -135,6 +135,10 @@ async function run() {
     assert.match(ep2,/음력 초하루가 아니라/);
     assert.ok(ep2.includes('preview.candidates[0].month.branch'));
     assert.equal(await evaluate("document.querySelector('.month-chapter .fact-glyph').textContent"),primary[1].slice(1));
+    assert.deepEqual(await evaluate("(() => { const s=getComputedStyle(document.querySelector('.month-chapter'));return {background:s.backgroundColor,border:s.borderTopColor}; })()"),
+      {background:'rgb(247, 250, 246)',border:'rgb(207, 221, 208)'},'EP2 month chapter computed colors');
+    assert.deepEqual(await evaluate("(() => { const s=getComputedStyle(document.querySelector('.fact-chapter:not(.month-chapter)'));return {background:s.backgroundColor,border:s.borderTopColor}; })()"),
+      {background:'rgb(245, 247, 242)',border:'rgb(220, 227, 219)'},'EP1 generic chapter colors remain independent');
     const primaryJie = await evaluate("document.querySelector('.applied-jie').textContent");
     assert.match(primaryJie,/입춘\(立春\).*2027-02-04 10:46 \(한국 표준시 · KST 발표 분\)/);
     assert.match(primaryJie,/이 적용 절기 이벤트의 출처: KR-KASI-CALENDAR-DATA/);
@@ -212,6 +216,8 @@ async function run() {
        '입춘(立春) · 2027-02-04 10:46 (한국 표준시 · KST 발표 분)']);
     assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.applied-jie .jie-side'),e=>e.textContent)"),
       ['절입 발표 분 이전 후보','절입 발표 분 이후 후보']);
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.month-chapter'),e=>{const s=getComputedStyle(e);return [s.backgroundColor,s.borderTopColor];})"),
+      [['rgb(247, 250, 246)','rgb(207, 221, 208)'],['rgb(247, 250, 246)','rgb(207, 221, 208)']]);
     for(const [i,text] of (await evaluate("Array.from(document.querySelectorAll('.applied-jie'),e=>e.textContent)")).entries()){
       assert.ok(text.includes(`preview.candidates[${i}].month`));
       assert.ok(text.includes(`preview.monthBoundaryTrace.candidateContexts[${i}]`));
