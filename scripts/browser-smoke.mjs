@@ -124,15 +124,16 @@ async function run() {
 
     // U1 EP0 evidence is a native accessible disclosure; provenance comes from the engine DTO.
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')?.open"), false);
+    await send('Page.bringToFront');
     await evaluate("document.querySelector('#calculation-evidence summary').focus()");
-    await send('Input.dispatchKeyEvent', {
-      type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13,
-      nativeVirtualKeyCode: 13,
-    });
-    await send('Input.dispatchKeyEvent', {
-      type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13,
-      nativeVirtualKeyCode: 13,
-    });
+    assert.equal(await evaluate("document.activeElement === document.querySelector('#calculation-evidence summary')"), true);
+    const enter = { key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13,
+      nativeVirtualKeyCode: 13 };
+    // CDP rawKeyDown alone does not activate native <summary>: Chrome needs the
+    // corresponding char event. Reproduced with a real Chromium/CDP local probe.
+    await send('Input.dispatchKeyEvent', { type: 'rawKeyDown', ...enter });
+    await send('Input.dispatchKeyEvent', { type: 'char', text: '\r', ...enter });
+    await send('Input.dispatchKeyEvent', { type: 'keyUp', ...enter });
     await until("document.querySelector('#calculation-evidence')?.open === true",
       'Keyboard Enter opens calculation evidence');
     const evidence = await evaluate("document.querySelector('#calculation-evidence').textContent");
