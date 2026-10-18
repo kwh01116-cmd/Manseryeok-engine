@@ -127,7 +127,7 @@ async function run() {
     const ep1 = await evaluate("document.querySelector('.candidate .fact-chapter').textContent");
     assert.match(ep1,/나의 일간/);
     assert.match(ep1,/전통 명리의 분류/);
-    assert.match(ep1,/preview\\.candidates\\[0\\]\\.day\\.stem/);
+    assert.ok(ep1.includes('preview.candidates[0].day.stem'));
     assert.equal(await evaluate("document.querySelector('.fact-chapter .fact-glyph').textContent"),
       primary[2].slice(0,1));
 
