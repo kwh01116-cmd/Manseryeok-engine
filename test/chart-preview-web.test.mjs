@@ -38,6 +38,7 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
     assert.match(html, /나의 사주 원국/);
     assert.match(html, /왜 이렇게 계산됐나요/);
     assert.match(html, /나의 일간/);
+    assert.match(html, /월지는 어떻게 정해질까요/);
     const a = await submit(server.origin, sample);
     const b = await submit(server.origin, { ...sample, calendar: 'KOREAN_LUNAR', date: '2026-12-29', leap: false });
     assert.equal(a.status, 200);
@@ -56,6 +57,10 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
     assert.equal(a.body.story.candidates[0].beats[1].type,'DAY_STEM_CLASSIFICATION');
     assert.equal(a.body.story.candidates[0].beats[1].stem,a.body.preview.candidates[0].day.stem);
     assert.equal(a.body.story.candidates[0].beats[1].factRef,'preview.candidates[0].day.stem');
+    assert.equal(a.body.story.candidates[0].beats[2].type,'MONTH_BRANCH_CLASSIFICATION');
+    assert.equal(a.body.story.candidates[0].beats[2].branch,a.body.preview.candidates[0].month.branch);
+    assert.equal(a.body.story.candidates[0].beats[2].factRef,'preview.candidates[0].month.branch');
+    assert.deepEqual(a.body.story.candidates[0].beats[2],b.body.story.candidates[0].beats[2]);
   } finally { server.stop(); }
 });
 test('V0 web preserves Lichun candidates and rejects invalid policies', async () => {
@@ -69,6 +74,11 @@ test('V0 web preserves Lichun candidates and rejects invalid policies', async ()
     assert.equal(boundary.body.story.candidateDisplay,'SHOW_ALL_BOUNDARY_CANDIDATES');
     assert.deepEqual(boundary.body.story.candidates.map(x=>x.beats[1].factRef),
       ['preview.candidates[0].day.stem','preview.candidates[1].day.stem']);
+    assert.deepEqual(boundary.body.story.candidates.map(x=>x.beats[2].factRef),
+      ['preview.candidates[0].month.branch','preview.candidates[1].month.branch']);
+    assert.deepEqual(boundary.body.story.candidates.map(x=>x.beats[2].branch),
+      boundary.body.preview.candidates.map(x=>x.month.branch));
+    assert.notEqual(boundary.body.story.candidates[0].beats[2].branch,boundary.body.story.candidates[1].beats[2].branch);
     const bad = await submit(server.origin, { ...sample, dayRollover: '' });
     assert.equal(bad.status, 422);
     assert.equal(bad.body.status, 'ERROR');

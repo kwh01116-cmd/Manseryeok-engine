@@ -122,14 +122,19 @@ async function run() {
     const primary = await evaluate("Array.from(document.querySelectorAll('.candidate .pillar strong'), e => e.textContent)");
     assert.deepEqual(primary.slice(0, 2), ['丁未', '壬寅']);
     assert.equal(primary.length, 4);
-    await until("document.querySelectorAll('.candidate .fact-chapter').length === 1",
-      'U1 EP1 day-master fact chapter');
-    const ep1 = await evaluate("document.querySelector('.candidate .fact-chapter').textContent");
+    await until("document.querySelectorAll('.candidate .fact-chapter').length === 2",
+      'U1 EP1 day-master and EP2 month-branch chapters');
+    const ep1 = await evaluate("document.querySelector('.candidate .fact-chapter:not(.month-chapter)').textContent");
     assert.match(ep1,/나의 일간/);
     assert.match(ep1,/전통 명리의 분류/);
     assert.ok(ep1.includes('preview.candidates[0].day.stem'));
-    assert.equal(await evaluate("document.querySelector('.fact-chapter .fact-glyph').textContent"),
+    assert.equal(await evaluate("document.querySelector('.fact-chapter:not(.month-chapter) .fact-glyph').textContent"),
       primary[2].slice(0,1));
+    const ep2 = await evaluate("document.querySelector('.month-chapter').textContent");
+    assert.match(ep2,/월지는 어떻게 정해질까요/);
+    assert.match(ep2,/음력 초하루가 아니라/);
+    assert.ok(ep2.includes('preview.candidates[0].month.branch'));
+    assert.equal(await evaluate("document.querySelector('.month-chapter .fact-glyph').textContent"),primary[1].slice(1));
 
     // U1 EP0 evidence is a native accessible disclosure; provenance comes from the engine DTO.
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')?.open"), false);
@@ -163,9 +168,10 @@ async function run() {
     await until("document.querySelectorAll('.candidate').length === 1", 'Korean lunar chart rendered');
     const fromLunar = await evaluate("Array.from(document.querySelectorAll('.candidate .pillar strong'),e=>e.textContent)");
     assert.deepEqual(fromLunar, primary);
-    assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),1);
-    assert.equal(await evaluate("document.querySelector('.fact-chapter .fact-glyph').textContent"),
+    assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),2);
+    assert.equal(await evaluate("document.querySelector('.fact-chapter:not(.month-chapter) .fact-glyph').textContent"),
       primary[2].slice(0,1));
+    assert.equal(await evaluate("document.querySelector('.month-chapter .fact-glyph').textContent"),primary[1].slice(1));
     assert.match(await evaluate("document.querySelector('#calculation-evidence').textContent"),
       /음력 변환.*KR-KASI-CALENDAR-DATA/);
 
@@ -181,15 +187,19 @@ async function run() {
       form.querySelector('button[type=submit]').click();
     })()`);
     await until("document.querySelectorAll('.candidate').length === 2", 'Lichun two candidates');
-    await until("document.querySelectorAll('.candidate .fact-chapter').length === 2",
-      'Lichun separate U1 EP1 candidates');
-    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.fact-chapter .fact-evidence'),e=>e.textContent)"),
+    await until("document.querySelectorAll('.candidate .fact-chapter').length === 4",
+      'Lichun separate U1 EP1 and EP2 candidate chapters');
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.fact-chapter:not(.month-chapter) .fact-evidence'),e=>e.textContent)"),
       ['계산 근거: preview.candidates[0].day.stem · 검증된 U0 사실 매핑',
        '계산 근거: preview.candidates[1].day.stem · 검증된 U0 사실 매핑']);
     assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.candidate .pillar:first-child strong'),e=>e.textContent)"),
       ['丙午', '丁未']);
     assert.match(await evaluate("document.querySelector('#calculation-evidence').textContent"),
       /두 후보 모두 검토/);
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.candidate .month-chapter .fact-evidence'),e=>e.textContent.includes('preview.candidates[0].month.branch') ? 0 : e.textContent.includes('preview.candidates[1].month.branch') ? 1 : -1)"),[0,1]);
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.candidate .month-chapter .fact-glyph'),e=>e.textContent)"),
+      await evaluate("Array.from(document.querySelectorAll('.candidate .pillar:nth-child(2) strong'),e=>e.textContent.slice(1))"));
+    assert.ok((await evaluate("document.querySelector('.candidate .month-chapter').textContent")).includes('달라질 수 있습니다'));
 
     // Input edits invalidate old candidates. Out-of-coverage dates cannot produce a story.
     await evaluate(`(() => {
@@ -217,7 +227,7 @@ async function run() {
       features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
     });
     assert.equal(await evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"), true);
-    process.stdout.write('PASS real-Chromium V0/U1 EP0+EP1 browser smoke: local HTTP, Gregorian/lunar day stem, Lichun, keyboard evidence, coverage, 360/390px, reduced-motion\n');
+    process.stdout.write('PASS real-Chromium V0/U1 EP0+EP1+EP2 browser smoke: local HTTP, Gregorian/lunar day stem, Lichun, keyboard evidence, coverage, 360/390px, reduced-motion\n');
   } finally {
     if (browser) {
       try { browser.socket.close(); } catch { /* teardown */ }
