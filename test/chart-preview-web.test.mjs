@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { STEM_NATURE, BRANCH_NATURE } from '../dist/index.js';
 const script = fileURLToPath(new URL('../scripts/chart-preview-web.mjs', import.meta.url));
 const sample = {
   calendar: 'GREGORIAN', date: '2027-02-05', time: '12:00',
@@ -125,4 +126,29 @@ test('S4: actual HTTP returns Gregorian/lunar equivalent event evidence and sepa
       }
     }
   } finally { server.stop(); }
+});
+
+test('EP3: HTML embeds only existing public classification tables and HTTP returns eight candidate facts',async()=>{
+  const server=await start();
+  try{
+    const page=await fetch(server.origin+'/'),html=await page.text();
+    assert.equal(page.headers.get('cache-control'),'no-store');
+    const embedded=/<script id="nature-lookups" type="application\/json">([^<]+)<\/script>/.exec(html);
+    assert.ok(embedded);
+    assert.deepEqual(JSON.parse(embedded[1]),{stems:STEM_NATURE,branches:BRANCH_NATURE});
+    assert.equal(html.includes('<!-- NATURE_LOOKUPS -->'),false);
+    assert.match(html,/여덟 글자와 다섯 가지 이름/);
+    for(const request of [sample,{...sample,date:'2027-02-04',time:'10:46'}]){
+      const response=await submit(server.origin,request);assert.equal(response.status,200);
+      for(const [i,candidate] of response.body.story.candidates.entries()){
+        assert.equal(candidate.eightGlyphs.symbols.length,8);
+        assert.equal(candidate.eightGlyphs.candidateIndex,i);
+        assert.equal(candidate.eightGlyphs.sourcePreviewVersion,response.body.preview.schemaVersion);
+        for(const fact of candidate.eightGlyphs.symbols){
+          assert.equal(fact.glyph,response.body.preview.candidates[i][fact.role][fact.kind==='STEM'?'stem':'branch']);
+          assert.match(fact.factRef,new RegExp('^preview\\.candidates\\['+i+'\\]\\.'));
+        }
+      }
+    }
+  }finally{server.stop();}
 });

@@ -3,6 +3,7 @@ import { BRANCH_NATURE } from "../domain/branches.js";
 import type { KoreanBirthChartPreviewResult, KoreanGanZhiLabel } from "../calendar/koreanBirthPreview.js";
 import { copyValidatedKoreanMonthBoundaryTrace,
   type KoreanAppliedJieEventV1, type KoreanMonthBoundaryCandidateContextV1 } from "../calendar/koreanMonthBoundaryTrace.js";
+import { projectEightGlyphs, type EightGlyphsChapter } from "./eightGlyphsProjection.js";
 
 /** A presentation contract, not another pillar resolver or an interpretation. */
 export const V0_STORY_SCHEMA_VERSION = "u0-story-projection-v1" as const;
@@ -34,6 +35,7 @@ export interface V0MonthBranchBeat {
 export interface V0CandidateStory {
   readonly candidateIndex: number;
   readonly beats: readonly [V0PillarBeat, V0DayStemBeat, V0MonthBranchBeat, V0MonthAppliedJieBeat?];
+  readonly eightGlyphs?: EightGlyphsChapter;
 }
 export interface V0MonthAppliedJieBeat {
   readonly type: "MONTH_APPLIED_JIE_CONTEXT";
@@ -115,7 +117,7 @@ export function projectKoreanV0Story(result: KoreanBirthChartPreviewResult): V0S
       boundarySide: context.boundarySide, activeSince: context.activeSince,
       ...(trace.atPublishedBoundary ? { atPublishedBoundary: trace.atPublishedBoundary } : {}),
     }));
-    return { candidateIndex: i, beats };
+    return { candidateIndex: i, beats, eightGlyphs: projectEightGlyphs(candidate, i) };
   });
   return {
     schemaVersion: V0_STORY_SCHEMA_VERSION, status: "READY",

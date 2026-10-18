@@ -53,8 +53,10 @@ async function launchBrowser(chrome, profile, origin) {
   });
   let nextId = 0;
   const pending = new Map();
+  const networkRequests = [];
   socket.addEventListener('message', event => {
     const message = JSON.parse(event.data);
+    if(message.method==='Network.requestWillBeSent')networkRequests.push(message.params.request.url);
     if (!message.id) return;
     const item = pending.get(message.id);
     if (!item) return;
@@ -90,7 +92,7 @@ async function launchBrowser(chrome, profile, origin) {
   };
   await send('Page.enable');
   await send('Runtime.enable');
-  return { child, socket, send, evaluate, until };
+  return { child, socket, send, evaluate, until, networkRequests };
 }
 
 async function run() {
@@ -107,6 +109,37 @@ async function run() {
     const origin = 'http://127.0.0.1:' + server.address().port;
     browser = await launchBrowser(binary, profile, origin);
     const { send, evaluate, until } = browser;
+    await send('Network.enable');
+    const checkEp3 = async expected => {
+      const chapters=await evaluate(`Array.from(document.querySelectorAll('[data-chapter="ep3"]'),section=>({
+        index:Number(section.dataset.candidateIndex),text:section.textContent,
+        glyphs:Array.from(section.querySelectorAll('.glyph-symbol'),e=>e.textContent),
+        elements:Array.from(section.querySelectorAll('.glyph-element'),e=>e.textContent),
+        facts:Array.from(section.querySelectorAll('.glyph-proof'),e=>({ref:e.dataset.factRef,
+          label:e.getAttribute('aria-label'),controls:e.getAttribute('aria-controls'),
+          width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height})),
+        rows:Array.from(section.querySelectorAll('tbody th'),e=>e.textContent),
+      }))`);
+      assert.equal(chapters.length,expected.length);
+      const labels={甲:'목(木)',乙:'목(木)',丙:'화(火)',丁:'화(火)',戊:'토(土)',己:'토(土)',庚:'금(金)',辛:'금(金)',壬:'수(水)',癸:'수(水)',
+        子:'수(水)',丑:'토(土)',寅:'목(木)',卯:'목(木)',辰:'토(土)',巳:'화(火)',午:'화(火)',未:'토(土)',申:'금(金)',酉:'금(金)',戌:'토(土)',亥:'수(水)'};
+      for(const [i,chapter] of chapters.entries()){
+        assert.equal(chapter.index,i);assert.deepEqual(chapter.glyphs,expected[i]);
+        assert.deepEqual(chapter.elements,expected[i].map(glyph=>labels[glyph]));
+        assert.deepEqual(chapter.rows,['연주','월주','일주','시주']);
+        assert.match(chapter.text,/글자의 개수만으로 기운의 강약이나 길흉을 판단하지 않습니다/);
+        assert.equal(chapter.facts.length,8);
+        for(const [j,fact] of chapter.facts.entries()){
+          const role=['year','month','day','hour'][Math.floor(j/2)],kind=j%2===0?'STEM':'BRANCH';
+          assert.equal(fact.ref,`preview.candidates[${i}].${role}.${kind==='STEM'?'stem':'branch'}`);
+          assert.equal(fact.controls,`ep3-proof-${i}-${role}-${kind}`);
+          assert.ok(fact.label.includes('근거 확인'));assert.ok(fact.label.includes(expected[i][j]));
+          assert.ok(fact.width>=44&&fact.height>=44,'EP3 tap target '+fact.ref);
+        }
+      }
+      assert.equal(await evaluate("Array.from(document.querySelectorAll('.glyph-proof'),e=>!!document.getElementById(e.getAttribute('aria-controls'))).every(Boolean)"),true);
+      return chapters;
+    };
     await send('Emulation.setDeviceMetricsOverride', {
       width: 360, height: 780, deviceScaleFactor: 1, mobile: true,
     });
@@ -144,6 +177,8 @@ async function run() {
     assert.match(primaryJie,/이 적용 절기 이벤트의 출처: KR-KASI-CALENDAR-DATA/);
     assert.ok(primaryJie.includes('preview.candidates[0].month'));
     assert.ok(primaryJie.includes('preview.monthBoundaryTrace.candidateContexts[0]'));
+    const primaryGlyphs=primary.flatMap(label=>Array.from(label));
+    await checkEp3([primaryGlyphs]);
 
     // U1 EP0 evidence is a native accessible disclosure; provenance comes from the engine DTO.
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')?.open"), false);
@@ -165,6 +200,27 @@ async function run() {
     assert.match(evidence, /분 단위/);
     assert.doesNotMatch(evidence, /공식 인증 완료/);
     assert.match(evidence,/검증에 사용한 절기 자료의 출처 집합/);
+    // EP3 buttons follow year stem -> year branch order and open the matching proof by keyboard.
+    await evaluate("document.querySelector('.glyph-proof').focus()");
+    await send('Input.dispatchKeyEvent',{type:'keyDown',key:'Tab',code:'Tab',windowsVirtualKeyCode:9});
+    await send('Input.dispatchKeyEvent',{type:'keyUp',key:'Tab',code:'Tab',windowsVirtualKeyCode:9});
+    assert.equal(await evaluate("document.activeElement.dataset.factRef"),'preview.candidates[0].year.branch');
+    await evaluate("document.querySelector('.glyph-proof').focus()");
+    await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...enter});
+    await send('Input.dispatchKeyEvent',{type:'char',text:'\r',...enter});
+    await send('Input.dispatchKeyEvent',{type:'keyUp',...enter});
+    await until("document.querySelector('.glyph-evidence').open===true",'EP3 keyboard proof disclosure');
+    assert.equal(await evaluate("document.activeElement.id"),'ep3-proof-0-year-STEM');
+    assert.match(await evaluate("document.activeElement.textContent"),/preview\.candidates\[0\]\.year\.stem/);
+    const glyphContext=await evaluate("document.querySelector('.glyph-context').textContent");
+    assert.match(glyphContext,/CALCULATED_CLASSIFICATION_ONLY/);
+    assert.match(glyphContext,/v0-korean-birth-chart-preview-v1/);
+    assert.match(glyphContext,/자정\(00:00\)/);
+    await send('Accessibility.enable');
+    const ax=await send('Accessibility.getFullAXTree');
+    assert.ok(ax.nodes.some(node=>!node.ignored&&node.role?.value==='table'&&node.name?.value==='후보 1의 천간·지지 여덟 글자'));
+    assert.deepEqual(ax.nodes.filter(node=>!node.ignored&&node.role?.value==='rowheader').map(node=>node.name.value),['연주','월주','일주','시주']);
+    assert.ok(ax.nodes.some(node=>!node.ignored&&node.role?.value==='button'&&node.name?.value==='연주 천간 정(丁) · 화(火) 근거 확인'));
 
     // Gregorian and equivalent Korean-lunar births produce identical four pillars.
     await evaluate(`(() => {
@@ -185,6 +241,7 @@ async function run() {
     assert.match(await evaluate("document.querySelector('#calculation-evidence').textContent"),
       /음력 변환.*KR-KASI-CALENDAR-DATA/);
     assert.equal(await evaluate("document.querySelector('.applied-jie').textContent"),primaryJie);
+    await checkEp3([primaryGlyphs]);
 
     // Boundary minute must preserve both correlated year/month candidates.
     await evaluate(`(() => {
@@ -224,11 +281,21 @@ async function run() {
       assert.match(text,/분 단위 자료라 실제 초 시각에 따라 달라질 수 있습니다/);
       assert.match(text,/현재 경계: 입춘\(立春\).*2027-02-04 10:46/);
     }
+    const boundaryGlyphs=await evaluate("Array.from(document.querySelectorAll('.candidate'),c=>Array.from(c.querySelectorAll('.pillar strong'),e=>e.textContent).flatMap(s=>Array.from(s)))");
+    await checkEp3(boundaryGlyphs);
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep3] .jie-caveat').length"),2);
     // Measure successful boundary cards with their longer per-event references.
     for(const width of [360,390]){
       await send('Emulation.setDeviceMetricsOverride',{width,height:800,deviceScaleFactor:1,mobile:true});
       const measured=await evaluate('({innerWidth,scrollWidth:document.documentElement.scrollWidth})');
       assert.ok(measured.scrollWidth<=measured.innerWidth+1,'Applied Jie overflow at '+width+'px');
+    }
+    for(const width of [320,360,390]){
+      await send('Emulation.setDeviceMetricsOverride',{width,height:800,deviceScaleFactor:1,mobile:true});
+      const measured=await evaluate('({innerWidth,scrollWidth:document.documentElement.scrollWidth})');
+      assert.ok(measured.scrollWidth<=measured.innerWidth+1,'EP3 viewport overflow at '+width+'px');
+      await checkEp3(boundaryGlyphs);
+      assert.equal(await evaluate("Array.from(document.querySelectorAll('.glyph-element'),e=>e.scrollWidth<=e.clientWidth+1).every(Boolean)"),true);
     }
 
     // Input edits invalidate old candidates. Out-of-coverage dates cannot produce a story.
@@ -244,6 +311,7 @@ async function run() {
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')"), null);
     assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),0);
     assert.equal(await evaluate("document.querySelectorAll('.applied-jie').length"),0);
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep3]').length"),0);
 
     // Mobile source/error layout must fit and expose native focusable controls.
     for (const width of [360, 390]) {
@@ -281,6 +349,15 @@ async function run() {
     for(const mutation of [
       "data.story.candidates[0].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT').factRef='preview.candidates[1].month'",
       "data.story.candidates[0].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT').activeSince.sourceIds=['FORGED']",
+      "data.story.candidates[0].eightGlyphs.candidateIndex=1",
+      "data.story.candidates[0].eightGlyphs.symbols[0].factRef='preview.candidates[1].year.stem'",
+      "data.story.candidates[0].eightGlyphs.symbols[0].element='WOOD'", // valid element, incorrect for 丁
+      "data.story.candidates[0].eightGlyphs.symbols[0].glyph='甲'",
+      "data.story.candidates[0].eightGlyphs.symbols[0].elementLookupRef='FORGED'",
+      "data.story.candidates[0].eightGlyphs.sourcePreviewVersion='FORGED'",
+      "data.story.candidates[0].eightGlyphs.symbols.pop()",
+      "data.story.candidates[0].eightGlyphs.symbols[1]=data.story.candidates[0].eightGlyphs.symbols[0]",
+      "data.story.policies.dayRollover='ZI_START'",
     ]){
       await evaluate(`(() => {
         window.__smokeFetch=window.fetch;
@@ -296,13 +373,35 @@ async function run() {
       await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
     }
 
+    // Both individually valid boundary chapters must belong to their original candidate.
+    await evaluate(`(() => {
+      window.__smokeFetch=window.fetch;
+      window.fetch=async (...args)=>{
+        const response=await window.__smokeFetch(...args),data=await response.json();
+        [data.story.candidates[0].eightGlyphs,data.story.candidates[1].eightGlyphs]=
+          [data.story.candidates[1].eightGlyphs,data.story.candidates[0].eightGlyphs];
+        return new Response(JSON.stringify(data),{status:response.status});
+      };
+      document.getElementById('example').click();
+      document.getElementById('birth-date').value='2027-02-04';
+      document.getElementById('birth-time').value='10:46';
+      document.querySelector('#birth-form button[type=submit]').click();
+    })()`);
+    await until("!!document.querySelector('#output .error')",'EP3 rejects swapped Lichun chapters');
+    assert.equal(await evaluate("document.querySelector('#output').textContent"),'명식과 사실 설명의 기준이 일치하지 않습니다.');
+    assert.equal(await evaluate("document.querySelectorAll('.candidate,[data-chapter=ep3]').length"),0);
+    await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
+
     // Older v1 responses without the optional trace still show their original chapters.
     await evaluate(`(() => {
       window.__smokeFetch=window.fetch;
       window.fetch=async (...args)=>{
         const response=await window.__smokeFetch(...args);const data=await response.json();
         delete data.preview.monthBoundaryTrace;
-        for(const candidate of data.story.candidates) candidate.beats=candidate.beats.filter(b=>b.type!=='MONTH_APPLIED_JIE_CONTEXT');
+        for(const candidate of data.story.candidates){
+          candidate.beats=candidate.beats.filter(b=>b.type!=='MONTH_APPLIED_JIE_CONTEXT');
+          delete candidate.eightGlyphs;
+        }
         return new Response(JSON.stringify(data),{status:response.status});
       };
       document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click();
@@ -310,6 +409,7 @@ async function run() {
     await until("document.querySelectorAll('.candidate').length===1",'S4 legacy optional trace');
     assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),2);
     assert.equal(await evaluate("document.querySelectorAll('.applied-jie').length"),0);
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep3]').length"),0);
     await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
 
     // Even a mutually consistent injected source string must render as text, never HTML.
@@ -351,7 +451,24 @@ async function run() {
     })()`);
     assert.equal(await evaluate("document.querySelectorAll('.candidate,.applied-jie').length"),0);
     assert.match(await evaluate("document.querySelector('#output').textContent"),/다시 계산/);
-    process.stdout.write('PASS real-Chromium V0/U1 EP0+EP1+EP2 + M1 S4 applied-Jie smoke: live HTTP, Gregorian/lunar parity, Lichun/Jingzhe before-at-after, candidate-specific KST/source refs, keyboard, coverage, 360/390px, reduced-motion, forged/legacy responses, text-only rendering, stale-response rejection\n');
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep3]').length"),0);
+    for(const [id,value,eventType] of [['birth-time','13:00','input'],['rollover','ZI_START','change']]){
+      await evaluate("document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click()");
+      await until("document.querySelectorAll('.glyph-proof').length===8",'EP3 refresh before edit');
+      await evaluate(`(() => {const field=document.getElementById(${JSON.stringify(id)});field.value=${JSON.stringify(value)};field.dispatchEvent(new Event(${JSON.stringify(eventType)},{bubbles:true}));})()`);
+      assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep3]').length"),0);
+      assert.match(await evaluate("document.querySelector('#output').textContent"),/다시 계산/);
+    }
+    await send('Page.setFontFamilies',{fontFamilies:{standard:'sans-serif',serif:'sans-serif',sansSerif:'sans-serif'}});
+    await evaluate("document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click()");
+    await until("document.querySelectorAll('.glyph-proof').length===8",'EP3 system fonts and reduced motion');
+    await checkEp3([primaryGlyphs]);
+    assert.equal(await evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"),true);
+    assert.deepEqual(await evaluate("(async()=>({local:localStorage.length,session:sessionStorage.length,cookie:document.cookie,databases:(await indexedDB.databases()).length,caches:(await caches.keys()).length}))()"),
+      {local:0,session:0,cookie:'',databases:0,caches:0});
+    assert.ok(browser.networkRequests.length>0);
+    assert.ok(browser.networkRequests.every(url=>url.startsWith(origin+'/')),'No external telemetry or font requests');
+    process.stdout.write('PASS real-Chromium V0/U1 EP0-EP3 + M1 S4: computed month colors, 8/16 classified glyphs and candidate factRefs, live Gregorian/lunar HTTP, Lichun/Jingzhe, keyboard proof focus and AX table, 320/360/390px, reduced-motion/system-fonts, forged/legacy responses, text-only rendering, stale/date/time/policy invalidation, no browser persistence/external requests\n');
   } finally {
     if (browser) {
       try { browser.socket.close(); } catch { /* teardown */ }

@@ -2,7 +2,8 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { isDirectModuleRun } from './web-entrypoint.mjs';
-import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027, resolveKoreanBirthChartPreview } from '../dist/index.js';
+import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027, resolveKoreanBirthChartPreview,
+  STEM_NATURE, BRANCH_NATURE } from '../dist/index.js';
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 } from '../dist/calendar/koreaSolarTermFixtures.js';
 import { parseKoreanChartCliArgs } from './chart-preview-cli-args.mjs';
 import { projectKoreanV0Story } from '../dist/story/v0StoryProjection.js';
@@ -55,7 +56,12 @@ export function makeChartPreviewServer() {
   return createServer(async (req, res) => {
     if (req.method === 'GET' && (req.url === '/' || req.url === '/index.html')) {
       try {
-        const html = await readFile(new URL('../web/index.html', import.meta.url));
+        const template = await readFile(new URL('../web/index.html', import.meta.url), 'utf8');
+        // Public static metadata, independent of birth input. One source of classification
+        // for server projection and client validation; no new API or persisted records.
+        const lookups = JSON.stringify({ stems: STEM_NATURE, branches: BRANCH_NATURE }).replace(/</g, '\\u003c');
+        const html = template.replace('<!-- NATURE_LOOKUPS -->',
+          '<script id="nature-lookups" type="application/json">' + lookups + '</script>');
         res.writeHead(200, { ...common, 'Content-Type': 'text/html; charset=utf-8' });
         res.end(html);
       } catch { json(res, 500, { status: 'ERROR', message: 'Unable to load preview page' }); }
