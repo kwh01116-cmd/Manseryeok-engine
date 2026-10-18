@@ -188,3 +188,26 @@ test('historical corpus beyond its Gregorian solar-term gate fails closed despit
     { status: 'INVALID_LUNAR_DATE' });
   assert.deepEqual(converter.fromGregorianDate('2001-01-24'), { status: 'OUT_OF_COVERAGE' });
 });
+
+
+test('Gregorian/lunar Four Pillars parity survives 2000 civil-day and Zi rollover boundaries', () => {
+  const dates = ['2000-01-01', '2000-02-04', '2000-02-05', '2000-02-28',
+    '2000-02-29', '2000-03-01', '2000-12-30', '2000-12-31'];
+  const clocks = ['00:00', '00:59', '01:00', '22:59', '23:00', '23:59'];
+  let comparisons = 0;
+  for (const date of dates) {
+    for (const clock of clocks) {
+      for (const policy of profiles) {
+        const actual = assertSameChart(date, clock, policy);
+        assert.equal(actual.candidates.length, 1, date + ' ' + clock);
+        assert.equal(actual.confidence, 'DEFINITE', date + ' ' + clock);
+        assert.equal(actual.effectiveDayDate,
+          policy.dayRollover === 'ZI_START' && clock >= '23:00'
+            ? dayString(Date.parse(date + 'T00:00:00Z') + 86_400_000)
+            : date);
+        comparisons++;
+      }
+    }
+  }
+  assert.equal(comparisons, 8 * 6 * 3);
+});
