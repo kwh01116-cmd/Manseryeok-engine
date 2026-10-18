@@ -14,3 +14,12 @@ This slice installs only the **12 branches → hidden heavenly-stem members** fr
 ## Release gate
 
 M2 ChartFacts candidate representation and hidden-stem/ten-god composition must carry both the rule ID and profile ID, preserve boundary candidates, and remain read-only. Continue to exclude weights, dominance, scoring and interpretation until the separate M3+ evidence rules pass.
+
+## M2 G2 — ten-god facts for each hidden stem
+
+`src/domain/branchTenGods.ts` composes the existing fully tested stem-to-stem `tenGod(dayMaster, hiddenStem)` with the **required** M2 hidden-stem membership/profile. All members are preserved (not just an allegedly definitive branch ten god), each with its displayed position, ruleId/policyId and classical/modern source IDs.
+
+The lookup is **not** a ten-god strength metric or root-quality assessment: 地支 본기 labels do not prove a hidden stem is seasonally commanding, nor do generic counts determine 旺衰. A single branch may contain multiple unlike ten gods; for example 甲/寅 = 甲比肩 · 丙食神 · 戊偏財.
+
+`test/m2-branch-ten-gods.test.mjs` tests all **10 × 12** day-master/branch queries and the 28-member table, independently pinned witnesses, provenance and fail-closed invalid policy/input/mutation. The existing stem-to-stem rule remains a separate upstream dependency.
+
