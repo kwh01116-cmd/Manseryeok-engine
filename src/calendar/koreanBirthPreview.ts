@@ -7,6 +7,9 @@ import type { SolarTermEvent } from "./solarTerms.js";
 import { SolarTermQueryOutOfCoverageError, type FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
 import { resolveCoverageCheckedModernKoreanCivilFourPillars, type CoverageCheckedModernKoreanFourPillarsResolution, type ModernKoreanCivilTimePolicy } from "./fourPillars.js";
 import { resolveKoreanLunarBirthFourPillars } from "./koreanLunarBirthFourPillars.js";
+import { projectKoreanMonthBoundaryTrace, type KoreanMonthBoundaryTraceV1 } from "./koreanMonthBoundaryTrace.js";
+export { copyValidatedKoreanMonthBoundaryTrace } from "./koreanMonthBoundaryTrace.js";
+export type { KoreanMonthBoundaryTraceV1, KoreanAppliedJieEventV1, KoreanMonthBoundaryCandidateContextV1 } from "./koreanMonthBoundaryTrace.js";
 
 const STEM_HANGUL: Readonly<Record<HeavenlyStem,string>> = { 甲:"갑",乙:"을",丙:"병",丁:"정",戊:"무",己:"기",庚:"경",辛:"신",壬:"임",癸:"계" };
 const BRANCH_HANGUL: Readonly<Record<EarthlyBranch,string>> = { 子:"자",丑:"축",寅:"인",卯:"묘",辰:"진",巳:"사",午:"오",未:"미",申:"신",酉:"유",戌:"술",亥:"해" };
@@ -30,6 +33,7 @@ export interface KoreanBirthChartPreview {
  readonly confidenceScope:"PUBLISHED_MINUTE_COMPARISON_ONLY";
  /** Distinct IDs of all supplied solar-term records, including the preceding Daxue guard. */
  readonly solarTermSourceIds:readonly string[];
+ readonly monthBoundaryTrace?:KoreanMonthBoundaryTraceV1;
  readonly coverage:CoverageCheckedModernKoreanFourPillarsResolution["coverage"];
  readonly lunarConversionSource?:KoreanLunisolarProvenance & { readonly corpusId:string };
  readonly candidates:readonly {
@@ -64,6 +68,9 @@ export function resolveKoreanBirthChartPreview(
   if(error instanceof SolarTermQueryOutOfCoverageError)return {status:"OUT_OF_COVERAGE"};
   throw error;
  }
+ const solarTermSourceIds=[...new Set(events.flatMap(event=>event.sourceIds))].sort();
+ const monthBoundaryTrace=chart.monthBoundaryTrace
+  ?projectKoreanMonthBoundaryTrace(chart.monthBoundaryTrace,{...chart,solarTermSourceIds},events):undefined;
  return {status:"OK",preview:{
   schemaVersion:"v0-korean-birth-chart-preview-v1",locale:"ko-KR",
   input:input.calendar==="GREGORIAN"
@@ -72,7 +79,8 @@ export function resolveKoreanBirthChartPreview(
   recordedBirthKstMinute:chart.recordedBirthKstMinute,
   effectiveDayDate:chart.effectiveDayDate,policies:{...chart.policies},
   confidence:chart.confidence,confidenceScope:chart.confidenceScope,
-  solarTermSourceIds:[...new Set(events.flatMap(event=>event.sourceIds))].sort(),
+  solarTermSourceIds,
+  ...(monthBoundaryTrace?{monthBoundaryTrace}:{}),
   coverage:{...chart.coverage},
   ...(source?{lunarConversionSource:{...source}}:{}),
   candidates:chart.candidates.map(c=>({
