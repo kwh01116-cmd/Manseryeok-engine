@@ -34,7 +34,9 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
   try {
     const page = await fetch(server.origin + '/');
     assert.equal(page.status, 200);
-    assert.match(await page.text(), /나의 사주 원국/);
+    const html = await page.text();
+    assert.match(html, /나의 사주 원국/);
+    assert.match(html, /왜 이렇게 계산됐나요/);
     const a = await submit(server.origin, sample);
     const b = await submit(server.origin, { ...sample, calendar: 'KOREAN_LUNAR', date: '2026-12-29', leap: false });
     assert.equal(a.status, 200);
@@ -43,6 +45,9 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
     assert.deepEqual(a.body.preview.candidates, b.body.preview.candidates);
     assert.equal(a.body.preview.candidates[0].year.hangul, '정미');
     assert.equal(a.body.preview.coverage.validation, 'STRUCTURAL_COVERAGE_ONLY');
+    assert.deepEqual(a.body.preview.solarTermSourceIds, ['KR-KASI-CALENDAR-DATA']);
+    assert.deepEqual(b.body.preview.solarTermSourceIds, a.body.preview.solarTermSourceIds);
+    assert.equal(b.body.preview.lunarConversionSource.sourceId, 'KR-KASI-CALENDAR-DATA');
   } finally { server.stop(); }
 });
 test('V0 web preserves Lichun candidates and rejects invalid policies', async () => {

@@ -38,3 +38,5 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Full repository check
         run: npm run check
+      - name: Real Chromium local-browser smoke
+        run: node scripts/browser-smoke.mjs

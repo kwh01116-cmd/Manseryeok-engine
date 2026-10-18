@@ -28,6 +28,8 @@ export interface KoreanBirthChartPreview {
  readonly policies:ModernKoreanCivilTimePolicy;
  readonly confidence:CoverageCheckedModernKoreanFourPillarsResolution["confidence"];
  readonly confidenceScope:"PUBLISHED_MINUTE_COMPARISON_ONLY";
+ /** Distinct IDs of all supplied solar-term records, including the preceding Daxue guard. */
+ readonly solarTermSourceIds:readonly string[];
  readonly coverage:CoverageCheckedModernKoreanFourPillarsResolution["coverage"];
  readonly lunarConversionSource?:KoreanLunisolarProvenance & { readonly corpusId:string };
  readonly candidates:readonly {
@@ -70,6 +72,7 @@ export function resolveKoreanBirthChartPreview(
   recordedBirthKstMinute:chart.recordedBirthKstMinute,
   effectiveDayDate:chart.effectiveDayDate,policies:{...chart.policies},
   confidence:chart.confidence,confidenceScope:chart.confidenceScope,
+  solarTermSourceIds:[...new Set(events.flatMap(event=>event.sourceIds))].sort(),
   coverage:{...chart.coverage},
   ...(source?{lunarConversionSource:{...source}}:{}),
   candidates:chart.candidates.map(c=>({

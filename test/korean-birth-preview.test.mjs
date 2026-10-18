@@ -30,6 +30,7 @@ test("Gregorian chart preview carries four Korean labels and limited confidence"
  assert.equal(r.preview.candidates[0].month.hangul,"임인");
  assert.equal(r.preview.confidenceScope,"PUBLISHED_MINUTE_COMPARISON_ONLY");
  assert.equal(r.preview.coverage.validation,"STRUCTURAL_COVERAGE_ONLY");
+ assert.deepEqual(r.preview.solarTermSourceIds, ["KR-KASI-CALENDAR-DATA"]);
  assert.equal(Object.hasOwn(r.preview,"lunarConversionSource"),false);
 });
 test("Lunar/Gregorian input charts agree but lunar source is retained",()=>{
