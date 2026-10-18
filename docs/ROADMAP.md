@@ -5,16 +5,25 @@
 Historical Korean time reconstruction remains a correctness feature, but it is not the critical path for the first product. The main path is now: official Korean calendar fixtures -> Four Pillars -> deterministic chart facts -> a read-only app slice -> interpretation resolvers. Historical/DST work stays isolated and returns later unless it blocks a required fixture.
 
 
+## M2 implementation checkpoint — 2026-10-18 (four code slices, not full M2 exit)
+
+- **G1:** `src/domain/hiddenStems.ts`, `M2-RULE-HIDDEN-STEMS-001`: twelve classical hidden-stem member lists plus explicitly school-dependent MAIN_QI convention, 4 tests. Exact verified commit `8a125c0a59c0ff15020b3dd60eeb441b56f2898d`; failed initial compiler literal widening was fixed, then Actions passed.
+- **G2:** `src/domain/branchTenGods.ts`, `M2-RULE-BRANCH-TEN-GODS-001`: derive ten gods for **each** selected hidden stem for 10 day masters × 12 branches without strength/weight, 4 tests. Verified `1c3edca82809a39d01cc706b49596670c932bdb8`.
+- **G3:** `src/chartFacts/chartFactsV1.ts`, `m2-chart-facts-v1`: versioned, immutable M1 Four Pillars → policy-tagged source-linked ChartFacts (both Lichun candidates, 4 roles, lunar provenance), typed BLOCKED result for unsupported inputs, 6 tests. Verified `8080461f0cfe4a51a8a221de9ace04c4286f3b94`; fixed one compile-only empty tuple widening.
+- **G4:** `src/domain/twelveGrowthStages.ts`, `M2-RULE-TWELVE-GROWTH-STAGES-001`: separate explicit `陽順陰逆·火土同宮` school convention with 120-cell exhaustive table, 5 tests; **not** auto-attached to generic ChartFacts or strength calculation. Current verified head `c5603212103858d3251e50af5efce587adb0ecc4`.
+- Canonical [GitHub Actions run 39093026376](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39093026376) on G4 exact source: TypeScript typecheck/build **PASS**, Node **198/198 pass; 0 fail/skip**, real Chromium loopback HTTP/browser mobile/keyboard smoke **PASS**.
+- **Remaining M2 exit:** source-identified raw 지지 육합·충·형·해·파 fact lookup and tests, no transformation or auspiciousness; explicit school profile differences where applicable; versioned ChartFacts integration and representative 2026–2027 actual web/UI projection. M1 legal/KASA edition accuracy gates still OPEN. V0 consumer support stays 2026–2027. No release/merge/deployment or collection of personal birth data.
+
 ## Verified live milestone checkpoint — 2026-10-18
 
 | Lane | Gate status | Actual evidence | Next |
 | --- | --- | --- | --- |
-| **M0 safety** | GREEN within repo | Locked Node/TS, GitHub hosted canonical CI, 179 passing Node cases, provenance boundaries | Keep scoped checks green |
+| **M0 safety** | GREEN within repo | Locked Node/TS, GitHub hosted canonical CI, 198 passing Node cases, provenance boundaries | Keep scoped checks green |
 | **M1 modern Korean Four Pillars (2026–2027)** | **IMPLEMENTED / STRUCTURAL TEST GREEN**, **source-authority/reuse gates OPEN** | Gregorian/lunar input, explicit Zi policies, KASI minute corpus and independent published differentials; real API and browser smoke green | Independent Korean calendar edition rights/accuracy qualification and controlled birth-year extension |
 | **M1 historical 2000** | **RESEARCH ONLY** | NAOJ 1999 Daxue + 2000 full terms; separate independent MIT lunar 1999/2000 corpus; year/month/full pillars/parity tests executed | Korean historical sourcing/licensing/precision before consumer promotion |
-| **M2 deterministic ChartFacts** | **NOT IMPLEMENTED as full schema** | Only domain primitives (stems/branches/ten gods) and U0 factual projection are present | First tiny source-identified **hidden-stem lookup / branch ten-god** finite-table slice and exhaustive tests; no strength judgement |
+| **M2 deterministic ChartFacts** | **PARTIAL ENGINE GREEN**, full M2 gate OPEN | Profile-specific hidden stems, 10×12 branch-ten-god matrix, immutable ChartFacts v1, policy-gated 12-growth lookup; 198/198 tests and Chromium check green | Raw combine/clash/punishment/harm/break relation tables + exhaustive counterexamples; integrate optional facts with explicit policies; source-text edition review |
 | **V0 / U0** | **GREEN for local preview / deterministic beats** | Real HTTP + fixed factual projection; no public server | Keep current API contract stable |
-| **U1 EP0** | **GREEN for actual real-browser functional gate**, NOT released | Explanatory evidence disclosure from chart DTO; keyboard / 360/390px / Gregorian–lunar / Lichun / out-of-coverage confirmed in Actions [39090821483](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39090821483) | EP1 day stem factual glyph/element when useful; next main engine slice **M2** takes priority |
+| **U1 EP0** | **GREEN for actual real-browser functional gate**, NOT released | Explanatory evidence disclosure from chart DTO; browser gate rechecked in M2 Actions [39093026376](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39093026376) | EP1 day stem factual glyph/element when useful; do not render unverified growth-strength judgements |
 | **M3–M10 / U2–U4** | DEPENDENCY BLOCKED | No inference, prediction, accounts or public deployment added | Follow original gates in order |
 
 No evidence that a 179/179 software pass certifies astronomical source times, commercial rights or disputed Myeongli theory. Current `docs/EXECUTION_HANDOFF.md` is the authoritative immediate next-run cursor; this section supersedes the older 2026-10-10 execution cursor below.

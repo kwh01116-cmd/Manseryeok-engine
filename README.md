@@ -6,7 +6,7 @@ The project separates reproducible calendar/civil-time facts from classical text
 
 ## Current phase
 
-Foundation / pre-alpha. The M1 **2026–2027 Korean Four-Pillars** computation is implemented with finite KASI reference fixtures, explicit rollover/hour-stem policies, lunar/Gregorian conversion, source-labeled uncertainty, and a private loopback V0 preview. Research-only 2000 historical sources are intentionally not served to consumers. The existing U0 deterministic presentation and U1 EP0 calculation-evidence disclosure are functional, not predictive interpretation. M2 verified ChartFacts is the next mainline milestone.
+Foundation / pre-alpha. The M1 **2026–2027 Korean Four-Pillars** computation is implemented with finite KASI reference fixtures, explicit rollover/hour-stem policies, lunar/Gregorian conversion, source-labeled uncertainty, and a private loopback V0 preview. Research-only 2000 historical sources are intentionally not served to consumers. The existing U0 deterministic presentation and U1 EP0 calculation-evidence disclosure are functional, not predictive interpretation. M2 now includes a **partial**, source/policy-gated ChartFacts v1, hidden-stem/branch ten-god lookups and explicit 12-growth table. The full M2 exit remains open for raw branch relations and source-text review; no strength/forecast is computed.
 
 Astronomical boundaries, historical Korean civil time, Zi-hour rollover, hidden stems, strength, patterns, useful gods, climate adjustment, follow/transformation structures, and luck cycles are introduced only after their provenance and policy boundaries are explicit.
 

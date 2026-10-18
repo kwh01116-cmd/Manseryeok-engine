@@ -19,4 +19,4 @@ Rule record `M2-RULE-TWELVE-GROWTH-STAGES-001`: `CONDITIONAL`, `SCHOOL_DEPENDENT
 
 ## Release gate
 
-This slice is research/lookup code, not app UX, future-prediction validation, or Korean domestic school-specific endorsement. Any school variants require distinct policy IDs, primary text crosscheck and adversarial table fixtures. Full CI must pass on the exact branch before marking verified.
+This slice is research/lookup code, not app UX, future-prediction validation, or Korean domestic school-specific endorsement. Any school variants require distinct policy IDs, primary text crosscheck and adversarial table fixtures. Canonical code-head CI at `c5603212103858d3251e50af5efce587adb0ecc4` passed 198/198 Node tests plus real Chromium smoke; this is **code-regression verification**, not traditional-school consensus, independent critical-edition approval or efficacy validation.

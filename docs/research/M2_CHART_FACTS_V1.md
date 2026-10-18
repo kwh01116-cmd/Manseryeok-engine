@@ -1,6 +1,6 @@
 # M2 ChartFacts v1 — deterministic rule-only projection
 
-Status: **DRAFT implementation**. At creation, full CI and browser smoke must pass before claiming verified.
+Status: **implemented / canonical TypeScript + Node + Chromium regression GREEN** at code head `c5603212103858d3251e50af5efce587adb0ecc4`, [198/198 tests plus browser](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39093026376). This is the G3 ChartFacts subset, NOT the full M2 milestone or licensed/released app.
 
 ## Contract and dependencies
 
