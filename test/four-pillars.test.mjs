@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { resolveModernKoreanCivilFourPillars } from "../dist/index.js";
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 } from "../dist/calendar/koreaSolarTermFixtures.js";
+import { resolveYearMonthPillars } from "../dist/calendar/yearMonthPillars.js";
 
 const events = KOREA_SOLAR_TERM_EVENTS_2026_2027;
 const policy = Object.freeze({
@@ -54,4 +55,34 @@ test("unsupported or omitted time/policy inputs fail closed", () => {
   assert.throws(() => resolveModernKoreanCivilFourPillars(events, "1988-10-09T02:30", policy), RangeError);
   assert.throws(() => resolveModernKoreanCivilFourPillars(events, "2027-02-05T12:00", { ...policy, dayRollover: "AUTO" }), RangeError);
   assert.throws(() => resolveModernKoreanCivilFourPillars(events, "2027-02-05T12:00", { ...policy, hourStemReference: "AUTO" }), RangeError);
+});
+
+test("S2: Four Pillars preserves the S1 trace and candidate order at both kinds of Jie", () => {
+  for (const minute of ["2027-02-04T10:45", "2027-02-04T10:46", "2027-02-04T10:47",
+    "2027-03-06T04:39", "2027-03-06T04:40", "2027-03-06T04:41"]) {
+    const result = resolveModernKoreanCivilFourPillars(events, minute, policy);
+    assert.deepEqual(result.monthBoundaryTrace, resolveYearMonthPillars(events, minute).monthBoundaryTrace);
+    assert.equal(result.recordedBirthKstMinute, minute);
+    assert.equal(result.monthBoundaryTrace.confidence, result.confidence);
+    assert.equal(result.monthBoundaryTrace.candidateContexts.length, result.candidates.length);
+    for (const context of result.monthBoundaryTrace.candidateContexts) {
+      assert.equal(context.monthBranch, result.candidates[context.candidateIndex].month.branch);
+      assert.ok(Object.isFrozen(context.activeSince.sourceIds));
+    }
+  }
+});
+
+test("S2: day/hour policy changes at 23:00 and midnight never change applied Jie evidence", () => {
+  for (const minute of ["2027-02-05T23:00", "2027-02-06T00:00"]) {
+    const civil = resolveModernKoreanCivilFourPillars(events, minute, policy);
+    for (const hourStemReference of ["SELECTED_DAY_PILLAR", "CIVIL_DATE_DAY_PILLAR"]) {
+      const zi = resolveModernKoreanCivilFourPillars(events, minute, {
+        ...policy, dayRollover: "ZI_START", hourStemReference,
+      });
+      assert.deepEqual(zi.monthBoundaryTrace, civil.monthBoundaryTrace);
+      assert.deepEqual(zi.candidates[0].month, civil.candidates[0].month);
+      assert.equal(zi.monthBoundaryTrace.candidateContexts[0].activeSince.term, "LICHUN");
+      if (minute.endsWith("23:00")) assert.notDeepEqual(zi.candidates[0].day, civil.candidates[0].day);
+    }
+  }
 });

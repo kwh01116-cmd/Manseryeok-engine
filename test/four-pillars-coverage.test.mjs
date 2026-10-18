@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { resolveModernKoreanCivilFourPillars, resolveCoverageCheckedModernKoreanCivilFourPillars } from "../dist/index.js";
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 as full } from "../dist/calendar/koreaSolarTermFixtures.js";
+import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027,
+  resolveKoreanLunarBirthFourPillars } from "../dist/index.js";
 
 const policy = Object.freeze({
   timeBasis: "KOREAN_CIVIL_TIME",
@@ -61,4 +63,40 @@ test("manifest and runtime policy are never implicit", () => {
     resolveCoverageCheckedModernKoreanCivilFourPillars(full, "2027-02-05T12:00", policy, undefined), RangeError);
   assert.throws(() => checked(full, "2027-02-05T12:00", {...policy, dayRollover: "AUTO"}), RangeError);
   assert.throws(() => checked(full, "2027-02-05T12:00", {...policy, timeBasis: "LOCAL_APPARENT_SOLAR_TIME"}), RangeError);
+});
+
+test("S2: coverage wrapper retains the same immutable trace through supported interval edges", () => {
+  for (const minute of ["2026-01-01T00:00", "2027-02-04T10:46", "2027-12-31T23:59"]) {
+    const result = checked(full, minute);
+    assert.deepEqual(result.monthBoundaryTrace,
+      resolveModernKoreanCivilFourPillars(full, minute, policy).monthBoundaryTrace);
+    assert.ok(Object.isFrozen(result.monthBoundaryTrace));
+    assert.equal(result.coverage.supportedUntilExclusive, "2028-01-01T00:00");
+  }
+  assert.equal(checked(full, "2026-01-01T00:00").monthBoundaryTrace.candidateContexts[0].activeSince.displayedDateTime,
+    "2025-12-07T06:05");
+  assert.throws(() => checked(full, "2028-01-01T00:00"), /outside declared coverage/);
+});
+
+test("S2: Korean lunar and Gregorian inputs converge to identical traced Four Pillars", () => {
+  const converter = createKoreanLunisolarConverter(KASI_KOREAN_LUNISOLAR_2025_2027);
+  for (const [lunarDay, clock, gregorian] of [
+    [28, "10:45", "2027-02-04"], [28, "10:46", "2027-02-04"],
+    [28, "10:47", "2027-02-04"], [29, "12:00", "2027-02-05"],
+  ]) {
+    const lunar = resolveKoreanLunarBirthFourPillars(
+      { lunarYear: 2026, lunarMonth: 12, lunarDay, isLeapMonth: false }, clock,
+      policy, converter, full, manifest);
+    assert.equal(lunar.status, "OK");
+    assert.deepEqual(lunar.chart, checked(full, gregorian + "T" + clock));
+    assert.equal(lunar.conversionSource.sourceId, "KR-KASI-CALENDAR-DATA");
+    assert.ok(lunar.chart.monthBoundaryTrace);
+  }
+});
+
+test("S2: invalid source metadata cannot produce a coverage-checked trace", () => {
+  const corrupt = full.map(event => event.displayedDateTime === "2027-02-04T10:46"
+    ? { ...event, sourceIds: [] } : event);
+  assert.throws(() => checked(corrupt, "2027-02-05T12:00"),
+    { message: "missing solar-term source provenance: 2027:LICHUN" });
 });

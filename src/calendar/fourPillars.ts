@@ -1,7 +1,7 @@
 import type { GanZhi } from "../domain/sexagenary.js";
 import type { SolarTermEvent } from "./solarTerms.js";
 import { isGregorianMinute } from "./solarTermTimeline.js";
-import { resolveYearMonthPillars, type YearMonthConfidence } from "./yearMonthPillars.js";
+import { resolveYearMonthPillars, type MonthBoundaryTraceV1, type YearMonthConfidence } from "./yearMonthPillars.js";
 import { resolveDayHourPillars, type HourStemReferencePolicy } from "./dayHourPillars.js";
 import type { DayRolloverPolicy } from "./dayRollover.js";
 import { validateFullYearSolarTermCoverage, type FullYearSolarTermCoverageManifest } from "./solarTermCoverage.js";
@@ -28,6 +28,7 @@ export interface ModernKoreanFourPillarsResolution {
   readonly confidence: YearMonthConfidence;
   readonly confidenceScope: "PUBLISHED_MINUTE_COMPARISON_ONLY";
   readonly candidates: readonly FourPillarsCandidate[];
+  readonly monthBoundaryTrace?: MonthBoundaryTraceV1;
 }
 
 /**
@@ -68,6 +69,7 @@ export function resolveModernKoreanCivilFourPillars(
     },
     confidence: yearMonth.confidence,
     confidenceScope: "PUBLISHED_MINUTE_COMPARISON_ONLY",
+    ...(yearMonth.monthBoundaryTrace ? { monthBoundaryTrace: yearMonth.monthBoundaryTrace } : {}),
     candidates: yearMonth.candidates.map(({ year, month }) => ({
       year, month, day: dayHour.dayPillar, hour: dayHour.hourPillar,
     })),
