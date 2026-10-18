@@ -44,12 +44,14 @@ export type M2ChartFactsResult =
       readonly candidateDisplay: "ONE" | "SHOW_ALL_BOUNDARY_CANDIDATES";
       readonly candidates: readonly M2CandidateFacts[]; };
 
+const EMPTY_CANDIDATES = Object.freeze([] as const);
+
 const BLOCKED: Readonly<Record<"OUT_OF_COVERAGE" | "INVALID_LUNAR_DATE", M2ChartFactsResult>> =
   Object.freeze({
     OUT_OF_COVERAGE: Object.freeze({ schemaVersion:M2_CHART_FACTS_SCHEMA,
-      status:"BLOCKED",reason:"OUT_OF_COVERAGE",candidates:Object.freeze([]) }),
+      status:"BLOCKED",reason:"OUT_OF_COVERAGE",candidates:EMPTY_CANDIDATES }),
     INVALID_LUNAR_DATE: Object.freeze({ schemaVersion:M2_CHART_FACTS_SCHEMA,
-      status:"BLOCKED",reason:"INVALID_LUNAR_DATE",candidates:Object.freeze([]) }),
+      status:"BLOCKED",reason:"INVALID_LUNAR_DATE",candidates:EMPTY_CANDIDATES }),
   });
 
 /**
