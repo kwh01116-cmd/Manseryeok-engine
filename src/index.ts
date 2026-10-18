@@ -11,6 +11,7 @@ export * from "./calendar/koreanLunarBirthFourPillars.js";
 export * from "./calendar/solarTermCoverage.js";
 export * from "./calendar/solarTerms.js";
 export * from "./domain/branches.js";
+export * from "./domain/branchRelations.js";
 export * from "./domain/branchTenGods.js";
 export * from "./domain/hiddenStems.js";
 export * from "./domain/sexagenary.js";
