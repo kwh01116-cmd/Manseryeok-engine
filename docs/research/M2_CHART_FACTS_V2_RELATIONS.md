@@ -1,6 +1,6 @@
 # M2 G6 — ChartFacts v2 with positional raw earthly-branch relations
 
-Status: research-engine schema, not consumer/API release. Verify via canonical CI before treating as green.
+Status: **verified as research-engine code** at `451dd4d38e0c65b7ac052406f628189575cdfcc1` in [GitHub Actions 39094664600](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39094664600): full typecheck/build PASS, 212/212 tests PASS, real Chromium smoke PASS. NOT consumer/API release, independent scholarly endorsement or full M2 exit.
 
 ## Non-breaking versioned contract
 

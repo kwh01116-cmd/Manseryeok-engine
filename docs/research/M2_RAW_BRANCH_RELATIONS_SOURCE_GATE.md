@@ -1,6 +1,6 @@
 # M2 G5 — raw earthly-branch pair relationships, evidence and execution gate
 
-Status: implemented as a **policy-gated lookup**, not interpreted/finalized or released. The exact branch-head CI run must pass before considering the code gate green.
+Status: implemented and **canonical CI GREEN** as a policy-gated research lookup; [GitHub Actions 39094446372](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39094446372) passed 206/206 plus browser. Later ChartFacts v2 run [39094664600](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39094664600) passed 212/212 plus browser. No interpretation, policy consensus, official certification or release authorization is claimed.
 
 ## Verifiable source boundaries
 
