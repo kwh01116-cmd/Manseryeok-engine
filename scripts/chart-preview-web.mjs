@@ -5,6 +5,7 @@ import { isDirectModuleRun } from './web-entrypoint.mjs';
 import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027, resolveKoreanBirthChartPreview } from '../dist/index.js';
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 } from '../dist/calendar/koreaSolarTermFixtures.js';
 import { parseKoreanChartCliArgs } from './chart-preview-cli-args.mjs';
+import { projectKoreanV0Story } from '../dist/story/v0StoryProjection.js';
 
 const manifest = Object.freeze({
   schemaVersion: 'm1-solar-term-coverage-v1', requirementProfile: 'FULL_24_TERM_YEAR',
@@ -65,7 +66,13 @@ export function makeChartPreviewServer() {
         const { input, clock, policies } = parseWebBirthInput(await readJson(req));
         const output = resolveKoreanBirthChartPreview(input, clock, policies, converter,
           KOREA_SOLAR_TERM_EVENTS_2026_2027, manifest);
-        json(res, output.status === 'OK' ? 200 : 422, output);
+        // Additive, source-addressable U0 factual beats. The M1 chart remains
+        // the sole calendar calculation; errors keep their original contract.
+        if (output.status === 'OK') {
+          json(res, 200, { ...output, story: projectKoreanV0Story(output) });
+        } else {
+          json(res, 422, output);
+        }
       } catch (error) {
         const invalid = error instanceof RangeError || error instanceof TypeError;
         json(res, invalid ? 422 : 500, {

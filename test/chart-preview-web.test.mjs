@@ -37,6 +37,7 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
     const html = await page.text();
     assert.match(html, /나의 사주 원국/);
     assert.match(html, /왜 이렇게 계산됐나요/);
+    assert.match(html, /나의 일간/);
     const a = await submit(server.origin, sample);
     const b = await submit(server.origin, { ...sample, calendar: 'KOREAN_LUNAR', date: '2026-12-29', leap: false });
     assert.equal(a.status, 200);
@@ -48,6 +49,13 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
     assert.deepEqual(a.body.preview.solarTermSourceIds, ['KR-KASI-CALENDAR-DATA']);
     assert.deepEqual(b.body.preview.solarTermSourceIds, a.body.preview.solarTermSourceIds);
     assert.equal(b.body.preview.lunarConversionSource.sourceId, 'KR-KASI-CALENDAR-DATA');
+    assert.equal(a.body.story.status,'READY');
+    assert.equal(a.body.story.schemaVersion,'u0-story-projection-v1');
+    assert.deepEqual(a.body.story.candidates,b.body.story.candidates);
+    assert.equal(a.body.story.candidates.length,1);
+    assert.equal(a.body.story.candidates[0].beats[1].type,'DAY_STEM_CLASSIFICATION');
+    assert.equal(a.body.story.candidates[0].beats[1].stem,a.body.preview.candidates[0].day.stem);
+    assert.equal(a.body.story.candidates[0].beats[1].factRef,'preview.candidates[0].day.stem');
   } finally { server.stop(); }
 });
 test('V0 web preserves Lichun candidates and rejects invalid policies', async () => {
@@ -56,6 +64,11 @@ test('V0 web preserves Lichun candidates and rejects invalid policies', async ()
     const boundary = await submit(server.origin, { ...sample, date: '2027-02-04', time: '10:46' });
     assert.equal(boundary.status, 200);
     assert.equal(boundary.body.preview.candidates.length, 2);
+    assert.equal(boundary.body.story.status,'READY');
+    assert.equal(boundary.body.story.candidates.length,2);
+    assert.equal(boundary.body.story.candidateDisplay,'SHOW_ALL_BOUNDARY_CANDIDATES');
+    assert.deepEqual(boundary.body.story.candidates.map(x=>x.beats[1].factRef),
+      ['preview.candidates[0].day.stem','preview.candidates[1].day.stem']);
     const bad = await submit(server.origin, { ...sample, dayRollover: '' });
     assert.equal(bad.status, 422);
     assert.equal(bad.body.status, 'ERROR');
@@ -74,6 +87,7 @@ test('V0 HTTP distinguishes out-of-coverage dates from invalid birth dates', asy
       const response = await submit(server.origin, request);
       assert.equal(response.status, 422);
       assert.equal(response.body.status, 'OUT_OF_COVERAGE');
+      assert.equal(Object.hasOwn(response.body,'story'),false);
     }
     const invalid = await submit(server.origin, { ...sample, date: '2027-02-30' });
     assert.equal(invalid.status, 422);

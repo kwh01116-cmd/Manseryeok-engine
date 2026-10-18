@@ -113,6 +113,7 @@ async function run() {
     await until("document.readyState === 'complete' && !!document.getElementById('birth-form')",
       'V0 app loaded over real localhost HTTP');
     assert.equal(await evaluate("document.querySelectorAll('.candidate').length"), 0);
+    assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),0);
     assert.equal(await evaluate("document.querySelector('#rollover').value"), '');
 
     // First computation uses real HTML form submission, native browser fetch and live Node API.
@@ -121,6 +122,14 @@ async function run() {
     const primary = await evaluate("Array.from(document.querySelectorAll('.candidate .pillar strong'), e => e.textContent)");
     assert.deepEqual(primary.slice(0, 2), ['丁未', '壬寅']);
     assert.equal(primary.length, 4);
+    await until("document.querySelectorAll('.candidate .fact-chapter').length === 1",
+      'U1 EP1 day-master fact chapter');
+    const ep1 = await evaluate("document.querySelector('.candidate .fact-chapter').textContent");
+    assert.match(ep1,/나의 일간/);
+    assert.match(ep1,/전통 명리의 분류/);
+    assert.match(ep1,/preview\\.candidates\\[0\\]\\.day\\.stem/);
+    assert.equal(await evaluate("document.querySelector('.fact-chapter .fact-glyph').textContent"),
+      primary[2].slice(0,1));
 
     // U1 EP0 evidence is a native accessible disclosure; provenance comes from the engine DTO.
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')?.open"), false);
@@ -154,6 +163,9 @@ async function run() {
     await until("document.querySelectorAll('.candidate').length === 1", 'Korean lunar chart rendered');
     const fromLunar = await evaluate("Array.from(document.querySelectorAll('.candidate .pillar strong'),e=>e.textContent)");
     assert.deepEqual(fromLunar, primary);
+    assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),1);
+    assert.equal(await evaluate("document.querySelector('.fact-chapter .fact-glyph').textContent"),
+      primary[2].slice(0,1));
     assert.match(await evaluate("document.querySelector('#calculation-evidence').textContent"),
       /음력 변환.*KR-KASI-CALENDAR-DATA/);
 
@@ -169,6 +181,11 @@ async function run() {
       form.querySelector('button[type=submit]').click();
     })()`);
     await until("document.querySelectorAll('.candidate').length === 2", 'Lichun two candidates');
+    await until("document.querySelectorAll('.candidate .fact-chapter').length === 2",
+      'Lichun separate U1 EP1 candidates');
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.fact-chapter .fact-evidence'),e=>e.textContent)"),
+      ['계산 근거: preview.candidates[0].day.stem · 검증된 U0 사실 매핑',
+       '계산 근거: preview.candidates[1].day.stem · 검증된 U0 사실 매핑']);
     assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.candidate .pillar:first-child strong'),e=>e.textContent)"),
       ['丙午', '丁未']);
     assert.match(await evaluate("document.querySelector('#calculation-evidence').textContent"),
@@ -185,6 +202,7 @@ async function run() {
     await until("!!document.querySelector('#output .error')", 'out-of-coverage error');
     assert.match(await evaluate("document.querySelector('#output .error').textContent"), /범위를 벗어납니다/);
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')"), null);
+    assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),0);
 
     // Mobile source/error layout must fit and expose native focusable controls.
     for (const width of [360, 390]) {
@@ -199,7 +217,7 @@ async function run() {
       features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
     });
     assert.equal(await evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"), true);
-    process.stdout.write('PASS real-Chromium V0/U1 EP0 browser smoke: local HTTP, Gregorian/lunar, Lichun, keyboard evidence, coverage, 360/390px, reduced-motion\n');
+    process.stdout.write('PASS real-Chromium V0/U1 EP0+EP1 browser smoke: local HTTP, Gregorian/lunar day stem, Lichun, keyboard evidence, coverage, 360/390px, reduced-motion\n');
   } finally {
     if (browser) {
       try { browser.socket.close(); } catch { /* teardown */ }
