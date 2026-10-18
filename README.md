@@ -25,3 +25,9 @@ node scripts/chart-preview-web.mjs
 ```
 
 Then open http://127.0.0.1:4173/ . Time policies must be explicitly selected; the supported term coverage is currently 2026–2027. Canonical GitHub Actions `npm run check` (227/227) and a real Chromium local-HTTP EP0+EP1+EP2 browser smoke have passed on the Draft PR branch; this does **not** certify official KASA precision, calendar publication reuse rights, visual QA or suitability for collecting real users' personal data. The server has not been publicly deployed. See `docs/research/V0_READONLY_WEB.md`. Keep the large Draft PR unmerged until scope, rights and release gates are reviewed.
+
+## 2026-10-18: documentation-only research package / paused Actions
+
+The owner reports monthly GitHub Actions availability is exhausted; this package modifies **research/roadmap/operating documents only**, not the tested engine. See [research work package index](docs/RESEARCH_PACKAGE_INDEX_20261018.md) for (1) the M1 applied-Jie event evidence DTO, (2) Korean official-vs-computational calendar *reuse rights* gate, (3) M1 test-vector matrix, (4) M2 rule/school policy gaps and M3 interpretation blockers, (5) U1 EP3–EP5 factual storyboards, and (6) PR #1 142-commit/152-file scope and privacy review.
+
+The **2027 KASA official publication page advertises KOGL Type 2 (attribution, noncommercial use)**, while the distinct KASI computational data page does not constitute an official notice; a separate public lunar API lists unrestricted-use permission for its own fields. No broad commercial-use clearance is claimed. No source was contacted, no API key was used, and no new code was runtime-tested. The last successfully validated executable SHA remains `891967bfd2883e4aed8296a27b96d9be8a94ee11` (227/227 plus browser).

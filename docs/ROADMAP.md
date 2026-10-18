@@ -1,3 +1,13 @@
+## Quota-paused research/specification checkpoint — 2026-10-18 (NO NEW CI / NO CODE CHANGE)
+
+- User reports GitHub Actions monthly quota exhausted. **Only source review, evidence and design documents are authored**; no workflow trigger paths changed or pushed. See `docs/operations/NO_ACTIONS_QUOTA_OFFLINE_WORK_PROTOCOL_20261018.md`. Current observed workflow only triggers on selected executable paths, not `docs/**`, `README.md` or `AGENTS.md`.
+- **NEW licensing red flag:** the authoritative KASA **2027 월력요항** official posting displays **공공누리 2유형 = attribution + noncommercial**; the KASI separately generated 2027 dataset identifies itself as not an official notice, and the distinct KASI daily lunar API on data.go.kr lists `이용허락범위 제한 없음`. Official authority, copyright of the published work, reuse of calculated facts and API field permissions are separate legal objects. Commercial-source clearance remains **OPEN/NO-GO**; this research memo does NOT say astronomic facts cannot be used commercially. See `docs/research/CALENDAR_SOURCE_COMMERCIAL_RIGHTS_GATE_20261018.md` and the provider inquiry draft (NOT SENT).
+- Designed a candidate-specific **applied Jie trace** contract based on actual M1 `activeJieBeforeBoundary` / `boundaryJie`, avoiding falsely attributing one event based on whole-corpus `solarTermSourceIds`. 15 source-bound test vectors are **planned but NOT IMPLEMENTED/EXECUTED**. See `M1_APPLIED_JIE_PROVENANCE_DESIGN_20261018.md` and `M1_SOURCE_WITNESS_AND_TEST_VECTOR_MATRIX_20261018.md`.
+- Specified M2 missing-rule/source policy matrix, hard **M3 strength/격국/용신 interpretation block**, and candidate-safe **U1 EP3–EP5** storyboard as documents only. No software gate is marked green by this work. See `docs/RESEARCH_PACKAGE_INDEX_20261018.md`.
+- Inspected actual PR #1: **142 commits, 152 changed files**, Open/Draft. Documented A/B/C/D/E dependency-ordered split, privacy/security risks and commercial-source release blockers in `docs/review/PR1_SCOPE_SECURITY_AND_SPLIT_PLAN_20261018.md`; no split/merge executed.
+- The **last runtime-verified code remains** `891967bfd2883e4aed8296a27b96d9be8a94ee11`, GitHub Actions [39112191402](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39112191402), **227/227 Node + real Chromium PASS**. A docs-only later commit is NOT another runtime verification and is NOT a new release.
+- Next, after execution resumes and commercial-data path is qualified: implement/test precise M1 Jie event trace, then U1 EP3 factual glyphs. Do not make the huge PR main-ready or enable historical birth years by inference.
+
 # Execution roadmap
 
 ## Priority correction

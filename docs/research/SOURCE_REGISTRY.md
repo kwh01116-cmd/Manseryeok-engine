@@ -126,3 +126,15 @@ Next smallest evidence task: pin the original KASI/NAOJ minute-table editions an
 - The derived corpus has a **different** source ID/authority label from `KR-KASI-CALENDAR-DATA`. Its MIT implementation license is not Korean calendar authority and does not, by itself, resolve all data-rights questions. The validator accepts only explicitly paired source/authority profile IDs; any forged or swapped profile fails closed.
 - Alternative **not invoked in this run**: the public KASI lunar/solar information API https://www.data.go.kr/data/15012679/openapi.do (public data listing identifies `이용허락범위 제한 없음`); proper official API output verification requires a service key. This available API's usage listing does not retroactively waive the restrictive wording of a separately published archival bulletin.
 - Claims: *independent source-level lunar conversion parity* at 2000 and 1999/2001 edge; NOT official KASA astronomical second accuracy, direct KASI API parity, production release clearance, or support for the public 2000 birth form. Keep 2026–2027 V0 runtime unchanged.
+
+## SOURCE-RIGHTS-REVIEW-20261018 — distinct official document vs computational page vs public API
+
+Status: **RESEARCH / NOT A NEW COMPUTATIONAL SOURCE**. Retrieved and inspected live on 2026-10-18; see `docs/research/CALENDAR_SOURCE_COMMERCIAL_RIGHTS_GATE_20261018.md`.
+
+1. **KR-KASA-WOLRYEOK-2027** official 2027 notice, KASA announcement 2026-06-29 / No. 2026-0078: https://www.kasa.go.kr/bbs/BBSMSTR_000000000018/B000000003234Li6nD2.do?mno=sub01_03_03 . Page's posted work has visible **공공누리 2유형 (출처표시 + 상업적 이용금지)**. This is a license classification of the **published work**, not proof that elementary astronomical facts are themselves protected, not permission for commercial extraction/redistribution, and not clearance for the whole app.
+2. KOGL license definitions: https://www.kogl.or.kr/use/OpenBestCaseView.do . Type 2 is *noncommercial* reuse with attribution. Never label the official 2027 document KOGL-1 or freely commercial.
+3. **KR-KASI-CALENDAR-DATA** minute-precision computational reference, e.g. https://astro.kasi.re.kr/kor/life/post/calendarData?year=2027 , generation V1.0a 2026-06-30 12:33, explicitly says `자료는 공식 발표 자료가 아닙니다`. That is an *authority caveat*, not a license grant.
+4. **KR-KASI-LUNISOLAR-PUBLIC-API-15012679** separate dataset listing at https://www.data.go.kr/data/15012679/openapi.do , showing `무료`, `이용허락범위 제한 없음`, automatic access review, current field scope focused on daily lunar/solar date and related day-cycle information. It has **NOT** been queried in this review and is NOT evidenced here as a valid source for full minute-level 24 solar terms. API terms, field attribution, caching, redistribution and business authorization require review.
+5. **2000 archived source**: retain restricted use warning and research-only status; open-source MIT implementation does not guarantee rights of every underlying datum.
+
+Current aggregate release permission: `UNVERIFIED` / paid public product gate **BLOCKED**. A provider inquiry draft exists but has not been sent. Existing fixture source IDs/authority must not be silently rewritten.

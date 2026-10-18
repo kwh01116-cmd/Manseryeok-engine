@@ -29,3 +29,9 @@ Keep these distinct:
 - unresolved or disputed rule
 
 Document disagreement rather than silently collapsing it into one answer.
+
+## Quota-paused research mode (2026-10-18)
+
+When the owner reports that GitHub Actions allowance is exhausted, **do not trigger Actions or paid runners** and never weaken/remove the existing checks to fake a green state. The currently reviewed workflow on `agent/foundation-20261006` runs on pushes touching `src/**`, `test/**`, `scripts/**`, `web/**`, `package*.json`, `tsconfig.json` or the workflow itself. During this pause, restrict pushes to **docs-only** paths (plus carefully scoped `README.md`/`AGENTS.md` text), verify latest workflow and PR head before every push, and use optimistic expected-SHA branch leases. New executable changes require a runnable environment and exact-SHA checks before claiming verified. Reference `docs/operations/NO_ACTIONS_QUOTA_OFFLINE_WORK_PROTOCOL_20261018.md`.
+
+The latest verified code SHA is `891967bfd2883e4aed8296a27b96d9be8a94ee11` (227/227 Node tests and actual Chromium passed). Later research docs do **not** change this evidence. The 2027 official KASA 월력요항 document displays KOGL Type 2 noncommercial licensing: source, rights and independent astronomical facts must not be conflated; the commercial-use release gate remains open. Before implementing an applied Jie explanation, follow `docs/research/M1_APPLIED_JIE_PROVENANCE_DESIGN_20261018.md`; do not claim corpus-wide source IDs are the birth's exact applied event evidence.

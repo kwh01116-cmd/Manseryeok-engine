@@ -1,3 +1,10 @@
+## Quota-paused U1 EP3–EP5 design checkpoint — 2026-10-18
+
+- Verified local-only U1 **EP0, EP1, EP2** chapters already exist at code SHA `891967bfd2883e4aed8296a27b96d9be8a94ee11` ([GitHub Actions 39112191402](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39112191402): 227/227 + real Chromium). Earlier paragraphs below describing EP2 as unimplemented are historical snapshots, not current status.
+- **New design-only** `docs/product/U1_EP3_EP5_FACTUAL_SCENE_BLUEPRINT_20261018.md`: EP3 8 character element labels without "five-element strength", EP4 source/policy-tagged hidden stem member/ten-god cards without personality/wealth forecasts, EP5 raw branch pair and triad member-presence graph with overlaps, candidate source refs and explicit "not 合化 成立" caveat.
+- U1 EP3–EP5 are **NOT YET IMPLEMENTED**; mobile browser and accessibility tests are acceptance requirements for future executable slices. No generated assets, animation, API exposure or M3 interpretation are part of the present research package.
+- Release and source rights dependency: official 2027 KASA publication is marked KOGL Type 2, separate from the KASI computational calendar surface and API permissions. Do not create a commercial product claim until provider-specific rights are cleared. See `docs/RESEARCH_PACKAGE_INDEX_20261018.md`.
+
 # Storytelling / interactive webtoon UX — track U
 
 **Planning status 2026-10-10:** ADOPTED IN ROADMAP; **not an implemented webtoon, not a public release**. Canonical work order is `docs/ROADMAP.md` and `docs/EXECUTION_HANDOFF.md`. The user-supplied market/technology/legal report is a design hypothesis source, not independently source-verified proof, cost baseline or counsel opinion.
