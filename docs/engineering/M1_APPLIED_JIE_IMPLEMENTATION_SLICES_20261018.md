@@ -1,5 +1,12 @@
 # M1 applied-Jie trace — first green code slice implementation blueprint
 
+Execution update (2026-10-19 KST): **S1–S4 locally implemented and verified** on
+separate work branch `agent/m1-applied-jie-slice1-20261019`; final executable SHA
+`1ebd936db4fa0d66b1cd81b2e50be3f7fae113fb`, 253/253 Node tests and actual Chromium
+PASS, no GitHub Actions. See `M1_APPLIED_JIE_S2_S4_EXECUTION_20261019.md` and the
+S1 execution report. The original pre-implementation blueprint follows for context;
+its planned status is not the current execution cursor. Source/release gates remain open.
+
 Status: **STATIC ENGINEERING DESIGN, not implemented or executed**. Baseline reviewed commit `ba1d1909bb0f53dc41f9c280a287624f711ba98f`. Previous verified executable HEAD `891967bfd2883e4aed8296a27b96d9be8a94ee11`, 227/227 Node + Chromium. Research gate `M1_APPLIED_JIE_PROVENANCE_DESIGN_20261018.md` defines the public type semantics; this document identifies the exact implementation insertion points.
 
 ## Current call/data graph (read from real files)
