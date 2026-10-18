@@ -1,0 +1,68 @@
+# M1 #12 static audit (2026-10-08)
+
+Status: OPEN / canonical checks NOT RUN. Branch agent/foundation-20261006, PR #1.
+
+## Confirmed test defect
+- src/calendar/koreaSolarTermFixtures.ts has 24 events for 2026, 24 for 2027, and one 2025-12-07 DAXUE continuity guard: total 49.
+- test/solar-term-timeline.test.mjs incorrectly expected total 48. Corrected test now asserts 48 annual + 1 guard = 49, including guard identity and KASI-only provenance.
+- test/year-month-boundaries.test.mjs deliberately filters to 2026/2027 and its 48 annual-event expectation is correct. Removing the 2025 guard would break January 2026 continuity.
+- Static source count and independent Node arithmetic pass; local candidate node --check passes. Neither constitutes a canonical test pass.
+
+## Remaining critical-path blockers
+1. git ls-remote fails with DNS resolution for github.com in the available local shell. Exact checkout, npm ci, npm run check NOT RUN; do not merge.
+2. src/index.ts exports day/hour composition but does not export resolveYearMonthPillars; the inspected code does not expose an integrated Four-Pillars API. M1 #12 cannot close solely on the cardinality fix.
+3. The fixture assigns both KASA authority and KASI transcription IDs to minute values. KASA annual notice and KASI data are not independent minute-level transcriptions until the official attached edition is compared.
+4. Pinned independent differential checks and complete combined-pipeline adversarial tests remain to be demonstrated.
+
+## Provenance and counterexample
+Source files: src/calendar/koreaSolarTermFixtures.ts; test/solar-term-timeline.test.mjs; test/year-month-boundaries.test.mjs; src/index.ts.
+KASI 2025 calendar-data: https://astro.kasi.re.kr/kor/life/post/calendarData?search_year=2025 (computational reference, explicitly not the official annual notice).
+Counterexample: 48 annual events + 1 prior-year guard must never be asserted as 48 total.
+Codeability: EXACT for cardinality; CONDITIONAL for official-minute attribution. No classical interpretation or policy default changed.
+
+## Safe next tasks
+1. Obtain exact checkout and run npm ci && npm run check; correct any additional genuine failures.
+2. Audit public Four-Pillars composition and differential fixtures before closing M1 #12.
+3. Compare KASA official attachments to KASI transcriptions before promoting M1 #13 golden fixtures.
+
+## Runtime policy validation slice (2026-10-08)
+- Confirmed from source: invalid DAY_ROLLOVER values previously fell through to the civil-date branch; invalid HOUR_STEM_REFERENCE values fell through to the civil-date stem. TypeScript unions cannot validate untyped JavaScript/JSON at runtime.
+- Change: both policy parameters now reject unknown/missing values with `RangeError`, before calculation. No implicit default or interpretation rule was added.
+- Adversarial vectors: `ZI_STRAT`, `AUTO`, empty string, `undefined`, `null`, numeric `0`, and lower-case policy spellings. Existing late-Zi policy-divergence tests remain unchanged.
+- Source genealogy: direct code audit of `src/calendar/dayRollover.ts` and `src/calendar/dayHourPillars.ts`; software input-safety fact, not a classical or KASA/KASI astronomical claim.
+- Codeability: EXACT (enum membership); dispute: NONE for validation; policy selection itself remains DISPUTED/explicit. Preconditions: effective civil/effective-clock input and caller-supplied policy IDs. Exception: invalid ID throws. Boundary: 23:00 late-Zi remains governed by the selected policies.
+- Validation: isolated exact-logic Node 22.16.0 / TypeScript 5.8.3 strict check + three targeted tests PASS; full repository `npm run check` NOT RUN because GitHub checkout DNS failed. Keep M1 #12 OPEN and PR draft.
+
+## Solar-term year/term uniqueness guard (2026-10-08)
+- Source-level counterexample: the timeline validator previously checked only strictly increasing timestamps, so two distinct-minute LICHUN events within 2027 passed validation. The year resolver takes the first LICHUN while the month resolver iterates both, potentially producing inconsistent Four-Pillars results from corrupted input. This is a fixture integrity problem, not a classical-policy disagreement.
+- New guard: reject duplicate (Gregorian civil year, solar-term code) keys, while permitting the same term across years and the 2025 DAXUE continuity guard. Existing 2026/2027 24-term KASI corpus and the independently published NAOJ 48-record comparison support the one-per-year invariant for the current supported period.
+- Codeability: EXACT for finite uniqueness checking; precondition: sorted, valid KST minute events; exception: duplicate term/year throws; boundary: the same term in adjacent years is valid. Dispute: NONE for the current fixture period; not a new astronomy precision or school policy claim.
+- New adversarial executable test: 2027 LICHUN 10:46 + 10:47 must fail, while 2026/2027 LICHUN and 2025/2026 DAXUE must pass.
+- Checks actually run: isolated TypeScript 5.8.3 strict compilation PASS with a minimal SolarTermEvent type declaration; isolated Node.js 22.16.0 new-test logic 2/2 PASS; test file syntax PASS. Exact repository npm ci / npm run check NOT RUN: shell github.com DNS lookup still fails. Do not mark canonical verified or merge.
+
+## Interior Jie coverage gap (2026-10-09, STATIC FINDING; not patched)
+
+- Evidence: `validateKstMinuteSolarTermTimeline` checks KST, minute shape, chronological order and duplicate (year,term) keys; it does **not** assert expected Jie succession or the completeness of a declared supported coverage interval. `resolveMonthBranchAtJie` simply selects the latest supplied Jie. Thus removing an interior Jie from an otherwise sorted, unique fixture silently changes a month pillar. This is a software-data-integrity finding, not a school dispute.
+- Adversarial vector (synthetic corruption, **not** an astronomical claim): start from the 49-event 2025 guard + 2026/2027 corpus, delete only 2027-03-06T04:40 JINGZHE. Query 2027-03-10T12:00 KST. Uncorrupted expected active Jie=JINGZHE, month branch=卯 (丁-year 癸卯); corrupted source-loop behavior selects LICHUN, branch=寅 (丁-year 壬寅). Sortedness and uniqueness still hold. A standalone Node 22.16.0 reproduction of the resolver's selection loop confirms JINGZHE -> LICHUN on deletion; **the actual repository test suite was not run**.
+- Proposed narrow gate: check consecutive Jie codes modulo the 12-term sequence **within an explicitly declared covered interval**, and require an independently verified coverage/fixture manifest at edges. A blanket '12 Jie in every represented year' assertion would incorrectly reject the intentionally partial 2025 DAXUE guard and other legitimate partial timelines. Missing terminal events cannot be inferred from adjacency alone.
+- Preconditions: finite, source-tagged, KST minute corpus; exceptions: missing interior Jie and unsupported/partial coverage must fail closed for chart resolution, not silently extrapolate. Codeability=EXACT for interior sequence checking; CONDITIONAL for coverage-manifest semantics. Dispute=NONE for data integrity; astronomy source/precision still UNVERIFIED where noted above.
+- Follow-up executable change requires a failing regression test and exact-checkout `npm run check` before verification or merge.
+
+## Interior Jie succession guard (2026-10-09; isolated-check only)
+
+- Rule class: deterministic fixture-integrity invariant (EXACT for *interior* gaps, no school policy). The month-branch resolver now rejects any supplied pair of consecutive month-boundary Jie codes that skips a position in the 12-Jie cycle, including DAXUE -> XIAOHAN across civil years. Ordinary Zhongqi records are ignored by this check. No annual 12-Jie completeness assertion is imposed on a legitimate partial guard.
+- Preconditions: caller supplies a chronologically ordered, contiguous Jie timeline for the requested period; time basis KST, precision MINUTE. Exception: nonconsecutive Jie codes throw before any month pillar is returned. The separate solar-term timeline validator still permits partial arbitrary event sets; the stronger condition is applied only to month resolution.
+- Synthetic adversarial vectors: delete 2027 JINGZHE while keeping 2027 QINGMING; delete 2027 XIAOHAN while keeping DAXUE 2026 and LICHUN 2027. Both must fail closed. Control cases: 2025 DAXUE -> 2026 XIAOHAN partial guard works; omission of 2027 YUSHUI (Zhongqi) does not alter the month branch.
+- Known limitation: a missing *terminal* Jie or a single-Jie input cannot be detected by adjacency. This change does not establish the supported coverage interval, prove minute-to-second astronomical certainty, or replace a versioned fixture coverage manifest. Never claim full data completeness from this guard alone.
+- Provenance: source taxonomy in `src/calendar/monthPillar.ts`, official KASA/KASI calendar hierarchy in `docs/research/SOURCE_REGISTRY.md`, and NAOJ published 2026/2027 crosscheck in `test/naoj-solar-term-differential.test.mjs`. No new numerical astronomy claim. Codeability=EXACT for sequence order; CONDITIONAL for a future explicit coverage manifest. Dispute=NONE for integrity; source minute precision remains unresolved.
+- Checks actually run: Node 22.16.0 + TypeScript 5.8.3 strict compilation and 4/4 isolated regression tests PASS using reconstructed relevant sources with minimal domain stubs; exact repository `npm ci && npm run check` NOT RUN because github.com DNS resolution fails. PR remains draft; M1 Gate 12 OPEN.
+
+## Full-24-term label/order invariant (2026-10-09; unverified exact checkout)
+
+- Classification: astronomical calendar taxonomy / software dataset integrity, NOT a Myeongli interpretation or a new time rule. Codeability EXACT for the finite ordered sequence of an explicitly declared `FULL_24_TERM_YEAR` manifest; no new policy default.
+- Finding: the original complete-set check accepted label transpositions. Swap 2027 XIAOHAN 01-05 23:10 with DAHAN 01-20 16:30 while keeping timestamps, KST, source IDs and 49 events unchanged. The set and chronological validators still pass, but the inferred January month boundary becomes wrong.
+- Rule: after completeness and provenance checks, compare each chronological `(year, term)` pair with the canonical civil-year 24-term order in `SOLAR_TERM_CODES`, starting at the declared prior-year DAXUE boundary. Preserve the existing support for partial timelines outside the manifest; no universal full-year requirement in the timeline or month resolver.
+- Preconditions: full annual fixture, explicit manifest, chronological KST minute timestamps, valid source IDs. Exception: transposed codes -> `noncanonical solar-term order`. Boundary: prior-year DAXUE -> January XIAOHAN; year changes and leap years use the same ordered taxonomy. Dispute NONE for code-order invariant, but official numerical minute transcription remains pending.
+- New adversarial tests: swap 2027 XIAOHAN/DAHAN, LICHUN/YUSHUI, or DAXUE/DONGZHI; all retain 49 entries and satisfy chronology but must fail manifest validation. Control: unchanged 49-event fixture passes.
+- Evidence: existing repository `src/calendar/solarTerms.ts` 24-term taxonomy and `koreaSolarTermFixtures.ts` transcribed 2026/2027 years; KMA 24-solar-term seasonal reference (https://www.kma.go.kr); KASI minute-value transcription is not KASA official-annex certification. No novel clock values added.
+- Local checks: standalone Node.js 22.16.0 reproduction 4/4 PASS, **not** a compiled repository test. Exact checkout `git ls-remote` FAIL due to github.com DNS; `npm ci && npm run check` NOT RUN. Do not treat the patch as verified or merge.

@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "m1-independent-korean-lunar-1999-2000-research-v1",
+  "status": "RESEARCH_ONLY_NOT_CONSUMER_RUNTIME",
+  "generator": {
+    "package": "korean-lunar-calendar",
+    "version": "0.3.1",
+    "license": "MIT",
+    "url": "https://github.com/usingsky/korean_lunar_calendar_py",
+    "method": "setSolarDate for every civil day, record lunarDay=1; derive month size from consecutive starts"
+  },
+  "officialCrossCheck": {
+    "source": "KASI 2000 archived notice KAO-PR 9902-1, lunar 2000 dates only, NOT the corpus derivation",
+    "url": "https://www.kasi.re.kr/publication/post/newsMaterial/2008",
+    "nextYearUrl": "https://www.kasi.re.kr/kor/publication/post/newsMaterial/2023"
+  },
+  "publicApiAlternative": {
+    "url": "https://www.data.go.kr/data/15012679/openapi.do",
+    "licenseListing": "이용허락범위 제한 없음",
+    "invoked": false,
+    "verifiedAgainstLiveApi": false
+  },
+  "corpus": {
+    "schemaVersion": "m1-korean-lunisolar-months-v1",
+    "corpusId": "usingsky-korean-lunar-calendar-py-0.3.1-1999-2000-research-v1",
+    "authorityLevel": "INDEPENDENT_OPEN_SOURCE_IMPLEMENTATION_NOT_OFFICIAL_KASA",
+    "sourceId": "ORG-USINGSKY-KOREAN-LUNAR-CALENDAR-PY-0.3.1",
+    "sourceEditions": {
+      "1999": "MIT library 0.3.1 / independently derived daily corpus",
+      "2000": "MIT library 0.3.1 / independently derived daily corpus"
+    },
+    "supportedGregorianFromInclusive": "1999-02-16",
+    "supportedGregorianUntilExclusive": "2001-01-24",
+    "months": [
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 1,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-02-16",
+        "days": 30
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 2,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-03-18",
+        "days": 29
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 3,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-04-16",
+        "days": 29
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 4,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-05-15",
+        "days": 30
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 5,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-06-14",
+        "days": 29
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 6,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-07-13",
+        "days": 29
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 7,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-08-11",
+        "days": 30
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 8,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-09-10",
+        "days": 29
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 9,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-10-09",
+        "days": 30
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 10,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-11-08",
+        "days": 30
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 11,
+        "isLeapMonth": false,
+        "gregorianStart": "1999-12-08",
+        "days": 30
+      },
+      {
+        "lunarYear": 1999,
+        "lunarMonth": 12,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-01-07",
+        "days": 29
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 1,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-02-05",
+        "days": 30
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 2,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-03-06",
+        "days": 30
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 3,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-04-05",
+        "days": 29
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 4,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-05-04",
+        "days": 29
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 5,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-06-02",
+        "days": 30
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 6,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-07-02",
+        "days": 29
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 7,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-07-31",
+        "days": 29
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 8,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-08-29",
+        "days": 30
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 9,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-09-28",
+        "days": 29
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 10,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-10-27",
+        "days": 30
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 11,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-11-26",
+        "days": 30
+      },
+      {
+        "lunarYear": 2000,
+        "lunarMonth": 12,
+        "isLeapMonth": false,
+        "gregorianStart": "2000-12-26",
+        "days": 29
+      }
+    ]
+  }
+}
