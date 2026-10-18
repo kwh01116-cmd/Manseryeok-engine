@@ -135,6 +135,11 @@ async function run() {
     assert.match(ep2,/음력 초하루가 아니라/);
     assert.ok(ep2.includes('preview.candidates[0].month.branch'));
     assert.equal(await evaluate("document.querySelector('.month-chapter .fact-glyph').textContent"),primary[1].slice(1));
+    const primaryJie = await evaluate("document.querySelector('.applied-jie').textContent");
+    assert.match(primaryJie,/입춘\(立春\).*2027-02-04 10:46 \(한국 표준시 · KST 발표 분\)/);
+    assert.match(primaryJie,/이 적용 절기 이벤트의 출처: KR-KASI-CALENDAR-DATA/);
+    assert.ok(primaryJie.includes('preview.candidates[0].month'));
+    assert.ok(primaryJie.includes('preview.monthBoundaryTrace.candidateContexts[0]'));
 
     // U1 EP0 evidence is a native accessible disclosure; provenance comes from the engine DTO.
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')?.open"), false);
@@ -155,6 +160,7 @@ async function run() {
     assert.match(evidence, /자정\(00:00\)/);
     assert.match(evidence, /분 단위/);
     assert.doesNotMatch(evidence, /공식 인증 완료/);
+    assert.match(evidence,/검증에 사용한 절기 자료의 출처 집합/);
 
     // Gregorian and equivalent Korean-lunar births produce identical four pillars.
     await evaluate(`(() => {
@@ -174,6 +180,7 @@ async function run() {
     assert.equal(await evaluate("document.querySelector('.month-chapter .fact-glyph').textContent"),primary[1].slice(1));
     assert.match(await evaluate("document.querySelector('#calculation-evidence').textContent"),
       /음력 변환.*KR-KASI-CALENDAR-DATA/);
+    assert.equal(await evaluate("document.querySelector('.applied-jie').textContent"),primaryJie);
 
     // Boundary minute must preserve both correlated year/month candidates.
     await evaluate(`(() => {
@@ -200,6 +207,23 @@ async function run() {
     assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.candidate .month-chapter .fact-glyph'),e=>e.textContent)"),
       await evaluate("Array.from(document.querySelectorAll('.candidate .pillar:nth-child(2) strong'),e=>e.textContent.slice(1))"));
     assert.ok((await evaluate("document.querySelector('.candidate .month-chapter').textContent")).includes('달라질 수 있습니다'));
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.candidate .applied-jie .jie-minute'),e=>e.textContent)"),
+      ['소한(小寒) · 2027-01-05 23:10 (한국 표준시 · KST 발표 분)',
+       '입춘(立春) · 2027-02-04 10:46 (한국 표준시 · KST 발표 분)']);
+    assert.deepEqual(await evaluate("Array.from(document.querySelectorAll('.applied-jie .jie-side'),e=>e.textContent)"),
+      ['절입 발표 분 이전 후보','절입 발표 분 이후 후보']);
+    for(const [i,text] of (await evaluate("Array.from(document.querySelectorAll('.applied-jie'),e=>e.textContent)")).entries()){
+      assert.ok(text.includes(`preview.candidates[${i}].month`));
+      assert.ok(text.includes(`preview.monthBoundaryTrace.candidateContexts[${i}]`));
+      assert.match(text,/분 단위 자료라 실제 초 시각에 따라 달라질 수 있습니다/);
+      assert.match(text,/현재 경계: 입춘\(立春\).*2027-02-04 10:46/);
+    }
+    // Measure successful boundary cards with their longer per-event references.
+    for(const width of [360,390]){
+      await send('Emulation.setDeviceMetricsOverride',{width,height:800,deviceScaleFactor:1,mobile:true});
+      const measured=await evaluate('({innerWidth,scrollWidth:document.documentElement.scrollWidth})');
+      assert.ok(measured.scrollWidth<=measured.innerWidth+1,'Applied Jie overflow at '+width+'px');
+    }
 
     // Input edits invalidate old candidates. Out-of-coverage dates cannot produce a story.
     await evaluate(`(() => {
@@ -213,6 +237,7 @@ async function run() {
     assert.match(await evaluate("document.querySelector('#output .error').textContent"), /범위를 벗어납니다/);
     assert.equal(await evaluate("document.querySelector('#calculation-evidence')"), null);
     assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),0);
+    assert.equal(await evaluate("document.querySelectorAll('.applied-jie').length"),0);
 
     // Mobile source/error layout must fit and expose native focusable controls.
     for (const width of [360, 390]) {
@@ -227,7 +252,100 @@ async function run() {
       features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
     });
     assert.equal(await evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"), true);
-    process.stdout.write('PASS real-Chromium V0/U1 EP0+EP1+EP2 browser smoke: local HTTP, Gregorian/lunar day stem, Lichun, keyboard evidence, coverage, 360/390px, reduced-motion\n');
+
+    // All six live HTTP before/at/after vectors, including month-only ambiguity.
+    for(const [date,clock,terms] of [
+      ['2027-02-04','10:45',['소한']],['2027-02-04','10:46',['소한','입춘']],['2027-02-04','10:47',['입춘']],
+      ['2027-03-06','04:39',['입춘']],['2027-03-06','04:40',['입춘','경칩']],['2027-03-06','04:41',['경칩']],
+    ]){
+      await evaluate(`(() => {
+        document.getElementById('example').click();
+        const date=document.getElementById('birth-date');date.value=${JSON.stringify(date)};
+        date.dispatchEvent(new Event('input',{bubbles:true}));
+        const clock=document.getElementById('birth-time');clock.value=${JSON.stringify(clock)};
+        clock.dispatchEvent(new Event('input',{bubbles:true}));
+        document.querySelector('#birth-form button[type=submit]').click();
+      })()`);
+      await until(`document.querySelectorAll('.applied-jie').length === ${terms.length}`,'S4 '+date+' '+clock);
+      const texts=await evaluate("Array.from(document.querySelectorAll('.applied-jie .jie-minute'),e=>e.textContent)");
+      terms.forEach((term,i)=>assert.ok(texts[i].startsWith(term+'('),date+' '+clock));
+    }
+
+    // Tamper only with copies of actual live responses to test client consistency gates.
+    for(const mutation of [
+      "data.story.candidates[0].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT').factRef='preview.candidates[1].month'",
+      "data.story.candidates[0].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT').activeSince.sourceIds=['FORGED']",
+    ]){
+      await evaluate(`(() => {
+        window.__smokeFetch=window.fetch;
+        window.fetch=async (...args)=>{
+          const response=await window.__smokeFetch(...args);const data=await response.json();
+          ${mutation};return new Response(JSON.stringify(data),{status:response.status});
+        };
+        document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click();
+      })()`);
+      await until("!!document.querySelector('#output .error')",'S4 rejects mismatched response');
+      assert.equal(await evaluate("document.querySelector('#output').textContent"),'명식과 사실 설명의 기준이 일치하지 않습니다.');
+      assert.equal(await evaluate("document.querySelectorAll('.candidate,.applied-jie').length"),0);
+      await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
+    }
+
+    // Older v1 responses without the optional trace still show their original chapters.
+    await evaluate(`(() => {
+      window.__smokeFetch=window.fetch;
+      window.fetch=async (...args)=>{
+        const response=await window.__smokeFetch(...args);const data=await response.json();
+        delete data.preview.monthBoundaryTrace;
+        for(const candidate of data.story.candidates) candidate.beats=candidate.beats.filter(b=>b.type!=='MONTH_APPLIED_JIE_CONTEXT');
+        return new Response(JSON.stringify(data),{status:response.status});
+      };
+      document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click();
+    })()`);
+    await until("document.querySelectorAll('.candidate').length===1",'S4 legacy optional trace');
+    assert.equal(await evaluate("document.querySelectorAll('.fact-chapter').length"),2);
+    assert.equal(await evaluate("document.querySelectorAll('.applied-jie').length"),0);
+    await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
+
+    // Even a mutually consistent injected source string must render as text, never HTML.
+    await evaluate(`(() => {
+      window.__smokeFetch=window.fetch;
+      window.fetch=async (...args)=>{
+        const response=await window.__smokeFetch(...args);const data=await response.json();
+        const text='<img src=x onerror="window.__unsafeJie=true">';
+        data.preview.solarTermSourceIds.push(text);
+        data.preview.monthBoundaryTrace.candidateContexts[0].activeSince.sourceIds=[text];
+        data.story.candidates[0].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT').activeSince.sourceIds=[text];
+        return new Response(JSON.stringify(data),{status:response.status});
+      };
+      document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click();
+    })()`);
+    await until("document.querySelectorAll('.applied-jie').length===1",'S4 text-only source rendering');
+    assert.ok((await evaluate("document.querySelector('.jie-source').textContent")).includes('<img src=x'));
+    assert.equal(await evaluate("document.querySelectorAll('#output img').length"),0);
+    assert.equal(await evaluate("window.__unsafeJie===undefined"),true);
+    await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
+
+    // A response completed after input edits cannot restore stale event evidence.
+    await evaluate(`(() => {
+      window.__smokeFetch=window.fetch;
+      window.fetch=async (...args)=>{
+        const response=await window.__smokeFetch(...args);
+        await new Promise(resolve=>{window.__releaseSmokeResponse=resolve;});
+        return response;
+      };
+      document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click();
+    })()`);
+    await until("typeof window.__releaseSmokeResponse==='function'",'S4 delayed live response');
+    await evaluate(`(async () => {
+      const date=document.getElementById('birth-date');date.value='2028-01-01';
+      date.dispatchEvent(new Event('input',{bubbles:true}));
+      window.__releaseSmokeResponse();window.fetch=window.__smokeFetch;
+      delete window.__releaseSmokeResponse;delete window.__smokeFetch;
+      await new Promise(resolve=>setTimeout(resolve,100));
+    })()`);
+    assert.equal(await evaluate("document.querySelectorAll('.candidate,.applied-jie').length"),0);
+    assert.match(await evaluate("document.querySelector('#output').textContent"),/다시 계산/);
+    process.stdout.write('PASS real-Chromium V0/U1 EP0+EP1+EP2 + M1 S4 applied-Jie smoke: live HTTP, Gregorian/lunar parity, Lichun/Jingzhe before-at-after, candidate-specific KST/source refs, keyboard, coverage, 360/390px, reduced-motion, forged/legacy responses, text-only rendering, stale-response rejection\n');
   } finally {
     if (browser) {
       try { browser.socket.close(); } catch { /* teardown */ }

@@ -104,3 +104,25 @@ test('V0 HTTP distinguishes out-of-coverage dates from invalid birth dates', asy
     assert.equal(invalid.body.status, 'ERROR');
   } finally { server.stop(); }
 });
+
+test('S4: actual HTTP returns Gregorian/lunar equivalent event evidence and separate Lichun cards', async () => {
+  const server=await start();
+  try {
+    for(const [time,terms] of [['10:45',['XIAOHAN']],['10:46',['XIAOHAN','LICHUN']],['10:47',['LICHUN']]]){
+      const a=await submit(server.origin,{...sample,date:'2027-02-04',time});
+      const b=await submit(server.origin,{...sample,calendar:'KOREAN_LUNAR',date:'2026-12-28',leap:false,time});
+      assert.equal(a.status,200);assert.equal(b.status,200);
+      assert.deepEqual(a.body.preview.monthBoundaryTrace,b.body.preview.monthBoundaryTrace);
+      assert.deepEqual(a.body.story.candidates,b.body.story.candidates);
+      const beats=a.body.story.candidates.map(c=>c.beats.find(beat=>beat.type==='MONTH_APPLIED_JIE_CONTEXT'));
+      assert.deepEqual(beats.map(beat=>beat.activeSince.term),terms);
+      for(const [i,beat] of beats.entries()){
+        assert.equal(beat.factRef,`preview.candidates[${i}].month`);
+        assert.equal(beat.monthBranch,a.body.preview.candidates[i].month.branch);
+        assert.equal(beat.activeSince.timeBasis,'KST');
+        assert.equal(beat.activeSince.sourcePrecision,'MINUTE');
+        assert.deepEqual(beat.activeSince.sourceIds,['KR-KASI-CALENDAR-DATA']);
+      }
+    }
+  } finally { server.stop(); }
+});

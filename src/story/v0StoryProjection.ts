@@ -1,6 +1,8 @@
 import { STEM_NATURE } from "../domain/stems.js";
 import { BRANCH_NATURE } from "../domain/branches.js";
 import type { KoreanBirthChartPreviewResult, KoreanGanZhiLabel } from "../calendar/koreanBirthPreview.js";
+import { copyValidatedKoreanMonthBoundaryTrace,
+  type KoreanAppliedJieEventV1, type KoreanMonthBoundaryCandidateContextV1 } from "../calendar/koreanMonthBoundaryTrace.js";
 
 /** A presentation contract, not another pillar resolver or an interpretation. */
 export const V0_STORY_SCHEMA_VERSION = "u0-story-projection-v1" as const;
@@ -31,7 +33,18 @@ export interface V0MonthBranchBeat {
 }
 export interface V0CandidateStory {
   readonly candidateIndex: number;
-  readonly beats: readonly [V0PillarBeat, V0DayStemBeat, V0MonthBranchBeat];
+  readonly beats: readonly [V0PillarBeat, V0DayStemBeat, V0MonthBranchBeat, V0MonthAppliedJieBeat?];
+}
+export interface V0MonthAppliedJieBeat {
+  readonly type: "MONTH_APPLIED_JIE_CONTEXT";
+  readonly candidateIndex: number;
+  readonly factRef: `preview.candidates[${number}].month`;
+  readonly traceRef: `preview.monthBoundaryTrace.candidateContexts[${number}]`;
+  readonly birthKstMinute: string;
+  readonly monthBranch: KoreanGanZhiLabel["branch"];
+  readonly boundarySide: KoreanMonthBoundaryCandidateContextV1["boundarySide"];
+  readonly activeSince: KoreanAppliedJieEventV1;
+  readonly atPublishedBoundary?: KoreanAppliedJieEventV1;
 }
 export type V0StoryProjection =
   | { readonly schemaVersion: typeof V0_STORY_SCHEMA_VERSION; readonly status: "BLOCKED";
@@ -76,6 +89,8 @@ export function projectKoreanV0Story(result: KoreanBirthChartPreviewResult): V0S
   if (chart.candidates.length !== (boundary ? 2 : 1)) {
     throw new RangeError("Inconsistent published-minute candidate set.");
   }
+  const trace = chart.monthBoundaryTrace === undefined ? undefined
+    : copyValidatedKoreanMonthBoundaryTrace(chart.monthBoundaryTrace, chart);
   const roles = ["year", "month", "day", "hour"] as const;
   const candidates: V0CandidateStory[] = chart.candidates.map((candidate, i) => {
     const dayNature = STEM_NATURE[candidate.day.stem];
@@ -85,16 +100,22 @@ export function projectKoreanV0Story(result: KoreanBirthChartPreviewResult): V0S
       role, factRef: `preview.candidates[${i}].${role}` as PillarRef,
       label: { ...candidate[role] },
     }));
-    return {
-      candidateIndex: i,
-      beats: [
+    const beats: [V0PillarBeat, V0DayStemBeat, V0MonthBranchBeat, V0MonthAppliedJieBeat?] = [
         { type: "FOUR_PILLARS", pillars },
         { type: "DAY_STEM_CLASSIFICATION", factRef: `preview.candidates[${i}].day.stem`,
           stem: candidate.day.stem, element: dayNature.element, polarity: dayNature.polarity },
         { type: "MONTH_BRANCH_CLASSIFICATION", factRef: `preview.candidates[${i}].month.branch`,
           branch: candidate.month.branch, principalElement: monthNature.principalElement },
-      ],
-    };
+      ];
+    const context = trace?.candidateContexts[i];
+    if (context && trace) beats.push(Object.freeze({
+      type: "MONTH_APPLIED_JIE_CONTEXT", candidateIndex: i,
+      factRef: context.monthPillarFactRef, traceRef: `preview.monthBoundaryTrace.candidateContexts[${i}]`,
+      birthKstMinute: trace.birthKstMinute, monthBranch: context.monthBranch,
+      boundarySide: context.boundarySide, activeSince: context.activeSince,
+      ...(trace.atPublishedBoundary ? { atPublishedBoundary: trace.atPublishedBoundary } : {}),
+    }));
+    return { candidateIndex: i, beats };
   });
   return {
     schemaVersion: V0_STORY_SCHEMA_VERSION, status: "READY",

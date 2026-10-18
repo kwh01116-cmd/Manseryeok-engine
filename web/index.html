@@ -12,7 +12,7 @@
     .layout{display:grid;grid-template-columns:minmax(290px,390px) 1fr;gap:22px;align-items:start}.panel{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 14px 44px rgba(28,50,34,.035)}.panel h2{font-size:19px;margin:0 0 19px;letter-spacing:-.025em}fieldset{border:0;margin:0;padding:0}.switch{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:19px;background:#f6f8f6}.switch label{cursor:pointer;text-align:center;padding:8px;border-radius:8px}.switch input{position:absolute;opacity:0}.switch label:has(input:checked){background:var(--leaf);color:white;font-weight:700}.field{display:block;margin-bottom:16px}.field span,.field legend{display:block;font-size:13px;font-weight:650;margin-bottom:7px}.field input,.field select{width:100%;font:inherit;border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:white;color:var(--ink)}.field input:focus,.field select:focus{outline:2px solid #78a18a;outline-offset:1px}.note{color:var(--muted);font-size:12px;margin:-7px 0 18px}.checkline{display:flex;align-items:center;gap:9px;margin:-1px 0 19px}.checkline input{width:18px;height:18px;accent-color:var(--leaf)}.checkline label{cursor:pointer}.actions{display:flex;gap:9px}.primary,.secondary{font:inherit;font-weight:700;border-radius:11px;padding:12px;border:1px solid var(--leaf);cursor:pointer}.primary{background:var(--leaf);color:white;flex:1}.secondary{background:white;color:var(--leaf)}.primary:hover{background:#163e31}.secondary:hover{background:#f1f7f2}
     .result{min-height:418px}.state{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--leaf);margin-bottom:16px}.dot{width:7px;height:7px;border-radius:50%;background:#69a18a}.placeholder{border:1px dashed var(--line);border-radius:15px;text-align:center;padding:60px 28px;background:#fafbf9;color:var(--muted)}.placeholder b{display:block;color:var(--ink);font-size:18px;margin-bottom:8px}.candidate{border:1px solid var(--line);border-radius:15px;padding:18px;margin:15px 0}.candidate h3{font-size:14px;font-weight:650;margin:0 0 16px}.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.pillar{border:1px solid var(--line);background:#f9fbf8;text-align:center;border-radius:10px;padding:14px 6px}.pillar small{display:block;font-size:12px;color:var(--muted);margin-bottom:7px}.pillar strong{display:block;font-family:Georgia,serif;font-size:clamp(22px,3.2vw,33px);font-weight:500;line-height:1.25}.pillar em{display:block;font-style:normal;font-size:13px;color:var(--leaf);margin-top:6px}.meta{font-size:12px;color:var(--muted);line-height:1.85;margin-top:15px}.warning{margin-top:16px;border-left:3px solid #af9460;background:#faf8f0;padding:12px 15px;color:#65553e;border-radius:4px;font-size:13px}.error{color:#a13a35;background:#fff3f1;border:1px solid #efd3ce;padding:12px;border-radius:10px;margin-top:14px}.footer{font-size:12px;line-height:1.9;color:var(--muted);padding-top:23px}.hide{display:none!important}
     .meta{white-space:pre-line}.evidence{border:1px solid var(--line);border-radius:13px;margin:19px 0 2px;background:#f8faf7}.evidence summary{cursor:pointer;color:var(--leaf);font-weight:700;padding:13px 15px}.evidence summary:focus-visible{outline:3px solid #78a18a;outline-offset:2px}.evidence[open] summary{border-bottom:1px solid var(--line)}.evidence-body{padding:10px 15px 17px;font-size:13px;color:var(--muted);overflow-wrap:anywhere}.evidence-body p{margin:8px 0}.evidence-body strong{color:var(--ink)}.evidence-body .boundary-help{color:#65553e}.result .notice{border-radius:12px;background:#f6f8f6;padding:15px;color:var(--muted)}
-    .month-chapter{border-color:#cfddd0;background:#f7faf6}.month-chapter .fact-glyph{font-size:28px}.month-chapter .fact-desc{margin-top:10px}
+    .month-chapter{border-color:#cfddd0;background:#f7faf6}.month-chapter .fact-glyph{font-size:28px}.month-chapter .fact-desc{margin-top:10px}.applied-jie{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;overflow-wrap:anywhere}.applied-jie p{margin:7px 0}.jie-minute{display:block;color:var(--leaf);font-weight:650}.jie-source,.jie-ref{color:var(--muted);font-size:11px}.jie-side{font-weight:650}.jie-caveat{color:#65553e}
     .fact-chapter{margin-top:17px;padding:17px 16px;border:1px solid var(--line);border-radius:13px;background:var(--paper)}.fact-kicker{font-size:11px;letter-spacing:.07em;font-weight:750;color:var(--leaf)}.fact-row{display:flex;gap:13px;align-items:center;margin-top:8px;flex-wrap:wrap}.fact-glyph{font-family:Georgia,"Noto Serif KR",serif;font-size:31px;font-weight:600;color:var(--leaf);line-height:1.25}.fact-label{font-size:14px;font-weight:650}.fact-desc{font-size:12px;color:var(--muted);margin:11px 0 0}.fact-evidence{font-size:11px;color:var(--muted);overflow-wrap:anywhere;margin-top:7px}
     @media(max-width:750px){.layout{grid-template-columns:1fr}header{padding:38px 0 26px}.shell{padding:24px 16px 60px}.panel{padding:21px}.result{min-height:300px}}
   </style>
@@ -67,7 +67,7 @@
    if(!Array.isArray(sourceIds)||sourceIds.length===0) throw new Error('절기 출처가 없는 계산 결과입니다.');
    const rows=[
      ['연·월 기준','연주는 입춘, 월주는 12개의 절(節) 진입 시각을 기준으로 계산합니다.'],
-     ['절기 출처',sourceIds.join(' · ')+' (한국 표준시, 분 단위 발표 시각)'],
+     ['검증에 사용한 절기 자료의 출처 집합',sourceIds.join(' · ')+' (전체 입력 자료의 출처이며, 후보별 적용 절기의 출처는 각 월지 설명에 표시합니다.)'],
      ['일주 정책',rolloverLabel(p.policies.dayRollover)],
      ['시주 정책',hourLabel(p.policies.hourStemReference)],
      ['적용 범위',p.coverage.supportedFromInclusive.replace('T',' ')+' 이상 / '+p.coverage.supportedUntilExclusive.replace('T',' ')+' 미만'],
@@ -96,7 +96,9 @@
    section.append(element('div','fact-evidence','계산 근거: '+beat.factRef+' · 검증된 U0 사실 매핑'));
    return section;
  }
- function monthBranchChapter(beat, ambiguous) {
+ const jieLabel = event => event.koreanName+'('+event.hanjaName+')';
+ const jieMinute = event => jieLabel(event)+' · '+event.displayedDateTime.replace('T',' ')+' (한국 표준시 · KST 발표 분)';
+ function monthBranchChapter(beat, ambiguous, applied) {
    const section=element('section','fact-chapter month-chapter');
    section.append(element('div','fact-kicker','02 · 월지는 어떻게 정해질까요?'));
    const row=element('div','fact-row');
@@ -104,8 +106,60 @@
    section.append(row);
    section.append(element('p','fact-desc','월지는 음력 초하루가 아니라 12개의 절(節)이 시작되는 시각을 기준으로 정합니다. 이 명식의 월지와 오행은 계산 결과에 포함된 전통 명리 분류입니다.'));
    if(ambiguous) section.append(element('p','fact-desc','입력 시각이 발표된 절입 분과 같아 월지가 달라질 수 있습니다. 위의 명식 후보를 각각 확인하세요.'));
-   section.append(element('div','fact-evidence','계산 근거: '+beat.factRef+' · 검증된 U0 사실 매핑 · 절기 출처는 아래에서 확인'));
+   section.append(element('div','fact-evidence','계산 근거: '+beat.factRef+' · 검증된 U0 사실 매핑'));
+   if(applied){
+     const detail=element('div','applied-jie');
+     const side={DEFINITE:'적용 절기',BEFORE_PUBLISHED_MINUTE:'절입 발표 분 이전 후보',AFTER_PUBLISHED_MINUTE:'절입 발표 분 이후 후보'};
+     detail.append(element('p','jie-side',side[applied.boundarySide]));
+     detail.append(element('p','','이 후보의 월지는 '+jieLabel(applied.activeSince)+'을 기준으로 계산했습니다.'));
+     detail.append(element('span','jie-minute',jieMinute(applied.activeSince)));
+     detail.append(element('p','jie-source','이 적용 절기 이벤트의 출처: '+applied.activeSince.sourceIds.join(' · ')));
+     if(applied.atPublishedBoundary){
+       detail.append(element('p','jie-boundary','현재 경계: '+jieMinute(applied.atPublishedBoundary)));
+       detail.append(element('p','jie-source','현재 경계 이벤트의 출처: '+applied.atPublishedBoundary.sourceIds.join(' · ')));
+       detail.append(element('p','jie-caveat','분 단위 자료라 실제 초 시각에 따라 달라질 수 있습니다. 두 후보를 각각 확인하세요.'));
+     }else detail.append(element('p','jie-caveat','표시된 시각은 분 단위 발표 자료이며, 정확한 초 시각을 뜻하지 않습니다.'));
+     detail.append(element('p','jie-ref','계산 근거: '+applied.factRef+' · '+applied.traceRef));
+     section.append(detail);
+   }
    return section;
+ }
+ function sameJieEvent(a,b){
+   if(a===undefined||b===undefined)return a===b;
+   return !!a&&!!b&&a.term===b.term&&a.koreanName===b.koreanName&&a.hanjaName===b.hanjaName&&
+     a.displayedDateTime===b.displayedDateTime&&a.timeBasis===b.timeBasis&&a.sourcePrecision===b.sourcePrecision&&
+     Array.isArray(a.sourceIds)&&Array.isArray(b.sourceIds)&&a.sourceIds.length===b.sourceIds.length&&
+     a.sourceIds.every((id,i)=>id===b.sourceIds[i]);
+ }
+ function validAppliedJie(p,candidate,i){
+   const beats=candidate.beats?.filter(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT');
+   const trace=p.monthBoundaryTrace;
+   if(trace===undefined)return beats?.length===0;
+   const ambiguous=p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS';
+   if(!trace||trace.schemaVersion!=='m1-month-boundary-trace-v1'||trace.confidence!==p.confidence||
+      trace.birthKstMinute!==p.recordedBirthKstMinute||!Array.isArray(trace.candidateContexts)||
+      trace.candidateContexts.length!==p.candidates.length||beats?.length!==1)return false;
+   const context=trace.candidateContexts[i],beat=beats[0];
+   const side=ambiguous?(i===0?'BEFORE_PUBLISHED_MINUTE':'AFTER_PUBLISHED_MINUTE'):'DEFINITE';
+   const event=context?.activeSince;
+   if(!event||event.timeBasis!=='KST'||event.sourcePrecision!=='MINUTE'||
+      typeof event.koreanName!=='string'||typeof event.hanjaName!=='string'||
+      typeof event.displayedDateTime!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(event.displayedDateTime)||
+      !Array.isArray(event.sourceIds)||!event.sourceIds.length||!Array.isArray(p.solarTermSourceIds)||
+      ![...event.sourceIds].every(id=>typeof id==='string'&&id.trim()&&p.solarTermSourceIds.includes(id)))return false;
+   if(side==='AFTER_PUBLISHED_MINUTE'?event.displayedDateTime!==p.recordedBirthKstMinute:
+      event.displayedDateTime>=p.recordedBirthKstMinute)return false;
+   if(ambiguous){
+     if(!sameJieEvent(trace.atPublishedBoundary,trace.candidateContexts[1]?.activeSince)||
+        trace.atPublishedBoundary?.displayedDateTime!==p.recordedBirthKstMinute)return false;
+   }else if(trace.atPublishedBoundary!==undefined)return false;
+   return context.candidateIndex===i&&context.monthPillarFactRef===`preview.candidates[${i}].month`&&
+     context.monthBranch===p.candidates[i].month.branch&&context.boundarySide===side&&
+     beat.candidateIndex===i&&beat.factRef===context.monthPillarFactRef&&
+     beat.traceRef===`preview.monthBoundaryTrace.candidateContexts[${i}]`&&
+     beat.birthKstMinute===p.recordedBirthKstMinute&&beat.monthBranch===context.monthBranch&&
+     beat.boundarySide===side&&sameJieEvent(beat.activeSince,event)&&
+     sameJieEvent(beat.atPublishedBoundary,trace.atPublishedBoundary);
  }
  function render(data) {
    if(data.status!=='OK'){error(data.status==='OUT_OF_COVERAGE'?'현재 검증된 역법 적용 범위를 벗어납니다.':'유효하지 않은 음력 날짜입니다.');return;}
@@ -123,11 +177,11 @@
           !Object.hasOwn(polarityName,beat?.polarity) ||
           month?.factRef!==`preview.candidates[${i}].month.branch` ||
           month?.branch!==p.candidates[i].month.branch ||
-          !Object.hasOwn(elementName,month?.principalElement);
+          !Object.hasOwn(elementName,month?.principalElement)||!validAppliedJie(p,candidate,i);
       })){error('명식과 사실 설명의 기준이 일치하지 않습니다.');return;}
    if(p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS')frag.append(element('div','warning','절입 발표 시각과 일치해 가능한 두 명식을 함께 표시합니다.'));
    p.candidates.forEach((c,i)=>{const card=element('article','candidate');card.append(element('h3','',p.candidates.length>1?`가능한 명식 ${i+1}`:'연 · 월 · 일 · 시'));
-     const grid=element('div','pillars');for (const [name,part] of [['연주',c.year],['월주',c.month],['일주',c.day],['시주',c.hour]]){const box=element('div','pillar');box.append(element('small','',name),element('strong','',part.hanja),element('em','',part.hangul));grid.append(box);}card.append(grid);card.append(dayMasterChapter(story.candidates[i].beats.find(b=>b.type==='DAY_STEM_CLASSIFICATION')));card.append(monthBranchChapter(story.candidates[i].beats.find(b=>b.type==='MONTH_BRANCH_CLASSIFICATION'),p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS'));frag.append(card);});
+     const grid=element('div','pillars');for (const [name,part] of [['연주',c.year],['월주',c.month],['일주',c.day],['시주',c.hour]]){const box=element('div','pillar');box.append(element('small','',name),element('strong','',part.hanja),element('em','',part.hangul));grid.append(box);}card.append(grid);card.append(dayMasterChapter(story.candidates[i].beats.find(b=>b.type==='DAY_STEM_CLASSIFICATION')));card.append(monthBranchChapter(story.candidates[i].beats.find(b=>b.type==='MONTH_BRANCH_CLASSIFICATION'),p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS',story.candidates[i].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT')));frag.append(card);});
    frag.append(element('div','meta',`한국 민간시 ${p.recordedBirthKstMinute.replace('T',' ')} · 적용 일자 ${p.effectiveDayDate}\n시간 정책: ${p.policies.dayRollover} / ${p.policies.hourStemReference}\n검증: ${p.coverage.validation} · ${p.confidenceScope}`));frag.append(evidenceFor(p));output.replaceChildren(frag);
  }
  form.addEventListener('submit',async e=>{e.preventDefault();const version=++requestVersion;
