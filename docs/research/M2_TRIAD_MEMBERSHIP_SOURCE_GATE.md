@@ -1,11 +1,11 @@
 # M2 G7 — Four 三合 / Four 三會 member sets, distinct-presence only
 
-Date: 2026-10-18. Initial status: authored, **canonical CI not yet executed**. Never claim a green gate without an exact SHA run.
+Date: 2026-10-18. **Implementation verified**: commit `1f7aa3dfd38868cc0c59691c84bca0f4f891bc9e`, [Actions 39096470339](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39096470339) full typecheck/build and 220/220 tests PASS + real Chromium PASS. This verifies the versioned implementation, **not** scholarly consensus or efficacy.
 
 ## Sources and limitations
 
 - **CLASSIC-YUANHAI-ZIPING-LUN-SHIERZHI-SANHE**: `淵海子平` 卷一〈論十二支三合〉, https://www.donglishuzhai.net/chapter/5619.html . It lists 申子辰水, 亥卯未木, 寅午戌火, 巳酉丑金, **as well as 辰戌丑未土局**. This code implements only the usual **four 3-member** groups. The extra **four-branch earth group is explicitly excluded** pending its own shape, status semantics and classical-edition gate. Do not erase it from the source record or pretend the chapter lists only four.
-- **MODERN-CLARIFYHK-FOUR-SEASONAL-SANHUI-2026**: modern educational listing of 寅卯辰木, 巳午未火, 申酉戌金, 亥子丑水. See https://clarifyhk.com/zh-hans/learn/bazi/stem-branch-relations/trine-formation-conditions and linked 三会 knowledge page. This is not falsely marked as the preceding *classical chapter's* own 三會 statement.
+- **MODERN-CLARIFYHK-FOUR-SEASONAL-SANHUI-2026**: modern educational listing of 寅卯辰木, 巳午未火, 申酉戌金, 亥子丑水. See https://clarifyhk.com/zh-hans/learn/bazi/stem-branch-relations/directional-meeting-conditions and its comparison page https://clarifyhk.com/zh-hans/learn/bazi/stem-branch-relations/trine-formation-conditions. This is not falsely marked as the preceding *classical chapter's* own 三會 statement.
 - **MODERN-CLARIFYHK-SANHE-PARTIAL-MEMBER-CATEGORIES-2026**: educational 生旺/旺墓 and non-central 生墓 categories, https://clarifyhk.com/zh-hans/learn/bazi/stem-branch-relations/trine-formation-conditions and https://www.mczwl.cn/article/earthly-branches-liuhe-sanhe-sanhui-differences . `生+旺` and `旺+墓` are two member patterns conventionally known as 半合; `生+墓` without 旺 is **NOT silently labeled 半合**, and the program returns only `BIRTH_AND_TOMB_NOT_HALF_TRINE`. Under a different school even half-group activation or remote/adjacent requirements differ.
 - Classical chapter's *member lists* do not independently establish that exactly 3 present means an effective 合化, or that 2 present means a universal 半合 prediction. Source transmission, edition and modern-school disagreement remain open. **No source scientifically validates predictive outcomes**.
 

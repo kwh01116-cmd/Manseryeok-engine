@@ -1,6 +1,6 @@
 # U1 EP1 — day-master factual chapter (one computed M1 result, one U0 projection)
 
-Date: 2026-10-18. Initial status: **authored, not yet CI verified**; update only after exact-code run passes.
+Date: 2026-10-18. **Verified local HTTP + Chromium chapter**: final code head `d13e8d16c23e53cf44494d50e3405035b4e74051`, [Actions 39097033098](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39097033098): full typecheck/build, 227/227 Node tests, EP0+EP1 real Chromium smoke PASS. Earlier intermediary failed due to test-harness escaped regex, corrected without weakening product rules.
 
 ## Why this slice
 

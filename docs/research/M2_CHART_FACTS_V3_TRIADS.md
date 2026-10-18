@@ -1,6 +1,6 @@
 # M2 G8 — Opt-in ChartFacts v3, source-linked 三合/三會 member presence
 
-Status: **authored but not yet canonical CI verified**. This remains internal research and must not be promoted to production merely because it compiles.
+Status: **code gate GREEN** at `379e6ea28945f8deb47a86c5810234036ed16b92`, [Actions 39096678588](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39096678588): full typecheck/build, 227/227 Node tests and real Chromium PASS. This is still **internal research**; it is not a consumer release or scientific/transformation certification.
 
 ## Data contract
 

@@ -2,6 +2,13 @@
 
 **Planning status 2026-10-10:** ADOPTED IN ROADMAP; **not an implemented webtoon, not a public release**. Canonical work order is `docs/ROADMAP.md` and `docs/EXECUTION_HANDOFF.md`. The user-supplied market/technology/legal report is a design hypothesis source, not independently source-verified proof, cost baseline or counsel opinion.
 
+## Actual implemented presentation checkpoint — 2026-10-18
+
+- **U1 EP0** existing M1 computed four pillars + accessible “왜 이렇게 계산됐나요?” source/policy/minute-uncertainty drawer is real local Chromium checked.
+- **U1 EP1** day-master traditional element/polarity factual chapter now runs from `projectKoreanV0Story` without duplicate calendar calculation; the same candidate index and source ref are checked in the real browser. `/api/preview` adds `story` only for `status: OK`. [GitHub Actions 39097033098](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39097033098) passed 227/227 and Chromium 360/390px, Gregorian/lunar, two-candidate Lichun, stale edit protection and keyboard tests.
+- **Not implemented:** the larger interactive/animated scroll-webtoon U1 EP2/EP3 and M2 U2 relation chapters, unknown-time birth handling, public release, user storage or validated destiny interpretation. Raw Triad `ChartFacts v3` stays internal until source and Korean consumer-meaning review.
+- **Next safe visual slice:** EP2 month-branch/Jie source-linked fact display, grounded in existing computed M1/U0, not seasonal strength; separate visual acceptance review afterward.
+
 ## Why this track exists
 
 A Korea-first manseryeok should be understandable without losing reproducibility. Design for **scroll-based reveal + bounded information navigation + expandable calculation/rule evidence**, not endless branching or ungrounded AI predictions. The user may select chapter order, traditional/accessible terms or source detail; these do **not** alter the computed chart. Changing calculation policy must trigger an explicitly identified recomputation with old/new candidate comparison.
