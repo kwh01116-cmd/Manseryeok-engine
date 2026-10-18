@@ -47,3 +47,7 @@ E. Until A–D are resolved, `licenseClearance: UNVERIFIED`; UI wording must nev
 ## Exit criteria (all mandatory)
 
 Written or independently well-supported commercial-use basis per **field and data source**; independent numerical source parity; audit-able complete provenance; approved public privacy/security treatment; no restrictive source content accidentally committed as a full reproduced table; lawyer/provider review where uncertainty remains. Mark **GO** only with reviewed date, authorizing owner and evidence link. This memo cannot itself mark the gate green.
+
+## Direct public API operation-scope cross-check — 2026-10-18
+
+The public data portal page https://www.data.go.kr/data/15012679/openapi.do explicitly documents `REST` / `XML`, `getLunCalInfo` endpoint `https://apis.data.go.kr/B090041/openapi/service/LrsrCldInfoService/getLunCalInfo` (Gregorian request `solYear`, `solMonth`, optional `solDay`), and fields `lunYear/lunMonth/lunDay/lunLeapmonth/lunIljin/lunNday`. The listing says `무료`, `이용허락범위 제한 없음` and automatic API approval; update timestamp is 2022-10-29. **No minute-resolution solar-term event parameter was verified.** See `KASI_OPENAPI_15012679_FIELD_SCOPE_REVIEW_20261018.md` for precise alternative-source boundaries. This is a *candidate for daily lunar conversion* and cannot by itself clear either copyrighted annual document redistribution or second/minute-level 24-term runtime authority.

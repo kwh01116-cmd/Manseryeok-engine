@@ -1,3 +1,14 @@
+## Second no-CI work package — static code review + exact implementation seams (2026-10-18)
+
+Following the initial ten-document source/research package, a **second docs-only deep review** was performed at Draft PR HEAD `ba1d1909bb0f53dc41f9c280a287624f711ba98f`. Read in this order:
+
+1. `docs/review/STATIC_CODE_FINDINGS_20261018.md` — **nine actionable static findings** with precise file paths and release importance: local HTTP security/privacy, source reuse, exact Jie evidence, CSP/request timeout, CSS selector order and oversized PR scope. Source read only, **not proof of an exploit or runtime pass**.
+2. `docs/research/KASI_OPENAPI_15012679_FIELD_SCOPE_REVIEW_20261018.md` — directly inspected public data portal API documentation, exact `getLunCalInfo` XML daily fields, authority vs reuse vs calendar-minute gap, proposed clean normalization/test suite. No authenticated API request or key.
+3. `docs/engineering/M1_APPLIED_JIE_IMPLEMENTATION_SLICES_20261018.md` — actual source-call graph and reversible S1–S4 path (`yearMonthPillars` → `fourPillars` → `koreanBirthPreview` → U0/U1) keeping per-event provenance, Gregorian/lunar convergence and Lichun correlated candidates; unimplemented/non-executed.
+4. `docs/product/U1_EP3_FACTUAL_EIGHT_GLYPHS_COPY_AND_TEST_PLAN_20261018.md` — Korean copy, exact eight `preview.candidates[i]` fact links, both boundary candidates, mobile and assistive technology acceptance, non-predictive limits. No code, image or browser output is claimed.
+
+**Runtime evidence unchanged:** prior code commit `891967bfd2883e4aed8296a27b96d9be8a94ee11` green at Actions #39112191402 (227 Node tests + Chromium). No GitHub Actions runs invoked by the second package. Do not promote these static review findings or specifications to implementation completion.
+
 # Research and zero-CI execution package — 2026-10-18
 
 **Owner instruction:** Continue substantial work while GitHub Actions monthly allowance is reported exhausted. **Scope of this package: DOCUMENTATION AND INDEPENDENT SOURCE RESEARCH ONLY**. No production code, tests, workflow, browser assets, dependency manifest, merge or deployment is changed. Baseline verified code SHA `891967bfd2883e4aed8296a27b96d9be8a94ee11`, 227/227 Node tests plus Chromium via Actions #39112191402. The documentation-only HEAD after this package is not newly runtime-tested.

@@ -1,3 +1,8 @@
+## EP3 exact Korean copy and story-binding package — 2026-10-18 (DESIGN / NOT IMPLEMENTED)
+
+A ready-for-code review of the next factual EP3 chapter lives at `docs/product/U1_EP3_FACTUAL_EIGHT_GLYPHS_COPY_AND_TEST_PLAN_20261018.md`. Shows 8 visible heavenly/earthly characters, `STEM_NATURE` / `BRANCH_NATURE` element labels and **candidate-indexed** factRefs only. Explicitly disclaims element strength, personality, good/bad luck, causal prediction and false minute certainty. Includes 10 acceptance vectors (2027 Gregorian/lunar parity, two Lichun candidate sets, unsupported birth, stale requests, 320/360/390px, keyboard/screen readers). This package authorizes **no code yet** while Actions quota is unavailable.
+
+
 ## Quota-paused U1 EP3–EP5 design checkpoint — 2026-10-18
 
 - Verified local-only U1 **EP0, EP1, EP2** chapters already exist at code SHA `891967bfd2883e4aed8296a27b96d9be8a94ee11` ([GitHub Actions 39112191402](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39112191402): 227/227 + real Chromium). Earlier paragraphs below describing EP2 as unimplemented are historical snapshots, not current status.

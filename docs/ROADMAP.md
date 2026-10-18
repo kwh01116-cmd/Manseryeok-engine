@@ -1,3 +1,14 @@
+## Additional offline research checkpoint — 2026-10-18 (actual code review + executable slice plan)
+
+- **GitHub Actions remains PAUSED by owner report.** This revision is documentation-only and has **no new executable-test evidence**.
+- **Static code audit** of current files found nine follow-up items: `monthPillar.resolveMonthBranchAtJie` already retains exact Jie event objects but `yearMonthPillars` drops them (P1 data-provenance gap); localhost `chart-preview-web.mjs` must not be promoted to production without HTTP origin/host, privacy, request-timeout, CSP and limits (P0/P1 production gates); CSS `.month-chapter` style precedes the generic `.fact-chapter` and may be overridden (P2 UI regression target). See `docs/review/STATIC_CODE_FINDINGS_20261018.md`; these findings came from static source inspection, NOT a browser security test.
+- **M1 applied Jie delivery S1–S4** defined by actual call graph: retain event object in `yearMonthPillars` → pass through checked `fourPillars` → add source-specific optional preview DTO → show the sourced Korean named Jie in U1. Add deterministic vectors at each stage. Do NOT recompute the solar-term lookup in UI.
+- **KASI data.go.kr API 15012679** directly inspected: REST XML `getLunCalInfo` + Gregorian date params, lunar fields, leap flags and `lunIljin`, but **no verified minute-of-24-Jie field**. It is a candidate **daily lunar source**, NOT a replacement for exact KST solar-term instants without another source. See `docs/research/KASI_OPENAPI_15012679_FIELD_SCOPE_REVIEW_20261018.md`.
+- **U1 EP3** factual eight-glyph/five-element Korean copy + candidate-specific proof refs and ten acceptance cases specified as a future isolated UI slice. See `docs/product/U1_EP3_FACTUAL_EIGHT_GLYPHS_COPY_AND_TEST_PLAN_20261018.md`. No strength/fortune claims.
+- **Priority order on runner restoration:** 1) small CSS fix + computed-style smoke, 2) M1 Jie evidence S1–S3 with tests, 3) U1 exact Jie copy/chrome, 4) U1 EP3 eight glyphs, 5) Draft PR review/split. Public calendar rights and production privacy are still release blockers.
+- Last executable validation remains [Actions 39112191402](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39112191402) on `891967bfd2883e4aed8296a27b96d9be8a94ee11`: 227/227 and browser pass. A docs-only SHA must not be labeled as a newly tested code build.
+
+
 ## Quota-paused research/specification checkpoint — 2026-10-18 (NO NEW CI / NO CODE CHANGE)
 
 - User reports GitHub Actions monthly quota exhausted. **Only source review, evidence and design documents are authored**; no workflow trigger paths changed or pushed. See `docs/operations/NO_ACTIONS_QUOTA_OFFLINE_WORK_PROTOCOL_20261018.md`. Current observed workflow only triggers on selected executable paths, not `docs/**`, `README.md` or `AGENTS.md`.
