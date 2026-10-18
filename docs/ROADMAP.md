@@ -4,6 +4,21 @@
 
 Historical Korean time reconstruction remains a correctness feature, but it is not the critical path for the first product. The main path is now: official Korean calendar fixtures -> Four Pillars -> deterministic chart facts -> a read-only app slice -> interpretation resolvers. Historical/DST work stays isolated and returns later unless it blocks a required fixture.
 
+
+## Verified live milestone checkpoint — 2026-10-18
+
+| Lane | Gate status | Actual evidence | Next |
+| --- | --- | --- | --- |
+| **M0 safety** | GREEN within repo | Locked Node/TS, GitHub hosted canonical CI, 179 passing Node cases, provenance boundaries | Keep scoped checks green |
+| **M1 modern Korean Four Pillars (2026–2027)** | **IMPLEMENTED / STRUCTURAL TEST GREEN**, **source-authority/reuse gates OPEN** | Gregorian/lunar input, explicit Zi policies, KASI minute corpus and independent published differentials; real API and browser smoke green | Independent Korean calendar edition rights/accuracy qualification and controlled birth-year extension |
+| **M1 historical 2000** | **RESEARCH ONLY** | NAOJ 1999 Daxue + 2000 full terms; separate independent MIT lunar 1999/2000 corpus; year/month/full pillars/parity tests executed | Korean historical sourcing/licensing/precision before consumer promotion |
+| **M2 deterministic ChartFacts** | **NOT IMPLEMENTED as full schema** | Only domain primitives (stems/branches/ten gods) and U0 factual projection are present | First tiny source-identified **hidden-stem lookup / branch ten-god** finite-table slice and exhaustive tests; no strength judgement |
+| **V0 / U0** | **GREEN for local preview / deterministic beats** | Real HTTP + fixed factual projection; no public server | Keep current API contract stable |
+| **U1 EP0** | **GREEN for actual real-browser functional gate**, NOT released | Explanatory evidence disclosure from chart DTO; keyboard / 360/390px / Gregorian–lunar / Lichun / out-of-coverage confirmed in Actions [39090821483](https://github.com/kwh01116-cmd/Manseryeok-engine/actions/runs/39090821483) | EP1 day stem factual glyph/element when useful; next main engine slice **M2** takes priority |
+| **M3–M10 / U2–U4** | DEPENDENCY BLOCKED | No inference, prediction, accounts or public deployment added | Follow original gates in order |
+
+No evidence that a 179/179 software pass certifies astronomical source times, commercial rights or disputed Myeongli theory. Current `docs/EXECUTION_HANDOFF.md` is the authoritative immediate next-run cursor; this section supersedes the older 2026-10-10 execution cursor below.
+
 ## Milestones and gates
 
 ### M0 Repository safety
