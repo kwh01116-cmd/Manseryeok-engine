@@ -34,18 +34,18 @@ export interface HiddenStemFact {
 }
 
 const NAMES: Readonly<Record<EarthlyBranch, readonly HeavenlyStem[]>> = Object.freeze({
-  子: Object.freeze(["癸"]),
-  丑: Object.freeze(["己", "癸", "辛"]),
-  寅: Object.freeze(["甲", "丙", "戊"]),
-  卯: Object.freeze(["乙"]),
-  辰: Object.freeze(["戊", "乙", "癸"]),
-  巳: Object.freeze(["丙", "庚", "戊"]),
-  午: Object.freeze(["丁", "己"]),
-  未: Object.freeze(["己", "丁", "乙"]),
-  申: Object.freeze(["庚", "壬", "戊"]),
-  酉: Object.freeze(["辛"]),
-  戌: Object.freeze(["戊", "辛", "丁"]),
-  亥: Object.freeze(["壬", "甲"]),
+  子: Object.freeze(["癸"] as const),
+  丑: Object.freeze(["己", "癸", "辛"] as const),
+  寅: Object.freeze(["甲", "丙", "戊"] as const),
+  卯: Object.freeze(["乙"] as const),
+  辰: Object.freeze(["戊", "乙", "癸"] as const),
+  巳: Object.freeze(["丙", "庚", "戊"] as const),
+  午: Object.freeze(["丁", "己"] as const),
+  未: Object.freeze(["己", "丁", "乙"] as const),
+  申: Object.freeze(["庚", "壬", "戊"] as const),
+  酉: Object.freeze(["辛"] as const),
+  戌: Object.freeze(["戊", "辛", "丁"] as const),
+  亥: Object.freeze(["壬", "甲"] as const),
 } as const);
 
 export const HIDDEN_STEMS_V1: Readonly<Record<EarthlyBranch, readonly HiddenStemFact[]>> =
