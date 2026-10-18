@@ -1,5 +1,6 @@
 export * from "./chartFacts/chartFactsV1.js";
 export * from "./chartFacts/chartFactsV2.js";
+export * from "./chartFacts/chartFactsV3.js";
 export * from "./calendar/coverageIslandRegistry.js";
 export * from "./calendar/dayHourPillars.js";
 export * from "./calendar/dayPillar.js";
