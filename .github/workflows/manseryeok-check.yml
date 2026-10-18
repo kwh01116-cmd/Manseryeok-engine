@@ -1,0 +1,40 @@
+name: Manseryeok M1 checks
+
+on:
+  push:
+    branches:
+      - agent/foundation-20261006
+    paths:
+      - '.github/workflows/manseryeok-check.yml'
+      - 'src/**'
+      - 'test/**'
+      - 'scripts/**'
+      - 'web/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manseryeok-m1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Node 22 - typecheck and all tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Full repository check
+        run: npm run check
