@@ -1,5 +1,13 @@
 > **Status navigation (2026-10-19):** This roadmap retains milestone and historic engineering checkpoints. For the *current* short handoff, see [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md); for stable agent rules, see [AGENTS.md](../AGENTS.md). Old checkpoint sections remain historical evidence, not permission to skip checks or publish. Verify live GitHub refs before acting.
 
+## Latest review checkpoint — 2026-10-19, EP4 preserved / EP5 validation gate
+
+- Documentation-only review from work HEAD `b7f510fa88dbc7a8b31718f85a1ebfb0e0bdaf16`; EP4 code remains `13538952676159f5169142b0939bbe827565f320`. Existing four actual Chromium PNGs displayed as native Codex image results, outside Git. See [UI review and EP5 readiness](engineering/U1_EP0_EP4_UI_REVIEW_AND_EP5_READINESS_20261019.md).
+- Actual Chromium EP0–EP4 smoke re-run PASS, 320/360/390px no horizontal overflow; keyboard/native details/AX and reduced motion verified. Supplemental measurements found hidden calendar-radio focus, custom outline contrast 2.785:1, small 11–12px explanatory text and late EP0 evidence discovery as follow-ups. EP4 was left unchanged. Manual VoiceOver/NVDA and participant comprehension are **UNVERIFIED**.
+- Typecheck/build and **29/29 existing M2 tests PASS** in this review. Full-suite checkpoint remains **269/269** on the executable SHA above; no new full `npm run check` execution is claimed for docs edits.
+- **EP5 direct UI/API connection HOLD:** v2/v3 accept a nonempty unknown M1 source ID (`FORGED-NONEMPTY`) as `READY`; they assume trusted upstream input. First next unit: trusted fixture/edition-context and candidate validation contract/tests, without an API/UI addition or M1 rerun. Then, if independently verified and authorized, a server-only v2 pair projection → small text-first pair UI → separately gated v3 membership. V2 requires two explicit policies, v3 three. Exact per-hit classical/modern sources, overlaps, candidate refs and four-earth exclusion remain mandatory. No EP5 feature was implemented in this task.
+- Calendar reuse rights, source editions, production security/privacy, human comprehension/accessibility and large-PR integration remain open. No Actions, main/foundation update, force push, merge or public deployment.
+
 ## Latest local execution checkpoint — 2026-10-19 KST, U1 EP4 opt-in member/ten-god display
 
 - Continued approved work branch from `9423794e5d01d2b5ac474019aef8bcfb57773d7b`. Backend contract `2d7eab7ce58bad360882b0d18f1b5f26caa16d93`, UI/browser `13538952676159f5169142b0939bbe827565f320`; ordinary fast-forward push only, Actions listing 0 runs, no main/foundation changes.
