@@ -152,3 +152,23 @@ test('EP3: HTML embeds only existing public classification tables and HTTP retur
     }
   }finally{server.stop();}
 });
+
+test('EP4 HTTP is opt-in with a required supported policy and keeps the unselected V0 result unchanged',async()=>{
+  const server=await start();
+  const policyId='M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1';
+  try{
+    const old=await submit(server.origin,sample);assert.equal(Object.hasOwn(old.body,'ep4'),false);
+    const selected=await submit(server.origin,{...sample,hiddenStemPolicyId:policyId});
+    assert.equal(selected.status,200);assert.deepEqual(selected.body.preview,old.body.preview);assert.deepEqual(selected.body.story,old.body.story);
+    assert.equal(selected.body.ep4.policyId,policyId);assert.equal(selected.body.ep4.candidates[0].branches.length,4);
+    for(const invalid of ['',null,'AUTO',false]){
+      const bad=await submit(server.origin,{...sample,hiddenStemPolicyId:invalid});
+      assert.equal(bad.status,422);assert.equal(Object.hasOwn(bad.body,'ep4'),false);
+    }
+    const a=await submit(server.origin,{...sample,date:'2027-02-04',time:'10:46',hiddenStemPolicyId:policyId});
+    const b=await submit(server.origin,{...sample,calendar:'KOREAN_LUNAR',date:'2026-12-28',leap:false,time:'10:46',hiddenStemPolicyId:policyId});
+    assert.deepEqual(a.body.ep4,b.body.ep4);assert.equal(a.body.ep4.candidates.length,2);
+    const outside=await submit(server.origin,{...sample,date:'2028-01-01',hiddenStemPolicyId:policyId});
+    assert.equal(outside.status,422);assert.equal(Object.hasOwn(outside.body,'ep4'),false);
+  }finally{server.stop();}
+});

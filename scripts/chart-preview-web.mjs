@@ -7,6 +7,8 @@ import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027, resolv
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 } from '../dist/calendar/koreaSolarTermFixtures.js';
 import { parseKoreanChartCliArgs } from './chart-preview-cli-args.mjs';
 import { projectKoreanV0Story } from '../dist/story/v0StoryProjection.js';
+import { deriveHiddenStemChapter } from '../dist/story/hiddenStemChapter.js';
+import { HIDDEN_STEM_POLICY_V1 } from '../dist/domain/hiddenStems.js';
 
 const manifest = Object.freeze({
   schemaVersion: 'm1-solar-term-coverage-v1', requirementProfile: 'FULL_24_TERM_YEAR',
@@ -16,7 +18,7 @@ const manifest = Object.freeze({
   requiredPriorBoundary: Object.freeze({ year: 2025, term: 'DAXUE' }),
 });
 const converter = createKoreanLunisolarConverter(KASI_KOREAN_LUNISOLAR_2025_2027);
-const allowed = ['calendar', 'date', 'time', 'timeBasis', 'dayRollover', 'hourStemReference', 'leap'];
+const allowed = ['calendar', 'date', 'time', 'timeBasis', 'dayRollover', 'hourStemReference', 'leap', 'hiddenStemPolicyId'];
 const required = ['calendar', 'date', 'time', 'timeBasis', 'dayRollover', 'hourStemReference'];
 
 /** Reuse the tested CLI parser to avoid a second calendar or policy validator. */
@@ -24,6 +26,8 @@ export function parseWebBirthInput(data) {
   if (data === null || typeof data !== 'object' || Array.isArray(data)) throw new RangeError('Invalid request');
   if (Object.keys(data).some(key => !allowed.includes(key)) ||
       required.some(key => typeof data[key] !== 'string')) throw new RangeError('Invalid request');
+  if (Object.hasOwn(data,'hiddenStemPolicyId') && data.hiddenStemPolicyId !== HIDDEN_STEM_POLICY_V1)
+    throw new RangeError('Invalid request');
   if (data.calendar === 'KOREAN_LUNAR') {
     if (typeof data.leap !== 'boolean') throw new RangeError('Invalid request');
   } else if ('leap' in data) throw new RangeError('Invalid request');
@@ -33,7 +37,8 @@ export function parseWebBirthInput(data) {
     '--hour-stem-reference=' + data.hourStemReference,
     ...(data.calendar === 'KOREAN_LUNAR' ? ['--leap=' + data.leap] : []),
   ];
-  return parseKoreanChartCliArgs(args);
+  return { ...parseKoreanChartCliArgs(args),
+    ...(Object.hasOwn(data,'hiddenStemPolicyId') ? { hiddenStemPolicyId:data.hiddenStemPolicyId } : {}) };
 }
 const common = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer' };
 function json(res, code, value) {
@@ -69,13 +74,14 @@ export function makeChartPreviewServer() {
     }
     if (req.method === 'POST' && req.url === '/api/preview') {
       try {
-        const { input, clock, policies } = parseWebBirthInput(await readJson(req));
+        const { input, clock, policies, hiddenStemPolicyId } = parseWebBirthInput(await readJson(req));
         const output = resolveKoreanBirthChartPreview(input, clock, policies, converter,
           KOREA_SOLAR_TERM_EVENTS_2026_2027, manifest);
         // Additive, source-addressable U0 factual beats. The M1 chart remains
         // the sole calendar calculation; errors keep their original contract.
         if (output.status === 'OK') {
-          json(res, 200, { ...output, story: projectKoreanV0Story(output) });
+          json(res, 200, { ...output, story: projectKoreanV0Story(output),
+            ...(hiddenStemPolicyId ? { ep4:deriveHiddenStemChapter(output,hiddenStemPolicyId) } : {}) });
         } else {
           json(res, 422, output);
         }
