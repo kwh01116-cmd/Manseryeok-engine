@@ -57,8 +57,9 @@ const BLOCKED: Readonly<Record<"OUT_OF_COVERAGE" | "INVALID_LUNAR_DATE", M2Chart
 /**
  * M2 does not recompute astronomical/calendar input, collapse Jie candidates,
  * score strength, assign a 格局/用神 or infer a personal characteristic.
- * All inputs have already passed M1 calendar coverage; this projector defends
- * its M1 contract again so callers cannot quietly forge provenance.
+ * Inputs are assumed to have passed M1 calendar coverage. This projector checks
+ * the structural/self-consistency contract, not arbitrary source authenticity.
+ * Use the receipt-based trusted Lab entry point for its selected fixture context.
  */
 export function deriveM2ChartFacts(
   result: KoreanBirthChartPreviewResult,

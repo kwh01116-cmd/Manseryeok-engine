@@ -2,23 +2,14 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { isDirectModuleRun } from './web-entrypoint.mjs';
-import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027, resolveKoreanBirthChartPreview,
+import { resolveTrustedKoreanLabPreview, verifyTrustedKoreanLabPreview,
   STEM_NATURE, BRANCH_NATURE } from '../dist/index.js';
-import { KOREA_SOLAR_TERM_EVENTS_2026_2027 } from '../dist/calendar/koreaSolarTermFixtures.js';
 import { parseKoreanChartCliArgs } from './chart-preview-cli-args.mjs';
 import { projectKoreanV0Story } from '../dist/story/v0StoryProjection.js';
 import { deriveHiddenStemChapter, HIDDEN_STEM_KOREAN, TEN_GOD_KOREAN } from '../dist/story/hiddenStemChapter.js';
 import { HIDDEN_STEM_POLICY_V1, HIDDEN_STEM_RULE, HIDDEN_STEMS_V1 } from '../dist/domain/hiddenStems.js';
 import { BRANCH_TEN_GOD_RULE_ID } from '../dist/domain/branchTenGods.js';
 
-const manifest = Object.freeze({
-  schemaVersion: 'm1-solar-term-coverage-v1', requirementProfile: 'FULL_24_TERM_YEAR',
-  timeBasis: 'KST', sourcePrecision: 'MINUTE',
-  supportedFromInclusive: '2026-01-01T00:00', supportedUntilExclusive: '2028-01-01T00:00',
-  requiredYears: Object.freeze([2026, 2027]),
-  requiredPriorBoundary: Object.freeze({ year: 2025, term: 'DAXUE' }),
-});
-const converter = createKoreanLunisolarConverter(KASI_KOREAN_LUNISOLAR_2025_2027);
 const allowed = ['calendar', 'date', 'time', 'timeBasis', 'dayRollover', 'hourStemReference', 'leap', 'hiddenStemPolicyId'];
 const required = ['calendar', 'date', 'time', 'timeBasis', 'dayRollover', 'hourStemReference'];
 
@@ -79,8 +70,8 @@ export function makeChartPreviewServer() {
     if (req.method === 'POST' && req.url === '/api/preview') {
       try {
         const { input, clock, policies, hiddenStemPolicyId } = parseWebBirthInput(await readJson(req));
-        const output = resolveKoreanBirthChartPreview(input, clock, policies, converter,
-          KOREA_SOLAR_TERM_EVENTS_2026_2027, manifest);
+        const receipt = resolveTrustedKoreanLabPreview(input, clock, policies);
+        const output = verifyTrustedKoreanLabPreview(receipt, receipt.result);
         // Additive, source-addressable U0 factual beats. The M1 chart remains
         // the sole calendar calculation; errors keep their original contract.
         if (output.status === 'OK') {

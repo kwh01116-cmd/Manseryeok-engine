@@ -47,6 +47,8 @@ export type M2ChartFactsV2Result =
 
 /**
  * This opt-in upgrade enriches already verified M2 v1 candidates.
+ * Generic input is assumed trusted: nonempty source IDs are not authenticated.
+ * Use deriveTrustedM2ChartFactsV2 for the fixed Lab execution/fixture boundary.
  *
  * No M1 calendar recomputation, hidden-stem default, strength weighting,
  * pair suppression, three-branch completion, conflict resolution or prediction.

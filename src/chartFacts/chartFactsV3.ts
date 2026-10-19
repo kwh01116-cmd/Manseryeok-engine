@@ -46,6 +46,8 @@ export type M2ChartFactsV3Result =
 
 /**
  * Explicit V1(hidden-stems) + V2(pair-relations) + V3(triad members) upgrade.
+ * Generic input is assumed trusted; use deriveTrustedM2ChartFactsV3 for the
+ * fixed Lab execution/fixture boundary, not arbitrary self-declared provenance.
  * No calendar recomputation, inferred missing branch, source smoothing,
  * school choice default, true transformation or predictive interpretation.
  */
