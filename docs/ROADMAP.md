@@ -4,6 +4,25 @@
 
 Current operational cursor: [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md). Stable instructions: [AGENTS.md](../AGENTS.md). Detailed evidence and research gaps: [engine reassessment / G0 report](engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md).
 
+## 2026-10-20 실행 순서 보강 — KASI API 활용, G1, 출생연도 확대
+
+**상태: 계획·자료 명세 검토, 미실행.** 사용자는 KASI 특일 OpenAPI 15012690 인증키를 발급받았다고 밝혔다. 제공된 v1.4 가이드(2020년 개정)에는 \`get24DivisionsInfo\`의 \`dateName/locdate/kst/sunLongitude\` 응답 필드가 명시돼 있다. 특히 **\`kst\` 분 단위 시각 후보**가 있으므로 구문서에 근거한 ‘날짜만 제공’ 가정을 폐기한다. 그러나 라이브 호출과 응답 시각/라이선스의 현재 상태는 **UNVERIFIED**. KASI 음양력 15012679와는 별도 API/권한이다. 상세 결정 배경은 [개발 일지](DEVLOG.md)의 2026-10-20 기록 참조.
+
+**분업:** 이 채팅은 문헌·독립 대조·정책·안전/정확도 결정, 키가 등록된 작업 실행환경은 호출·재현 가능한 수집 스크립트·테스트, Codex는 실제 엔진 구현과 GitHub 전달, Astra는 추후 별도 콘셉트/시장 검증. Work 클라우드 환경 변수는 별도 Codex 런타임에 자동 공유된다고 가정하지 않는다.
+
+| 차례 | 독립 산출물 | 구현/검증 허용 조건 | 금지 또는 보류 |
+| --- | --- | --- | --- |
+| **R0 (첫 실험)** | 15012690 HTTPS/인증/JSON·XML/연도 페이지 처리/실제 \`kst\`·황경 확인, 2019·2026·2027 응답 스키마 및 2026/27 기존 48개 절기 비교 보고서 | 사용권·응답·출처판본을 기록. 노출 가능한 샘플만 저장하고 **키·전체 인증 URL 출력 금지** | 실사용 API 키/환경 없으면 요청 성공 주장 금지, 기본 fixture 수정 금지 |
+| **G1 (현행 코드의 다음 안전 단위)** | 2026/27 절기 각 이벤트와 음력 월→출처/판본/정밀도/지문 검증 계약 및 반례 테스트 | 진짜 원본/판본 근거 확인 후 좁게 구현; 미확인 출처는 UNKNOWN/BLOCKED; 기존 G0 1회 M1 계산 불변 | 모든 행을 ‘KASI 공식 판본’으로 일괄 치환하거나 해시 일치=천문학적 진위로 주장 금지 |
+| **Y1 (2025 단일 연도)** | 2024 대설 guard, 2025 절기 24개, 2025 연초 음력 공백 보완, 말단 경계·윤달·일주·시각 오라클 | NAOJ/독립 천문 계산 등 다른 생성 계열과 차이 보고; 권리 별도 검토; 전체 Node/Chromium 통과 후 범위 승격 | 1989~2025 전면 확장 일괄 Push 금지 |
+| **Y2 (1989~2024 현대 범위)** | 연도별 지원 증거/누락·차이 레지스터, 재현 가능한 fixture 생성기, 경계·음력 oracle | Y1의 검증 게이트를 각 구간에 반복; 1987/88 DST는 현대 1989+와 분리 | 자료가 있다고 무검증으로 지원 선언 금지 |
+| **H1 (역사 시간)** | 법령 원본+IANA 버전 비교, 표준시/DST gap/fold와 정책 차이 테스트 | 실제 생년 기록의 민간시와 UTC/태양시 정책을 구별 | 단일 UTC+9 역투영·임의 진태양시 보정 금지 |
+| **M2/M3+** | M2 원전/학파별 명시 정책과 독립 사례, M3–M8 소스 게이트/계산 명세 | 학파/원전의 공백 해소 후 좁은 resolver 구현 | 예측 타당성 주장, 자동 신강/용신/길흉 단정 금지 |
+| **Integration** | 변하지 않는 버전형 계산·근거 API, 샘플 데이터/오류 계약 | 각 범위의 데이터권리·개인정보·공개 보안/QA 별도 승인 | Story UI/EP5와 Astra 콘셉트 작업을 엔진 작업에서 시작하지 않음 |
+
+**완성도 판정:** 테스트 그린만으로 완료라 하지 않는다. 기능별로 ① 계산 및 반례 테스트 ② 사용 연도/경계 연속성 ③ 독립 대조/불일치 해석 ④ 출처·판본 및 사용 권리 ⑤ 불확실성·정책 표현 ⑥ 안정적 계약을 구분하여 승인한다. **R0는 G1 설계의 실증 자료로 먼저 수행 가능하며, G1 구현은 R0가 준비될 때까지 판본을 지어내지 말고 출처 검토부터 한다.** 1989~2025 연도 확장은 제품 출시 보증이 아니다.
+
+
 ## Completion criteria
 
 A feature is assessed along separate axes: (1) implemented algorithm and adversarial tests, (2) traceable source/edition and field-level use rights, (3) independent external numerical/textual comparison, (4) finite supported coverage and explicit ambiguity/policies, (5) immutable/reproducible API contracts. Passing tests demonstrates the encoded behavior; it does **not** establish external calendar truth, textual authenticity, scientific predictive validity or commercial permission. No aggregate completion percentage is used.

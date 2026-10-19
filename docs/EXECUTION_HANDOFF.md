@@ -4,6 +4,9 @@
 
 This is current status, not authority to override `AGENTS.md` or owner instructions. Read the [active engine roadmap](ROADMAP.md) and [engine assessment / G0 execution report](engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md), then inspect live refs.
 
+
+**2026-10-20 research/access note (NOT a new engine implementation):** Owner reports KASI **15012690 특일 API** key issued and supplied v1.4 guide confirming documented \`get24DivisionsInfo\` fields \`locdate\`, \`dateName\`, \`kst\`, \`sunLongitude\`. **No authenticated live call yet**; 15012679 lunar API is separate. Key was discussed in **ChatGPT Work cloud environment settings**; availability in a separate Codex runtime is **unverified**. Never commit or print secrets. First run R0 read-only API response/schema test and comparison, while planning G1 current-corpus per-event/month edition provenance; do not replace fixtures or expand supported years without review. See [2026-10-20 roadmap addition](ROADMAP.md) and [dated devlog](DEVLOG.md).
+
 ## Active refs / exact verified code
 
 - Repository: `kwh01116-cmd/Manseryeok-engine`; approved branch: `agent/m1-applied-jie-slice1-20261019`.
@@ -28,7 +31,7 @@ This is current status, not authority to override `AGENTS.md` or owner instructi
 2. **Then one adjacent modern year:** provisionally 2025 after 2024 Daxue guard, full 2025 terms, late-2024 lunar wrap, independent witnesses and rights review. Current lunar rows alone omit January 1–28, 2025. No supported-range change until complete evidence/tests.
 3. **Historical time:** primary decrees/IANA comparison and exact gaps/folds before integrated conversion; pre-1908 and earlier DST remain unresolved. Mean/apparent solar time is not implemented and must be separate from civil-time policy.
 4. **M2/M3–M8:** M1/M2 overall PARTIALLY_VERIFIED; named finite subfeatures tested. M3–M6 BLOCKED_BY_SOURCE_OR_POLICY; M7 RESEARCH_ONLY; M8 NOT_IMPLEMENTED. No automatic interpretation. Full file-level evidence/research packets are in the report/roadmap.
-5. **Release rights/security:** KASA 2027 KOGL Type 2, KASI reference/API field scopes and archive restrictions remain separate. Production Host/Origin, CSP, limits/timeouts, privacy/abuse and giant-PR integration remain open. No new API key, provider contact or paid service.
+5. **Release rights/security:** KASA 2027 KOGL Type 2, KASI reference/API field scopes and archive restrictions remain separate. Production Host/Origin, CSP, limits/timeouts, privacy/abuse and giant-PR integration remain open. No API key is held in the repository or evidenced in the Codex runtime; user reports a key issued in Work settings. No provider contact or paid service.
 6. **Lab-only follow-ups:** prior small-text/focus findings remain in the [UI review](engineering/U1_EP0_EP4_UI_REVIEW_AND_EP5_READINESS_20261019.md). Automated Chromium keyboard/AX is not manual VoiceOver/NVDA or participant comprehension; both remain UNVERIFIED. Do not resume Story UI work from an old cursor.
 
 ## Preserved history
