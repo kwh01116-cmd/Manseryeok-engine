@@ -1,5 +1,13 @@
 > **Status navigation (2026-10-19):** This roadmap retains milestone and historic engineering checkpoints. For the *current* short handoff, see [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md); for stable agent rules, see [AGENTS.md](../AGENTS.md). Old checkpoint sections remain historical evidence, not permission to skip checks or publish. Verify live GitHub refs before acting.
 
+## Latest local execution checkpoint — 2026-10-19 KST, U1 EP4 opt-in member/ten-god display
+
+- Continued approved work branch from `9423794e5d01d2b5ac474019aef8bcfb57773d7b`. Backend contract `2d7eab7ce58bad360882b0d18f1b5f26caa16d93`, UI/browser `13538952676159f5169142b0939bbe827565f320`; ordinary fast-forward push only, Actions listing 0 runs, no main/foundation changes.
+- EP4 reuses ChartFacts v1 and existing hidden-stem/branch-ten-god primitives, requires explicit `M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1`, and retains per-candidate member/source/fact references. Four native branch disclosures show Korean/Hanja, MAIN_QI/OTHER and ten gods relative to that candidate's day master. No calendar rerun, new rule/profile, strength, qi proportion or prediction.
+- Exact final code SHA: fresh Node 22 lock install, TypeScript/build and **269/269 Node PASS**, 0 fail/skip; actual Chromium EP0–EP4 PASS including Gregorian/lunar, Lichun alternatives, invalid/swapped payloads, input/stale invalidation, 320/360/390px, keyboard/AX and reduced motion. Four native browser PNGs are available outside the repository.
+- Evidence: [EP4 execution report](engineering/U1_EP4_EXECUTION_20261019.md). Manual VoiceOver/NVDA and human comprehension remain unverified. Classical edition/source criticism, modern ordering's school dependence, commercial calendar rights and public-service security/privacy remain open.
+- Next: human source/language/accessibility review, then a separately scoped EP5 raw-relation chapter using explicit M2 v2/v3 policies after its source gate. Large foundation-PR split/review remains required before integration; M3 and public release remain blocked.
+
 ## Latest local execution checkpoint — 2026-10-19 KST, S4 review/CSS + U1 EP3
 
 - Separate work branch `agent/m1-applied-jie-slice1-20261019`, continued from `1bb89f77ea44f9f90c624764b38c7cd670293371`; no main/foundation update, Actions or force push.
