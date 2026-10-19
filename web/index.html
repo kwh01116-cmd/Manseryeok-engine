@@ -15,6 +15,7 @@
     .fact-chapter.month-chapter{border-color:#cfddd0;background:#f7faf6}.month-chapter .fact-glyph{font-size:28px}.month-chapter .fact-desc{margin-top:10px}.applied-jie{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;overflow-wrap:anywhere}.applied-jie p{margin:7px 0}.jie-minute{display:block;color:var(--leaf);font-weight:650}.jie-source,.jie-ref{color:var(--muted);font-size:11px}.jie-side{font-weight:650}.jie-caveat{color:#65553e}
     .fact-chapter{margin-top:17px;padding:17px 16px;border:1px solid var(--line);border-radius:13px;background:var(--paper)}.fact-kicker{font-size:11px;letter-spacing:.07em;font-weight:750;color:var(--leaf)}.fact-row{display:flex;gap:13px;align-items:center;margin-top:8px;flex-wrap:wrap}.fact-glyph{font-family:Georgia,"Noto Serif KR",serif;font-size:31px;font-weight:600;color:var(--leaf);line-height:1.25}.fact-label{font-size:14px;font-weight:650}.fact-desc{font-size:12px;color:var(--muted);margin:11px 0 0}.fact-evidence{font-size:11px;color:var(--muted);overflow-wrap:anywhere;margin-top:7px}
     .eight-glyphs{margin-top:17px;padding:14px 10px;border:1px solid var(--line);border-radius:13px;overflow-wrap:anywhere}.eight-glyphs h4{margin:0;font-size:14px;color:var(--leaf)}.eight-glyphs p{font-size:12px}.glyph-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}.glyph-table caption{padding:8px 0;text-align:left}.glyph-table th{font-weight:650}.glyph-table th,.glyph-table td{padding:5px 2px;border-bottom:1px solid var(--line);text-align:center}.glyph-table th:first-child{width:34px}.glyph-proof{display:block;width:100%;min-height:44px;min-width:44px;padding:7px 2px;border:1px solid var(--line);border-radius:8px;background:white;color:var(--ink);font:inherit;cursor:pointer}.glyph-symbol{display:block;font-size:23px;line-height:1.3;color:var(--leaf)}.glyph-element{display:block;font-size:12px}.glyph-proof:focus-visible,.glyph-evidence summary:focus-visible,.glyph-fact:focus{outline:3px solid #78a18a;outline-offset:2px}.glyph-evidence{margin-top:12px;font-size:12px}.glyph-evidence summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--leaf);font-weight:650}.glyph-fact{padding:5px;scroll-margin:15px}.glyph-context{white-space:pre-line}.non-predictive-note{color:var(--muted)}
+    .hidden-stems{margin-top:17px;padding:14px 10px;border:1px solid var(--line);border-radius:13px;overflow-wrap:anywhere}.hidden-stems h4{margin:0;color:var(--leaf);font-size:14px}.hidden-stems p,.hidden-stems li{font-size:12px}.hidden-branch{border:1px solid var(--line);border-radius:9px;margin-top:9px;background:#fafbf9}.hidden-branch>summary{padding:11px 9px;min-height:44px;cursor:pointer;font-size:13px;font-weight:650;color:var(--leaf)}.hidden-branch>summary:focus-visible,.hidden-proof>summary:focus-visible{outline:3px solid #78a18a;outline-offset:2px}.hidden-branch-body{padding:0 10px 10px}.hidden-members{list-style:none;padding:0;margin:0}.hidden-member{padding:10px 0;border-top:1px solid var(--line)}.hidden-member strong,.hidden-ten-god{display:block}.hidden-position{font-weight:500;color:var(--muted)}.hidden-proof>summary{min-height:44px;padding:11px 0;cursor:pointer;color:var(--leaf)}.hidden-proof p{white-space:pre-line;margin:4px 0}.hidden-policy-note{color:var(--muted);font-size:11px}
     @media(max-width:750px){.layout{grid-template-columns:1fr}header{padding:38px 0 26px}.shell{padding:24px 16px 60px}.panel{padding:21px}.result{min-height:300px}}
   </style>
 </head>
@@ -30,16 +31,20 @@
 <p class="note" id="supported">계산 가능한 출생 날짜는 현재 주로 2026~2027년입니다. 시각은 분 단위로 입력합니다.</p>
 <label class="field"><span>일주 변경 기준</span><select id="rollover" required><option value="">기준을 선택하세요</option><option value="CIVIL_MIDNIGHT">자정(00:00)에 변경</option><option value="ZI_START">자시 시작(23:00)에 변경</option></select></label>
 <label class="field"><span>야자시 시주 천간 기준</span><select id="hourref" required><option value="">기준을 선택하세요</option><option value="SELECTED_DAY_PILLAR">선택한 일주의 천간</option><option value="CIVIL_DATE_DAY_PILLAR">민간 날짜의 일주 천간</option></select></label>
+<label class="field"><span>지장간·십성 설명 (선택)</span><select id="hidden-policy" aria-describedby="hidden-policy-help"><option value="">표시하지 않음 · 정책 미선택</option><option value="M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1">고전 구성원 + 본기 표시 정책 v1</option></select></label>
+<p class="note" id="hidden-policy-help">이 정책을 직접 선택한 경우에만 지장간 설명을 표시합니다. 본기 표시는 강약이나 길흉 판정이 아닙니다.</p>
 <div class="actions"><button class="primary" type="submit">사주 명식 계산</button><button class="secondary" type="button" id="example">예시 입력</button></div>
 </form></section>
 <section class="panel result" aria-live="polite" aria-atomic="false"><div class="state"><span class="dot"></span>출처·정책을 구분한 계산 결과</div><h2>나의 사주 원국</h2><div id="output"><div class="placeholder"><b>명식을 계산해 볼까요?</b>왼쪽에서 시간 정책을 선택하고 계산 버튼을 눌러주세요.<br><br><small>‘예시 입력’을 누르면 2027년 양력 샘플이 채워집니다.</small></div></div><div class="warning">연·월 경계의 발표 시각에 해당하면 가능한 명식이 둘 이상 표시됩니다. 자료는 KASI 계산 참고자료이며 공식 역법 인증·미래 예측을 뜻하지 않습니다.</div></section></main>
 <footer class="footer">V0 연구용 화면 · 출생정보는 이 화면에서 저장하지 않습니다. · 한국 민간시 / 분 단위 출생시각만 지원<br>절입시각의 초 단위 불확실성, 역사적 시각 복원, 해석 학파 선택은 추후 확장합니다.</footer></div>
 <!-- NATURE_LOOKUPS -->
+<!-- EP4_RULES -->
 <script>
 (() => {
  const $ = id => document.getElementById(id);
  const form = $('birth-form'), output = $('output');
  const natureLookups=JSON.parse($('nature-lookups').textContent);
+ const ep4Rules=JSON.parse($('ep4-rules').textContent);
  let requestVersion=0;
  const submitButton=form.querySelector('button[type="submit"]');
  function invalidate() {
@@ -52,7 +57,7 @@
  form.addEventListener('change',invalidate);
  const calendar = () => form.querySelector('input[name="calendar"]:checked').value;
  for (const el of form.querySelectorAll('input[name="calendar"]')) el.addEventListener('change', () => $('leap-wrap').classList.toggle('hide', calendar() !== 'KOREAN_LUNAR'));
- $('example').addEventListener('click', () => {invalidate();form.querySelector('input[value="GREGORIAN"]').checked=true;$('leap-wrap').classList.add('hide');$('birth-date').value='2027-02-05';$('birth-time').value='12:00';$('rollover').value='CIVIL_MIDNIGHT';$('hourref').value='SELECTED_DAY_PILLAR';$('birth-date').focus();});
+ $('example').addEventListener('click', () => {invalidate();form.querySelector('input[value="GREGORIAN"]').checked=true;$('leap-wrap').classList.add('hide');$('birth-date').value='2027-02-05';$('birth-time').value='12:00';$('rollover').value='CIVIL_MIDNIGHT';$('hourref').value='SELECTED_DAY_PILLAR';$('hidden-policy').value='';$('birth-date').focus();});
  const element=(tag,className,text)=>{const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;};
  const error = message => {output.replaceChildren(element('div','error',message));};
  const rolloverLabel = code => ({
@@ -222,9 +227,71 @@
      beat.boundarySide===side&&sameJieEvent(beat.activeSince,event)&&
      sameJieEvent(beat.atPublishedBoundary,trace.atPublishedBoundary);
  }
- function render(data) {
+ const sameList=(a,b)=>Array.isArray(a)&&Array.isArray(b)&&a.length===b.length&&[...a].every((x,i)=>x===b[i]);
+ function validEp4(data,requestedPolicy){
+   const e=data.ep4,p=data.preview;
+   if(requestedPolicy===undefined)return e===undefined;
+   if(requestedPolicy!==ep4Rules.rule.policyId||!e||e.schemaVersion!=='u1-hidden-stem-chapter-v1'||
+      e.sourceSchemaVersion!=='m2-chart-facts-v1'||e.sourcePreviewVersion!==p.schemaVersion||
+      e.evidenceClass!=='TRADITIONAL_RULE_LOOKUP_ONLY'||e.policyId!==requestedPolicy||e.confidence!==p.confidence||
+      !sameList(e.sourceIds,ep4Rules.rule.sourceIds)||!sameList(e.ruleIds,['M2-RULE-CHART-FACTS-001',ep4Rules.rule.ruleId,ep4Rules.branchRuleId,'M0-RULE-TEN-GODS-ELEMENT-RELATION'])||
+      e.policies?.timeBasis!==p.policies.timeBasis||e.policies?.dayRollover!==p.policies.dayRollover||e.policies?.hourStemReference!==p.policies.hourStemReference||
+      !Array.isArray(e.candidates)||e.candidates.length!==p.candidates.length)return false;
+   return [...e.candidates].every((c,i)=>{
+     const pc=p.candidates[i],roles=['year','month','day','hour'];
+     if(!c||c.candidateIndex!==i||c.dayMaster!==pc.day.stem||c.dayMasterHangul!==ep4Rules.stemNames[c.dayMaster]||
+        c.dayMasterFactRef!==`preview.candidates[${i}].day.stem`||!sameList(c.pillarHanja,roles.map(r=>pc[r].hanja))||
+        !Array.isArray(c.branches)||c.branches.length!==4)return false;
+     return [...c.branches].every((b,j)=>{
+       const role=roles[j],m2Ref=`chartFacts.candidates[${i}].pillars[${j}].branchTenGods`;
+       if(!b||b.role!==role||b.branch!==pc[role].branch||b.branchHangul!==pc[role].hangul[1]||
+          b.branchFactRef!==`preview.candidates[${i}].${role}.branch`||b.m2FactRef!==m2Ref||
+          b.ruleId!==ep4Rules.branchRuleId||b.policyId!==requestedPolicy||!sameList(b.sourceIds,ep4Rules.rule.sourceIds)||
+          !Object.hasOwn(ep4Rules.members,b.branch)||!Array.isArray(b.members)||b.members.length!==ep4Rules.members[b.branch].length)return false;
+       return [...b.members].every((m,k)=>{
+         const original=ep4Rules.members[b.branch][k];
+         return !!m&&m.index===k&&m.stem===original.stem&&m.position===original.position&&
+           m.stemHangul===ep4Rules.stemNames[m.stem]&&Object.hasOwn(ep4Rules.tenGodNames,m.tenGod)&&
+           m.tenGodHangul===ep4Rules.tenGodNames[m.tenGod]&&m.factRef===`ep4.candidates[${i}].branches[${j}].members[${k}]`&&
+           m.m2FactRef===`${m2Ref}.members[${k}]`;
+       });
+     });
+   });
+ }
+ function hiddenStemChapter(e,i,p){
+   const c=e.candidates[i],section=element('section','hidden-stems');section.dataset.chapter='ep4';section.dataset.candidateIndex=String(i);
+   const title=element('h4','','04 · 지지 안에는 어떤 천간이 있을까요?');title.id=`ep4-heading-${i}`;section.setAttribute('aria-labelledby',title.id);section.append(title);
+   section.append(element('p','','지장간은 전통 자료에 기록된 지지의 천간 구성원입니다. 십성은 이 후보의 일간 '+c.dayMasterHangul+'('+c.dayMaster+')을 기준으로 계산한 전통 명리 분류입니다.'));
+   for(const b of c.branches){
+     const roleName={year:'연지',month:'월지',day:'일지',hour:'시지'}[b.role];
+     const branch=element('details','hidden-branch');branch.dataset.role=b.role;
+     const summary=element('summary','',roleName+' '+b.branchHangul+'('+b.branch+') · '+b.members.map(m=>m.stemHangul).join('·'));
+     summary.setAttribute('aria-label',`후보 ${i+1} ${roleName} ${b.branch} 지장간 상세 보기`);branch.append(summary);
+     const body=element('div','hidden-branch-body'),list=element('ul','hidden-members');
+     for(const m of b.members){
+       const item=element('li','hidden-member');item.dataset.factRef=m.factRef;item.dataset.m2FactRef=m.m2FactRef;
+       item.append(element('strong','hidden-stem-name',m.stemHangul+'('+m.stem+')'));
+       item.append(element('span','hidden-position',m.position==='MAIN_QI'?'본기 (MAIN_QI)':'나머지 구성원 (OTHER)'));
+       item.append(element('span','hidden-ten-god','십성: '+m.tenGodHangul+'('+m.tenGod+') · 기준 일간 '+c.dayMasterHangul+'('+c.dayMaster+')'));
+       const proof=element('details','hidden-proof');
+       const toggle=element('summary','',m.stemHangul+'('+m.stem+')의 계산 근거');
+       toggle.setAttribute('aria-label',`후보 ${i+1} ${roleName} ${m.stem} 계산 근거 보기`);proof.append(toggle);
+       proof.append(element('p','','현재 결과 경로: '+m.factRef+'\n투영 전 M2 원본 경로: '+m.m2FactRef+
+         '\n지지 근거: '+b.branchFactRef+'\n일간 근거: '+c.dayMasterFactRef+'\n정책: '+b.policyId+
+         '\n규칙: '+e.ruleIds.join(' · ')+'\n출처: '+b.sourceIds.join(' · ')));
+       item.append(proof);list.append(item);
+     }
+     body.append(list);body.append(element('p','hidden-policy-note','구성원 근거는 淵海子平 「又地支藏遁歌」 전사본이며, 본기 표시 순서는 별도의 현대 구현 정책입니다. 선택 정책: '+e.policyId));
+     branch.append(body);section.append(branch);
+   }
+   section.append(element('p','non-predictive-note','본기/나머지 표기는 선택된 전통 배열의 표시 방법입니다. 계절의 실제 세기나 사람의 성격을 수치화한 결과가 아닙니다. 십성 이름으로 직업·재물·연애 운세를 판단하지 않습니다.'));
+   if(p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS')section.append(element('p','jie-caveat','발표된 절입 분의 두 후보를 각각 표시합니다. 어느 후보가 적용되는지 초 단위로 확정하지 않습니다.'));
+   return section;
+ }
+ function render(data,requestedPolicy) {
    if(data.status!=='OK'){error(data.status==='OUT_OF_COVERAGE'?'현재 검증된 역법 적용 범위를 벗어납니다.':'유효하지 않은 음력 날짜입니다.');return;}
    const p=data.preview, story=data.story, frag=document.createDocumentFragment();
+   if(!validEp4(data,requestedPolicy)){error('명식과 지장간 설명의 정책·출처·후보 근거가 일치하지 않습니다.');return;}
    if(!story || story.status!=='READY' ||
       story.sourcePreviewVersion!==p.schemaVersion ||
       !Array.isArray(story.candidates) || story.candidates.length!==p.candidates.length ||
@@ -242,13 +309,14 @@
       })){error('명식과 사실 설명의 기준이 일치하지 않습니다.');return;}
    if(p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS')frag.append(element('div','warning','절입 발표 시각과 일치해 가능한 두 명식을 함께 표시합니다.'));
    p.candidates.forEach((c,i)=>{const card=element('article','candidate');card.append(element('h3','',p.candidates.length>1?`가능한 명식 ${i+1}`:'연 · 월 · 일 · 시'));
-     const grid=element('div','pillars');for (const [name,part] of [['연주',c.year],['월주',c.month],['일주',c.day],['시주',c.hour]]){const box=element('div','pillar');box.append(element('small','',name),element('strong','',part.hanja),element('em','',part.hangul));grid.append(box);}card.append(grid);card.append(dayMasterChapter(story.candidates[i].beats.find(b=>b.type==='DAY_STEM_CLASSIFICATION')));card.append(monthBranchChapter(story.candidates[i].beats.find(b=>b.type==='MONTH_BRANCH_CLASSIFICATION'),p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS',story.candidates[i].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT')));if(story.candidates[i].eightGlyphs)card.append(eightGlyphChapter(story.candidates[i].eightGlyphs,p,story));frag.append(card);});
+     const grid=element('div','pillars');for (const [name,part] of [['연주',c.year],['월주',c.month],['일주',c.day],['시주',c.hour]]){const box=element('div','pillar');box.append(element('small','',name),element('strong','',part.hanja),element('em','',part.hangul));grid.append(box);}card.append(grid);card.append(dayMasterChapter(story.candidates[i].beats.find(b=>b.type==='DAY_STEM_CLASSIFICATION')));card.append(monthBranchChapter(story.candidates[i].beats.find(b=>b.type==='MONTH_BRANCH_CLASSIFICATION'),p.confidence==='PUBLISHED_MINUTE_AMBIGUOUS',story.candidates[i].beats.find(b=>b.type==='MONTH_APPLIED_JIE_CONTEXT')));if(story.candidates[i].eightGlyphs)card.append(eightGlyphChapter(story.candidates[i].eightGlyphs,p,story));if(data.ep4)card.append(hiddenStemChapter(data.ep4,i,p));frag.append(card);});
    frag.append(element('div','meta',`한국 민간시 ${p.recordedBirthKstMinute.replace('T',' ')} · 적용 일자 ${p.effectiveDayDate}\n시간 정책: ${p.policies.dayRollover} / ${p.policies.hourStemReference}\n검증: ${p.coverage.validation} · ${p.confidenceScope}`));frag.append(evidenceFor(p));output.replaceChildren(frag);
  }
  form.addEventListener('submit',async e=>{e.preventDefault();const version=++requestVersion;
    const request={calendar:calendar(),date:$('birth-date').value,time:$('birth-time').value,timeBasis:'KOREAN_CIVIL_TIME',dayRollover:$('rollover').value,hourStemReference:$('hourref').value};if(request.calendar==='KOREAN_LUNAR')request.leap=$('leap').checked;
+   if($('hidden-policy').value)request.hiddenStemPolicyId=$('hidden-policy').value;
    submitButton.disabled=true;submitButton.textContent='계산 중…';
-   try{const response=await fetch('/api/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(request),cache:'no-store'});const data=await response.json();if(version!==requestVersion)return;if(!response.ok&&data.status==='ERROR')error(data.message==='Invalid request'?'입력값을 확인해 주세요.':(data.message||'계산 오류가 발생했습니다.'));else render(data);}catch{if(version===requestVersion)error('계산 서버에 연결할 수 없습니다. 로컬 미리보기 파일이라면 저장소에서 npm run build 후 npm run web 명령으로 실행하세요.');}finally{if(version===requestVersion){submitButton.disabled=false;submitButton.textContent='사주 명식 계산';}}
+   try{const response=await fetch('/api/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(request),cache:'no-store'});const data=await response.json();if(version!==requestVersion)return;if(!response.ok&&data.status==='ERROR')error(data.message==='Invalid request'?'입력값을 확인해 주세요.':(data.message||'계산 오류가 발생했습니다.'));else render(data,request.hiddenStemPolicyId);}catch{if(version===requestVersion)error('계산 서버에 연결할 수 없습니다. 로컬 미리보기 파일이라면 저장소에서 npm run build 후 npm run web 명령으로 실행하세요.');}finally{if(version===requestVersion){submitButton.disabled=false;submitButton.textContent='사주 명식 계산';}}
  });
 })();
 </script>

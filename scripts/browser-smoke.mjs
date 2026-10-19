@@ -6,7 +6,7 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { makeChartPreviewServer } from './chart-preview-web.mjs';
@@ -464,10 +464,157 @@ async function run() {
     await until("document.querySelectorAll('.glyph-proof').length===8",'EP3 system fonts and reduced motion');
     await checkEp3([primaryGlyphs]);
     assert.equal(await evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"),true);
+    // EP4 stays absent unless a user explicitly selects the supported policy.
+    assert.equal(await evaluate("document.getElementById('hidden-policy').value"),'');
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep4]').length"),0);
+    const hiddenPolicy='M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1';
+    await evaluate(`(() => {
+      window.__ep4Fetch=window.fetch;
+      window.fetch=async (...args)=>{const response=await window.__ep4Fetch(...args);
+        window.__ep4Data=await response.clone().json();return response;};
+    })()`);
+    const submitEp4 = async (date='2027-02-05',time='12:00',calendar='GREGORIAN') => {
+      await evaluate(`(() => {
+        document.getElementById('example').click();
+        const radio=document.querySelector('input[value=${JSON.stringify(calendar)}]');radio.checked=true;
+        radio.dispatchEvent(new Event('change',{bubbles:true}));
+        document.getElementById('birth-date').value=${JSON.stringify(date)};
+        document.getElementById('birth-time').value=${JSON.stringify(time)};
+        const policy=document.getElementById('hidden-policy');policy.value=${JSON.stringify(hiddenPolicy)};
+        policy.dispatchEvent(new Event('change',{bubbles:true}));
+        document.querySelector('#birth-form button[type=submit]').click();
+      })()`);
+      await until("document.querySelectorAll('[data-chapter=ep4]').length>0",'EP4 selected policy');
+    };
+    const checkEp4 = async () => {
+      const data=await evaluate('window.__ep4Data');
+      const chapters=await evaluate(`Array.from(document.querySelectorAll('[data-chapter=ep4]'),section=>({
+        index:Number(section.dataset.candidateIndex),text:section.textContent,
+        branches:Array.from(section.querySelectorAll('.hidden-branch'),branch=>({role:branch.dataset.role,
+          summary:branch.querySelector('summary').textContent,
+          members:Array.from(branch.querySelectorAll('.hidden-member'),m=>({ref:m.dataset.factRef,m2ref:m.dataset.m2FactRef,
+            name:m.querySelector('.hidden-stem-name').textContent,position:m.querySelector('.hidden-position').textContent,
+            god:m.querySelector('.hidden-ten-god').textContent,proof:m.querySelector('.hidden-proof').textContent}))}))
+      }))`);
+      assert.equal(chapters.length,data.preview.candidates.length);
+      for(const [i,c] of chapters.entries()){
+        const source=data.ep4.candidates[i];assert.equal(c.index,i);assert.equal(source.dayMaster,data.preview.candidates[i].day.stem);
+        assert.match(c.text,/전통 명리 분류/);assert.match(c.text,/본기\/나머지 표기는/);assert.equal(c.branches.length,4);
+        for(const [j,b] of c.branches.entries()){
+          const actual=source.branches[j];assert.equal(b.role,actual.role);assert.ok(b.summary.includes(actual.branch));
+          assert.equal(actual.branch,data.preview.candidates[i][b.role].branch);
+          assert.equal(b.members.length,actual.members.length);
+          for(const [k,m] of b.members.entries()){
+            const fact=actual.members[k];assert.equal(m.name,`${fact.stemHangul}(${fact.stem})`);
+            assert.equal(m.position,fact.position==='MAIN_QI'?'본기 (MAIN_QI)':'나머지 구성원 (OTHER)');
+            assert.ok(m.god.includes(`${fact.tenGodHangul}(${fact.tenGod})`));assert.ok(m.god.includes(source.dayMaster));
+            assert.equal(m.ref,`ep4.candidates[${i}].branches[${j}].members[${k}]`);
+            assert.equal(m.m2ref,`chartFacts.candidates[${i}].pillars[${j}].branchTenGods.members[${k}]`);
+            assert.ok(m.proof.includes(source.dayMasterFactRef));assert.ok(m.proof.includes(actual.branchFactRef));
+            assert.ok(m.proof.includes(hiddenPolicy));actual.sourceIds.forEach(id=>assert.ok(m.proof.includes(id)));
+          }
+        }
+      }
+      return data.ep4;
+    };
+    const captureEp4 = async (name,selector) => {
+      if(!process.env.EP4_SCREENSHOT_DIR)return;
+      await mkdir(process.env.EP4_SCREENSHOT_DIR,{recursive:true});
+      const metrics=await send('Page.getLayoutMetrics');
+      const clip=selector?await evaluate(`(() => {const rects=Array.from(document.querySelectorAll(${JSON.stringify(selector)}),e=>e.getBoundingClientRect());
+        const x=Math.min(...rects.map(r=>r.left))+scrollX,y=Math.min(...rects.map(r=>r.top))+scrollY;
+        return {x,y,width:Math.max(...rects.map(r=>r.right))+scrollX-x,height:Math.max(...rects.map(r=>r.bottom))+scrollY-y,scale:1};})()`)
+        :{x:0,y:0,width:metrics.cssContentSize.width,height:metrics.cssContentSize.height,scale:1};
+      const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip});
+      await writeFile(join(process.env.EP4_SCREENSHOT_DIR,name),Buffer.from(shot.data,'base64'));
+    };
+    await send('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+    await submitEp4();const ordinaryEp4=await checkEp4();
+    assert.equal(await evaluate("matchMedia('(prefers-reduced-motion: reduce)').matches"),true);
+    assert.equal(await evaluate("Array.from(document.querySelectorAll('.hidden-branch'),e=>e.open).some(Boolean)"),false);
+    await captureEp4('ep3-ep4-normal.png','[data-chapter=ep3],[data-chapter=ep4]');
+    await evaluate("document.querySelector('.hidden-branch>summary').focus()");
+    await send('Input.dispatchKeyEvent',{type:'rawKeyDown',...enter});
+    await send('Input.dispatchKeyEvent',{type:'char',text:'\r',...enter});
+    await send('Input.dispatchKeyEvent',{type:'keyUp',...enter});
+    await until("document.querySelector('.hidden-branch').open",'EP4 Enter opens branch');
+    await evaluate("document.querySelector('.hidden-proof>summary').focus()");
+    await send('Input.dispatchKeyEvent',{type:'rawKeyDown',key:' ',code:'Space',windowsVirtualKeyCode:32});
+    await send('Input.dispatchKeyEvent',{type:'char',text:' ',key:' ',code:'Space',windowsVirtualKeyCode:32});
+    await send('Input.dispatchKeyEvent',{type:'keyUp',key:' ',code:'Space',windowsVirtualKeyCode:32});
+    await until("document.querySelector('.hidden-proof').open",'EP4 Space opens member proof');
+    assert.equal(await evaluate("document.activeElement===document.querySelector('.hidden-proof>summary')"),true);
+    const ep4AX=await send('Accessibility.getFullAXTree');
+    assert.ok(ep4AX.nodes.some(n=>!n.ignored&&n.name?.value==='후보 1 연지 未 지장간 상세 보기'));
+    assert.ok(ep4AX.nodes.some(n=>!n.ignored&&n.name?.value==='후보 1 연지 己 계산 근거 보기'));
+    await captureEp4('ep4-expanded.png','[data-chapter=ep4]');
+    await submitEp4('2026-12-29','12:00','KOREAN_LUNAR');assert.deepEqual(await checkEp4(),ordinaryEp4);
+    await submitEp4('2027-02-04','10:46');const lichunEp4=await checkEp4();
+    assert.deepEqual(lichunEp4.candidates.map(c=>c.branches[1].branch),['丑','寅']);
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep4] .jie-caveat').length"),2);
+    await captureEp4('lichun-two-candidates.png','.candidate');
+    for(const width of [320,360,390]){
+      await send('Emulation.setDeviceMetricsOverride',{width,height:850,deviceScaleFactor:1,mobile:true});
+      await evaluate("document.querySelectorAll('.hidden-branch,.hidden-proof').forEach(e=>e.open=true)");
+      await checkEp4();
+      const measured=await evaluate('({innerWidth,scrollWidth:document.documentElement.scrollWidth})');
+      assert.ok(measured.scrollWidth<=measured.innerWidth+1,'EP4 overflow '+width);
+      assert.equal(await evaluate("Array.from(document.querySelectorAll('.hidden-branch>summary,.hidden-proof>summary'),e=>e.getBoundingClientRect().height>=44).every(Boolean)"),true);
+    }
+    await submitEp4();await checkEp4();
+    await evaluate("document.querySelector('.hidden-branch').open=true");
+    await captureEp4('mobile-390.png');
+    for(const mutation of [
+      "delete data.ep4", "data.ep4.policyId='AUTO'", "data.ep4.sourceIds=['FORGED']",
+      "data.ep4.candidates[0].candidateIndex=1", "data.ep4.candidates[0].dayMaster='甲'",
+      "data.ep4.candidates[0].branches[0].branchFactRef='preview.candidates[1].year.branch'",
+      "data.ep4.candidates[0].branches[0].sourceIds=['FORGED']",
+      "data.ep4.candidates[0].branches[0].members[0].factRef='ep4.candidates[1].branches[0].members[0]'",
+      "data.ep4.candidates[0].branches[0].members[0].m2FactRef='chartFacts.candidates[1].pillars[0].branchTenGods.members[0]'",
+      "data.ep4.candidates[0].branches[0].members[0].tenGod='UNKNOWN'",
+      "data.ep4.candidates[0].branches[0].members[0].position='OTHER'",
+    ]){
+      await evaluate(`(() => {window.__smokeFetch=window.fetch;window.fetch=async(...args)=>{
+        const response=await window.__smokeFetch(...args),data=await response.json();${mutation};
+        return new Response(JSON.stringify(data),{status:response.status});};
+        document.getElementById('example').click();document.getElementById('hidden-policy').value=${JSON.stringify(hiddenPolicy)};
+        document.querySelector('#birth-form button[type=submit]').click();})()`);
+      await until("!!document.querySelector('#output .error')",'EP4 forged response rejected');
+      assert.equal(await evaluate("document.querySelector('#output').textContent"),'명식과 지장간 설명의 정책·출처·후보 근거가 일치하지 않습니다.');
+      assert.equal(await evaluate("document.querySelectorAll('.candidate,[data-chapter=ep4]').length"),0);
+      await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
+    }
+    await evaluate(`(() => {window.__smokeFetch=window.fetch;window.fetch=async(...args)=>{
+      const response=await window.__smokeFetch(...args),data=await response.json();
+      [data.ep4.candidates[0],data.ep4.candidates[1]]=[data.ep4.candidates[1],data.ep4.candidates[0]];
+      return new Response(JSON.stringify(data),{status:response.status});};
+      document.getElementById('example').click();document.getElementById('hidden-policy').value=${JSON.stringify(hiddenPolicy)};
+      document.getElementById('birth-date').value='2027-02-04';document.getElementById('birth-time').value='10:46';
+      document.querySelector('#birth-form button[type=submit]').click();})()`);
+    await until("!!document.querySelector('#output .error')",'EP4 swapped candidates rejected');
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep4]').length"),0);
+    await evaluate("window.fetch=window.__smokeFetch;delete window.__smokeFetch");
+    for(const [id,value,event] of [['birth-date','2028-01-01','input'],['birth-time','13:00','input'],['rollover','ZI_START','change'],['hidden-policy','','change']]){
+      await submitEp4();await evaluate(`(()=>{const f=document.getElementById(${JSON.stringify(id)});f.value=${JSON.stringify(value)};f.dispatchEvent(new Event(${JSON.stringify(event)},{bubbles:true}));})()`);
+      assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep4]').length"),0);
+    }
+    await evaluate(`(() => {window.__smokeFetch=window.fetch;window.fetch=async(...args)=>{
+      const response=await window.__smokeFetch(...args);await new Promise(resolve=>window.__ep4Release=resolve);return response;};
+      document.getElementById('example').click();document.getElementById('hidden-policy').value=${JSON.stringify(hiddenPolicy)};
+      document.querySelector('#birth-form button[type=submit]').click();})()`);
+    await until("typeof window.__ep4Release==='function'",'EP4 delayed response');
+    await evaluate(`(async()=>{const f=document.getElementById('hidden-policy');f.value='';f.dispatchEvent(new Event('change',{bubbles:true}));
+      window.__ep4Release();window.fetch=window.__smokeFetch;delete window.__smokeFetch;delete window.__ep4Release;
+      await new Promise(resolve=>setTimeout(resolve,100));})()`);
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep4]').length"),0);
+    await evaluate("window.fetch=window.__ep4Fetch;delete window.__ep4Fetch;delete window.__ep4Data;document.getElementById('example').click();document.querySelector('#birth-form button[type=submit]').click()");
+    await until("document.querySelectorAll('.glyph-proof').length===8",'EP4 deselected compatibility');
+    assert.equal(await evaluate("document.querySelectorAll('[data-chapter=ep4]').length"),0);
     assert.deepEqual(await evaluate("(async()=>({local:localStorage.length,session:sessionStorage.length,cookie:document.cookie,databases:(await indexedDB.databases()).length,caches:(await caches.keys()).length}))()"),
       {local:0,session:0,cookie:'',databases:0,caches:0});
     assert.ok(browser.networkRequests.length>0);
     assert.ok(browser.networkRequests.every(url=>url.startsWith(origin+'/')),'No external telemetry or font requests');
+    process.stdout.write('PASS EP4 explicit policy, M2-sourced member/ten-god display, per-candidate source refs, Gregorian/lunar and Lichun, Enter/Space proofs/AX, 320/360/390px, malformed/swapped responses, stale/input invalidation, reduced motion and optional PNG capture\n');
     process.stdout.write('PASS real-Chromium V0/U1 EP0-EP3 + M1 S4: computed month colors, 8/16 classified glyphs and candidate factRefs, live Gregorian/lunar HTTP, Lichun/Jingzhe, keyboard proof focus and AX table, 320/360/390px, reduced-motion/system-fonts, forged/legacy responses, text-only rendering, stale/date/time/policy invalidation, no browser persistence/external requests\n');
   } finally {
     if (browser) {

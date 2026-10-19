@@ -7,8 +7,9 @@ import { createKoreanLunisolarConverter, KASI_KOREAN_LUNISOLAR_2025_2027, resolv
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 } from '../dist/calendar/koreaSolarTermFixtures.js';
 import { parseKoreanChartCliArgs } from './chart-preview-cli-args.mjs';
 import { projectKoreanV0Story } from '../dist/story/v0StoryProjection.js';
-import { deriveHiddenStemChapter } from '../dist/story/hiddenStemChapter.js';
-import { HIDDEN_STEM_POLICY_V1 } from '../dist/domain/hiddenStems.js';
+import { deriveHiddenStemChapter, HIDDEN_STEM_KOREAN, TEN_GOD_KOREAN } from '../dist/story/hiddenStemChapter.js';
+import { HIDDEN_STEM_POLICY_V1, HIDDEN_STEM_RULE, HIDDEN_STEMS_V1 } from '../dist/domain/hiddenStems.js';
+import { BRANCH_TEN_GOD_RULE_ID } from '../dist/domain/branchTenGods.js';
 
 const manifest = Object.freeze({
   schemaVersion: 'm1-solar-term-coverage-v1', requirementProfile: 'FULL_24_TERM_YEAR',
@@ -65,8 +66,11 @@ export function makeChartPreviewServer() {
         // Public static metadata, independent of birth input. One source of classification
         // for server projection and client validation; no new API or persisted records.
         const lookups = JSON.stringify({ stems: STEM_NATURE, branches: BRANCH_NATURE }).replace(/</g, '\\u003c');
+        const ep4Rules=JSON.stringify({rule:HIDDEN_STEM_RULE,members:HIDDEN_STEMS_V1,
+          branchRuleId:BRANCH_TEN_GOD_RULE_ID,stemNames:HIDDEN_STEM_KOREAN,tenGodNames:TEN_GOD_KOREAN}).replace(/</g,'\\u003c');
         const html = template.replace('<!-- NATURE_LOOKUPS -->',
-          '<script id="nature-lookups" type="application/json">' + lookups + '</script>');
+          '<script id="nature-lookups" type="application/json">' + lookups + '</script>')
+          .replace('<!-- EP4_RULES -->','<script id="ep4-rules" type="application/json">'+ep4Rules+'</script>');
         res.writeHead(200, { ...common, 'Content-Type': 'text/html; charset=utf-8' });
         res.end(html);
       } catch { json(res, 500, { status: 'ERROR', message: 'Unable to load preview page' }); }

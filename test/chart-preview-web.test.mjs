@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { STEM_NATURE, BRANCH_NATURE } from '../dist/index.js';
+import { HIDDEN_STEM_RULE, HIDDEN_STEMS_V1 } from '../dist/domain/hiddenStems.js';
 const script = fileURLToPath(new URL('../scripts/chart-preview-web.mjs', import.meta.url));
 const sample = {
   calendar: 'GREGORIAN', date: '2027-02-05', time: '12:00',
@@ -136,6 +137,12 @@ test('EP3: HTML embeds only existing public classification tables and HTTP retur
     const embedded=/<script id="nature-lookups" type="application\/json">([^<]+)<\/script>/.exec(html);
     assert.ok(embedded);
     assert.deepEqual(JSON.parse(embedded[1]),{stems:STEM_NATURE,branches:BRANCH_NATURE});
+    const ep4Metadata=/<script id="ep4-rules" type="application\/json">([^<]+)<\/script>/.exec(html);
+    assert.ok(ep4Metadata);
+    const ep4Rules=JSON.parse(ep4Metadata[1]);
+    assert.deepEqual(ep4Rules.rule,HIDDEN_STEM_RULE);assert.deepEqual(ep4Rules.members,HIDDEN_STEMS_V1);
+    assert.equal(Object.hasOwn(ep4Rules,'tenGodMatrix'),false); // browser never derives ten gods
+    assert.match(html,/id="hidden-policy"/);
     assert.equal(html.includes('<!-- NATURE_LOOKUPS -->'),false);
     assert.match(html,/여덟 글자와 다섯 가지 이름/);
     for(const request of [sample,{...sample,date:'2027-02-04',time:'10:46'}]){
