@@ -31,6 +31,13 @@ This repository builds a Korea-first deterministic 만세력 / Four Pillars engi
 12. Respect the owner’s current no-GitHub-Actions instruction recorded in the active handoff: do not dispatch or rerun Actions, and check workflow triggers before any push so a code commit cannot unintentionally start one. If requirements conflict, stop and ask; do not disable CI as a workaround.
 13. Work completion means: scoped change + relevant checks + commit + push to the *approved task branch*, **when authorized and technically available**. Report the exact remote HEAD. Local commits or self-reported tests alone do not prove remote delivery.
 
+## Development journal — future blog source of truth
+
+- Maintain **one cumulative chronological journal** in [`docs/DEVLOG.md`](docs/DEVLOG.md). After each substantive code, test, research, source-rights, debugging, or architectural decision task, append a dated entry **in the same authorized task/branch**. Include problem and context, attempted approach, failed or rejected alternatives, decision rationale, exact code/commit/tests with who ran them, evidence paths, unresolved questions, and the next experiment. Preserve prior entries; make corrections as explicitly dated addenda rather than silently rewriting history.
+- Separate **OBSERVED/TESTED**, **REPORTED**, **RESEARCH HYPOTHESIS**, **UNVERIFIED** and **DECISION**. Tests passing are not independent astronomical/source-rights proof. Never fabricate omitted steps, human reactions, timestamps or test runs. Historical reconstruction must cite commits/reports or say "reconstructed from conversation".
+- Write concise, natural Korean narrative suitable for future developer-blog posts alongside reproducible technical evidence; avoid promotional accuracy claims, AI boilerplate and code dumps. Link to dated execution reports rather than copying them verbatim. No personal birth records, credentials, personal data or unpublished private source content.
+- Keep `docs/EXECUTION_HANDOFF.md` a brief current checkpoint, `docs/ROADMAP.md` the planned work, and `docs/DEVLOG.md` the enduring story of what happened. Journal maintenance does **not** authorize a new feature, branch permission, Actions run, or deployment.
+
 ## Handoff hygiene
 
 - `docs/EXECUTION_HANDOFF.md` is a short **current checkpoint**, not an append-only history or an independent authority for permissions.
