@@ -1,3 +1,5 @@
+> **Status navigation (2026-10-19):** This roadmap retains milestone and historic engineering checkpoints. For the *current* short handoff, see [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md); for stable agent rules, see [AGENTS.md](../AGENTS.md). Old checkpoint sections remain historical evidence, not permission to skip checks or publish. Verify live GitHub refs before acting.
+
 ## Latest local execution checkpoint — 2026-10-19 KST, S4 review/CSS + U1 EP3
 
 - Separate work branch `agent/m1-applied-jie-slice1-20261019`, continued from `1bb89f77ea44f9f90c624764b38c7cd670293371`; no main/foundation update, Actions or force push.
