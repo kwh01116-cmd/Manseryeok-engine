@@ -6,7 +6,9 @@ The project separates reproducible calendar/civil-time facts from classical text
 
 ## Current phase
 
-Foundation / pre-alpha. The M1 **2026–2027 Korean Four-Pillars** computation is implemented with finite KASI reference fixtures, explicit rollover/hour-stem policies, lunar/Gregorian conversion, source-labeled uncertainty, and a private loopback V0 preview. Research-only 2000 historical sources are intentionally not served to consumers. The existing U0 deterministic presentation and **U1 EP0–EP2** calculation-evidence/day-master/month-branch factual chapters are functional in local Chromium, not predictive interpretation. M2 now includes a **partial**, source/policy-gated ChartFacts v1, hidden-stem/branch ten-god lookups and explicit 12-growth table. M2 raw source/policy-gated 合·冲·刑·害·破 relation facts now extend a non-breaking immutable ChartFacts v2 (without changing M1 or existing HTTP response). M2 now also includes an **opt-in ChartFacts v3** with source-gated 三合/三會 *member presence* (not claimed 化局); full M2 remains open for the four-member classical 土局, competing source/school variants and critical source review. No strength/fortune interpretation is computed.
+**Engine reliability first (2026-10-19).** M1 and M2 are **PARTIALLY_VERIFIED** overall: the default 2026–2027 Korean civil-minute Four-Pillars pipeline and named finite traditional-rule profiles have passing tests, while independent accuracy, editions/rights, broader years, historical-time integration and school disputes remain open. M2 includes immutable opt-in ChartFacts v1/v2/v3, hidden stems/ten gods/twelve stages, raw pairs and triad membership; no strength/fortune interpretation is computed. Test-only 2000 is not a supported default runtime year. See the [engine roadmap](docs/ROADMAP.md) and [M1–M8 evidence/G0 report](docs/engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md).
+
+Existing EP0–EP4 remains **Manseryeok Lab**, an internal calculation/rule verification tool. Story App, webtoon, characters, EP5 UI and visual redesign are paused; future product design belongs to a separate Astra task. G0 now binds the Lab's single M1 calculation to a fixed fixture/manifest/edition context and an in-process execution receipt, with strict M2 entry points. Generic M2 functions retain structural checks and trusted-upstream assumptions; source IDs are not publication authentication or commercial permission.
 
 Astronomical boundaries, historical Korean civil time, Zi-hour rollover, hidden stems, strength, patterns, useful gods, climate adjustment, follow/transformation structures, and luck cycles are introduced only after their provenance and policy boundaries are explicit.
 
@@ -14,7 +16,7 @@ Astronomical boundaries, historical Korean civil time, Zi-hour rollover, hidden 
 
 Correctness and reproducibility outrank feature count. Executable changes must be small, tested, and reversible. See `AGENTS.md` and `docs/research/ENGINE_GUARDRAILS.md`.
 
-## V0 local web preview (draft)
+## Manseryeok Lab — private local verification tool
 
 A read-only local UI is available at `web/index.html` backed by the existing Korean Four-Pillars engine. After the exact branch checkout, run:
 
@@ -24,7 +26,11 @@ npm run check
 node scripts/chart-preview-web.mjs
 ```
 
-Then open http://127.0.0.1:4173/ . Time policies must be explicitly selected; the supported term coverage is currently 2026–2027. Canonical GitHub Actions `npm run check` (227/227) and a real Chromium local-HTTP EP0+EP1+EP2 browser smoke have passed on the Draft PR branch; this does **not** certify official KASA precision, calendar publication reuse rights, visual QA or suitability for collecting real users' personal data. The server has not been publicly deployed. See `docs/research/V0_READONLY_WEB.md`. Keep the large Draft PR unmerged until scope, rights and release gates are reviewed.
+Then open http://127.0.0.1:4173/ . Time policies must be explicitly selected; term coverage stays 2026–2027. On executable/test commit `0eb277645b7e87915c9dd6d68172a7d0516cce40`, Node 22.23.3 typecheck/build and **283/283 Node tests**, plus actual Chromium EP0–EP4 smoke, passed locally. No GitHub Actions were used. These results do **not** certify external calendar truth, source authenticity, reuse rights or public-service privacy/security. The server has not been publicly deployed; do not collect/store real users' birth records. Keep the large Draft PR unmerged until scope, rights and integration gates are reviewed.
+
+## Historical review notes (superseded by the engine roadmap)
+
+The following dated sections preserve earlier checkpoints; their test counts and Story/UI queues are historical, not the current execution cursor.
 
 ## 2026-10-18: documentation-only research package / paused Actions
 

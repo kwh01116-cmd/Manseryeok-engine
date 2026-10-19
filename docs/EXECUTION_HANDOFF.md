@@ -1,42 +1,40 @@
 # Manseryeok-engine — current execution handoff
 
-**Checkpoint:** 2026-10-19 KST  
-**Status:** EP4 retained; EP0–EP4 UI review and EP5 contract/readiness review completed as documents only. EP5 UI connection is **on hold pending source-validation boundary tests**; **not merged or publicly deployed**.
-**This is a status document, not authorization for new privileges or overrides of `AGENTS.md` / current owner instructions.** Always inspect live refs before starting.
+**Checkpoint:** 2026-10-19 KST. **Direction:** engine reliability first until further owner instruction. Existing EP0–EP4 is **Manseryeok Lab**, an internal calculation/rule verification tool; preserve its current UI. Story App/EP5 UI, characters/webtoon/design concepts and public deployment are paused. Future Astra design is a separate task.
 
-## Active refs and verified scope
+This is current status, not authority to override `AGENTS.md` or owner instructions. Read the [active engine roadmap](ROADMAP.md) and [engine assessment / G0 execution report](engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md), then inspect live refs.
 
-- GitHub repo: `kwh01116-cmd/Manseryeok-engine`
-- Approved current work branch: `agent/m1-applied-jie-slice1-20261019`
-- Review started from freshly fetched local/remote `b7f510fa88dbc7a8b31718f85a1ebfb0e0bdaf16`. This docs-only checkpoint advances HEAD again; **re-fetch the live ref**. Executable EP4 remains `13538952676159f5169142b0939bbe827565f320`.
-- Last runtime-tested **executable** commit: `13538952676159f5169142b0939bbe827565f320` — Node 22.23.3, TypeScript 5.8.3, real Chromium 154.0.8037.57; fresh `npm ci`, `npm run check` **269/269 passed**, 0 fail/cancel/skip/todo; actual EP0–EP4 Chromium PASS. Local results are tied to that code SHA, not GitHub Actions or this docs-only successor.
-- `main` at the time of that report: `39b6653e4f93169a4b5b51412b72d4710e9da91f`; foundation draft: `95906e6b0d57427b69c6461bb66eb076e2076af0`. Re-check all SHA values before use.
-- Ordinary fast-forward code push succeeded; no force option used. Read-only GitHub Actions listing returned **0 runs** after push. The owner's current instruction is **no Actions runs**. Re-inspect `.github/workflows/manseryeok-check.yml` before pushes.
+## Active refs / exact verified code
 
-## Implemented
+- Repository: `kwh01116-cmd/Manseryeok-engine`; approved branch: `agent/m1-applied-jie-slice1-20261019`.
+- Started from freshly fetched local/remote `8325a2eb113776901d859040d8dca0e32f5ef096`. Later documentation commit changes HEAD again; **re-fetch**.
+- G0 implementation: `0bbaf47d1e91e2ce4e9af5790bd6cca6c0a9adf2`; separate regression commit / final tested executable tree: **`0eb277645b7e87915c9dd6d68172a7d0516cce40`**.
+- On that exact tree: fresh Node **22.23.3**, npm **10.9.9**, TS **5.8.3**; `npm ci`, `npm run check` **283/283 PASS**, 0 fail/cancel/skip/todo; actual Chromium **154.0.8037.57** Lab EP0–EP4 smoke **PASS**. Documentation successor is not a new code-test execution.
+- Protected refs observed: main `39b6653e4f93169a4b5b51412b72d4710e9da91f`; foundation `95906e6b0d57427b69c6461bb66eb076e2076af0`. No merge or direct update authorized.
+- Inspect workflow before **every push**: current trigger is selected executable paths on `push` to foundation only. Owner prohibits Actions, force push, public deployment and personal-data storage. Use ordinary fast-forward push only to the approved work branch and verify remote HEAD.
 
-- **M1 S1–S4:** minute-level month-boundary Jie source trace retained from resolver through Four Pillars, Korean preview, source-fact story projection and UI; two correlated Lichun candidates are kept distinct.
-- **U1 EP0–EP3:** date/calendar inputs, four-pillar fact display, day-master nature, month Jie evidence, candidate-specific eight glyphs/element labels. The CSS month-chapter priority issue was fixed and checked in Chromium.
-- **U1 EP4:** explicit optional `M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1` policy, M2 ChartFacts v1 member/ten-god projection, separate candidate branches, Korean names, MAIN_QI/OTHER and source/fact disclosures. No M1 recalculation, new rule, qi weighting or interpretation. Missing policy yields no chapter; unsupported policy and corrupt sources/refs fail closed. Backend commit `2d7eab7ce58bad360882b0d18f1b5f26caa16d93`, UI/browser `13538952676159f5169142b0939bbe827565f320`.
-- Tests and reports: `docs/engineering/M1_APPLIED_JIE_S1_EXECUTION_20261019.md`, `docs/engineering/M1_APPLIED_JIE_S2_S4_EXECUTION_20261019.md`, `docs/engineering/U1_EP3_EXECUTION_20261019.md`.
-- Latest evidence/file inventory: `docs/engineering/U1_EP4_EXECUTION_20261019.md`. Browser checks policy opt-in, Gregorian/lunar parity, independent Lichun candidates, malformed/swapped response rejection, Enter/Space/AX, 320/360/390px, reduced motion and stale-input rejection. Four actual PNGs at `/workspace/scratch/manseryeok-ep4/`, outside Git.
-- Latest review: [EP0–EP4 UI and EP5 readiness](engineering/U1_EP0_EP4_UI_REVIEW_AND_EP5_READINESS_20261019.md). Four existing PNGs displayed as native image results in Codex; no image edits/commits. Actual Chromium smoke re-run PASS; supplemental 320/360/390/768/1280 measurements, typecheck/build and **29/29 existing M2 tests PASS**. Full 269-test check was not re-run for this docs-only review.
+## Implemented scope and G0 guarantee
 
-## Open gates and recommended next slice
+- Default M1 Gregorian interval remains **2026–2027**; lunar inputs only if their converted civil date falls inside it. 2000 is test-only research, not a default runtime profile. Standalone base-offset/1987–88 DST helpers are not integrated into historical chart calculation.
+- M1 applied Jie trace and correlated boundary candidates, existing M2 v1/v2/v3 finite named-profile facts, and Lab EP0–EP4 remain. No new school, strength, personality, fortune, useful-god rule or source year was added.
+- G0 selects fixed server fixtures/manifest/annual edition metadata, calculates M1 once, checks selected context/exact event provenance, freezes an execution receipt and verifies subsequent DTOs against that same execution. Trusted M2 v1/v2/v3 wrappers reject altered corpus/event sources, candidates/refs, policies, schema and lunar provenance. HTTP uses the trusted entry point while preserving the existing response/UI.
+- Fourteen new regressions include the original nonempty forged-source example. **Generic M2 v2/v3 still return READY for that example by design**: they assume trusted M1 and provide structural/self-consistency checks. New trusted entry points reject it. Do not advertise source authentication for generic functions.
+- V8 precise function coverage verified exactly one M1 resolver call while verification and M2 wrappers ran repeatedly. Receipts are request-local in-process capabilities, not serialized signatures or durable birth-record storage.
+- G0 guarantees selected-fixture/execution consistency only. It does not authenticate an external publication, establish astronomical correctness or commercial rights. Per-row event edition metadata is not yet encoded; existing fixture digest tests and annual context metadata are not a substitute for source criticism.
 
-1. **EP5 validation boundary:** reproduced nonempty unknown `solarTermSourceIds: ['FORGED-NONEMPTY']` being accepted as `READY` by both M2 v2/v3. Existing empty-source rejection tests do not establish source authentication. Current server computes M1 internally; no external exploit is demonstrated. First next unit is a trusted fixture/edition-context + candidate validation contract/test slice, without HTTP/UI changes. No new relation rules, M1 recomputation or silent source replacement.
-2. **UI/human review:** native details/keyboard/AX pass, but hidden radio inputs lack visible focus on their labels and the custom EP4 focus outline measures 2.785:1 against its background. EP0 is below long result cards; explanatory text is 11–12px. EP4 code was deliberately preserved; record/fix in a separate scoped UI task. Korean participant comprehension and manual VoiceOver/NVDA remain unverified.
-3. **Calendar source authority and commercial rights:** KASA 2027 monthly-calendar publication's KOGL Type 2 restriction and KASI reference/API scopes require source-by-source release analysis or permission. Never treat software checks as commercial clearance.
-4. **Production security/privacy:** preview HTTP is loopback/private only. Do not publicly deploy, process real patients' or users' birth details, or add accounts/storage until privacy/security design is reviewed.
-5. **Integration and later EP5:** giant foundation Draft PR remains unmerged; evaluate scoped splitting. Reviewed v2 requires **two** policies; v3 requires **three**, including the triad policy (correcting blueprint shorthand). Keep exact classical/modern per-hit sources and four-earth exclusion. After the validation gate, separately authorize a server-only v2 projection, then a text-first UI; v3 is a later slice. M3 and public release remain NO-GO.
+## Next engine unit / open gates
 
-## Historical record (preserved verbatim)
+1. **G1 provenance:** versioned event/month-to-edition manifest + fingerprint validation for the **current corpus**, no year/UI expansion. Verify actual source metadata first; keep unresolved rows blocked rather than inferring editions from a generic source ID. Preserve event-vs-corpus sources, candidate isolation and one M1 path.
+2. **Then one adjacent modern year:** provisionally 2025 after 2024 Daxue guard, full 2025 terms, late-2024 lunar wrap, independent witnesses and rights review. Current lunar rows alone omit January 1–28, 2025. No supported-range change until complete evidence/tests.
+3. **Historical time:** primary decrees/IANA comparison and exact gaps/folds before integrated conversion; pre-1908 and earlier DST remain unresolved. Mean/apparent solar time is not implemented and must be separate from civil-time policy.
+4. **M2/M3–M8:** M1/M2 overall PARTIALLY_VERIFIED; named finite subfeatures tested. M3–M6 BLOCKED_BY_SOURCE_OR_POLICY; M7 RESEARCH_ONLY; M8 NOT_IMPLEMENTED. No automatic interpretation. Full file-level evidence/research packets are in the report/roadmap.
+5. **Release rights/security:** KASA 2027 KOGL Type 2, KASI reference/API field scopes and archive restrictions remain separate. Production Host/Origin, CSP, limits/timeouts, privacy/abuse and giant-PR integration remain open. No new API key, provider contact or paid service.
+6. **Lab-only follow-ups:** prior small-text/focus findings remain in the [UI review](engineering/U1_EP0_EP4_UI_REVIEW_AND_EP5_READINESS_20261019.md). Automated Chromium keyboard/AX is not manual VoiceOver/NVDA or participant comprehension; both remain UNVERIFIED. Do not resume Story UI work from an old cursor.
 
-The prior append-only handoff was copied **without rewriting or truncation** to:
-`docs/archive/EXECUTION_HANDOFF_BEFORE_COMPACTION_20261019.md`.
+## Preserved history
 
-That archive includes older, superseded run instructions, source-rights findings, commit details, test history, and dated reports. It is **history, not live authority**. The separate dated reports and Git commit history also remain available.
+- Previous roadmap: [byte-preserved pre-engine-focus archive](archive/ROADMAP_BEFORE_ENGINE_FOCUS_20261019.md); old Story queues are superseded.
+- Earlier handoff history: [pre-compaction archive](archive/EXECUTION_HANDOFF_BEFORE_COMPACTION_20261019.md).
+- Existing dated M1 S1–S4 and U1 EP3/EP4 reports remain in `docs/engineering/`. Prior PNGs remain outside Git; no new screenshots or UI redesign were needed for this engine task.
 
-## Operator checklist
-
-Read `AGENTS.md` → fetch live refs and workflow → read this checkpoint and exact dated report → scope task/branch → execute full checks where applicable → commit and ordinary fast-forward push only to approved work branch → verify remote HEAD → update this concise checkpoint and dated execution report. If any check or branch safety gate fails, stop and report instead of marking done.
+For each next unit: fetch/live branch/workflow → source/policy gate → counterexample → narrow implementation → Node 22 full check + relevant real Lab browser → separate verified code/test/doc commits → ordinary push → remote/protected-ref/Actions verification. Do not treat historical notes or this checklist as permission to bypass owner constraints.
