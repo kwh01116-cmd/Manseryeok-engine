@@ -9,6 +9,9 @@ This is current status, not authority to override `AGENTS.md` or owner instructi
 
 **P2 = NO-GO:** only the execution gate is resolved. P1 remains report-only: 49 solar + 37 lunar rows internally consistent, **0/86 original rows verified**, all three original-document digests `null`, rights `UNVERIFIED`. Keep G1 outside G0 until the original row/edition evidence gate is met. P2 was not implemented. Authenticated R0 API calls remain paused following environment setup problems; this validation did not read keys or call KASI. The owner's reported 15012690 special-day API and its documented `kst` field remain separate from the 15012679 lunar API; live responses are still unverified.
 
+
+**2026-10-20 added independent public-table comparison:** manually transcribed indexed KASI annual tables for 2025/26/27, compared programmatically with actual GitHub `koreaSolarTermFixtures.ts` and `koreanLunisolarFixtures.ts` at `955a8e389d773005f149e807567c19f4a1b10435`: **49/49 solar event minutes and 37/37 lunar month starts/sizes matched; 0 mismatches**. Web search-index extraction is not downloaded provider original TXT or authenticated file provenance, and page re-open failed (cache miss); keep G1 P1 original rows **0/86 VERIFIED**, origin SHA **0/3**, G1-P2 **NO-GO**. No tests newly run beyond earlier reported 292/292 exact checkout. [Detailed differential](research/G1_PUBLIC_KASI_WEB_TABLE_RECONCILIATION_20261020.md). **Next:** in functioning execution environment identify verified KASI annual TXT download for three years, record real origin SHA + edition + row mapping or precise failure; API key not required.
+
 ## Active refs / exact verified code
 
 - Repository: `kwh01116-cmd/Manseryeok-engine`; approved branch: `agent/m1-applied-jie-slice1-20261019`.
