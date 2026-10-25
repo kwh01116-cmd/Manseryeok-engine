@@ -110,8 +110,18 @@ export class Store {
   }
 }
 export interface YearData {schemaVersion:'kasi-collector-year-v1';year:number;status:'COMPLETE';normalizerVersion:'0.1.0';lunarMode:'monthly'|'daily';requestedFormat:Format;solar:SolarRow[];lunar:LunarRow[];normalizedSha256:string;sources:Receipt[];externalOriginalVerification:'UNVERIFIED';rightsReview:'UNVERIFIED';}
+export type CollectorStorage=Pick<Store,'load'|'save'|'json'|'read'>;
+/** One web request only. No file, browser storage, shared cache or key persistence. */
+export class EphemeralStore implements CollectorStorage {
+  private pages=new Map<string,{body:string;receipt:Receipt}>();
+  private records=new Map<string,unknown>();
+  async load(q:Query):Promise<{body:string;receipt:Receipt}|undefined>{return this.pages.get(pageId(q));}
+  async save(body:string,receipt:Receipt):Promise<void>{this.pages.set(pageId(receipt.query),{body,receipt});}
+  async json(name:string,value:unknown):Promise<void>{this.records.set(name,value);}
+  async read(name:string):Promise<unknown|undefined>{return this.records.get(name);}
+}
 export class Collector {
-  constructor(readonly store:Store,private client:Client,readonly format:Format='xml',readonly lunarMode:'monthly'|'daily'='monthly'){}
+  constructor(readonly store:CollectorStorage,private client:Client,readonly format:Format='xml',readonly lunarMode:'monthly'|'daily'='monthly'){}
   private async query(service:Service,y:number,month?:number,day?:number,offline=false):Promise<{items:Record<string,unknown>[];sources:Receipt[]}>{
     const items:Record<string,unknown>[]=[],sources:Receipt[]=[];let total:number|undefined,size:number|undefined;
     for(let n=1;n<=100;n++){
@@ -126,11 +136,11 @@ export class Collector {
     }
     return fail('PAGINATION_LIMIT');
   }
-  async probe(y:number,service:Service):Promise<unknown>{
+  async probe(y:number,service:Service,includeRows=false):Promise<unknown>{
     year(y);const sampleDay=service==='lunar'&&this.lunarMode==='daily'?1:undefined;const response=await this.query(service,y,service==='lunar'?1:undefined,sampleDay);
     const rows=service==='solar'?response.items.map(i=>normalizeSolar(i,y)):response.items.map(i=>normalizeLunar(i,y,1,sampleDay));
     if(service==='solar')validateSolar(rows as SolarRow[],y);else validateLunar(rows as LunarRow[],y,1,sampleDay);
-    const report={schemaVersion:'kasi-probe-v1',year:y,service,status:service==='solar'&&(rows as SolarRow[]).some(r=>r.time===null)?'SAMPLE_DATE_ONLY':'SAMPLE_RESPONSE_VALIDATED',scope:service==='solar'?'24_TERMS':sampleDay?'JANUARY_DAY1_ONLY':'JANUARY_ONLY',requestedFormat:this.format,actualFormats:[...new Set(response.sources.map(s=>s.schema.format))],yearComplete:false,normalizedSha256:fingerprint(rows),sources:response.sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',minuteRows:service==='solar'?(rows as SolarRow[]).filter(r=>r.time!==null).length:null};
+    const report={schemaVersion:'kasi-probe-v1',year:y,service,status:service==='solar'&&(rows as SolarRow[]).some(r=>r.time===null)?'SAMPLE_DATE_ONLY':'SAMPLE_RESPONSE_VALIDATED',scope:service==='solar'?'24_TERMS':sampleDay?'JANUARY_DAY1_ONLY':'JANUARY_ONLY',requestedFormat:this.format,actualFormats:[...new Set(response.sources.map(s=>s.schema.format))],yearComplete:false,normalizedSha256:fingerprint(rows),sources:response.sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',minuteRows:service==='solar'?(rows as SolarRow[]).filter(r=>r.time!==null).length:null,...(includeRows?{data:rows}:{})};
     await this.store.json(`probes/${service}-${y}.json`,report);return report;
   }
   async buildYear(y:number,offline=false):Promise<YearData>{

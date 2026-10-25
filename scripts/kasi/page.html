@@ -1,0 +1,32 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KASI JSON 조회</title>
+<style nonce="__NONCE__">
+*{box-sizing:border-box}body{margin:0;background:#f5f7f2;color:#20322a;font:16px/1.6 system-ui,sans-serif}.wrap{max-width:960px;margin:auto;padding:28px 16px}h1{font-size:28px;margin:0 0 8px}p{margin:8px 0 20px}.card{background:white;border:1px solid #d2ddd5;border-radius:16px;padding:22px;margin:18px 0}label{display:block;font-weight:650;margin:14px 0 5px}input,select,button{font:inherit;min-height:46px;border-radius:8px;border:1px solid #8a9e90;padding:10px 12px;width:100%;background:white;color:inherit}button{cursor:pointer;font-weight:700;background:#275444;color:white;margin-top:16px}button:disabled{opacity:.6;cursor:default}:focus-visible{outline:3px solid #275444;outline-offset:3px}.row{display:grid;grid-template-columns:1fr 2fr 1fr;gap:14px}small{display:block;font-size:14px;color:#42594c}.actions{display:flex;gap:12px}.actions button{width:auto}pre{margin:15px 0 0;max-height:65vh;overflow:auto;background:#17251f;color:#e3f4e9;padding:16px;border-radius:10px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}details summary{cursor:pointer;min-height:44px;padding:8px 0;font-weight:650}#status{min-height:28px;font-weight:600;overflow-wrap:anywhere}@media(max-width:600px){.row{grid-template-columns:1fr}.card{padding:16px}.wrap{padding:22px 12px}h1{font-size:25px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body><main class="wrap">
+<h1>KASI JSON 조회</h1><p>일반 인증키를 입력하고 조회하면, API 응답을 검증한 JSON을 볼 수 있습니다.</p>
+<section class="card"><form id="query-form" autocomplete="off">
+<label for="key">일반 인증키</label><input id="key" type="password" required autocomplete="off" spellcheck="false" autocapitalize="none" maxlength="1024" aria-describedby="key-help"><small id="key-help">입력한 키는 이번 조회에만 사용합니다. 앱은 키를 저장하지 않으며 조회를 시작하면 입력란을 비웁니다.</small>
+<div class="row"><div><label for="year">조회 연도</label><input id="year" type="number" min="1950" max="2027" value="2026" required></div><div><label for="service">조회할 자료</label><select id="service"><option value="solar">24절기 · 해당 연도</option><option value="lunar">음양력 · 1월 표본</option></select></div><div><label for="format">요청 형식</label><select id="format"><option value="xml">XML (기본)</option><option value="json">JSON</option></select></div></div>
+<button id="submit" type="submit">조회하기</button></form></section>
+<section class="card" aria-labelledby="result-title"><h2 id="result-title">조회 결과</h2><p id="status" role="status" aria-live="polite">키와 연도를 입력해 주세요.</p><div class="actions"><button type="button" id="download" disabled>JSON 내려받기</button></div><pre id="output" aria-label="정규화된 JSON 결과" tabindex="0">아직 조회한 자료가 없습니다.</pre></section>
+<details class="card"><summary>조회 범위와 데이터 안내</summary><p>24절기는 한 해의 24개 항목, 음양력은 해당 연도의 1월 일자를 조회합니다. 연간 전체 음력 수집이나 여러 연도 대량 수집은 하지 않습니다. 두 API의 활용 승인은 각각 필요합니다.</p><p>정규화된 JSON이며 원본 판본 인증·상업 이용권 검증을 뜻하지 않습니다. 시각이 없으면 null로 남깁니다. 1950년대의 역사적 민간시·서머타임을 보정한 결과가 아닙니다.</p><p>이 페이지는 내 PC의 로컬 서버를 통해 KASI API에 연결합니다. 키와 응답을 파일·브라우저 저장소에 보관하지 않습니다. JSON 파일은 내려받기 버튼을 눌렀을 때만 만들어집니다.</p></details></main>
+<script nonce="__NONCE__">
+(()=>{
+ const $=id=>document.getElementById(id),form=$('query-form'),key=$('key'),output=$('output'),status=$('status'),button=$('submit'),download=$('download');
+ let version=0,active=null,current=null;
+ const messages={INVALID_REQUEST:'입력값을 확인해 주세요.',YEAR_RANGE_1950_2027:'1950~2027년 중에서 선택해 주세요.',HTTP_ERROR:'API 연결이 거부되었습니다. 서비스 승인과 네트워크를 확인해 주세요.',API_RESULT_ERROR:'API가 오류를 반환했습니다. 키와 해당 서비스의 활용 승인을 확인해 주세요.',API_GATEWAY_ERROR:'API 인증 또는 서비스 접근 오류입니다.',NETWORK_ERROR:'KASI에 연결할 수 없습니다. 네트워크 접근을 확인해 주세요.',REQUEST_TIMEOUT:'API 응답 시간이 초과되었습니다.',WEB_QUERY_TIMEOUT:'전체 조회 시간이 초과되었습니다.',QUERY_IN_PROGRESS:'다른 조회가 진행 중입니다. 잠시 후 다시 시도해 주세요.',PAGINATION_MISMATCH:'응답 페이지가 요청 범위와 다릅니다.',CREDENTIAL_ECHO:'인증정보가 포함된 응답을 차단했습니다.'};
+ form.addEventListener('input',()=>{version++;active?.abort();current=null;download.disabled=true;button.disabled=false;button.textContent='조회하기';output.textContent='입력이 변경되었습니다. 다시 조회해 주세요.';status.textContent='입력이 변경되었습니다.';});
+ form.addEventListener('change',()=>{version++;active?.abort();current=null;download.disabled=true;button.disabled=false;button.textContent='조회하기';output.textContent='입력이 변경되었습니다. 다시 조회해 주세요.';status.textContent='입력이 변경되었습니다.';});
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();const body={key:key.value,year:Number($('year').value),service:$('service').value,format:$('format').value};key.value='';
+  active?.abort();const controller=new AbortController();active=controller;const id=++version;current=null;download.disabled=true;button.disabled=true;button.textContent='조회 중…';status.textContent='KASI API를 조회하고 응답을 검사하고 있습니다.';output.textContent='조회 중…';
+  try{
+   const response=await fetch('/api/query',{method:'POST',headers:{'Content-Type':'application/json','X-Kasi-Session':'__NONCE__'},body:JSON.stringify(body),cache:'no-store',signal:controller.signal});body.key='';
+   const data=await response.json();if(id!==version)return;
+   if(!response.ok){status.textContent=messages[data.code]||'응답을 검증하지 못했습니다. 오류 코드: '+data.code;output.textContent=JSON.stringify(data,null,2);return;}
+   current=data;output.textContent=JSON.stringify(data,null,2);download.disabled=false;status.textContent=data.status==='SAMPLE_DATE_ONLY'?'날짜만 확인했습니다. 분 단위 시각은 제공되지 않았습니다.':'조회와 구조 검사가 끝났습니다. 원본 인증·이용권은 미검증입니다.';
+  }catch(error){if(id===version){status.textContent='조회 서버에 연결하지 못했거나 요청이 취소됐습니다.';output.textContent='연결 상태를 확인한 뒤 다시 조회해 주세요.';}}
+  finally{body.key='';if(id===version){button.disabled=false;button.textContent='조회하기';active=null;}}
+ });
+ download.addEventListener('click',()=>{if(!current)return;const blob=new Blob([JSON.stringify(current,null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='kasi-'+current.service+'-'+current.year+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+})();
+</script></body></html>
