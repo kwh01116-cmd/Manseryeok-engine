@@ -4,6 +4,10 @@
 
 Current operational cursor: [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md). Stable instructions: [AGENTS.md](../AGENTS.md). Detailed evidence and research gaps: [engine reassessment / G0 report](engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md).
 
+## 2026-10-25 Collector v0.1 — engine-independent acquisition tool
+
+Strict TypeScript CLI (`scripts/kasi/`) now implements probe/collect/validate/export with private atomic checkpoints and hashes, bounded transport, explicit month/daily modes and sample gates. Exact tested SHA `0c60b0c627e6783bdb56c39e950ebad64b7cd54a`: **314/314 Node**, TypeScript/build and actual Lab Chromium PASS. Existing G0/G1-P1/data/UI/year support unchanged. Actual keys absent/API host restricted; live 1950/2026 schema/pagination/precision and attached DOCX review remain UNVERIFIED. No authenticated collection or bulk request was executed. Next: live two-year probe, validate complete sample years, then explicitly consider bulk. API output stays a separate evidence surface, not ORIGINAL_ROW_VERIFIED or engine year promotion. G1-P2 remains NO-GO. [Guide](KASI_COLLECTOR_GUIDE.md) · [execution evidence](engineering/KASI_COLLECTOR_V01_EXECUTION_20261025.md).
+
 ## 2026-10-20 실행 순서 보강 — KASI API 활용, G1, 출생연도 확대
 
 **상태: 계획·자료 명세 검토, 미실행.** 사용자는 KASI 특일 OpenAPI 15012690 인증키를 발급받았다고 밝혔다. 제공된 v1.4 가이드(2020년 개정)에는 \`get24DivisionsInfo\`의 \`dateName/locdate/kst/sunLongitude\` 응답 필드가 명시돼 있다. 특히 **\`kst\` 분 단위 시각 후보**가 있으므로 구문서에 근거한 ‘날짜만 제공’ 가정을 폐기한다. 그러나 라이브 호출과 응답 시각/라이선스의 현재 상태는 **UNVERIFIED**. KASI 음양력 15012679와는 별도 API/권한이다. 상세 결정 배경은 [개발 일지](DEVLOG.md)의 2026-10-20 기록 참조.
