@@ -7,7 +7,7 @@ import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {Client,Collector,Store,atomicWrite} from '../.kasi-build/collector.js';
 import {parsePage,normalizeSolar,normalizeLunar,validateSolar,validateLunar,TERMS,daysInMonth,CollectorError,compareReference,sha} from '../.kasi-build/schema.js';
-import {parseArgs,selectedYears,main} from '../.kasi-build/cli.js';
+import {parseArgs,selectedYears,main,resolveApiKeys} from '../.kasi-build/cli.js';
 const secret='SYNTHETIC_CREDENTIAL_not_a_real_key/+=';
 const options={timeoutMs:100,retries:0,intervalMs:0};
 const envelope=(items,page=1,size=100,total=items.length)=>JSON.stringify({response:{header:{resultCode:'00',resultMsg:'OK'},body:{items:{item:items.length===1?items[0]:items},pageNo:page,numOfRows:size,totalCount:total}}});
@@ -146,7 +146,7 @@ test('CLI arguments reject unknown options, unsupported years, duplicate years a
  for(const o of [{years:'1949'},{years:'2026,2026'},{from:'2027',to:'1950'}])assert.throws(()=>selectedYears(o),CollectorError);
 });
 test('CLI errors suppress unknown arguments and missing credentials; bulk collection cannot start by accident',()=>{
- const env={...process.env};delete env.KASI_SPCDE_API_KEY;delete env.KASI_LUNAR_API_KEY;
+ const env={...process.env};delete env.KASI_API_KEY;delete env.KASI_SPCDE_API_KEY;delete env.KASI_LUNAR_API_KEY;
  for(const args of [['probe','--unknown',secret],['collect','--from','1950','--to','2027']]){
    const result=spawnSync(process.execPath,['.kasi-build/cli.js',...args],{env,encoding:'utf8'});assert.equal(result.status,1);assert.ok(!result.stdout.includes(secret)&&!result.stderr.includes(secret));
  }
@@ -187,4 +187,28 @@ test('encoded JSON/XML credential echoes are rejected before any response is sto
  for(const body of [envelope([{echo:secret}]).replace('SYNTHETIC','\\u0053YNTHETIC'),xml([{echo:secret}]).replace('SYNTHETIC','&#83;YNTHETIC')]){
   await reject(()=>new Client(async()=>({status:200,body}),{solar:secret},options).request(q),'CREDENTIAL_ECHO');
  }
+});
+
+test('one ordinary KASI_API_KEY is used for both service requests',async()=>{
+ const keys=resolveApiKeys({KASI_API_KEY:secret}),services=[];
+ const client=new Client(async url=>{assert.equal(url.searchParams.get('ServiceKey'),secret);services.push(url.pathname);return {status:200,body:envelope(solar(1950))};},keys,options);
+ await client.request({...q,year:1950});await client.request({...q,service:'lunar',year:1950,month:1});
+ assert.equal(services.length,2);assert.ok(services[0].includes('SpcdeInfoService'));assert.ok(services[1].includes('LrsrCldInfoService'));
+});
+
+test('per-service overrides retain priority and the other service uses the common key',()=>{
+ assert.deepEqual(resolveApiKeys({KASI_API_KEY:secret,KASI_SPCDE_API_KEY:'SYNTHETIC_SOLAR_OVERRIDE'}),{solar:'SYNTHETIC_SOLAR_OVERRIDE',lunar:secret});
+ assert.deepEqual(resolveApiKeys({KASI_API_KEY:secret,KASI_LUNAR_API_KEY:'SYNTHETIC_LUNAR_OVERRIDE'}),{solar:secret,lunar:'SYNTHETIC_LUNAR_OVERRIDE'});
+ assert.deepEqual(resolveApiKeys({KASI_SPCDE_API_KEY:secret,KASI_LUNAR_API_KEY:secret}),{solar:secret,lunar:secret});
+});
+
+test('blank common or per-service settings do not create credentials',()=>{
+ assert.deepEqual(resolveApiKeys({KASI_API_KEY:'  ',KASI_SPCDE_API_KEY:'',KASI_LUNAR_API_KEY:'\n'}),{});
+ assert.deepEqual(resolveApiKeys({KASI_API_KEY:' '+secret+' ',KASI_SPCDE_API_KEY:'  '}),{solar:secret,lunar:secret});
+});
+
+test('a rejected override never silently falls back to a common key or exposes either value',async()=>{
+ const override='SYNTHETIC_REJECTED_OVERRIDE';let calls=0;
+ const client=new Client(async url=>{calls++;assert.equal(url.searchParams.get('ServiceKey'),override);return {status:403,body:secret+' '+override};},resolveApiKeys({KASI_API_KEY:secret,KASI_SPCDE_API_KEY:override}),{...options,retries:2});
+ await assert.rejects(client.request(q),e=>{assert.ok(!String(e).includes(secret)&&!String(e).includes(override));return e.code==='HTTP_ERROR';});assert.equal(calls,1);
 });
