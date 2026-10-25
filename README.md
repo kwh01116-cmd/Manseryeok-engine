@@ -12,6 +12,10 @@ Existing EP0–EP4 remains **Manseryeok Lab**, an internal calculation/rule veri
 
 Astronomical boundaries, historical Korean civil time, Zi-hour rollover, hidden stems, strength, patterns, useful gods, climate adjustment, follow/transformation structures, and luck cycles are introduced only after their provenance and policy boundaries are explicit.
 
+## KASI 키 입력·JSON 조회 페이지
+
+Windows에서는 Node.js 22를 설치한 뒤 프로젝트 폴더의 **`start-kasi-web.cmd`를 더블클릭**하면 로컬 조회 페이지가 열린다. 일반 인증키를 페이지에 입력해 절기/1월 음양력 표본의 정규화 JSON을 표시·다운로드한다. 키/응답은 자동 저장하지 않으며 공개 배포가 아니다. 터미널에서는 `npm run kasi:web`로 시작한다. [상세 실행 방법과 검증 한계](docs/KASI_COLLECTOR_GUIDE.md). Windows 배치 실기 검사는 아직 미검증이고 Node 서버/실제 Chromium은 합성 upstream으로 검증했다.
+
 ## Development rule
 
 Correctness and reproducibility outrank feature count. Executable changes must be small, tested, and reversible. See `AGENTS.md` and `docs/research/ENGINE_GUARDRAILS.md`.
