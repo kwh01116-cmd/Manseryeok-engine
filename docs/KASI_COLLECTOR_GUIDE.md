@@ -12,14 +12,14 @@ npm ci
 npm run check
 ```
 
-키는 두 서비스 각각의 활용 승인을 받은 뒤 환경변수로 제공한다. 기존 `KASI_API_KEY`로 자동 대체하지 않는다. 키를 명령행 인자·파일·Git·채팅에 넣지 않는다. Bash에서 값이 화면/명령 이력에 나오지 않게 입력하는 예:
+**일반 인증키 하나면 `KASI_API_KEY` 하나만 설정한다.** 공공데이터포털의 일반 인증키(Decoding)를 그대로 입력하면 두 API 요청에서 공통으로 사용한다. 키가 하나여도 두 서비스의 활용 승인 범위는 각각 확인해야 한다. 키를 명령행 인자·파일·Git·채팅에 넣지 않는다. Bash에서 값이 화면/명령 이력에 나오지 않게 입력하는 예:
 
 ```bash
-read -rsp '특일 API 키: ' KASI_SPCDE_API_KEY; printf '\n'
-export KASI_SPCDE_API_KEY
-read -rsp '음양력 API 키: ' KASI_LUNAR_API_KEY; printf '\n'
-export KASI_LUNAR_API_KEY
+read -rsp 'KASI 일반 인증키: ' KASI_API_KEY; printf '\n'
+export KASI_API_KEY
 ```
+
+기존 `KASI_SPCDE_API_KEY` 또는 `KASI_LUNAR_API_KEY`가 비어 있지 않으면 해당 서비스에서만 우선한다. 별도 키를 실제로 쓰는 경우를 위한 호환 설정이며 필수 변수가 아니다. 공통 키만 쓰려면 기존 서비스별 환경변수를 해제한다. 비어 있는 개별 변수는 공통 키를 사용한다. 요청이 거부됐을 때 다른 키로 재시도하는 자동 전환은 하지 않는다.
 
 일반 키와 URL 인코딩 키 모두 한 번만 URL 인코딩한다. 키 값/일부 문자열/키 포함 URL은 출력하지 않는다. 자격이 없는 서비스는 별도 실패한다. HTTPS만 사용하며 리다이렉트하지 않는다. `HTTPS_PROXY`, `HTTP_PROXY`, `NO_PROXY` 및 `NODE_EXTRA_CA_CERTS`를 사용하는 환경은 상속된 설정을 보존한다. 네트워크 정책에서 **apis.data.go.kr:443** 접근을 허용해야 한다. TLS 검증을 끄지 않는다.
 
@@ -120,4 +120,4 @@ npm run kasi:export -- --reference .private/annual-reference.json
 
 공식 공개 웹 명세는 직접 읽었다. 그러나 첨부 DOCX 다운로드는 이 환경의 텍스트 도구에서 실제 파일 링크가 노출되지 않았고, executor의 직접 공식 포털 조회도 실패하여 **가이드 DOCX 원문을 확보·전수 검토했다고 주장하지 않는다**. `kst`/`sunLongitude`의 live schema는 키가 있는 환경에서 재확인할 항목이다.
 
-개발 환경에는 두 서비스 키가 없고 API 호스트도 네트워크 허용 대상이 아니었다. 실제 인증 API 요청/수집 성공은 **0건**, 1950/2026 실제 지원·실제 월 pagination·현재 JSON·kst 반환은 **UNVERIFIED**다. 키 등록을 요구하거나 우회하지 않았다. 합성 응답으로 동작/오류/재개/CLI 경로를 검증했으며 Ubuntu에서는 키와 네트워크 준비 후 probe부터 실행한다. 공개 목록의 이용허락범위 표기는 개별 원문·추출 자료·재배포의 전체 법적 검토를 대신하지 않는다.
+v0.1 최초 개발 환경에는 두 전용 서비스 키가 없고 API 호스트도 네트워크 허용 대상이 아니었다. 실제 인증 API 요청/수집 성공은 **0건**, 1950/2026 실제 지원·실제 월 pagination·현재 JSON·kst 반환은 **UNVERIFIED**다. 키 등록을 요구하거나 우회하지 않았다. 합성 응답으로 동작/오류/재개/CLI 경로를 검증했으며 Ubuntu에서는 키와 네트워크 준비 후 probe부터 실행한다. 공개 목록의 이용허락범위 표기는 개별 원문·추출 자료·재배포의 전체 법적 검토를 대신하지 않는다.
