@@ -8,13 +8,23 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.kasi.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.kasi.json --noEmit",
     "test": "npm run build && node --test test/*.test.mjs",
     "check": "npm run typecheck && npm test",
-    "web": "npm run build && node scripts/chart-preview-web.mjs"
+    "web": "npm run build && node scripts/chart-preview-web.mjs",
+    "kasi:build": "tsc -p tsconfig.kasi.json",
+    "kasi:probe": "npm run kasi:build --silent && node .kasi-build/cli.js probe",
+    "kasi:collect": "npm run kasi:build --silent && node .kasi-build/cli.js collect",
+    "kasi:validate": "npm run kasi:build --silent && node .kasi-build/cli.js validate",
+    "kasi:export": "npm run kasi:build --silent && node .kasi-build/cli.js export"
   },
   "devDependencies": {
+    "@types/node": "22.20.5",
     "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "fast-xml-parser": "5.11.2",
+    "undici": "8.12.3"
   }
 }

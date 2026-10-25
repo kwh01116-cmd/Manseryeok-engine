@@ -3,3 +3,9 @@ dist/
 coverage/
 .DS_Store
 *.log
+
+# KASI collector: private responses/checkpoints/exports and build output
+.private/
+.kasi-build/
+.env
+.env.*
