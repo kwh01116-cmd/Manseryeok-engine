@@ -31,6 +31,13 @@ export function selectedYears(options:Record<string,string>,fallback?:number[]):
   years.forEach(year);if(!years.length||new Set(years).size!==years.length)fail('CLI_DUPLICATE_YEARS');return [...years].sort((a,b)=>a-b);
 }
 const safeCode=(error:unknown)=>error instanceof CollectorError?error.code:'INTERNAL_ERROR';
+/** One ordinary portal key may serve both separately approved services. Explicit overrides win. */
+export function resolveApiKeys(env:Record<string,string|undefined>):Partial<Record<Service,string>> {
+  const common=env.KASI_API_KEY?.trim();
+  const solar=env.KASI_SPCDE_API_KEY?.trim()||common;
+  const lunar=env.KASI_LUNAR_API_KEY?.trim()||common;
+  return {...(solar?{solar}:{}),...(lunar?{lunar}:{})};
+}
 // Injection is for in-process offline tests only; production CLI has no mock flag.
 export async function main(args:string[],testRuntime?:{store:Store;transport:Transport;keys:Partial<Record<Service,string>>}):Promise<number>{
   const {command,options}=parseArgs(args);
@@ -45,7 +52,7 @@ export async function main(args:string[],testRuntime?:{store:Store;transport:Tra
     const mode=(options['lunar-mode']??((command==='validate'||command==='export')?saved?.lunarMode:undefined)??'monthly') as 'monthly'|'daily';
     // Keys are used only inside the transport; no key, URL or raw upstream error is logged.
     const wire=testRuntime?{transport:testRuntime.transport,close:async()=>{}}:makeTransport();
-    const client=new Client(wire.transport,testRuntime?.keys??{...(process.env.KASI_SPCDE_API_KEY?{solar:process.env.KASI_SPCDE_API_KEY}:{}),...(process.env.KASI_LUNAR_API_KEY?{lunar:process.env.KASI_LUNAR_API_KEY}:{})},testRuntime?{timeoutMs:100,retries:0,intervalMs:0}:undefined);
+    const client=new Client(wire.transport,testRuntime?.keys??resolveApiKeys(process.env),testRuntime?{timeoutMs:100,retries:0,intervalMs:0}:undefined);
     const collector=new Collector(store,client,format,mode);
     try{
       if(command==='probe'){
