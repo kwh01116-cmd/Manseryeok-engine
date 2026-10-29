@@ -219,6 +219,17 @@
 
 **[미검증과 다음]** Windows 배치 자체는 Linux 환경에서 실기 실행하지 못했다. 실제 인증키/실서비스 호출도 사용하지 않아 API 성공 0건이다. Windows 실행과 실제 표본 schema가 다음 확인 대상이다. 엔진/G0/G1/UI/지원 연도는 그대로이고 원본 인증/P2를 승격하지 않는다. [Windows 사용 가이드](KASI_COLLECTOR_GUIDE.md), [실행 보고서](engineering/KASI_WEB_QUERY_EXECUTION_20261025.md).
 
+## 2026-10-30 — Codex Cloud에 프로젝트 전체 맥락을 넘기기 위한 문서화
+
+**[사용자 요청]** 우리가 10월 5일부터 연구·설계·구현해온 사주/만세력 프로젝트를 새 Codex Cloud 세션에서 이어받도록 누적 인수인계를 정리한다. ChatGPT의 모든 채팅 원문을 Codex에 자동 동기화하는 기능은 별개이며 이번에 사용하지 않았다.
+
+**[실제 확인]** GitHub 작업 브랜치 630db067…, main 39b6653…, foundation 95906e6…와 draft PR #1을 대조하고, AGENTS/ROADMAP/EXECUTION_HANDOFF/DEVLOG, KASI Collector CLI·웹 화면 사용 안내 및 실행 보고를 읽었다. Node 22.23.3의 **325/325와 두 Chromium smoke 통과는 10월 25일 Codex가 기록한 검증**이고 이번 문서 작업에서 재실행하지 않았다.
+
+**[결정·산출물]** [Codex Cloud 마스터 인수인계](CODEX_CLOUD_MASTER_HANDOFF_20261030.md)에 결정론 계산→명리 규칙→Story→웹툰 구상, M1/M2/G0/G1의 실제 보장 범위, 49절기/37개월, 0/86 원본 행·0/3 파일 SHA와 P2 NO-GO, Collector CLI/localhost 웹 구현, 실서비스 API 미확인, 1950~2027 자료수집과 한국 역사시 정책, 장기 제품 보류, GitHub 브랜치/테스트 안전 규칙을 담았다. AGENTS와 짧은 EXECUTION_HANDOFF에는 새 입문 링크만 추가했다.
+
+**[제약]** 개인 KASI 키나 ChatGPT 대화 축어록, Codex 미커밋 파일은 인계하지 않았고 API 수집·명식 엔진·UI·지원연도·권리 상태는 변경하지 않았다. 다음 Codex 세션이 문서를 실제로 읽고 작업했는지도 아직 미확인이다.
+
+
 ## 새로운 작업을 마칠 때마다 덧붙일 항목 — 기록 템플릿
 
 ### YYYY-MM-DD — 무엇을 만들거나 알아보려 했나?

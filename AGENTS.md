@@ -38,6 +38,8 @@ This repository builds a Korea-first deterministic 만세력 / Four Pillars engi
 - Write concise, natural Korean narrative suitable for future developer-blog posts alongside reproducible technical evidence; avoid promotional accuracy claims, AI boilerplate and code dumps. Link to dated execution reports rather than copying them verbatim. No personal birth records, credentials, personal data or unpublished private source content.
 - Keep `docs/EXECUTION_HANDOFF.md` a brief current checkpoint, `docs/ROADMAP.md` the planned work, and `docs/DEVLOG.md` the enduring story of what happened. Journal maintenance does **not** authorize a new feature, branch permission, Actions run, or deployment.
 
+- New Codex Cloud sessions: **read [docs/CODEX_CLOUD_MASTER_HANDOFF_20261030.md](docs/CODEX_CLOUD_MASTER_HANDOFF_20261030.md)** as a historical/architecture index; verify all statuses against live repository state. This is not an owner authorization or a verbatim ChatGPT transcript.
+
 ## Handoff hygiene
 
 - `docs/EXECUTION_HANDOFF.md` is a short **current checkpoint**, not an append-only history or an independent authority for permissions.
