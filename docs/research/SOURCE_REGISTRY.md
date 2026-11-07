@@ -1,5 +1,9 @@
 # Source registry
 
+## M2 finite-policy catalogue — local consistency audit, 2026-11-07
+
+The four existing finite M2 policies now have a separate [machine-readable catalogue](m2-policy-catalog.json) and [report-only audit](M2_POLICY_CATALOG_AUDIT.md). It links 9 native rules and 12 source IDs to their existing local research records and positive/adversarial tests. Classical member lists and modern ordering/labels remain distinct. Critical-edition and reuse-rights fields are explicitly UNVERIFIED; seven native rule objects lack a separate version field. This is a bounded consistency check, not a complete M2 registry or renewed external source verification. Composition and upstream rule records remain outside this audit.
+
 ## KR-KASA-WOLRYEOK-2026
 Issuer: Korea AeroSpace Administration.
 Publication: 2026년 월력요항.

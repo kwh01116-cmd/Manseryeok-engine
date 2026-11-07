@@ -1,0 +1,241 @@
+{
+  "schemaVersion": "m2-policy-catalog-v1",
+  "scope": "FOUR_EXISTING_FINITE_POLICIES",
+  "interpretationPromotion": false,
+  "sources": [
+    {
+      "sourceId": "CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE",
+      "evidenceLayer": "CLASSICAL_BASE_TEXT",
+      "contribution": "CLASSICAL_MEMBER_LIST",
+      "localEvidenceDoc": "docs/research/M2_HIDDEN_STEM_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026",
+      "evidenceLayer": "MODERN_HEURISTIC",
+      "contribution": "MODERN_MAIN_QI_ORDER",
+      "localEvidenceDoc": "docs/research/M2_HIDDEN_STEM_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026",
+      "evidenceLayer": "MODERN_HEURISTIC",
+      "contribution": "MODERN_STAGE_DIRECTION",
+      "localEvidenceDoc": "docs/research/M2_TWELVE_GROWTH_POLICY_V1.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026",
+      "evidenceLayer": "MODERN_HEURISTIC",
+      "contribution": "MODERN_STAGE_ANCHORS",
+      "localEvidenceDoc": "docs/research/M2_TWELVE_GROWTH_POLICY_V1.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "CLASSIC-YUANHAI-ZIPING-LIUHE",
+      "evidenceLayer": "CLASSICAL_BASE_TEXT",
+      "contribution": "CLASSICAL_PAIR_LIST",
+      "localEvidenceDoc": "docs/research/M2_RAW_BRANCH_RELATIONS_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "CLASSIC-YUANHAI-ZIPING-XIANGCHONG",
+      "evidenceLayer": "CLASSICAL_BASE_TEXT",
+      "contribution": "CLASSICAL_PAIR_LIST",
+      "localEvidenceDoc": "docs/research/M2_RAW_BRANCH_RELATIONS_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "CLASSIC-YUANHAI-ZIPING-XIANGCHUAN",
+      "evidenceLayer": "CLASSICAL_BASE_TEXT",
+      "contribution": "CLASSICAL_PAIR_LIST",
+      "localEvidenceDoc": "docs/research/M2_RAW_BRANCH_RELATIONS_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "MODERN-CLARIFYHK-LIUPO-LIUREN-COMPARISON-2026",
+      "evidenceLayer": "MODERN_HEURISTIC",
+      "contribution": "MODERN_PAIR_COMPARISON",
+      "localEvidenceDoc": "docs/research/M2_RAW_BRANCH_RELATIONS_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "CLASSIC-YUANHAI-ZIPING-XIANGXING",
+      "evidenceLayer": "CLASSICAL_BASE_TEXT",
+      "contribution": "CLASSICAL_DIRECTIONAL_PAIR_LIST",
+      "localEvidenceDoc": "docs/research/M2_RAW_BRANCH_RELATIONS_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "CLASSIC-YUANHAI-ZIPING-LUN-SHIERZHI-SANHE",
+      "evidenceLayer": "CLASSICAL_BASE_TEXT",
+      "contribution": "CLASSICAL_THREE_MEMBER_LIST",
+      "localEvidenceDoc": "docs/research/M2_TRIAD_MEMBERSHIP_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "MODERN-CLARIFYHK-FOUR-SEASONAL-SANHUI-2026",
+      "evidenceLayer": "MODERN_HEURISTIC",
+      "contribution": "MODERN_SEASONAL_MEMBER_LIST",
+      "localEvidenceDoc": "docs/research/M2_TRIAD_MEMBERSHIP_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    },
+    {
+      "sourceId": "MODERN-CLARIFYHK-SANHE-PARTIAL-MEMBER-CATEGORIES-2026",
+      "evidenceLayer": "MODERN_HEURISTIC",
+      "contribution": "MODERN_PARTIAL_MEMBER_LABELS",
+      "localEvidenceDoc": "docs/research/M2_TRIAD_MEMBERSHIP_SOURCE_GATE.md",
+      "criticalEdition": null,
+      "editionVerification": "UNVERIFIED",
+      "rightsReview": "UNVERIFIED"
+    }
+  ],
+  "policies": [
+    {
+      "policyId": "M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1",
+      "meaning": "BRANCH_MEMBERSHIP_AND_NAMED_MAIN_QI_ONLY",
+      "rules": [
+        {
+          "ruleId": "M2-RULE-HIDDEN-STEMS-001",
+          "runtimeVersion": "1.0.0",
+          "evidenceLayer": "CLASSICAL_BASE_TEXT",
+          "sourceIds": [
+            "CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE",
+            "MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026"
+          ]
+        }
+      ],
+      "conditionalSourceIds": [],
+      "testFile": "test/m2-hidden-stems.test.mjs",
+      "positiveTest": "12 branches retain independently transcribed classical membership without omissions",
+      "adversarialTest": "unknown/omitted policy and malformed/prototype branch names fail closed",
+      "codeability": "CONDITIONAL",
+      "disputeStatus": "SCHOOL_DEPENDENT"
+    },
+    {
+      "policyId": "M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1",
+      "meaning": "TRADITIONAL_STAGE_LABEL_ONLY",
+      "rules": [
+        {
+          "ruleId": "M2-RULE-TWELVE-GROWTH-STAGES-001",
+          "runtimeVersion": "1.0.0",
+          "evidenceLayer": "MODERN_HEURISTIC",
+          "sourceIds": [
+            "MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026",
+            "MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026"
+          ]
+        }
+      ],
+      "conditionalSourceIds": [],
+      "testFile": "test/m2-twelve-growth-stages.test.mjs",
+      "positiveTest": "10 day masters exhaustively yield a bijective 12-stage cycle with explicit anchors and directions",
+      "adversarialTest": "omitted/disputed school policy and bogus/prototype heavenly/earthly tokens are rejected",
+      "codeability": "CONDITIONAL",
+      "disputeStatus": "SCHOOL_DEPENDENT"
+    },
+    {
+      "policyId": "M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1",
+      "meaning": "RAW_PAIR_MEMBERSHIP_ONLY",
+      "rules": [
+        {
+          "ruleId": "M2-RULE-BRANCH-LIUHE-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "CLASSICAL_BASE_TEXT",
+          "sourceIds": [
+            "CLASSIC-YUANHAI-ZIPING-LIUHE"
+          ]
+        },
+        {
+          "ruleId": "M2-RULE-BRANCH-LIUCHONG-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "CLASSICAL_BASE_TEXT",
+          "sourceIds": [
+            "CLASSIC-YUANHAI-ZIPING-XIANGCHONG"
+          ]
+        },
+        {
+          "ruleId": "M2-RULE-BRANCH-LIUHAI-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "CLASSICAL_BASE_TEXT",
+          "sourceIds": [
+            "CLASSIC-YUANHAI-ZIPING-XIANGCHUAN"
+          ]
+        },
+        {
+          "ruleId": "M2-RULE-BRANCH-LIUPO-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "MODERN_HEURISTIC",
+          "sourceIds": [
+            "MODERN-CLARIFYHK-LIUPO-LIUREN-COMPARISON-2026"
+          ]
+        },
+        {
+          "ruleId": "M2-RULE-BRANCH-XING-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "CLASSICAL_BASE_TEXT",
+          "sourceIds": [
+            "CLASSIC-YUANHAI-ZIPING-XIANGXING"
+          ]
+        }
+      ],
+      "conditionalSourceIds": [],
+      "testFile": "test/m2-branch-relations.test.mjs",
+      "positiveTest": "complete 12×12 source-independent oracle prevents spurious matches or suppressed overlaps",
+      "adversarialTest": "bogus policy, malformed inputs and prototype keys are rejected before lookups",
+      "codeability": "CONDITIONAL",
+      "disputeStatus": "SCHOOL_DEPENDENT"
+    },
+    {
+      "policyId": "M2-TRIAD-FOUR-SANHE-FOUR-SANHUI-MEMBERSHIP-V1",
+      "meaning": "PRESENCE_OF_DISTINCT_MEMBER_BRANCHES_ONLY",
+      "rules": [
+        {
+          "ruleId": "M2-RULE-TRIAD-SANHE-MEMBERS-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "CLASSICAL_BASE_TEXT",
+          "sourceIds": [
+            "CLASSIC-YUANHAI-ZIPING-LUN-SHIERZHI-SANHE"
+          ]
+        },
+        {
+          "ruleId": "M2-RULE-TRIAD-SANHUI-MEMBERS-001",
+          "runtimeVersion": null,
+          "evidenceLayer": "MODERN_HEURISTIC",
+          "sourceIds": [
+            "MODERN-CLARIFYHK-FOUR-SEASONAL-SANHUI-2026"
+          ]
+        }
+      ],
+      "conditionalSourceIds": [
+        "MODERN-CLARIFYHK-SANHE-PARTIAL-MEMBER-CATEGORIES-2026"
+      ],
+      "testFile": "test/m2-triad-memberships.test.mjs",
+      "positiveTest": "all 12⁴ positional charts match independent oracle for every full/partial/missing member case",
+      "adversarialTest": "bogus policy, prototype-looking branches and non-four-branch input fail closed",
+      "codeability": "CONDITIONAL",
+      "disputeStatus": "SCHOOL_DEPENDENT"
+    }
+  ]
+}
