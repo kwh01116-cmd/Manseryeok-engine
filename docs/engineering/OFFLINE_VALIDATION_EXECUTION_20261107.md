@@ -69,6 +69,37 @@
 
 **다음 최소 작업:** 사용자가 로컬에서 확보한 비밀을 제외한 원래 응답 한 장을 서비스·연도·월 등의 명시 범위와 함께 인수해 구조·정밀도·누락부터 평가한다. 그 전에는 증거 없는 인증/지원 승격이나 추가 제품 기능으로 확대하지 않는다. M2 비평 판본·권리·다른 학파/조합 규칙의 전체 등록부는 후속 과제다.
 
+## 작업 3 — 검토 반례: 월별 절기 날짜 순서 누락 수정
+
+**기준·반례:** 후속 시작 시 원격과 로컬은 **`7def4b8c273e45c3e4fe3bedcc8fcbe51a5b30fc`**, 작업 트리 clean이었다. 이는 앞선 두 작업의 실제 원격 전달 HEAD다. 상위 검토자는 월 범위의 완료 응답이 연간 `validateSolar`를 거치지 않는 빈틈을 지적했다. 네트워크를 차단한 합성 입력(2026년 1월, 소한 1월 20일·대한 1월 5일, 정상 kst·pageNo 1·numOfRows 100·totalCount 2)이 **`STRUCTURALLY_COMPLETE_SCOPE`로 잘못 승인됨을 직접 재현**했다. 실제 API나 달력 정확성 자료가 아니다.
+
+**수정:** `scripts/kasi/intake.ts`의 월 범위 완료 분기에만 날짜 정렬 후 해당 월의 두 절기 순서를 대조한다. 입력 행 나열 순서는 의미를 바꾸지 않고, 날짜 자체가 역전되면 `INTAKE_SOLAR_ORDER`로 거절한다. 기존 `schema.ts`, 엔진·UI·정밀도/출처/권리 상태는 변경하지 않았다. 기존 테스트 제목의 chronology 표현은 실제로 검사하던 월/중복 범위로 바로잡았다.
+
+**회귀 증거:** 새 검사 4개를 먼저 추가한 수정 전 실행은 **2 PASS / 2 FAIL, 종료 1**이었다. 정상 월 및 행 순서 변경은 통과했고, 날짜 역전과 CLI 거절 검사가 실패했다. 수정 후 intake 집중 검사는 **14/14, 종료 0**. 12개월의 유효한 날짜, 행 나열 순서, 날짜 역전, 분/날짜전용 응답을 구분한다. 네트워크를 차단한 실제 CLI 자식 프로세스에서도 정상/순서만 변경된 응답은 종료 0·동일 보고서, 역전 응답은 종료 1·안전한 오류 코드만 출력했다.
+
+**정확한 검사 코드 SHA: `52f4ee61126c7462df05ee7089ddaac879b3c6ea`.** 실행자는 이 Cloud 작업의 Codex, Node 22.23.3/npm 10.9.9/TS 5.8.3이다.
+
+| 새 실행 검사 | 결과 |
+| --- | --- |
+| `npm run check` | 종료 0, typecheck/build, **349/349 PASS**, fail/cancel/skip/todo 각 0 |
+| `node scripts/browser-smoke.mjs` | 종료 0, 실제 Chromium 154.0.8037.57 Lab PASS |
+| `npm run kasi:web:smoke` | 종료 0, 실제 Chromium + synthetic upstream PASS |
+| Git 상태/범위 | 검사 후 clean; 7def4b8c 대비 `src/`, `web/`, `scripts/kasi/schema.ts`, workflow, lockfile diff 없음 |
+
+이번 실제 KASI 호출·키 사용 **0회**. 순서의 구조적 모순을 거절하는 기능이며 날짜/시각의 외부 정확성이나 원본 인증을 증명하지 않는다.
+
+| 로컬 증거 (`/tmp/manseryeok-overnight-logs/`) | 크기(bytes) | SHA-256 |
+| --- | ---: | --- |
+| `month-order-before.json` | 545 | `dcb7bf5535c62233caa0748efc402ea4f266ef54f3be981f30e0684cee0bf743` |
+| `month-order-red.log` | 2354 | `6527117f65ee9a8fe968155117b3609a2cd4ce3e6f272307422c4241a9984262` |
+| `month-order-check.log` | 79572 | `f2bbcaf92c8ecbbf9c4a7767f1e0e2805081429522f91d5c42f3949aaa6b4dac` |
+| `month-order-lab.log` | 607 | `d7b0874ef489044e8a71d8524b841d0ae1c24681164731f8c546d3bb4e531066` |
+| `month-order-kasi-web.log` | 349 | `44723f7c7d13fec73a00b8f72e29e0b16adccfe4628be92f22c3a3e92aa531e0` |
+
+새 세 명령의 종료코드·검사 SHA는 `month-order-exits.json`에 있다. 기존 `intake-check.log`의 TAP은 tests/pass **335/335**, `m2-check.log`는 **345/345**, 양쪽 fail/cancel/skip/todo 0으로 다시 읽어 확인했다. 기존 `m2-check-exit.json`의 check와 `m2-audit-browser-exits.json`의 audit/Lab 항목은 모두 종료 0, 검사 SHA **03af44ec34489204a36692e8ca509ae03ad24aaa**였다. 이 기존 기록은 `review-requested-evidence.json`에 안전한 필드만 발췌했으며 새 실행으로 계산하지 않는다.
+
+**짧은 추가 검토:** intake의 연간·부분 페이지·음력 분기, 고정 출력 필드, M2 감사의 조건부 출처/승격 금지 경계를 코드와 기존 반례 검사에 대조했다. 자체 검토에서는 다른 반례를 찾지 못했지만, 기록 중 상위 검토자가 `sameSet`의 구분자 충돌 가능성을 제보했다. 아직 재현 전이며 이 월 순서 수정 전달 후 직렬로 확인한다. 자체 검토를 전체 결함 부재의 보증으로 취급하지 않는다. 일반 Push 전 workflow/원격 HEAD를 다시 확인하고 최종 원격 SHA는 결과 메시지에서 별도로 확인한다.
+
 ## 직전 API 진단과 이번 결정의 구분
 
 같은 Cloud 세션의 앞선 사용자 승인 진단에서는 총 8회 전송 시도, 재시도 0, 성공 0이었다. 최초 1회는 HTTP 400만 확보했고, 이후 7회는 HTTP 400 / 제공자 코드 10 `INVALID_REQUEST_PARAMETER_ERROR`를 확인했다. 마지막 pageNo 없는 2026 절기 요청도 같았다. 로컬 성공은 사용자 보고이며 이 작업이 재현한 사실이 아니다. 키/원문/인증 URL은 이 문서에 기록하지 않는다. 원인이 규명되거나 고쳐진 것으로 표현하지 않고 **사용자 결정에 따라 API 진단 보류**, 로컬 자료 인수 검증으로 전환했다.
