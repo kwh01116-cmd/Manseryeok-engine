@@ -48,13 +48,39 @@ test('local intake rejects false pagination claims without retrieving another pa
     assert.throws(() => inspectLocalResponse(input, solarScope));
   }
 });
-test('local intake checks declared solar month, chronology and duplicate identities', () => {
+test('local intake checks declared solar month and duplicate identities', () => {
   const scope = { ...solarScope, month: 1 };
   assert.equal(inspectLocalResponse(body(terms().slice(0, 2)), scope).status, 'STRUCTURALLY_COMPLETE_SCOPE');
   assert.throws(() => inspectLocalResponse(body(terms().slice(2, 4)), scope));
   const wrong = terms(); wrong[0].locdate = '20260205';
   assert.throws(() => inspectLocalResponse(body(wrong), solarScope));
   assert.throws(() => inspectLocalResponse(body([terms()[0], terms()[0]]), scope));
+});
+test('monthly solar intake accepts valid term dates with minute or date-only precision', () => {
+  for (let month = 1; month <= 12; month++) {
+    const rows = terms().slice((month - 1) * 2, month * 2), scope = { ...solarScope, month };
+    const minute = inspectLocalResponse(body(rows), scope);
+    assert.equal(minute.status, 'STRUCTURALLY_COMPLETE_SCOPE');
+    assert.equal(minute.completeScope, true); assert.equal(minute.minuteRows, 2);
+    const dateOnly = inspectLocalResponse(body(rows.map(({ kst, ...row }) => row)), scope);
+    assert.equal(dateOnly.status, 'DATE_ONLY_SCOPE'); assert.equal(dateOnly.completeScope, true);
+  }
+});
+test('monthly solar intake ignores input row order while retaining the same normalized digest', () => {
+  for (let month = 1; month <= 12; month++) {
+    const rows = terms().slice((month - 1) * 2, month * 2), scope = { ...solarScope, month };
+    assert.deepEqual(inspectLocalResponse(body([...rows].reverse()), scope), inspectLocalResponse(body(rows), scope));
+  }
+});
+test('monthly solar intake rejects reversed term dates regardless of row order or precision', () => {
+  for (let month = 1; month <= 12; month++) {
+    const rows = terms().slice((month - 1) * 2, month * 2), scope = { ...solarScope, month };
+    [rows[0].locdate, rows[1].locdate] = [rows[1].locdate, rows[0].locdate];
+    for (const input of [rows, [...rows].reverse(), rows.map(({ kst, ...row }) => row),
+      [...rows].reverse().map(({ kst, ...row }) => row)]) {
+      assert.throws(() => inspectLocalResponse(body(input), scope), error => error.code === 'INTAKE_SOLAR_ORDER');
+    }
+  }
 });
 test('local lunar sample validates an explicit day/month, leap values and full-month continuity', () => {
   const scope = { service: 'lunar', year: 2026, month: 1 };
@@ -116,4 +142,23 @@ test('offline CLI has stable exits and suppresses source/path/parser errors and 
   }
   await rm(file); const missing = spawnSync(process.execPath, args, { env, encoding: 'utf8', timeout: 10000 });
   assert.equal(missing.status, 1); assert.equal(JSON.parse(missing.stdout).code, 'INTAKE_READ_FAILED'); assert.ok(!missing.stdout.includes(marker));
+}));
+test('monthly offline CLI distinguishes reordered rows from invalid chronological dates', async () => temporary(async root => {
+  const file = join(root, 'synthetic-month.json'), blocker = join(root, 'no-network.mjs');
+  await writeFile(blocker, "import net from 'node:net'; net.Socket.prototype.connect=function(){throw Error('NETWORK_MUST_NOT_BE_USED')}; globalThis.fetch=()=>{throw Error('NETWORK_MUST_NOT_BE_USED')};");
+  const args = ['--import', blocker, '.kasi-build/intake.js', '--file', file, '--service', 'solar', '--year', '2026', '--month', '1'];
+  const env = { ...process.env };
+  for (const key of Object.keys(env)) if (/KASI.*KEY/.test(key)) delete env[key];
+  const rows = terms().slice(0, 2), reversedDates = rows.map((row, index) => ({ ...row, locdate: rows[1 - index].locdate }));
+  const reports = [];
+  for (const [input, exit, status] of [[rows, 0, 'STRUCTURALLY_COMPLETE_SCOPE'],
+    [[...rows].reverse(), 0, 'STRUCTURALLY_COMPLETE_SCOPE'], [reversedDates, 1, 'REJECTED']]) {
+    const source = body(input); await writeFile(file, source);
+    const run = spawnSync(process.execPath, args, { env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(run.status, exit); assert.equal(run.stderr, '');
+    const report = JSON.parse(run.stdout); assert.equal(report.status, status); reports.push(report);
+    assert.equal(await readFile(file, 'utf8'), source);
+  }
+  assert.deepEqual(reports[0], reports[1]);
+  assert.deepEqual(reports[2], { schemaVersion: 'kasi-local-intake-report-v1', status: 'REJECTED', code: 'INTAKE_SOLAR_ORDER' });
 }));

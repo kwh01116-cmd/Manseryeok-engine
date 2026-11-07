@@ -38,7 +38,15 @@ export function inspectLocalResponse(raw: string, scope: IntakeScope) {
   } else if (new Set((rows as LunarRow[]).map(r => r.solarDate)).size !== rows.length) fail('INTAKE_DUPLICATE_ROW');
   const complete = page.page === 1 && page.total === expected && rows.length === expected;
   if (complete) {
-    if (scope.service === 'solar' && scope.month === undefined) validateSolar(rows as SolarRow[], scope.year);
+    if (scope.service === 'solar') {
+      if (scope.month === undefined) validateSolar(rows as SolarRow[], scope.year);
+      else {
+        // Input order is arbitrary; the dates must preserve this month's term sequence.
+        const ordered = [...rows as SolarRow[]].sort((a, b) => a.date.localeCompare(b.date));
+        const firstTerm = (scope.month - 1) * 2;
+        if (ordered.some((row, index) => row.term !== TERMS[firstTerm + index])) fail('INTAKE_SOLAR_ORDER');
+      }
+    }
     if (scope.service === 'lunar') validateLunar(rows as LunarRow[], scope.year, scope.month, scope.day);
   }
   const minuteRows = scope.service === 'solar' ? (rows as SolarRow[]).filter(r => r.precision === 'MINUTE').length : null;
