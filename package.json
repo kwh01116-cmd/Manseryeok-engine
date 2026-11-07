@@ -19,7 +19,8 @@
     "kasi:validate": "npm run kasi:build --silent && node .kasi-build/cli.js validate",
     "kasi:export": "npm run kasi:build --silent && node .kasi-build/cli.js export",
     "kasi:web": "npm run kasi:build --silent && node .kasi-build/web.js",
-    "kasi:web:smoke": "npm run kasi:build --silent && node scripts/kasi/browser-smoke.mjs"
+    "kasi:web:smoke": "npm run kasi:build --silent && node scripts/kasi/browser-smoke.mjs",
+    "kasi:intake": "npm run kasi:build --silent && node .kasi-build/intake.js"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
