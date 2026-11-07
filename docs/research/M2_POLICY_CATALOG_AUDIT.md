@@ -8,7 +8,7 @@ Node 22와 잠금 의존성이 설치된 저장소에서 `npm run m2:audit`를 �
 
 | 기존 정책 | 규칙 수 | 근거 기록 | 의미의 경계 |
 | --- | ---: | --- | --- |
-| 지장간 | 1 | [회원 목록과 본기 순서](M2_HIDDEN_STEM_SOURCE_GATE.md) | 고전의 구성원과 현대 본기 순서를 구분; 수치 세력·司令 아님 |
+| 지장간 | 1 | [구성원과 본기 순서](M2_HIDDEN_STEM_SOURCE_GATE.md) | 고전의 구성원과 현대 본기 순서를 구분; 수치 세력·司令 아님 |
 | 십이운성 | 1 | [양순음역·화토 정책](M2_TWELVE_GROWTH_POLICY_V1.md) | 선택한 학파의 단계 이름; 강약·길흉 아님 |
 | 지지 쌍 관계 | 5 | [육합·충·해·파·형](M2_RAW_BRANCH_RELATIONS_SOURCE_GATE.md) | 원시 쌍 구성원; 관계의 성립·상쇄·효력 아님 |
 | 삼합·삼회 구성원 | 2 | [완전·부분 구성원](M2_TRIAD_MEMBERSHIP_SOURCE_GATE.md) | 고유 구성원의 존재; 合化·국 성립 아님 |
