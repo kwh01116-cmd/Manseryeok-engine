@@ -4,6 +4,10 @@
 
 Current operational cursor: [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md). Stable instructions: [AGENTS.md](../AGENTS.md). Detailed evidence and research gaps: [engine reassessment / G0 report](engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md).
 
+## 2026-11-07 operational update — offline work first
+
+Owner paused Cloud KASI diagnosis and will supply locally obtained data. **Do not resume API calls from historical queue entries below.** Offline single-response intake is implemented and tested at `4026bdb7e8c2ae37d3d943726be29539e872e4b4` (335/335 + both Chromium smokes). It does not import engine data or authenticate the provider. Next available non-engine unit: M2 policy/source completeness audit; actual data/source/rights qualification remains blocked on evidence. [Intake guide](KASI_LOCAL_INTAKE_GUIDE.md) · [execution](engineering/OFFLINE_VALIDATION_EXECUTION_20261107.md).
+
 ## 2026-10-25 Collector v0.1 — engine-independent acquisition tool
 
 Common ordinary `KASI_API_KEY` now serves both APIs, with optional per-service overrides and separate utilization approvals. Strict TypeScript CLI (`scripts/kasi/`) now implements probe/collect/validate/export with private atomic checkpoints and hashes, bounded transport, explicit month/daily modes and sample gates. Exact tested SHA `fca4267df7329bd20a91bb9ba6f1290870ef5f02`: **318/318 Node**, TypeScript/build and actual Lab Chromium PASS. Existing G0/G1-P1/data/UI/year support unchanged. Actual keys absent/API host restricted; live 1950/2026 schema/pagination/precision and attached DOCX review remain UNVERIFIED. No authenticated collection or bulk request was executed. Next: live two-year probe, validate complete sample years, then explicitly consider bulk. API output stays a separate evidence surface, not ORIGINAL_ROW_VERIFIED or engine year promotion. G1-P2 remains NO-GO. [Guide](KASI_COLLECTOR_GUIDE.md) · [execution evidence](engineering/KASI_COLLECTOR_V01_EXECUTION_20261025.md).
