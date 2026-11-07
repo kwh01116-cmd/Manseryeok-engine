@@ -6,7 +6,9 @@ Current operational cursor: [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md). Stable
 
 ## 2026-11-07 operational update — offline work first
 
-Review correction: monthly intake chronology was missing despite the earlier tests passing. Code **52f4ee61126c7462df05ee7089ddaac879b3c6ea** rejects reversed term dates and accepts reordered valid rows. Latest full check **349/349**, Lab and KASI synthetic-upstream Chromium PASS. Existing Collector schema, calendar engine and source/rights gates are unchanged.
+Second review correction: M2 source ID sets no longer compare delimiter-joined strings. Code **72024d521560826cab001591bfc1019b70ba8a5c** rejects merging two IDs into one `|`-joined claim while retaining order independence. Latest full check **352/352**, standalone M2 audit and Lab Chromium PASS. Source records, runtime rules and open evidence gates are unchanged.
+
+Review correction: monthly intake chronology was missing despite the earlier tests passing. Code **52f4ee61126c7462df05ee7089ddaac879b3c6ea** rejects reversed term dates and accepts reordered valid rows. At that SHA, full check **349/349**, Lab and KASI synthetic-upstream Chromium PASS. Existing Collector schema, calendar engine and source/rights gates are unchanged.
 
 Owner paused Cloud KASI diagnosis and will supply locally obtained data. **Do not resume API calls from historical queue entries below.** Offline single-response intake is implemented at `4026bdb7e8c2ae37d3d943726be29539e872e4b4` (335/335 + both Chromium smokes). A bounded M2 policy/source audit is implemented at `03af44ec34489204a36692e8ca509ae03ad24aaa` (**345/345 + Lab Chromium**, M2 audit CLI PASS): 4 policies/9 rules/12 sources linked; 7 native rule version fields missing, editions/rights unverified. It is not a complete M2 registry. Neither tool adds data to the engine or authenticates sources. Next minimal unit: inspect one locally obtained response with its declared scope; actual data/source/rights qualification remains blocked on evidence. [Intake guide](KASI_LOCAL_INTAKE_GUIDE.md) · [M2 audit](research/M2_POLICY_CATALOG_AUDIT.md) · [execution](engineering/OFFLINE_VALIDATION_EXECUTION_20261107.md).
 

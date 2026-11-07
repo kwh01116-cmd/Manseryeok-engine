@@ -18,6 +18,7 @@ Node 22와 잠금 의존성이 설치된 저장소에서 `npm run m2:audit`를 �
 ## 탐지하는 불일치
 
 - 정책·규칙·출처의 누락/중복/불필요한 추가, runtime policy ID·meaning·evidence layer·source IDs·codeability·dispute status·version과 목록의 불일치.
+- source ID의 나열 순서는 무시하지만 각 ID와 원소 수는 보존해야 한다. 두 ID를 `|`로 연결한 한 문자열로 바꾼 목록도 불일치로 거절한다.
 - 고전 구성원 출처와 현대 순서·단계·분류 출처의 혼동. 지장간 규칙 자체의 기존 `CLASSICAL_BASE_TEXT` 값을 바꾸지 않고, 두 출처의 기여를 각각 `CLASSICAL_MEMBER_LIST`와 `MODERN_MAIN_QI_ORDER`로 기록한다.
 - 부분 삼합 결과에만 덧붙는 현대 source ID의 누락. 실제 부분 구성원 출력을 관찰하므로 완전 구성원용 `TRIAD_RULES`만 열거해 빠뜨리지 않는다.
 - 해당 연구 문서에서 source ID가 사라지거나, 정책별 양성·반례 테스트 제목 연결이 없어지는 경우. 지정된 로컬 파일만 읽으며 목록에 적힌 임의 경로는 열지 않는다.
