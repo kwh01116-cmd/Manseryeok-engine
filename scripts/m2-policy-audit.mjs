@@ -39,8 +39,12 @@ const uniqueMap = (rows, key) => {
   if (map.size !== rows.length) fail('DUPLICATE_ID');
   return map;
 };
-const sameSet = (actual, expected) => Array.isArray(actual) && actual.every(x => typeof x === 'string') &&
-  new Set(actual).size === actual.length && [...actual].sort().join('|') === [...expected].sort().join('|');
+const sameSet = (actual, expected) => {
+  if (!Array.isArray(actual) || !actual.every(x => typeof x === 'string') ||
+      new Set(actual).size !== actual.length || actual.length !== expected.length) return false;
+  const sortedExpected = [...expected].sort();
+  return [...actual].sort().every((value, index) => value === sortedExpected[index]);
+};
 
 export function observeM2Policies() {
   // Partial-Sanhe output has a modern source absent from TRIAD_RULES' complete-member metadata.

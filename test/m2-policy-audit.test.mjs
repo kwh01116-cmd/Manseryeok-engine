@@ -35,6 +35,33 @@ test('conditional partial-Sanhe provenance cannot disappear behind complete-memb
   rejectMutation(x => { x.observed[3].conditionalSourceIds = []; });
 });
 
+test('source identity set comparison accepts reordered distinct IDs without changing the audit', () => {
+  const input = fixture(), expected = auditM2Policies(input);
+  input.catalog.policies[0].rules[0].sourceIds.reverse();
+  assert.deepEqual(auditM2Policies(input), expected);
+});
+
+test('source identity set comparison rejects a delimiter-joined claim masquerading as two IDs', () => {
+  const input = fixture(), claim = input.catalog.policies[0].rules[0];
+  assert.equal(claim.sourceIds.length, 2);
+  claim.sourceIds = [[...claim.sourceIds].sort().join('|')];
+  assert.equal(claim.sourceIds.length, 1);
+  assert.throws(() => auditM2Policies(input), /M2 policy audit: RUNTIME_METADATA_MISMATCH/);
+});
+
+test('source identity set comparison rejects duplicates, omissions and wrong same-sized claims', () => {
+  for (const change of [
+    ids => [ids[0], ids[0]],
+    ids => [...ids, ids[0]],
+    ids => [ids[0]],
+    ids => [ids[0], ids[1] + '|UNREVIEWED'],
+  ]) {
+    const input = fixture(), claim = input.catalog.policies[0].rules[0];
+    claim.sourceIds = change(claim.sourceIds);
+    assert.throws(() => auditM2Policies(input), /M2 policy audit: RUNTIME_METADATA_MISMATCH/);
+  }
+});
+
 test('missing, extra and duplicate policy, rule or source records are rejected', () => {
   for (const change of [
     x => { x.catalog.policies.pop(); },
