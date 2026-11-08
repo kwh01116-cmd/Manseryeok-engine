@@ -71,9 +71,9 @@ export class Client {
   }
 }
 const pageId=(q:Query)=>`${q.service}-${q.year}-${q.month??0}-${q.day??0}-${q.format}-${q.page}`;
-export async function atomicWrite(path:string,text:string):Promise<void> {
+export async function atomicWrite(path:string,text:string,platform:NodeJS.Platform=process.platform):Promise<void> {
   const tmp=path+'.tmp-'+randomUUID();let handle;
-  try{handle=await open(tmp,'wx',0o600);await handle.writeFile(text);await handle.sync();await handle.close();handle=undefined;await rename(tmp,path);const directory=await open(dirname(path),'r');try{await directory.sync();}finally{await directory.close();}}
+  try{handle=await open(tmp,'wx',0o600);await handle.writeFile(text);await handle.sync();await handle.close();handle=undefined;await rename(tmp,path);if(platform!=='win32'){const directory=await open(dirname(path),'r');try{await directory.sync();}finally{await directory.close();}}}
   finally{await handle?.close();await unlink(tmp).catch(()=>{});}
 }
 export class Store {
