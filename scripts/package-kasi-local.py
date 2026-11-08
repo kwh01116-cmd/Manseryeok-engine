@@ -33,7 +33,7 @@ def main():
                 raise SystemExit('Native dependency needs a separate Windows build.')
             out.write(path, prefix + (target or str(path.relative_to(root)).replace('\\', '/')))
         for entry in ['package.json', 'package-lock.json', 'start-kasi-collection.cmd',
-                      'start-kasi-collection-daily.cmd', 'validate-kasi-collection.cmd']:
+                      'start-kasi-collection-daily.cmd', 'validate-kasi-collection.cmd', 'diagnose-kasi-cache.cmd']:
             add(root / entry)
         add(root / 'docs/KASI_LOCAL_1950_2026.md', 'README.md')
         compiled = list((root / '.kasi-build').glob('*.js'))
