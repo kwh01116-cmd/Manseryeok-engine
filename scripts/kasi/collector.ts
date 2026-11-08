@@ -109,7 +109,7 @@ export class Store {
     try{await handle.writeFile(JSON.stringify({pid:process.pid}));return await action();}finally{await handle.close();await unlink(path).catch(()=>{});}
   }
 }
-export interface YearData {schemaVersion:'kasi-collector-year-v1';year:number;status:'COMPLETE';normalizerVersion:'0.1.0';lunarMode:'monthly'|'daily';requestedFormat:Format;solar:SolarRow[];lunar:LunarRow[];normalizedSha256:string;sources:Receipt[];externalOriginalVerification:'UNVERIFIED';rightsReview:'UNVERIFIED';}
+export interface YearData {schemaVersion:'kasi-collector-year-v1';year:number;status:'COMPLETE';normalizerVersion:'0.1.1';lunarMode:'monthly'|'daily';requestedFormat:Format;solar:SolarRow[];lunar:LunarRow[];normalizedSha256:string;sources:Receipt[];externalOriginalVerification:'UNVERIFIED';rightsReview:'UNVERIFIED';}
 export type CollectorStorage=Pick<Store,'load'|'save'|'json'|'read'>;
 /** One web request only. No file, browser storage, shared cache or key persistence. */
 export class EphemeralStore implements CollectorStorage {
@@ -140,7 +140,7 @@ export class Collector {
     year(y);const sampleDay=service==='lunar'&&this.lunarMode==='daily'?1:undefined;const response=await this.query(service,y,service==='lunar'?1:undefined,sampleDay);
     const rows=service==='solar'?response.items.map(i=>normalizeSolar(i,y)):response.items.map(i=>normalizeLunar(i,y,1,sampleDay));
     if(service==='solar')validateSolar(rows as SolarRow[],y);else validateLunar(rows as LunarRow[],y,1,sampleDay);
-    const report={schemaVersion:'kasi-probe-v1',year:y,service,status:service==='solar'&&(rows as SolarRow[]).some(r=>r.time===null)?'SAMPLE_DATE_ONLY':'SAMPLE_RESPONSE_VALIDATED',scope:service==='solar'?'24_TERMS':sampleDay?'JANUARY_DAY1_ONLY':'JANUARY_ONLY',requestedFormat:this.format,actualFormats:[...new Set(response.sources.map(s=>s.schema.format))],yearComplete:false,normalizedSha256:fingerprint(rows),sources:response.sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',minuteRows:service==='solar'?(rows as SolarRow[]).filter(r=>r.time!==null).length:null,...(includeRows?{data:rows}:{})};
+    const report={schemaVersion:'kasi-probe-v1',year:y,service,status:service==='solar'&&(rows as SolarRow[]).some(r=>r.time===null)?'SAMPLE_DATE_ONLY':'SAMPLE_RESPONSE_VALIDATED',scope:service==='solar'?'24_TERMS':sampleDay?'JANUARY_DAY1_ONLY':'JANUARY_ONLY',requestedFormat:this.format,actualFormats:[...new Set(response.sources.map(s=>s.schema.format))],yearComplete:false,normalizedSha256:fingerprint(rows),sources:response.sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',minuteRows:service==='solar'?(rows as SolarRow[]).filter(r=>r.time!==null).length:null,published2400Rows:service==='solar'?(rows as SolarRow[]).filter(r=>r.timeNotation==='AS_REPORTED_2400').length:0,...(includeRows?{data:rows}:{})};
     await this.store.json(`probes/${service}-${y}.json`,report);return report;
   }
   async buildYear(y:number,offline=false):Promise<YearData>{
@@ -151,7 +151,7 @@ export class Collector {
       for(const d of days){const r=await this.query('lunar',y,m,d,offline),rows=r.items.map(i=>normalizeLunar(i,y,m,d));validateLunar(rows,y,m,d);lunar.push(...rows);sources.push(...r.sources);}
     }
     validateLunar(lunar,y);solar.sort((a,b)=>a.date.localeCompare(b.date));lunar.sort((a,b)=>a.solarDate.localeCompare(b.solarDate));
-    return {schemaVersion:'kasi-collector-year-v1',year:y,status:'COMPLETE',normalizerVersion:'0.1.0',lunarMode:this.lunarMode,requestedFormat:this.format,solar,lunar,normalizedSha256:fingerprint({solar,lunar}),sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED'};
+    return {schemaVersion:'kasi-collector-year-v1',year:y,status:'COMPLETE',normalizerVersion:'0.1.1',lunarMode:this.lunarMode,requestedFormat:this.format,solar,lunar,normalizedSha256:fingerprint({solar,lunar}),sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED'};
   }
   async collectYear(y:number):Promise<YearData>{
     if(await this.store.read(`years/${y}.json`)!==undefined)return this.validateYear(y);
@@ -160,7 +160,12 @@ export class Collector {
   async validateYear(y:number):Promise<YearData>{
     const saved=await this.store.read(`years/${y}.json`);if(saved===undefined)fail('INCOMPLETE_YEAR');
     const rebuilt=await this.buildYear(y,true);
-    if(fingerprint(saved)!==fingerprint(rebuilt))fail('YEAR_DATA_OR_FINGERPRINT_CHANGED');return rebuilt;
+    const version=object(saved).normalizerVersion;
+    if(version!=='0.1.0'&&version!=='0.1.1')fail('YEAR_NORMALIZER_VERSION');
+    if(version==='0.1.0'&&rebuilt.solar.some(r=>r.timeNotation==='AS_REPORTED_2400'))fail('LEGACY_YEAR_HAS_NEW_TIME_NOTATION');
+    // Legacy compatibility is limited to a version label with otherwise identical
+    // raw-rebuilt values, hashes and receipts. Existing files are never rewritten.
+    if(fingerprint(saved)!==fingerprint({...rebuilt,normalizerVersion:version}))fail('YEAR_DATA_OR_FINGERPRINT_CHANGED');return rebuilt;
   }
   async sampleGate():Promise<void>{for(const y of [1950,2026])await this.validateYear(y);}
 }

@@ -54,7 +54,7 @@ export function parsePage(raw:string):Page {
   return {items,page,size,total,schema:{format,headerFields:Object.keys(header).sort(),bodyFields:Object.keys(body).sort(),itemFields:[...new Set(items.flatMap(x=>Object.keys(x)))].sort()}};
 }
 export const TERMS = ['소한','대한','입춘','우수','경칩','춘분','청명','곡우','입하','소만','망종','하지','소서','대서','입추','처서','백로','추분','한로','상강','입동','소설','대설','동지'] as const;
-export interface SolarRow {kind:'solar';term:string;date:string;time:string|null;precision:'MINUTE'|'DAY';sunLongitude:number|null;timeBasis:'API_KST_AS_PUBLISHED';historicalCivilTime:'NOT_RESOLVED';}
+export interface SolarRow {kind:'solar';term:string;date:string;time:string|null;precision:'MINUTE'|'DAY';sunLongitude:number|null;timeBasis:'API_KST_AS_PUBLISHED';historicalCivilTime:'NOT_RESOLVED';timeNotation?:'AS_REPORTED_2400';}
 export interface LunarRow {kind:'lunar';solarDate:string;lunarYear:number;lunarMonth:number;lunarDay:number;leap:boolean;monthDays:number;ganji:{year:string;month:string;day:string};}
 export function normalizeSolar(item:Item,y:number):SolarRow {
   const loc=scalar(item.locdate).trim();if(!/^\d{8}$/.test(loc))fail('SOLAR_DATE');
@@ -62,7 +62,7 @@ export function normalizeSolar(item:Item,y:number):SolarRow {
   const term=scalar(item.dateName).trim();if(!TERMS.includes(term as typeof TERMS[number])||Number(dt.slice(0,4))!==y)fail('SOLAR_TERM_YEAR');
   let time:string|null=null;
   if(item.kst!=null&&scalar(item.kst).replace(/\s/g,'')!==''){
-    const k=scalar(item.kst).replace(/\s/g,'');if(!/^(?:[01]\d|2[0-3])[0-5]\d$/.test(k))fail('KST_HHMM');
+    const k=scalar(item.kst).replace(/\s/g,'');if(k!=='2400'&&!/^(?:[01]\d|2[0-3])[0-5]\d$/.test(k))fail('KST_HHMM');
     time=k.slice(0,2)+':'+k.slice(2);
   }
   let longitude:number|null=null;
@@ -70,7 +70,9 @@ export function normalizeSolar(item:Item,y:number):SolarRow {
     const s=scalar(item.sunLongitude).trim();if(!/^\d+(?:\.\d+)?$/.test(s))fail('SUN_LONGITUDE');
     longitude=Number(s);if(longitude>=360||longitude!==(285+TERMS.indexOf(term as typeof TERMS[number])*15)%360)fail('SUN_LONGITUDE');
   }
-  return {kind:'solar',term,date:dt,time,precision:time===null?'DAY':'MINUTE',sunLongitude:longitude,timeBasis:'API_KST_AS_PUBLISHED',historicalCivilTime:'NOT_RESOLVED'};
+  // Preserve the observed provider notation. Never replace this date's 24:00
+  // with this date's 00:00 or infer a UTC/next-day event without a separate policy.
+  return {kind:'solar',term,date:dt,time,precision:time===null?'DAY':'MINUTE',sunLongitude:longitude,timeBasis:'API_KST_AS_PUBLISHED',historicalCivilTime:'NOT_RESOLVED',...(time==='24:00'?{timeNotation:'AS_REPORTED_2400' as const}:{})};
 }
 export function normalizeLunar(item:Item,y:number,m:number,d?:number):LunarRow {
   const sy=integer(item.solYear,1950,2027),sm=integer(item.solMonth,1,12),sd=integer(item.solDay,1,31);

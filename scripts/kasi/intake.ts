@@ -64,6 +64,7 @@ export function inspectLocalResponse(raw: string, scope: IntakeScope) {
     page: Object.freeze({ number: page.page, size: page.size, declaredTotal: page.total, rows: rows.length }),
     expectedScopeRows: expected, completeScope: complete, yearComplete: false,
     minuteRows, dateOnlyRows: minuteRows === null ? null : rows.length - minuteRows,
+    published2400Rows: scope.service === 'solar' ? (rows as SolarRow[]).filter(r => r.timeNotation === 'AS_REPORTED_2400').length : 0,
     recognizedItemFields: Object.freeze(page.schema.itemFields.filter(f => fields.includes(f))),
     unreportedItemFieldCount: page.schema.itemFields.filter(f => !fields.includes(f)).length,
     normalizedRowsSha256: fingerprint(normalized),

@@ -50,7 +50,8 @@ test('collector parses XML/JSON singleton and array and records actual field sch
 test('solar rows retain missing minute precision and reject malformed times/dates/longitude',()=>{
  const base=solar(2026)[0];assert.equal(normalizeSolar(base,2026).time,'01:20');
  for(const kst of [undefined,'','   ']){const r=normalizeSolar({...base,kst},2026);assert.equal(r.time,null);assert.equal(r.precision,'DAY');}
- for(const kst of ['2400','1260','120','01:20','120000'])assert.throws(()=>normalizeSolar({...base,kst},2026),CollectorError);
+ // 2400 is an observed provider notation, preserved separately; other malformed values remain rejected.
+ for(const kst of ['2401','2460','2500','1260','120','01:20','120000'])assert.throws(()=>normalizeSolar({...base,kst},2026),CollectorError);
  for(const extra of [{locdate:'20260230'},{locdate:'20250105'},{sunLongitude:286},{dateName:'unknown'}])assert.throws(()=>normalizeSolar({...base,...extra},2026),CollectorError);
  const rows=solar(2026).map(i=>normalizeSolar(i,2026));validateSolar(rows,2026);
  assert.throws(()=>validateSolar(rows.slice(1),2026),CollectorError);assert.throws(()=>validateSolar([...rows.slice(1),rows[1]],2026),CollectorError);
