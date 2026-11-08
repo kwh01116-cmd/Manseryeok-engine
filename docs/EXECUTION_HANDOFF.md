@@ -4,6 +4,8 @@
 
 ## Latest delivered code / checks
 
+- Owner's Windows local run received a solar1950 success response but normalization stopped at `KST_HHMM`; actual scalar is not yet supplied. Added offline cache-only diagnostic patch at **76a5694fbea64f9cff82e8818972517ca172d137**, Node22 full **366/366 PASS**. It observes allowlisted numeric fields/types without changing the normalizer or calling APIs. Next: inspect `diagnostic-solar-1950.json` from that same PC cache before any schema correction. Native Windows remains unverified.
+
 - New derived task branch `agent/kasi-local-1950-2026-20261109`, from approved base **27903fbc**: Windows x64 portable collection runner, sample gate → 77 years → offline verification/export, hidden process-only key input, explicit daily mode and checkpoint resume. Exact code/test SHA **9ad130513a25ab4b103185bf4c238b20b1f9526b**: Node22.23.3/npm10.9.9 full **362/362 PASS**, Lab Chromium PASS, KASI synthetic Chromium PASS when run alone (one initial concurrent download failure is recorded). Native Windows and real 77year requests remain UNVERIFIED; actual API calls here 0. [Guide](KASI_LOCAL_1950_2026.md) · [evidence](engineering/KASI_LOCAL_1950_2026_EXECUTION_20261109.md).
 
 - Approved branch: `agent/m1-applied-jie-slice1-20261019`; re-read remote HEAD before work. main/foundation remain off-limits.
