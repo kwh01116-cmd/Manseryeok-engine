@@ -14,6 +14,8 @@ Astronomical boundaries, historical Korean civil time, Zi-hour rollover, hidden 
 
 ## KASI 키 입력·JSON 조회 페이지
 
+**1950~2026 전체 로컬 수집:** `start-kasi-collection.cmd`는 두 표본 연도 검증 후 명시적으로 77년 수집을 시작하고, 원문 보존·중단 재개·전체 오프라인 검증/export를 수행한다. Windows x64 휴대용 ZIP에는 공식 체크섬을 확인한 Node와 고정 의존성이 포함된다. [실행 가이드](docs/KASI_LOCAL_1950_2026.md) · [실제 검증과 한계](docs/engineering/KASI_LOCAL_1950_2026_EXECUTION_20261109.md). 실제 77년 수집/Windows 실기는 아직 미검증이며 엔진 지원 연도 확대를 뜻하지 않는다.
+
 Windows에서는 Node.js 22를 설치한 뒤 프로젝트 폴더의 **`start-kasi-web.cmd`를 더블클릭**하면 로컬 조회 페이지가 열린다. 일반 인증키를 페이지에 입력해 절기/1월 음양력 표본의 정규화 JSON을 표시·다운로드한다. 키/응답은 자동 저장하지 않으며 공개 배포가 아니다. 터미널에서는 `npm run kasi:web`로 시작한다. [상세 실행 방법과 검증 한계](docs/KASI_COLLECTOR_GUIDE.md). Windows 배치 실기 검사는 아직 미검증이고 Node 서버/실제 Chromium은 합성 upstream으로 검증했다.
 
 ## Development rule

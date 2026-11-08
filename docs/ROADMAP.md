@@ -1,5 +1,7 @@
 # Manseryeok-engine — engine reliability roadmap
 
+**2026-11-09 local acquisition update:** user requested a 1950–2026 local collection system. Reused the existing Collector in a Windows x64 portable runner, with 1950/2026 complete-year sample gates, explicit 77year request confirmation, resumable private storage and offline export. Code/test **9ad13051**, **362/362 PASS** plus existing Chromium checks; native Windows/live full-range collection unverified. [Guide](KASI_LOCAL_1950_2026.md). Data acquisition is independent of M1 coverage/P2; neither is promoted. Next local unit is the two sample years with actual approved services; no Cloud live diagnosis or bulk requests were executed in preparation.
+
 **Active direction: 2026-10-19 KST.** Engine correctness, provenance, supported coverage, explicit policies and reproducibility take priority until the owner changes direction. EP0–EP4 is **Manseryeok Lab**, an internal calculation/rule verification tool. Preserve its current UI and regression checks. Story App, EP5 UI, characters, webtoon, design concepts and deployment are paused; future product design belongs to a separate Astra task and is not this queue.
 
 Current operational cursor: [EXECUTION_HANDOFF.md](EXECUTION_HANDOFF.md). Stable instructions: [AGENTS.md](../AGENTS.md). Detailed evidence and research gaps: [engine reassessment / G0 report](engineering/ENGINE_REASSESSMENT_AND_G0_EXECUTION_20261019.md).

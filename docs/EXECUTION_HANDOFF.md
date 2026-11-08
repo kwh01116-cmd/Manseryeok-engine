@@ -1,8 +1,10 @@
 # Manseryeok-engine — current execution handoff
 
-**Checkpoint: 2026-11-07 UTC.** Current owner direction: pause Cloud KASI diagnosis; accept future locally obtained data and improve non-engine verification. No API/key use, M1 calculation/year expansion, P2 integration, new Story App/EP5/design, Actions or deployment. Existing EP0–EP4 remains the internal Lab. This checkpoint does not grant new permissions.
+**Checkpoint: 2026-11-09 KST.** Current owner direction: prepare local collection of KASI 1950–2026 data. Cloud API diagnosis remains paused. Existing EP0–EP4 remains the internal Lab. No engine-year expansion/P2/Story/public deployment was authorized by the acquisition task. This checkpoint does not grant new permissions.
 
 ## Latest delivered code / checks
+
+- New derived task branch `agent/kasi-local-1950-2026-20261109`, from approved base **27903fbc**: Windows x64 portable collection runner, sample gate → 77 years → offline verification/export, hidden process-only key input, explicit daily mode and checkpoint resume. Exact code/test SHA **9ad130513a25ab4b103185bf4c238b20b1f9526b**: Node22.23.3/npm10.9.9 full **362/362 PASS**, Lab Chromium PASS, KASI synthetic Chromium PASS when run alone (one initial concurrent download failure is recorded). Native Windows and real 77year requests remain UNVERIFIED; actual API calls here 0. [Guide](KASI_LOCAL_1950_2026.md) · [evidence](engineering/KASI_LOCAL_1950_2026_EXECUTION_20261109.md).
 
 - Approved branch: `agent/m1-applied-jie-slice1-20261019`; re-read remote HEAD before work. main/foundation remain off-limits.
 - Offline response intake introduced at **4026bdb7e8c2ae37d3d943726be29539e872e4b4**, monthly chronology corrected at **52f4ee61126c7462df05ee7089ddaac879b3c6ea** after review reproduced reversed dates being accepted. `kasi:intake` now rejects that case with `INTAKE_SOLAR_ORDER`; merely reordering rows retains the same result. No network/keys/engine imports or automatic integration. [Guide](KASI_LOCAL_INTAKE_GUIDE.md).
