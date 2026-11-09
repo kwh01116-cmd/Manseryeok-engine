@@ -19,14 +19,18 @@ const pickBrowser = () => [
   '/usr/bin/chromium',
 ].find(path => path && existsSync(path));
 
-async function launchBrowser(chrome, profile, origin) {
+async function launchBrowser(chrome, profile, origin, onSpawn) {
   const child = spawn(chrome, [
     '--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
     '--no-first-run', '--no-default-browser-check', '--disable-background-networking',
     '--remote-debugging-port=0', '--user-data-dir=' + profile, origin + '/',
   ], { stdio: 'ignore' });
+  onSpawn(child); // Keep ownership even if CDP startup fails.
+  let spawnError;
+  child.once('error', error => { spawnError=error; });
   let port;
   for (let i = 0; i < 150; i++) {
+    if (spawnError) throw spawnError;
     if (child.exitCode !== null) throw new Error('Chromium exited during startup: ' + child.exitCode);
     try {
       const file = await readFile(join(profile, 'DevToolsActivePort'), 'utf8');
@@ -54,9 +58,13 @@ async function launchBrowser(chrome, profile, origin) {
   let nextId = 0;
   const pending = new Map();
   const networkRequests = [];
+  const inlineResources = [];
   socket.addEventListener('message', event => {
     const message = JSON.parse(event.data);
-    if(message.method==='Network.requestWillBeSent')networkRequests.push(message.params.request.url);
+    if(message.method==='Network.requestWillBeSent') {
+      networkRequests.push(message.params.request.url);
+      if(message.params.request.url.startsWith('data:')) inlineResources.push({type:message.params.type,urlPrefix:message.params.request.url.slice(0,240),initiator:message.params.initiator});
+    }
     if (!message.id) return;
     const item = pending.get(message.id);
     if (!item) return;
@@ -64,6 +72,10 @@ async function launchBrowser(chrome, profile, origin) {
     clearTimeout(item.timeout);
     if (message.error) item.reject(new Error(JSON.stringify(message.error)));
     else item.resolve(message.result ?? {});
+  });
+  socket.addEventListener('close',()=>{
+    for(const item of pending.values()){clearTimeout(item.timeout);item.reject(new Error('CDP closed'));}
+    pending.clear();
   });
   const send = (method, params = {}) => new Promise((resolve, reject) => {
     const id = ++nextId;
@@ -92,7 +104,7 @@ async function launchBrowser(chrome, profile, origin) {
   };
   await send('Page.enable');
   await send('Runtime.enable');
-  return { child, socket, send, evaluate, until, networkRequests };
+  return { child, socket, send, evaluate, until, networkRequests, inlineResources };
 }
 
 async function run() {
@@ -101,13 +113,14 @@ async function run() {
   const profile = await mkdtemp(join(tmpdir(), 'manseryeok-browser-smoke-'));
   const server = makeChartPreviewServer();
   let browser;
+  let failure;
   try {
     await new Promise((resolve, reject) => {
       server.once('error', reject);
       server.listen(0, '127.0.0.1', resolve);
     });
     const origin = 'http://127.0.0.1:' + server.address().port;
-    browser = await launchBrowser(binary, profile, origin);
+    browser = await launchBrowser(binary, profile, origin, child=>{browser={child};});
     const { send, evaluate, until } = browser;
     await send('Network.enable');
     const checkEp3 = async expected => {
@@ -613,17 +626,33 @@ async function run() {
     assert.deepEqual(await evaluate("(async()=>({local:localStorage.length,session:sessionStorage.length,cookie:document.cookie,databases:(await indexedDB.databases()).length,caches:(await caches.keys()).length}))()"),
       {local:0,session:0,cookie:'',databases:0,caches:0});
     assert.ok(browser.networkRequests.length>0);
-    assert.ok(browser.networkRequests.every(url=>url.startsWith(origin+'/')),'No external telemetry or font requests');
-    process.stdout.write('PASS EP4 explicit policy, M2-sourced member/ten-god display, per-candidate source refs, Gregorian/lunar and Lichun, Enter/Space proofs/AX, 320/360/390px, malformed/swapped responses, stale/input invalidation, reduced motion and optional PNG capture\n');
-    process.stdout.write('PASS real-Chromium V0/U1 EP0-EP3 + M1 S4: computed month colors, 8/16 classified glyphs and candidate factRefs, live Gregorian/lunar HTTP, Lichun/Jingzhe, keyboard proof focus and AX table, 320/360/390px, reduced-motion/system-fonts, forged/legacy responses, text-only rendering, stale/date/time/policy invalidation, no browser persistence/external requests\n');
+    const unexpectedRequests=browser.networkRequests.filter(url=>!url.startsWith(origin+'/'));
+    if(unexpectedRequests.length) console.error('Inline resource diagnostic',JSON.stringify(browser.inlineResources));
+    assert.deepEqual(unexpectedRequests.map(url=>{const parsed=new URL(url);return {protocol:parsed.protocol,origin:parsed.origin,path:['http:','https:','chrome:'].includes(parsed.protocol)?parsed.pathname:'[non-HTTP resource]'};}),[], 'No external telemetry or font requests');
+  } catch(error) {
+    failure=error;
+    throw error;
   } finally {
-    if (browser) {
-      try { browser.socket.close(); } catch { /* teardown */ }
-      browser.child.kill();
+    try {
+      if (browser) {
+        // Graceful Chrome shutdown flushes and releases Crashpad profile files.
+        await browser.send?.('Browser.close').catch(()=>{});
+        browser.socket?.close();
+        const stopped=()=>!browser.child.pid || browser.child.exitCode!==null || browser.child.signalCode!==null;
+        for(let i=0;i<50&&!stopped();i++) await pause(100);
+        if(!stopped()) browser.child.kill(); // Only this test's owned child.
+        for(let i=0;i<50&&!stopped();i++) await pause(100);
+        if(!stopped()) throw new Error('Owned Chromium did not exit; profile retained: '+profile);
+      }
+      server.closeAllConnections();
+      await new Promise(resolve => server.close(resolve));
+      await rm(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch(error) {
+      if(failure) throw new AggregateError([failure,error],'Browser check and teardown both failed');
+      throw error;
     }
-    await new Promise(resolve => server.close(resolve));
-    await rm(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   }
+  process.stdout.write('PASS real-Chromium Lab EP0-EP4, M1 S4, responsive/AX/security regressions; owned browser/server closed and unique temporary profile removed\n');
 }
 
 run().catch(error => { console.error(error); process.exitCode = 1; });

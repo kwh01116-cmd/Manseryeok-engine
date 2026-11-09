@@ -22,7 +22,8 @@
     "kasi:web:smoke": "npm run kasi:build --silent && node scripts/kasi/browser-smoke.mjs",
     "kasi:intake": "npm run kasi:build --silent && node .kasi-build/intake.js",
     "m2:audit": "npm run build --silent && node scripts/m2-policy-audit.mjs",
-    "kasi:local": "npm run kasi:build --silent && node .kasi-build/local.js"
+    "kasi:local": "npm run kasi:build --silent && node .kasi-build/local.js",
+    "kasi:research": "npm run build --silent && node scripts/kasi/research.mjs"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
