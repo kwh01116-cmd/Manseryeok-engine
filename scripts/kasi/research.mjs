@@ -204,7 +204,7 @@ export async function loadCandidate(directory, expectedManifestContentSha256) {
   const manifest=JSON.parse(await readFile(join(directory,'manifest.json'),'utf8'));
   check(manifest.schemaVersion==='kasi-private-snapshot-v1' && fingerprint(manifest)===expectedManifestContentSha256,'MANIFEST_DIGEST_CHANGED');
   const values=new Map();
-  const names=['candidate.json','comparisons.json','boundary-requirements.json','soljd-audit.json','source-references.json'];
+  const names=['candidate.json','comparisons.json','boundary-requirements.json','soljd-audit.json','source-references.json','exceptions.json'];
   check(manifest.derived.length===names.length && new Set(manifest.derived.map(f=>f.path)).size===names.length,'DERIVED_FILE_SET');
   for(const file of manifest.derived) {
     check(names.includes(file.path),'DERIVED_PATH');
@@ -242,7 +242,15 @@ export async function runResearch({input,out,expectedExportSha256,from=1950,to=2
   for(const g of candidate.months) {g.sourceRefs=[...new Set(g.sourceDates.map(d=>verified.rowSources.get('lunar:'+d)))];delete g.sourceDates;}
   check(verified.rowSources.size===candidate.dates.length+candidate.events.length,'SOURCE_ROW_COVERAGE');
   const comparisons=await compareFixtures(candidate);
-  const contents={'candidate.json':candidate,'comparisons.json':comparisons,'boundary-requirements.json':candidate.boundaryRequirements,'soljd-audit.json':{scope:'RAW_ONLY_SEPARATE_EXTRACTION',count:verified.solJd.length,rows:verified.solJd},'source-references.json':verified.references};
+  const exceptions={schemaVersion:'kasi-api-exceptions-v1',
+    nullCalendarMonthGanji:candidate.months.flatMap(g=>{
+      const missing=candidate.dates.filter(r=>key(r)===key(g) && r.ganji.month===null);
+      return missing.length?[{month:key(g),leap:g.leap,rows:missing.length,from:missing[0].solarDate,through:missing.at(-1).solarDate,sourceRefs:[...new Set(missing.map(r=>r.sourceRef))],disposition:'PRESERVE_API_NULL_NOT_PILLAR_MONTH'}]:[];
+    }),
+    timeNotationReview:candidate.events.filter(r=>r.timeStatus==='TIME_NOTATION_REVIEW_REQUIRED'),
+    missingApiLongitude:candidate.events.filter(r=>r.sunLongitude===null).map(r=>({date:r.date,term:r.term,sourceRef:r.sourceRef,disposition:'PRESERVE_NULL_EXPECTED_LONGITUDE_SEPARATE'})),
+    partialMonths:candidate.audit.partialMonths,historicalTime:{events:candidate.events.length,status:'NOT_RESOLVED',utcInstantsCreated:0}};
+  const contents={'candidate.json':candidate,'comparisons.json':comparisons,'boundary-requirements.json':candidate.boundaryRequirements,'soljd-audit.json':{scope:'RAW_ONLY_SEPARATE_EXTRACTION',count:verified.solJd.length,rows:verified.solJd},'source-references.json':verified.references,'exceptions.json':exceptions};
   const derived=Object.entries(contents).map(([path,value])=>({path,sha256:sha(JSON.stringify(value,null,2)+'\n'),contentSha256:fingerprint(value)}));
   const rawFiles=verified.files.filter(f=>f.path.startsWith('raw/')), pageFiles=verified.files.filter(f=>f.path.startsWith('pages/'));
   const linkedRaw=new Set(verified.references.map(r=>'raw/'+r.responseSha256+'.body'));

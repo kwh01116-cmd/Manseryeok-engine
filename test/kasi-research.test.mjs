@@ -142,6 +142,12 @@ test('private snapshots reproduce byte-for-byte and a pinned consumer rejects sa
       const before=await inventory(dir), a=await runResearch({...options,out:first}), b=await runResearch({...options,out:second});
       assert.equal(a.manifestContentSha256,b.manifestContentSha256);
       const manifest=JSON.parse(await readFile(join(first,'manifest.json'),'utf8'));
+      const exceptions=JSON.parse(await readFile(join(first,'exceptions.json'),'utf8'));
+      assert.equal(exceptions.nullCalendarMonthGanji.length,1);
+      assert.equal(exceptions.nullCalendarMonthGanji[0].rows,29);
+      assert.equal(exceptions.timeNotationReview.length,1);
+      assert.equal(exceptions.missingApiLongitude.length,24);
+      assert.equal(exceptions.partialMonths.length,2);
       for(const f of manifest.derived) assert.deepEqual(await readFile(join(first,f.path)),await readFile(join(second,f.path)));
       assert.deepEqual(await inventory(dir),before);
       const loaded=await loadCandidate(first,a.manifestContentSha256);
