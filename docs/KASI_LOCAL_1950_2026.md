@@ -1,5 +1,7 @@
 # 로컬 KASI 1950~2026 전체 수집
 
+2026-11-09 Windows 실제 수집에서77년·절기1,848행·음양력28,124행이 COMPLETE를 통과했다. 정규화0.1.2는 API가 윤달에서 실제 빈 문자열로 반환한 월간지를 `ganji.month=null`로 보존하고 `unreportedLeapMonthGanjiRows`로 집계한다. 평달의 빈 월간지·필드 누락·잘못된 간지는 거절한다. 0.1.0·0.1.1 완료 캐시는 버전 라벨 외 원문 재구축 결과 전체가 일치할 때만 재사용한다. [실제 완료 기록과 검증 경계](engineering/KASI_WINDOWS_77_YEAR_COMPLETION_20261109.md).
+
 ## Windows x64 실행 패키지
 
 `Manseryeok-KASI-1950-2026-windows-x64.zip`은 기존 TypeScript Collector로 만든 독립 로컬 실행 패키지다. 공식 배포 Node 22.23.3 Windows x64 실행 파일과 고정 생산 의존성, 빌드된 Collector를 포함한다. Python·Node 별도 설치, 관리자 권한, Git 또는 npm 설치 과정이 필요 없다. 실행 시 인터넷은 KASI 조회에 사용한다. Mac/ARM Windows용 패키지는 아니다.
