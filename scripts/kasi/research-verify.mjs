@@ -9,8 +9,12 @@ const args=process.argv.slice(2);
 assert.equal(args.length,3,'input-directory first-snapshot second-snapshot required');
 const [input,first,second]=args.map(p=>resolve(p));
 const metadata=JSON.parse(await readFile(join(first,'run-metadata.json'),'utf8'));
-const a=await loadCandidate(first,metadata.manifestContentSha256);
-const b=await loadCandidate(second,metadata.manifestContentSha256);
+// Owner-supplied pin for this completed private cohort, not a value trusted from
+// the candidate directory or its adjacent run-metadata file.
+const expectedManifestContentSha256='8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf';
+const a=await loadCandidate(first,expectedManifestContentSha256);
+const b=await loadCandidate(second,expectedManifestContentSha256);
+assert.equal(metadata.manifestContentSha256,expectedManifestContentSha256);
 assert.equal(fingerprint(a.manifest),fingerprint(b.manifest));
 assert.equal(fingerprint(await inventory(input)),a.manifest.inputTreeSha256);
 assert.equal(sha(await readFile(join(input,'export.json'))),'7b5584aca339b85c7e54e953c43b672358bda605a478831b6f260df00472e851');
@@ -47,4 +51,4 @@ for(const row of c.events) {const source=refs.get(row.sourceRef);assert.equal(so
 assert.equal(p.solar.length,25);assert.ok(p.solar.every(r=>r.status==='MATCH'));
 assert.equal(p.dayPillar.MATCH,28124);assert.equal(p.dayPillar.MISMATCH,0);
 assert.equal(p.lunar[0].counts.MATCH,702);assert.equal(p.lunar[1].counts.MATCH,708);
-console.log(JSON.stringify({status:'PRIVATE_DATA_ACCEPTANCE_PASS',testedHead:metadata.head,codeTreeSha256:m.codeTreeSha256,buildTreeSha256:m.buildTreeSha256,manifestContentSha256:metadata.manifestContentSha256,inputTreeUnchanged:true,identicalSnapshots:true,roundTrips:28124,apiRequests:0},null,2));
+console.log(JSON.stringify({status:'PRIVATE_DATA_ACCEPTANCE_PASS',testedHead:metadata.head,codeTreeSha256:m.codeTreeSha256,buildTreeSha256:m.buildTreeSha256,manifestContentSha256:expectedManifestContentSha256,inputTreeUnchanged:true,identicalSnapshots:true,roundTrips:28124,apiRequests:0},null,2));

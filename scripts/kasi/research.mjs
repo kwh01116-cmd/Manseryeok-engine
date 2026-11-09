@@ -11,12 +11,12 @@ import { dayPillarForGregorianDate } from '../../dist/calendar/dayPillar.js';
 import { SEXAGENARY_CYCLE } from '../../dist/domain/sexagenary.js';
 import { KOREA_SOLAR_TERM_EVENTS_2026_2027 as solarFixture } from '../../dist/calendar/koreaSolarTermFixtures.js';
 import { KASI_KOREAN_LUNISOLAR_2025_2027 as lunarFixture } from '../../dist/calendar/koreanLunisolarFixtures.js';
+import { RESEARCH_VERSION, createResearchIndex, loadCandidate } from './candidate.mjs';
+export { RESEARCH_VERSION, createResearchIndex, loadCandidate };
 
-export const RESEARCH_VERSION = 'kasi-api-research-v1';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const check = (ok, code) => { if (!ok) throw new Error(code); };
 const key = r => monthKey(r.lunarYear, r.lunarMonth, r.leap);
-const lunarKey = r => key(r) + ':' + r.lunarDay;
 const codes = ['XIAOHAN','DAHAN','LICHUN','YUSHUI','JINGZHE','CHUNFEN','QINGMING','GUYU','LIXIA','XIAOMAN','MANGZHONG','XIAZHI','XIAOSHU','DASHU','LIQIU','CHUSHU','BAILU','QIUFEN','HANLU','SHUANGJIANG','LIDONG','XIAOXUE','DAXUE','DONGZHI'];
 const cycle = SEXAGENARY_CYCLE.map(p => p.stem + p.branch);
 const koStems = '갑을병정무기경신임계', koBranches = '자축인묘진사오미신유술해';
@@ -29,34 +29,6 @@ function hanGanji(text) {
   const han = candidate.stem + candidate.branch;
   check(!m[3] || m[3] === han, 'GANJI_SCRIPT_MISMATCH');
   return han;
-}
-
-/** A finite observed-date index, not an annual-TXT corpus or Four Pillars resolver. */
-export function createResearchIndex(rows) {
-  check(Array.isArray(rows) && rows.length > 0, 'INDEX_EMPTY');
-  const bySolar = new Map(), byLunar = new Map();
-  let previous;
-  for (const r of rows) {
-    day(r.solarDate);
-    check(!bySolar.has(r.solarDate) && !byLunar.has(lunarKey(r)), 'INDEX_DUPLICATE');
-    check(!previous || day(r.solarDate) === day(previous.solarDate)+1, 'INDEX_GAP');
-    const copy = structuredClone(r);
-    bySolar.set(r.solarDate, copy); byLunar.set(lunarKey(r), copy); previous = r;
-  }
-  const from = rows[0].solarDate, until = civil(day(rows.at(-1).solarDate)+1);
-  return Object.freeze({
-    from, until,
-    fromGregorianDate(date) {
-      day(date);
-      const value = bySolar.get(date);
-      return value ? {status:'OK',value:structuredClone(value)} : {status:'OUT_OF_COVERAGE'};
-    },
-    fromLunarDate(date) {
-      check(date && Number.isInteger(date.lunarYear) && date.lunarYear>0 && Number.isInteger(date.lunarMonth) && date.lunarMonth>=1 && date.lunarMonth<=12 && Number.isInteger(date.lunarDay) && date.lunarDay>=1 && date.lunarDay<=30 && typeof date.leap==='boolean', 'LUNAR_DATE_SHAPE');
-      const value = byLunar.get(lunarKey(date));
-      return value ? {status:'OK',value:value.solarDate} : {status:'OUT_OF_OBSERVED_COVERAGE'};
-    },
-  });
 }
 
 export function compileRows(years, {from, to}) {
@@ -196,27 +168,6 @@ export async function compareFixtures(candidate) {
     return {corpusId:corpus.corpusId,counts,details,months};
   });
   return {scope:'FIXTURE_OVERLAP_ONLY_NOT_FULL_EXTERNAL_CERTIFICATION',solar:solarResults,lunar:lunarResults,dayPillar:candidate.dayComparisons,roundTrips:{status:'MATCH',count:candidate.audit.roundTrips,meaning:'INTERNAL_LOOKUP_REVERSIBILITY_ONLY'},outsideSupport:[index.fromGregorianDate(civil(day(index.from)-1)),index.fromGregorianDate(index.until)]};
-}
-
-/** Pin the separately recorded manifest digest before reading a saved candidate. */
-export async function loadCandidate(directory, expectedManifestContentSha256) {
-  check(/^[a-f0-9]{64}$/.test(expectedManifestContentSha256),'EXPECTED_MANIFEST_SHA_REQUIRED');
-  const manifest=JSON.parse(await readFile(join(directory,'manifest.json'),'utf8'));
-  check(manifest.schemaVersion==='kasi-private-snapshot-v1' && fingerprint(manifest)===expectedManifestContentSha256,'MANIFEST_DIGEST_CHANGED');
-  const values=new Map();
-  const names=['candidate.json','comparisons.json','boundary-requirements.json','soljd-audit.json','source-references.json','exceptions.json'];
-  check(manifest.derived.length===names.length && new Set(manifest.derived.map(f=>f.path)).size===names.length,'DERIVED_FILE_SET');
-  for(const file of manifest.derived) {
-    check(names.includes(file.path),'DERIVED_PATH');
-    const bytes=await readFile(join(directory,file.path));
-    check(sha(bytes)===file.sha256,'DERIVED_FILE_DIGEST_CHANGED');
-    const value=JSON.parse(bytes);check(fingerprint(value)===file.contentSha256,'DERIVED_CONTENT_DIGEST_CHANGED');values.set(file.path,value);
-  }
-  const candidate=values.get('candidate.json');
-  check(candidate.schemaVersion===RESEARCH_VERSION && candidate.status==='RESEARCH_ONLY' && candidate.support.engineSupportPromotion===false && candidate.support.g1P2Promotion===false,'CANDIDATE_CONTRACT');
-  const index=createResearchIndex(candidate.dates);
-  check(index.from===candidate.support.from && index.until===candidate.support.untilExclusive,'CANDIDATE_COVERAGE');
-  return {manifest,candidate,index,comparisons:values.get('comparisons.json')};
 }
 
 function git(args) {return execFileSync('git',['-c','safe.directory='+root.replaceAll('\\','/'),'-c','core.quotepath=false',...args],{cwd:root,encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();}
