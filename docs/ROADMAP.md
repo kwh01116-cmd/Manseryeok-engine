@@ -1,5 +1,13 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-10 current checkpoint — collected data preserved, research adapter executed
+
+1950~2026 실제 수집은 완료됐다.77년/절기1,848행/음양력28,124행, 원문·receipt1,001개씩을 로컬 원문부터 오프라인 재검증했다. 코드 **fe84ab44ec4cd0efd27fb57c480a2b422d9decbc**에서 전 기간 연결·예외 목록·관측 범위 날짜 인덱스·출처/지문을 가진 비공개 후보2개가 재현됐다. 추가 KASI 요청0건, 원본 전체 지문 불변. 전체 **390/390**, KASI 웹/Lab 실제 Chrome 각각 PASS. 과거380개 실행 기록은 별도 보존한다. [연구용 실행 가이드](KASI_RESEARCH_ADAPTER.md) · [실행·실패·제한](engineering/KASI_RESEARCH_ADAPTER_EXECUTION_20261110.md).
+
+윤달 월간지 null816행/28그룹,24:00 검토1행, 황경 미제공1,392행, 양끝 부분 월2개를 보존했다. 역사 시간/UTC/권리/TXT 원본 인증과 G1-P2 NO-GO는 열려 있다. 기본 엔진 지원연도와 production/Lab/G0 진입점은 그대로다. 다음 최소 통합 단위는 **2026년만 기존 계산기에 API 절기 후보를 주입하는 별도 연구 통합 테스트**다. 추가 수집을 먼저 반복하지 않는다. 이후 필요 시 boundary-requirements에 근거해1949말/2027초 최소 증거만 별도 검토한다.
+
+아래 수집 준비·미실행 문구는 각 당시의 역사적 계획/실행 기록이며 현재 완료 상태는 위 체크포인트를 따른다.
+
 **2026-11-09 local acquisition update:** user requested a 1950–2026 local collection system. Reused the existing Collector in a Windows x64 portable runner, with 1950/2026 complete-year sample gates, explicit 77year request confirmation, resumable private storage and offline export. Code/test **9ad13051**, **362/362 PASS** plus existing Chromium checks; native Windows/live full-range collection unverified. [Guide](KASI_LOCAL_1950_2026.md). Data acquisition is independent of M1 coverage/P2; neither is promoted. Next local unit is the two sample years with actual approved services; no Cloud live diagnosis or bulk requests were executed in preparation.
 
 **Active direction: 2026-10-19 KST.** Engine correctness, provenance, supported coverage, explicit policies and reproducibility take priority until the owner changes direction. EP0–EP4 is **Manseryeok Lab**, an internal calculation/rule verification tool. Preserve its current UI and regression checks. Story App, EP5 UI, characters, webtoon, design concepts and deployment are paused; future product design belongs to a separate Astra task and is not this queue.
