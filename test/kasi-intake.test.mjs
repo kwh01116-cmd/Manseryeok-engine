@@ -5,6 +5,7 @@ import { mkdtemp, writeFile, readFile, rm, symlink, readdir } from 'node:fs/prom
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 import { inspectLocalResponse, inspectLocalFile, parseIntakeArgs } from '../.kasi-build/intake.js';
 import { TERMS } from '../.kasi-build/schema.js';
 const solarScope = { service: 'solar', year: 2026 };
@@ -132,7 +133,7 @@ test('offline CLI has stable exits and suppresses source/path/parser errors and 
   const marker = 'SYNTHETIC_NOT_A_REAL_KEY', file = join(root, marker + '.json');
   const blocker = join(root, 'no-network.mjs');
   await writeFile(blocker, "import net from 'node:net'; net.Socket.prototype.connect=function(){throw Error('NETWORK_MUST_NOT_BE_USED')}; globalThis.fetch=()=>{throw Error('NETWORK_MUST_NOT_BE_USED')};");
-  const args = ['--import', blocker, '.kasi-build/intake.js', '--file', file, '--service', 'solar', '--year', '2026'];
+  const args = ['--import', pathToFileURL(blocker).href, '.kasi-build/intake.js', '--file', file, '--service', 'solar', '--year', '2026'];
   const env = { ...process.env, KASI_API_KEY: marker, KASI_SPCDE_API_KEY: marker, KASI_LUNAR_API_KEY: marker };
   for (const [source, exit, status] of [[body(terms()), 0, 'STRUCTURALLY_COMPLETE_SCOPE'], [body([]), 2, 'EMPTY_RESPONSE'],
     [body(terms().map(({ kst, ...r }) => r)), 2, 'DATE_ONLY_SCOPE'], ['bad ' + marker, 1, 'REJECTED']]) {
@@ -146,7 +147,7 @@ test('offline CLI has stable exits and suppresses source/path/parser errors and 
 test('monthly offline CLI distinguishes reordered rows from invalid chronological dates', async () => temporary(async root => {
   const file = join(root, 'synthetic-month.json'), blocker = join(root, 'no-network.mjs');
   await writeFile(blocker, "import net from 'node:net'; net.Socket.prototype.connect=function(){throw Error('NETWORK_MUST_NOT_BE_USED')}; globalThis.fetch=()=>{throw Error('NETWORK_MUST_NOT_BE_USED')};");
-  const args = ['--import', blocker, '.kasi-build/intake.js', '--file', file, '--service', 'solar', '--year', '2026', '--month', '1'];
+  const args = ['--import', pathToFileURL(blocker).href, '.kasi-build/intake.js', '--file', file, '--service', 'solar', '--year', '2026', '--month', '1'];
   const env = { ...process.env };
   for (const key of Object.keys(env)) if (/KASI.*KEY/.test(key)) delete env[key];
   const rows = terms().slice(0, 2), reversedDates = rows.map((row, index) => ({ ...row, locdate: rows[1 - index].locdate }));

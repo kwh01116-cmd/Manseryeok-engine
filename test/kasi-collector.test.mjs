@@ -126,9 +126,10 @@ test('raw, normalized, and receipt fingerprint mutation fails closed',async()=>{
    await reject(()=>c.validateYear(2026));
  });
 });
-test('atomic store uses private permissions, no leftover temp files, and serial process locks',async()=>setup(async store=>{
+test('atomic store uses platform permission modes, no leftover temp files, and serial process locks',async()=>setup(async store=>{
  const path=join(store.root,'value.json');await atomicWrite(path,'old');await atomicWrite(path,'new');assert.equal(await readFile(path,'utf8'),'new');
- assert.equal((await stat(path)).mode&0o777,0o600);assert.ok(!(await readdir(store.root)).some(s=>s.includes('.tmp-')));
+ // Node does not distinguish POSIX owner/group permission bits on Windows.
+ assert.equal((await stat(path)).mode&0o777,process.platform==='win32'?0o666:0o600);assert.ok(!(await readdir(store.root)).some(s=>s.includes('.tmp-')));
  await store.lock(async()=>{await reject(()=>store.lock(async()=>{}),'COLLECTOR_BUSY');});
  await store.json('collector.lock',{pid:2147483647});await store.lock(async()=>{}); // stale crash lock recovered
 }));
