@@ -10,6 +10,7 @@ import { mkdtemp, readFile, rm, mkdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { makeChartPreviewServer } from './chart-preview-web.mjs';
+import { allowedSmokeRequest } from './browser-request-policy.mjs';
 
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const pickBrowser = () => [
@@ -19,11 +20,11 @@ const pickBrowser = () => [
   '/usr/bin/chromium',
 ].find(path => path && existsSync(path));
 
-async function launchBrowser(chrome, profile, origin, onSpawn) {
+async function launchBrowser(chrome, profile, onSpawn) {
   const child = spawn(chrome, [
     '--headless=new', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
     '--no-first-run', '--no-default-browser-check', '--disable-background-networking',
-    '--remote-debugging-port=0', '--user-data-dir=' + profile, origin + '/',
+    '--remote-debugging-port=0', '--user-data-dir=' + profile, 'about:blank',
   ], { stdio: 'ignore' });
   onSpawn(child); // Keep ownership even if CDP startup fails.
   let spawnError;
@@ -58,12 +59,10 @@ async function launchBrowser(chrome, profile, origin, onSpawn) {
   let nextId = 0;
   const pending = new Map();
   const networkRequests = [];
-  const inlineResources = [];
   socket.addEventListener('message', event => {
     const message = JSON.parse(event.data);
     if(message.method==='Network.requestWillBeSent') {
-      networkRequests.push(message.params.request.url);
-      if(message.params.request.url.startsWith('data:')) inlineResources.push({type:message.params.type,urlPrefix:message.params.request.url.slice(0,240),initiator:message.params.initiator});
+      networkRequests.push({url:message.params.request.url,type:message.params.type,initiator:message.params.initiator});
     }
     if (!message.id) return;
     const item = pending.get(message.id);
@@ -104,7 +103,7 @@ async function launchBrowser(chrome, profile, origin, onSpawn) {
   };
   await send('Page.enable');
   await send('Runtime.enable');
-  return { child, socket, send, evaluate, until, networkRequests, inlineResources };
+  return { child, socket, send, evaluate, until, networkRequests };
 }
 
 async function run() {
@@ -120,9 +119,11 @@ async function run() {
       server.listen(0, '127.0.0.1', resolve);
     });
     const origin = 'http://127.0.0.1:' + server.address().port;
-    browser = await launchBrowser(binary, profile, origin, child=>{browser={child};});
+    browser = await launchBrowser(binary, profile, child=>{browser={child};});
     const { send, evaluate, until } = browser;
     await send('Network.enable');
+    await send('Network.setCacheDisabled',{cacheDisabled:true});
+    await send('Page.navigate',{url:origin+'/'});
     const checkEp3 = async expected => {
       const chapters=await evaluate(`Array.from(document.querySelectorAll('[data-chapter="ep3"]'),section=>({
         index:Number(section.dataset.candidateIndex),text:section.textContent,
@@ -626,9 +627,9 @@ async function run() {
     assert.deepEqual(await evaluate("(async()=>({local:localStorage.length,session:sessionStorage.length,cookie:document.cookie,databases:(await indexedDB.databases()).length,caches:(await caches.keys()).length}))()"),
       {local:0,session:0,cookie:'',databases:0,caches:0});
     assert.ok(browser.networkRequests.length>0);
-    const unexpectedRequests=browser.networkRequests.filter(url=>!url.startsWith(origin+'/'));
-    if(unexpectedRequests.length) console.error('Inline resource diagnostic',JSON.stringify(browser.inlineResources));
-    assert.deepEqual(unexpectedRequests.map(url=>{const parsed=new URL(url);return {protocol:parsed.protocol,origin:parsed.origin,path:['http:','https:','chrome:'].includes(parsed.protocol)?parsed.pathname:'[non-HTTP resource]'};}),[], 'No external telemetry or font requests');
+    const unexpectedRequests=browser.networkRequests.filter(request=>!allowedSmokeRequest(request,origin));
+    assert.deepEqual(unexpectedRequests.map(({url})=>{const parsed=new URL(url);return {protocol:parsed.protocol,origin:parsed.origin,path:['http:','https:','chrome:'].includes(parsed.protocol)?parsed.pathname:'[non-HTTP resource]'};}),[], 'No external telemetry/fonts or unrecognized inline resources');
+    process.stdout.write('Verified inline native clock resources: '+browser.networkRequests.filter(r=>r.url.startsWith('data:')).length+'\n');
   } catch(error) {
     failure=error;
     throw error;

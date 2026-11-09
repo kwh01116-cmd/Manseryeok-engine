@@ -147,7 +147,11 @@ test('private snapshots reproduce byte-for-byte and a pinned consumer rejects sa
       assert.equal(exceptions.nullCalendarMonthGanji[0].rows,29);
       assert.equal(exceptions.timeNotationReview.length,1);
       assert.equal(exceptions.missingApiLongitude.length,24);
-      assert.equal(exceptions.partialMonths.length,2);
+      // 12 days before the observed first day + 365 days = 13 complete 29-day months.
+      assert.equal(exceptions.partialMonths.length,1);
+      const generated=JSON.parse(await readFile(join(first,'candidate.json'),'utf8'));
+      assert.equal(generated.months.at(-1).partial,false);
+      assert.equal(generated.months.at(-1).lastLunarDay,29);
       for(const f of manifest.derived) assert.deepEqual(await readFile(join(first,f.path)),await readFile(join(second,f.path)));
       assert.deepEqual(await inventory(dir),before);
       const loaded=await loadCandidate(first,a.manifestContentSha256);
