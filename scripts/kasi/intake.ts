@@ -65,6 +65,7 @@ export function inspectLocalResponse(raw: string, scope: IntakeScope) {
     expectedScopeRows: expected, completeScope: complete, yearComplete: false,
     minuteRows, dateOnlyRows: minuteRows === null ? null : rows.length - minuteRows,
     published2400Rows: scope.service === 'solar' ? (rows as SolarRow[]).filter(r => r.timeNotation === 'AS_REPORTED_2400').length : 0,
+    unreportedLeapMonthGanjiRows: scope.service === 'lunar' ? (rows as LunarRow[]).filter(r => r.ganji.month === null).length : 0,
     recognizedItemFields: Object.freeze(page.schema.itemFields.filter(f => fields.includes(f))),
     unreportedItemFieldCount: page.schema.itemFields.filter(f => !fields.includes(f)).length,
     normalizedRowsSha256: fingerprint(normalized),

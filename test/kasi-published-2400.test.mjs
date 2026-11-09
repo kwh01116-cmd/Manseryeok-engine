@@ -82,9 +82,9 @@ test('the published2400 exception does not admit malformed hours, minutes or inp
   }
 });
 
-test('a full synthetic year preserves raw2400 evidence and validates offline with normalizer0.1.1',async()=>setup(async({store,collector,offline,offlineCalls})=>{
+test('a full synthetic year preserves raw2400 evidence and validates offline with normalizer0.1.2',async()=>setup(async({store,collector,offline,offlineCalls})=>{
   const year=await collector.collectYear(1950);
-  assert.equal(year.normalizerVersion,'0.1.1');assert.equal(year.status,'COMPLETE');
+  assert.equal(year.normalizerVersion,'0.1.2');assert.equal(year.status,'COMPLETE');
   assert.equal(year.solar.length,24);assert.equal(year.lunar.length,365);
   const row=year.solar.find(item=>item.term==='대한');
   assert.equal(row.date,'1950-01-20');assert.equal(row.time,'24:00');
@@ -118,14 +118,16 @@ test('literal reference comparison keeps next-day00:00 distinct from the publish
   assert.equal(compareReference([row],[],{surface:'KASI_ANNUAL_TXT',solar:[{term:'대한',date:'1950-01-20',time:'24:00'}],lunar:[]}).status,'MATCH');
 });
 
-test('ordinary0.1.0 cache revalidates as0.1.1 without rewriting its original year file',async()=>setup(async({store,collector,offline,offlineCalls})=>{
+test('ordinary0.1.0 and0.1.1 caches revalidate as0.1.2 without rewriting original year files',async()=>setup(async({store,collector,offline,offlineCalls})=>{
   const current=await collector.collectYear(1950);
-  await store.json('years/1950.json',{...current,normalizerVersion:'0.1.0'});
-  const path=join(store.root,'years/1950.json'),before=await readFile(path,'utf8');
-  const rebuilt=await offline.validateYear(1950);
-  assert.equal(rebuilt.normalizerVersion,'0.1.1');assert.deepEqual(rebuilt,current);
-  assert.equal(await readFile(path,'utf8'),before);
-  assert.equal((await store.read('years/1950.json')).normalizerVersion,'0.1.0');
+  for(const normalizerVersion of ['0.1.0','0.1.1']){
+    await store.json('years/1950.json',{...current,normalizerVersion});
+    const path=join(store.root,'years/1950.json'),before=await readFile(path,'utf8');
+    const rebuilt=await offline.validateYear(1950);
+    assert.equal(rebuilt.normalizerVersion,'0.1.2');assert.deepEqual(rebuilt,current);
+    assert.equal(await readFile(path,'utf8'),before);
+    assert.equal((await store.read('years/1950.json')).normalizerVersion,normalizerVersion);
+  }
   assert.equal(offlineCalls.length,0);
 },false));
 

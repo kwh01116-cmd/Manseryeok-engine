@@ -55,7 +55,7 @@ export function parsePage(raw:string):Page {
 }
 export const TERMS = ['소한','대한','입춘','우수','경칩','춘분','청명','곡우','입하','소만','망종','하지','소서','대서','입추','처서','백로','추분','한로','상강','입동','소설','대설','동지'] as const;
 export interface SolarRow {kind:'solar';term:string;date:string;time:string|null;precision:'MINUTE'|'DAY';sunLongitude:number|null;timeBasis:'API_KST_AS_PUBLISHED';historicalCivilTime:'NOT_RESOLVED';timeNotation?:'AS_REPORTED_2400';}
-export interface LunarRow {kind:'lunar';solarDate:string;lunarYear:number;lunarMonth:number;lunarDay:number;leap:boolean;monthDays:number;ganji:{year:string;month:string;day:string};}
+export interface LunarRow {kind:'lunar';solarDate:string;lunarYear:number;lunarMonth:number;lunarDay:number;leap:boolean;monthDays:number;ganji:{year:string;month:string|null;day:string};}
 export function normalizeSolar(item:Item,y:number):SolarRow {
   const loc=scalar(item.locdate).trim();if(!/^\d{8}$/.test(loc))fail('SOLAR_DATE');
   const dt=date(loc.slice(0,4)+'-'+loc.slice(4,6)+'-'+loc.slice(6));
@@ -79,8 +79,11 @@ export function normalizeLunar(item:Item,y:number,m:number,d?:number):LunarRow {
   if(sy!==y||sm!==m||(d!==undefined&&sd!==d))fail('LUNAR_QUERY_RANGE');
   const lunarYear=integer(item.lunYear,1949,2027),lunarMonth=integer(item.lunMonth,1,12),lunarDay=integer(item.lunDay,1,30),monthDays=integer(item.lunNday,29,30);
   const leap=scalar(item.lunLeapmonth).trim();if(!['평','윤'].includes(leap)||lunarDay>monthDays||![sy-1,sy].includes(lunarYear))fail('LUNAR_VALUES');
-  const ganji={year:scalar(item.lunSecha).trim(),month:scalar(item.lunWolgeon).trim(),day:scalar(item.lunIljin).trim()};
-  if(Object.values(ganji).some(s=>!(/^[갑을병정무기경신임계][자축인묘진사오미신유술해](?:\([甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥]\))?$/.test(s)||/^[甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥]$/.test(s))))fail('GANJI');
+  const monthGanji=scalar(item.lunWolgeon).trim();
+  // The observed API leaves this field empty on leap-month dates. Preserve
+  // the unreported value explicitly, without deriving a month ganji.
+  const ganji={year:scalar(item.lunSecha).trim(),month:leap==='윤'&&monthGanji===''?null:monthGanji,day:scalar(item.lunIljin).trim()};
+  if(Object.values(ganji).some(s=>s!==null&&!(/^[갑을병정무기경신임계][자축인묘진사오미신유술해](?:\([甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥]\))?$/.test(s)||/^[甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥]$/.test(s))))fail('GANJI');
   return {kind:'lunar',solarDate:iso(sy,sm,sd),lunarYear,lunarMonth,lunarDay,leap:leap==='윤',monthDays,ganji};
 }
 export function validateSolar(rows:SolarRow[],y:number):void {

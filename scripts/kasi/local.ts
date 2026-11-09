@@ -55,6 +55,7 @@ export async function runLocal(options:RunOptions):Promise<Record<string,unknown
     const result={schemaVersion:'kasi-local-summary-v1',status:'COMPLETE',from:1950,to:2026,yearCount:data.length,
       solarCount,lunarCount,lunarMode:collector.lunarMode,requestedFormat:collector.format,
       published2400Rows:data.reduce((n,d)=>n+d.solar.filter(r=>r.timeNotation==='AS_REPORTED_2400').length,0),
+        unreportedLeapMonthGanjiRows:data.reduce((n,d)=>n+d.lunar.filter(r=>r.ganji.month===null).length,0),
       externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',
       guarantee:'STRUCTURE_COMPLETENESS_AND_LOCAL_HASH_CONSISTENCY_ONLY'};
     await store.json('summary.json',result);onProgress({stage:'COMPLETE',completed:77,total:77});return result;

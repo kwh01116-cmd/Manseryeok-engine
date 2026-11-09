@@ -109,7 +109,7 @@ export class Store {
     try{await handle.writeFile(JSON.stringify({pid:process.pid}));return await action();}finally{await handle.close();await unlink(path).catch(()=>{});}
   }
 }
-export interface YearData {schemaVersion:'kasi-collector-year-v1';year:number;status:'COMPLETE';normalizerVersion:'0.1.1';lunarMode:'monthly'|'daily';requestedFormat:Format;solar:SolarRow[];lunar:LunarRow[];normalizedSha256:string;sources:Receipt[];externalOriginalVerification:'UNVERIFIED';rightsReview:'UNVERIFIED';}
+export interface YearData {schemaVersion:'kasi-collector-year-v1';year:number;status:'COMPLETE';normalizerVersion:'0.1.2';lunarMode:'monthly'|'daily';requestedFormat:Format;solar:SolarRow[];lunar:LunarRow[];normalizedSha256:string;sources:Receipt[];externalOriginalVerification:'UNVERIFIED';rightsReview:'UNVERIFIED';}
 export type CollectorStorage=Pick<Store,'load'|'save'|'json'|'read'>;
 /** One web request only. No file, browser storage, shared cache or key persistence. */
 export class EphemeralStore implements CollectorStorage {
@@ -151,7 +151,7 @@ export class Collector {
       for(const d of days){const r=await this.query('lunar',y,m,d,offline),rows=r.items.map(i=>normalizeLunar(i,y,m,d));validateLunar(rows,y,m,d);lunar.push(...rows);sources.push(...r.sources);}
     }
     validateLunar(lunar,y);solar.sort((a,b)=>a.date.localeCompare(b.date));lunar.sort((a,b)=>a.solarDate.localeCompare(b.solarDate));
-    return {schemaVersion:'kasi-collector-year-v1',year:y,status:'COMPLETE',normalizerVersion:'0.1.1',lunarMode:this.lunarMode,requestedFormat:this.format,solar,lunar,normalizedSha256:fingerprint({solar,lunar}),sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED'};
+    return {schemaVersion:'kasi-collector-year-v1',year:y,status:'COMPLETE',normalizerVersion:'0.1.2',lunarMode:this.lunarMode,requestedFormat:this.format,solar,lunar,normalizedSha256:fingerprint({solar,lunar}),sources,externalOriginalVerification:'UNVERIFIED',rightsReview:'UNVERIFIED'};
   }
   async collectYear(y:number):Promise<YearData>{
     if(await this.store.read(`years/${y}.json`)!==undefined)return this.validateYear(y);
@@ -161,8 +161,9 @@ export class Collector {
     const saved=await this.store.read(`years/${y}.json`);if(saved===undefined)fail('INCOMPLETE_YEAR');
     const rebuilt=await this.buildYear(y,true);
     const version=object(saved).normalizerVersion;
-    if(version!=='0.1.0'&&version!=='0.1.1')fail('YEAR_NORMALIZER_VERSION');
+    if(version!=='0.1.0'&&version!=='0.1.1'&&version!=='0.1.2')fail('YEAR_NORMALIZER_VERSION');
     if(version==='0.1.0'&&rebuilt.solar.some(r=>r.timeNotation==='AS_REPORTED_2400'))fail('LEGACY_YEAR_HAS_NEW_TIME_NOTATION');
+    if(version!=='0.1.2'&&rebuilt.lunar.some(r=>r.ganji.month===null))fail('LEGACY_YEAR_HAS_NEW_GANJI_NULL');
     // Legacy compatibility is limited to a version label with otherwise identical
     // raw-rebuilt values, hashes and receipts. Existing files are never rewritten.
     if(fingerprint(saved)!==fingerprint({...rebuilt,normalizerVersion:version}))fail('YEAR_DATA_OR_FINGERPRINT_CHANGED');return rebuilt;
