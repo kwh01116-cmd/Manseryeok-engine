@@ -12,13 +12,14 @@ import { SOLAR_TERM_CODES, SOLAR_TERM_DEFINITIONS } from '../../dist/calendar/so
 import { gregorianDayNumber, monthKey } from '../../dist/calendar/koreanLunisolarValidation.js';
 
 export const STAGE_A_PROFILE_ID='kasi-api-2026-local-v1';
+export const MODERN_PROFILE_ID='kasi-api-1989-2026-local-v1';
 export const MODERN_CLOCK_POLICY_ID='KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1';
 export const BASELINE_MANIFEST_SHA256='8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf';
 export class LocalChartError extends Error {
   constructor(code){super(code);this.name='LocalChartError';this.code=code;}
 }
 const requireValue=(condition,code)=>{if(!condition)throw new LocalChartError(code);};
-const profiles=new Map([[STAGE_A_PROFILE_ID,{from:2026,to:2026,phase:'A'}]]);
+const profiles=new Map([[STAGE_A_PROFILE_ID,{from:2026,to:2026,phase:'A'}],[MODERN_PROFILE_ID,{from:1989,to:2026,phase:'B'}]]);
 const frozen=value=>{if(value&&typeof value==='object'&&!Object.isFrozen(value)){Object.values(value).forEach(frozen);Object.freeze(value);}return value;};
 const lunarKey=r=>monthKey(r.lunarYear,r.lunarMonth,r.leap);
 const sourceId=row=>'KASI_OPENAPI_RESPONSE:'+row.sourceRef+':'+row.date+':'+row.termCode;

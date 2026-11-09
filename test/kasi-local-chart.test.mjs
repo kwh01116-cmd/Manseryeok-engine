@@ -5,8 +5,8 @@ import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fingerprint } from '../.kasi-build/schema.js';
-import { createLocalChartProfile, loadLocalChartProfile, STAGE_A_PROFILE_ID, MODERN_CLOCK_POLICY_ID } from '../scripts/kasi/local-chart.mjs';
-import { syntheticLocalChartCandidate, sealSyntheticLocalChartCandidate, writeSyntheticLocalChartCandidate, chartRequest, chartSemantics } from './fixtures/kasi-local-chart-synthetic.mjs';
+import { createLocalChartProfile, loadLocalChartProfile, STAGE_A_PROFILE_ID, MODERN_PROFILE_ID, MODERN_CLOCK_POLICY_ID } from '../scripts/kasi/local-chart.mjs';
+import { syntheticLocalChartCandidate, syntheticModernLocalChartCandidate, sealSyntheticLocalChartCandidate, writeSyntheticLocalChartCandidate, chartRequest, chartSemantics } from './fixtures/kasi-local-chart-synthetic.mjs';
 
 const profileFor = fixture => createLocalChartProfile(fixture.loaded,{profileId:STAGE_A_PROFILE_ID,expectedManifestSha256:fixture.expectedManifestSha256});
 function rejected(action) {
@@ -171,3 +171,82 @@ test('pinned disk loading rejects absent candidates and data/manifest tampering 
   manifest.counts.solar=999;await writeFile(manifestPath,JSON.stringify(manifest));
   await assert.rejects(()=>loadLocalChartProfile(options));
 }));
+
+let modernSynthetic;
+const modernPacket=()=>modernSynthetic??=syntheticModernLocalChartCandidate();
+const modernProfile=()=>{const fixture=modernPacket();return createLocalChartProfile(fixture.loaded,{profileId:MODERN_PROFILE_ID,expectedManifestSha256:fixture.expectedManifestSha256});};
+
+test('modern profile checks converted civil birth scope rather than lunar-year labels or auxiliary guard dates',()=>{
+  const fixture=modernPacket(), profile=modernProfile(), first=fixture.loaded.candidate.dates[0], last=fixture.loaded.candidate.dates.at(-1);
+  assert.equal(fixture.loaded.candidate.dates.length,13879);
+  assert.deepEqual(profile.metadata.birthRange,{fromInclusive:'1989-01-01',untilExclusive:'2027-01-01'});
+  assert.equal(first.lunarYear,1988);
+  const fromLunar=profile.calculate(lunarRequest(first));
+  assert.equal(fromLunar.status,'OK');assert.equal(fromLunar.input.gregorianDate,'1989-01-01');
+  assert.deepEqual(chartSemantics(fromLunar),chartSemantics(profile.calculate(chartRequest('1989-01-01'))));
+  for(const date of ['1988-12-05','1988-12-31','2027-01-01']) assert.equal(profile.calculate(chartRequest(date)).status,'OUT_OF_PROFILE_COVERAGE');
+  assert.equal(last.lunarYear,2026);
+  const beyondObserved=profile.calculate(lunarRequest({...last,lunarDay:last.lunarDay+1}));
+  assert.equal(beyondObserved.status,'OUT_OF_OBSERVED_COVERAGE','a 2026 lunar label must not authorize a 2027 civil date');
+  const year1989=profile.eventsForYear(1989),year2026=profile.eventsForYear(2026);
+  assert.equal(year1989.events.length,25);assert.equal(year2026.events.length,25);
+  assert.equal(year1989.events[0].term,'DAXUE');assert.ok(year1989.events[0].displayedDateTime.startsWith('1988-12-'));
+  assert.ok(year2026.events.every(e=>!e.displayedDateTime.startsWith('2027-')),'future Jie is not required for 2026 births');
+});
+
+test('modern range requires the actual 1988 December guard and rejects an attempted DST-period guard',()=>{
+  const fixture=modernPacket();
+  const withoutGuard=structuredClone(fixture.loaded.candidate);withoutGuard.events=withoutGuard.events.filter(e=>!e.date.startsWith('1988-'));
+  const absent=sealSyntheticLocalChartCandidate(withoutGuard,fixture.loaded.sources);
+  assert.throws(()=>createLocalChartProfile(absent.loaded,{profileId:MODERN_PROFILE_ID,expectedManifestSha256:absent.expectedManifestSha256}),/DAXUE_GUARD/);
+  const earlier=structuredClone(fixture.loaded.candidate),guard=earlier.events.find(e=>e.date.startsWith('1988-'));
+  guard.date='1988-10-08';guard.computationalCivilDateTime=guard.date+'T'+guard.time;
+  const unresolved=sealSyntheticLocalChartCandidate(earlier,fixture.loaded.sources);
+  // December-identity validation rejects this before it could reach clock adaptation.
+  assert.throws(()=>createLocalChartProfile(unresolved.loaded,{profileId:MODERN_PROFILE_ID,expectedManifestSha256:unresolved.expectedManifestSha256}),/DAXUE_GUARD_MUST_BE_DECEMBER|CLOCK_POLICY_EVENT_RANGE/);
+});
+
+test('modern last-day Zi rollover may select 2027 day pillar without expanding birth or lunar-conversion support',()=>{
+  const profile=modernProfile(), request=chartRequest('2026-12-31','23:30','ZI_START','SELECTED_DAY_PILLAR');
+  const result=profile.calculate(request);
+  assert.equal(result.status,'OK');assert.equal(result.input.gregorianDate,'2026-12-31');assert.equal(result.chart.effectiveDayDate,'2027-01-01');
+  assert.equal(profile.calculate({...request,date:'2027-01-01'}).status,'OUT_OF_PROFILE_COVERAGE');
+  const row=modernPacket().loaded.candidate.dates.at(-1), lunar=profile.calculate(lunarRequest(row,'23:30',request.policies));
+  assert.deepEqual(chartSemantics(result),chartSemantics(lunar));
+  assert.ok(result.evidence.appliedJie.every(e=>e.original.date<'2027-01-01'));
+});
+
+test('modern and 2026 profiles alternate years without mixing calendar or applied-event sources',()=>{
+  const fixture=modernPacket(), modern=modernProfile();
+  const stageA=createLocalChartProfile(fixture.loaded,{profileId:STAGE_A_PROFILE_ID,expectedManifestSha256:fixture.expectedManifestSha256});
+  const target=chartRequest('2026-03-05','01:20'), original=modern.calculate(target), expected=chartSemantics(original);
+  assert.deepEqual(chartSemantics(stageA.calculate(target)),expected);
+  assert.notEqual(stageA.metadata.id,modern.metadata.id);
+  for(const year of [1989,2000,2025,1996,2026,1989]) {
+    const result=modern.calculate(chartRequest(year+'-06-01'));
+    assert.equal(result.evidence.dateConversion.source.query.year,year);
+    assert.equal(result.evidence.yearBoundary.source.query.year,year);
+    for(const event of result.evidence.appliedJie) {
+      assert.equal(event.source.query.year,year);
+      assert.ok(event.original.date.startsWith(year+'-'));
+    }
+    assert.deepEqual(chartSemantics(stageA.calculate(target)),expected);
+  }
+  original.evidence.appliedJie[0].original.date='1900-01-01';
+  original.evidence.dateConversion.source.query.year=1900;
+  assert.deepEqual(chartSemantics(modern.calculate(target)),expected);
+  assert.equal(modern.calculate(target).evidence.dateConversion.source.query.year,2026);
+  assert.deepEqual(modern.calculate(target),modern.calculate(target),'same input/policies/pinned packet must reproduce the full DTO');
+});
+
+test('modern synthetic calendar keeps leap/regular identity and invalid lunar days explicit',()=>{
+  const fixture=modernPacket(), profile=modernProfile(), leap=fixture.loaded.candidate.dates.find(r=>r.leap && r.lunarYear===2000);
+  const selected=leap??fixture.loaded.candidate.dates.find(r=>r.leap && r.lunarYear>=1989);
+  const regular=fixture.loaded.candidate.dates.find(r=>r.lunarYear===selected.lunarYear && r.lunarMonth===selected.lunarMonth && r.lunarDay===selected.lunarDay && !r.leap);
+  const leapResult=profile.calculate(lunarRequest(selected)), regularResult=profile.calculate(lunarRequest(regular));
+  assert.equal(leapResult.status,'OK');assert.equal(regularResult.status,'OK');assert.notEqual(leapResult.input.gregorianDate,regularResult.input.gregorianDate);
+  const shortMonth=fixture.loaded.candidate.months.find(m=>m.lunarYear===2000 && m.monthDays===29 && !m.leap);
+  assert.equal(profile.calculate(lunarRequest({...shortMonth,lunarDay:30})).status,'INVALID_LUNAR_DATE');
+  assert.equal(profile.calculate(lunarRequest({lunarYear:2000,lunarMonth:1,lunarDay:1,leap:true})).status,'INVALID_LUNAR_DATE');
+  rejected(()=>profile.calculate({...lunarRequest(selected),lunarDate:{...selected,leap:undefined}}));
+});

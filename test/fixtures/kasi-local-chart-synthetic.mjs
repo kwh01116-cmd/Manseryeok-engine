@@ -44,10 +44,56 @@ export function syntheticLocalChartCandidate({lichunTime='01:20',dropGuard=false
   return sealSyntheticLocalChartCandidate(candidate,sources);
 }
 
+/**
+ * A finite synthetic calendar for range/provenance tests, not a Korean calendar model.
+ * Alternating 30/29-day months plus seven 30-day leap months per 19 years keep
+ * the lunar-year labels inside the normalizer's civilYear-1/civilYear contract.
+ */
+export function syntheticModernLocalChartCandidate() {
+  const sources=[],events=[],dates=[],months=[];
+  for(let year=1988;year<=2026;year++) {
+    const items=TERMS.map((dateName,i)=>({dateName,locdate:`${year}${String(Math.floor(i/2)+1).padStart(2,'0')}${i%2?'20':'05'}`,kst:'0120'}));
+    const receipt=source({service:'solar',year,page:1,format:'xml'},items);sources.push(receipt);
+    for(let i=0;i<items.length;i++) {
+      if(year===1988 && SOLAR_TERM_CODES[i]!=='DAXUE')continue;
+      const row=normalizeSolar(items[i],year);
+      events.push({...row,termCode:SOLAR_TERM_CODES[i],expectedLongitude:(285+i*15)%360,expectedLongitudeEvidence:'DERIVED_FROM_TERM_RULE_NOT_API',timePolicyVersion:'preserve-api-published-minute-v1',timeStatus:'PUBLISHED_WALL_MINUTE_ONLY',computationalCivilDateTime:row.date+'T'+row.time,utcInstant:null,sourceRef:receipt.id});
+    }
+  }
+  let lunarYear=1988,lunarMonth=1,lunarDay=1,leap=false;
+  const rawByCivilMonth=new Map(), leapYears=new Set([3,6,8,11,14,17,19]);
+  const length=()=>leap?30:lunarMonth%2?30:29;
+  for(let n=day('1988-02-10');n<day('2027-01-01');n++) {
+    const solarDate=civil(n),[sy,sm,sd]=solarDate.split('-').map(Number);
+    if(sy>=1989) {
+      const p=dayPillarForGregorianDate(solarDate), key=sy+':'+sm;
+      if(!rawByCivilMonth.has(key))rawByCivilMonth.set(key,[]);
+      rawByCivilMonth.get(key).push({solYear:sy,solMonth:sm,solDay:sd,lunYear:lunarYear,lunMonth:lunarMonth,lunDay:lunarDay,lunNday:length(),lunLeapmonth:leap?'윤':'평',lunSecha:'갑자(甲子)',lunWolgeon:leap?'':'갑자(甲子)',lunIljin:p.stem+p.branch});
+    }
+    if(++lunarDay>length()) {
+      lunarDay=1;
+      if(lunarMonth===6 && !leap && leapYears.has((lunarYear-1988)%19+1))leap=true;
+      else {leap=false;if(++lunarMonth===13){lunarMonth=1;lunarYear++;}}
+    }
+  }
+  for(const items of rawByCivilMonth.values()) {
+    const year=items[0].solYear,month=items[0].solMonth,receipt=source({service:'lunar',year,month,page:1,format:'xml'},items);sources.push(receipt);
+    dates.push(...items.map(r=>({...normalizeLunar(r,year,month),sourceRef:receipt.id})));
+  }
+  for(const r of dates) {
+    const k=monthKey(r.lunarYear,r.lunarMonth,r.leap),previous=months.at(-1);
+    if(!previous || monthKey(previous.lunarYear,previous.lunarMonth,previous.leap)!==k) months.push({lunarYear:r.lunarYear,lunarMonth:r.lunarMonth,leap:r.leap,monthDays:r.monthDays,start:{date:civil(day(r.solarDate)-r.lunarDay+1),evidence:r.lunarDay===1?'API_OBSERVED_DAY_1':'ARITHMETIC_BACK_CALCULATION_NOT_OBSERVED'},observedFrom:r.solarDate,observedUntil:r.solarDate,firstLunarDay:r.lunarDay,lastLunarDay:r.lunarDay,observedDays:0,partial:false,sourceRefs:[]});
+    const g=months.at(-1);g.observedUntil=r.solarDate;g.lastLunarDay=r.lunarDay;g.observedDays++;if(!g.sourceRefs.includes(r.sourceRef))g.sourceRefs.push(r.sourceRef);
+  }
+  for(const g of months)g.partial=g.firstLunarDay!==1 || g.lastLunarDay!==g.monthDays;
+  const candidate={schemaVersion:'kasi-api-research-v1',evidenceProfile:'KASI_OPENAPI_RESPONSE_LOCAL_HASH_CHECKED_NOT_ANNUAL_TXT',rawValidation:'ACTUAL_LOCAL_RAW_RECEIPT_YEAR_EXPORT_REBUILD',normalizerVersion:'0.1.2',status:'RESEARCH_ONLY',support:{from:'1989-01-01',untilExclusive:'2027-01-01',scope:'CIVIL_DATE_LOOKUP_ONLY',engineSupportPromotion:false,g1P2Promotion:false},events,dates,months,audit:{years:38,solar:events.length,lunar:dates.length},boundaryRequirements:{synthetic:true},dayComparisons:{MATCH:dates.length,MISMATCH:0,UNSUPPORTED:0,details:[]}};
+  return sealSyntheticLocalChartCandidate(candidate,sources);
+}
+
 /** A changed synthetic dataset gets its own caller-held pin; this never bypasses a real-data pin. */
 export function sealSyntheticLocalChartCandidate(candidate,sources) {
   const contents={'candidate.json':candidate,'comparisons.json':{synthetic:true},'boundary-requirements.json':candidate.boundaryRequirements,'soljd-audit.json':{synthetic:true,rows:[]},'source-references.json':sources,'exceptions.json':{synthetic:true}};
-  const manifest={schemaVersion:'kasi-private-snapshot-v1',compilerVersion:'kasi-api-research-v1',normalizerVersion:'0.1.2',inputExportSha256:sha('generated-synthetic-export'),range:{from:candidate.support.from,untilExclusive:candidate.support.untilExclusive},counts:{years:1,solar:candidate.events.length,lunar:candidate.dates.length,raw:sources.length,pages:sources.length},apiRequests:0,sourceChanged:false,derived:Object.entries(contents).map(([path,value])=>({path,sha256:sha(bytes(value)),contentSha256:fingerprint(value)}))};
+  const manifest={schemaVersion:'kasi-private-snapshot-v1',compilerVersion:'kasi-api-research-v1',normalizerVersion:'0.1.2',inputExportSha256:sha('generated-synthetic-export'),range:{from:candidate.support.from,untilExclusive:candidate.support.untilExclusive},counts:{years:candidate.audit.years,solar:candidate.events.length,lunar:candidate.dates.length,raw:sources.length,pages:sources.length},apiRequests:0,sourceChanged:false,derived:Object.entries(contents).map(([path,value])=>({path,sha256:sha(bytes(value)),contentSha256:fingerprint(value)}))};
   return {loaded:{candidate,manifest,sources,index:createResearchIndex(candidate.dates)},expectedManifestSha256:fingerprint(manifest),contents};
 }
 
