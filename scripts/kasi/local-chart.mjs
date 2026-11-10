@@ -26,6 +26,21 @@ const sourceId=row=>'KASI_OPENAPI_RESPONSE:'+row.sourceRef+':'+row.date+':'+row.
 // In-process execution continuity only; serialized hashes are not source authentication.
 // Weak keys retain neither birth inputs nor results beyond the caller's object lifetime.
 const issuedResults=new WeakMap();
+const issuedProfiles=new WeakMap(), issuedEventContexts=new WeakSet();
+/** Read-only, already pinned modern events. No new collection or year promotion. */
+export function getLocalChartEventContext(profile) {
+  const entry=issuedProfiles.get(profile);
+  requireValue(entry,'LOCAL_CHART_CONTEXT_PROFILE_REQUIRED');
+  if(!entry.value){entry.value=entry.build();issuedEventContexts.add(entry.value);}
+  return entry.value;
+}
+export function verifyLocalChartEventContext(context,{calculation}={}) {
+  requireValue(issuedEventContexts.has(context) && Object.isFrozen(context),'LOCAL_CHART_EVENT_CONTEXT_REQUIRED');
+  if(calculation){
+    requireValue(calculation.profile?.id===context.profile.id && calculation.dataset?.candidateManifestContentSha256===context.dataset.candidateManifestContentSha256,'LOCAL_CHART_CONTEXT_MISMATCH');
+  }
+  return context;
+}
 export function verifyLocalChartResult(result,{request}={}) {
   const receipt=issuedResults.get(result);
   requireValue(receipt && receipt.contentSha256===fingerprint(result),'LOCAL_CHART_EXECUTION_CHANGED_OR_UNISSUED');
@@ -121,7 +136,15 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     issuedResults.set(result,{contentSha256:fingerprint(result),requestSha256:fingerprint(request)});
     return result;
   };
-  return Object.freeze({metadata,calculate,eventsForYear(year){const value=eventsByYear.get(year);requireValue(value,'YEAR_OUT_OF_PROFILE');return structuredClone(value);}});
+  const profile=Object.freeze({metadata,calculate,eventsForYear(year){const value=eventsByYear.get(year);requireValue(value,'YEAR_OUT_OF_PROFILE');return structuredClone(value);}});
+  issuedProfiles.set(profile,{build(){
+    const events=new Map();for(const value of eventsByYear.values())for(const event of value.events)events.set(event.sourceIds[0],event);
+    return frozen({schemaVersion:'kasi-local-issued-event-context-v1',profile:metadata,dataset,
+      events:[...events.values()].sort((a,b)=>a.displayedDateTime.localeCompare(b.displayedDateTime)),
+      evidence:[...evidenceById.entries()].map(([id,value])=>({id,...value})),
+      scope:'EXISTING_MODERN_PROFILE_EVENTS_AND_PRIOR_DAXUE_ONLY_NOT_NEW_BIRTH_SUPPORT'});
+  }});
+  return profile;
 }
 
 export async function loadLocalChartProfile({directory,expectedManifestSha256,profileId}) {

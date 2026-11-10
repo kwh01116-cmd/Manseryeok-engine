@@ -25,7 +25,8 @@
     "kasi:local": "npm run kasi:build --silent && node .kasi-build/local.js",
     "kasi:research": "npm run build --silent && node scripts/kasi/research.mjs",
     "kasi:chart": "npm run build --silent && node scripts/kasi/local-chart.mjs",
-    "kasi:explain": "npm run build --silent && node scripts/kasi/local-explain.mjs"
+    "kasi:explain": "npm run build --silent && node scripts/kasi/local-explain.mjs",
+    "kasi:luck": "npm run build --silent && node scripts/kasi/local-luck.mjs"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
