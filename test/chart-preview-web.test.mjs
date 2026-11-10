@@ -10,23 +10,77 @@ const sample = {
   timeBasis: 'KOREAN_CIVIL_TIME', dayRollover: 'CIVIL_MIDNIGHT',
   hourStemReference: 'SELECTED_DAY_PILLAR',
 };
+function announcedOrigin(stdout) {
+  // stdout chunks need not end at a line or even at the end of the port.
+  const found = /(?:^|\n)V0 chart preview: http:\/\/127\.0\.0\.1:(\d+)\r?\n/.exec(stdout);
+  if (!found) return null;
+  const port = Number(found[1]);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid announced local HTTP port');
+  return 'http://127.0.0.1:' + port;
+}
+async function stopOwnedChild(child) {
+  if (!child.pid || child.exitCode !== null || child.signalCode !== null) return;
+  await new Promise((resolve, reject) => {
+    const done = error => {
+      clearTimeout(timer);
+      child.off('exit', exited);
+      child.off('error', failed);
+      error ? reject(error) : resolve();
+    };
+    const exited = () => done();
+    const failed = () => done(new Error('Owned local HTTP server termination failed'));
+    const timer = setTimeout(() => done(new Error('Owned local HTTP server did not exit within cleanup bound')), 5000);
+    child.once('exit', exited);
+    child.once('error', failed);
+    child.kill(); // Only the child created by this test.
+  });
+}
 async function start() {
   const child = spawn(process.execPath, [script], { env: { ...process.env, PORT: '0' }, stdio: ['ignore', 'pipe', 'pipe'] });
-  const origin = await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('Local HTTP startup timeout')), 8000);
-    let stdout = '', stderr = '';
-    child.stdout.on('data', chunk => {
-      stdout += chunk.toString();
-      const found = /http:\/\/127\.0\.0\.1:\d+/.exec(stdout);
-      if (found) { clearTimeout(timer); resolve(found[0]); }
+  try {
+    const origin = await new Promise((resolve, reject) => {
+      let stdout = '', stderrPresent = false;
+      const finish = (error, value) => {
+        clearTimeout(timer);
+        child.stdout.off('data', onStdout);
+        child.stderr.off('data', onStderr);
+        child.off('exit', onExit);
+        child.off('error', onError);
+        error ? reject(error) : resolve(value);
+      };
+      const onStdout = chunk => {
+        stdout += chunk.toString();
+        try { const origin = announcedOrigin(stdout); if (origin) finish(null, origin); }
+        catch (error) { finish(error); }
+      };
+      const onStderr = () => { stderrPresent = true; };
+      const onExit = code => finish(new Error('Server exited during startup ' + code + (stderrPresent ? ' (stderr present)' : '')));
+      const onError = () => finish(new Error('Local HTTP server spawn failed'));
+      const timer = setTimeout(() => finish(new Error('Local HTTP startup timeout')), 8000);
+      child.stdout.on('data', onStdout);
+      child.stderr.on('data', onStderr);
+      child.once('exit', onExit);
+      child.once('error', onError);
     });
-    child.stderr.on('data', chunk => { stderr += chunk.toString(); });
-    child.once('exit', code => { clearTimeout(timer); reject(new Error('Server exited ' + code + ': ' + stderr)); });
-  });
-  return { origin, stop: () => child.kill() };
+    return { origin, stop: () => stopOwnedChild(child) };
+  } catch (error) {
+    try { await stopOwnedChild(child); }
+    catch (cleanupError) { throw new AggregateError([error, cleanupError], 'Local HTTP startup and owned cleanup failed'); }
+    throw error;
+  }
+}
+async function localFetch(origin, path, options) {
+  try { return await fetch(origin + path, options); }
+  catch (error) {
+    const value = error?.cause?.code ?? error?.code;
+    const code = typeof value === 'string' && /^[A-Z][A-Z0-9_]{0,63}$/.test(value)
+      ? value : error?.cause?.message === 'bad port' ? 'BAD_PORT' : 'UNKNOWN_FETCH_CAUSE';
+    // Keep diagnostics useful without echoing request bodies, birth data or keys.
+    throw new Error('Local HTTP fetch failed at ' + origin + ' (cause=' + code + ')');
+  }
 }
 async function submit(origin, data) {
-  const r = await fetch(origin + '/api/preview', {
+  const r = await localFetch(origin, '/api/preview', {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data),
   });
   return { status: r.status, body: await r.json() };
@@ -34,7 +88,7 @@ async function submit(origin, data) {
 test('V0 page loads and real solar/lunar chart outputs match', async () => {
   const server = await start();
   try {
-    const page = await fetch(server.origin + '/');
+    const page = await localFetch(server.origin, '/');
     assert.equal(page.status, 200);
     const html = await page.text();
     assert.match(html, /나의 사주 원국/);
@@ -63,7 +117,7 @@ test('V0 page loads and real solar/lunar chart outputs match', async () => {
     assert.equal(a.body.story.candidates[0].beats[2].branch,a.body.preview.candidates[0].month.branch);
     assert.equal(a.body.story.candidates[0].beats[2].factRef,'preview.candidates[0].month.branch');
     assert.deepEqual(a.body.story.candidates[0].beats[2],b.body.story.candidates[0].beats[2]);
-  } finally { server.stop(); }
+  } finally { await server.stop(); }
 });
 test('V0 web preserves Lichun candidates and rejects invalid policies', async () => {
   const server = await start();
@@ -86,7 +140,7 @@ test('V0 web preserves Lichun candidates and rejects invalid policies', async ()
     assert.equal(bad.body.status, 'ERROR');
     const extra = await submit(server.origin, { ...sample, unexpected: 'x' });
     assert.equal(extra.status, 422);
-  } finally { server.stop(); }
+  } finally { await server.stop(); }
 });
 
 test('V0 HTTP distinguishes out-of-coverage dates from invalid birth dates', async () => {
@@ -104,7 +158,7 @@ test('V0 HTTP distinguishes out-of-coverage dates from invalid birth dates', asy
     const invalid = await submit(server.origin, { ...sample, date: '2027-02-30' });
     assert.equal(invalid.status, 422);
     assert.equal(invalid.body.status, 'ERROR');
-  } finally { server.stop(); }
+  } finally { await server.stop(); }
 });
 
 test('S4: actual HTTP returns Gregorian/lunar equivalent event evidence and separate Lichun cards', async () => {
@@ -126,13 +180,13 @@ test('S4: actual HTTP returns Gregorian/lunar equivalent event evidence and sepa
         assert.deepEqual(beat.activeSince.sourceIds,['KR-KASI-CALENDAR-DATA']);
       }
     }
-  } finally { server.stop(); }
+  } finally { await server.stop(); }
 });
 
 test('EP3: HTML embeds only existing public classification tables and HTTP returns eight candidate facts',async()=>{
   const server=await start();
   try{
-    const page=await fetch(server.origin+'/'),html=await page.text();
+    const page=await localFetch(server.origin,'/'),html=await page.text();
     assert.equal(page.headers.get('cache-control'),'no-store');
     const embedded=/<script id="nature-lookups" type="application\/json">([^<]+)<\/script>/.exec(html);
     assert.ok(embedded);
@@ -157,7 +211,7 @@ test('EP3: HTML embeds only existing public classification tables and HTTP retur
         }
       }
     }
-  }finally{server.stop();}
+  }finally{await server.stop();}
 });
 
 test('EP4 HTTP is opt-in with a required supported policy and keeps the unselected V0 result unchanged',async()=>{
@@ -177,5 +231,16 @@ test('EP4 HTTP is opt-in with a required supported policy and keeps the unselect
     assert.deepEqual(a.body.ep4,b.body.ep4);assert.equal(a.body.ep4.candidates.length,2);
     const outside=await submit(server.origin,{...sample,date:'2028-01-01',hiddenStemPolicyId:policyId});
     assert.equal(outside.status,422);assert.equal(Object.hasOwn(outside.body,'ep4'),false);
-  }finally{server.stop();}
+  }finally{await server.stop();}
+});
+
+test('HTTP readiness waits for a complete announcement and validates the entire port', () => {
+  const complete = 'V0 chart preview: http://127.0.0.1:54321\n';
+  for (let end = 0; end < complete.length; end++) assert.equal(announcedOrigin(complete.slice(0, end)), null, 'a partial stdout chunk cannot announce readiness');
+  assert.equal(announcedOrigin(complete), 'http://127.0.0.1:54321');
+  assert.equal(announcedOrigin('other startup line\n' + complete.replace('\n', '\r\n')), 'http://127.0.0.1:54321');
+  for (const port of [1, 65535]) assert.equal(announcedOrigin('V0 chart preview: http://127.0.0.1:' + port + '\n'), 'http://127.0.0.1:' + port);
+  for (const port of [0, 65536, 99999999999999999]) assert.throws(() => announcedOrigin('V0 chart preview: http://127.0.0.1:' + port + '\n'), /Invalid announced/);
+  assert.equal(announcedOrigin('unrelated http://127.0.0.1:54321\n'), null);
+  assert.equal(announcedOrigin('V0 chart preview: http://127.0.0.1:54'), null);
 });
