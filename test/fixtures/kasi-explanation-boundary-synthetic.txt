@@ -1,0 +1,96 @@
+명식 기초 분석/설명
+양력 환산 2026-02-05 01:20 · GREGORIAN
+명식 프로필: kasi-api-2026-local-v1
+데이터셋: kasi-openapi-local-f594b8640f3fdd49
+manifest: f594b8640f3fdd49c97ded9b8e1d81e98acd1828d5b2dd63e25a836c3910622c
+시계 정책: KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1
+M2 정책 묶음: m2-basic-classification-local-v1
+hiddenStems: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 (원래 규칙 버전 1.0.0)
+branchRelations: M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1 (원래 규칙 버전 별도 필드 없음)
+triadMembership: M2-TRIAD-FOUR-SANHE-FOUR-SANHUI-MEMBERSHIP-V1 (원래 규칙 버전 별도 필드 없음)
+twelveGrowth: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 (원래 규칙 버전 1.0.0)
+선택한 전통 규칙의 분류를 설명합니다. 신강약·격국·용신·합화·길흉·성격·직업·재물·건강·연애 예측과 대운·세운은 계산하지 않습니다. 단일 후보도 발표 분 비교 정책 안의 결과이며, 원전 판본·이용권·예측 효력이나 외부 정확성 인증을 뜻하지 않습니다.
+
+후보 1 [chart.candidates[0]]
+연주 乙巳(을사) · 월주 己丑(기축) · 일주 庚戌(경술) · 시주 丁丑(정축). 적용 정책: 일주 교체 CIVIL_MIDNIGHT, 시주 일간 참조 SELECTED_DAY_PILLAR. 절입의 표시 분에 해당해 두 상관 후보를 각각 제공합니다. 이 후보는 경계 전 분류입니다. 이 후보의 월주에 적용한 절입은 소한 2026-01-05T01:20입니다.
+  근거: chart.candidates[0]#summary | 규칙: kasi-local-m2-composition-v1 | 정책: m2-basic-classification-local-v1
+이 후보의 일간은 庚입니다. 기존 천간 분류에서 양·금(金)에 해당하며, 십성을 분류할 때 이 일간을 기준으로 삼습니다.
+  근거: chart.candidates[0]#day-master | 규칙: src/domain/stems.ts#STEM_NATURE
+연주의 천간은 乙(음·목(木)), 지지는 巳(음·대표 오행 화(火))입니다.
+  근거: chart.candidates[0]#year-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+연주 천간 乙의 분류는 일간 庚 기준 정재(正財)입니다.
+  근거: chart.candidates[0]#year-visible-ten-god | 규칙: M0-RULE-TEN-GODS-ELEMENT-RELATION
+선택한 지장간 정책에서 연주 지지 巳의 장간은 다음과 같습니다: 丙(본기, 칠살) · 庚(기타 장간, 비견) · 戊(기타 장간, 편인). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[0]#year-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+연주 지지 巳의 십이운성은 일간 庚 기준 장생(長生)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[0]#year-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+월주의 천간은 己(음·토(土)), 지지는 丑(음·대표 오행 토(土))입니다.
+  근거: chart.candidates[0]#month-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+월주 천간 己의 분류는 일간 庚 기준 정인(正印)입니다.
+  근거: chart.candidates[0]#month-visible-ten-god | 규칙: M0-RULE-TEN-GODS-ELEMENT-RELATION
+선택한 지장간 정책에서 월주 지지 丑의 장간은 다음과 같습니다: 己(본기, 정인) · 癸(기타 장간, 상관) · 辛(기타 장간, 겁재). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[0]#month-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+월주 지지 丑의 십이운성은 일간 庚 기준 묘(墓)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[0]#month-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+일주의 천간은 庚(양·금(金)), 지지는 戌(양·대표 오행 토(土))입니다.
+  근거: chart.candidates[0]#day-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+선택한 지장간 정책에서 일주 지지 戌의 장간은 다음과 같습니다: 戊(본기, 편인) · 辛(기타 장간, 겁재) · 丁(기타 장간, 정관). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[0]#day-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+일주 지지 戌의 십이운성은 일간 庚 기준 쇠(衰)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[0]#day-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+시주의 천간은 丁(음·화(火)), 지지는 丑(음·대표 오행 토(土))입니다.
+  근거: chart.candidates[0]#hour-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+시주 천간 丁의 분류는 일간 庚 기준 정관(正官)입니다.
+  근거: chart.candidates[0]#hour-visible-ten-god | 규칙: M0-RULE-TEN-GODS-ELEMENT-RELATION
+선택한 지장간 정책에서 시주 지지 丑의 장간은 다음과 같습니다: 己(본기, 정인) · 癸(기타 장간, 상관) · 辛(기타 장간, 겁재). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[0]#hour-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+시주 지지 丑의 십이운성은 일간 庚 기준 묘(墓)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[0]#hour-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+월주 丑·일주 戌 조합은 현재 정책의 형 분류에 해당합니다. 방향은 월주→일주입니다.
+  근거: chart.candidates[0]#relation-0 | 규칙: M2-RULE-BRANCH-XING-001 | 정책: M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1 | 출처: CLASSIC-YUANHAI-ZIPING-XIANGXING
+일주 戌·시주 丑 조합은 현재 정책의 형 분류에 해당합니다. 방향은 시주→일주입니다.
+  근거: chart.candidates[0]#relation-1 | 규칙: M2-RULE-BRANCH-XING-001 | 정책: M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1 | 출처: CLASSIC-YUANHAI-ZIPING-XIANGXING
+금(金) 삼합의 관측 구성원: 巳(연주) · 丑(월주·시주). 서로 다른 두 구성원이 있습니다: 생지·묘지 구성원(반합 분류 제외). 없는 구성원은 酉입니다. 구성원 존재만 분류하며 합화나 국의 성립을 판정하지 않습니다.
+  근거: chart.candidates[0]#triad-0 | 규칙: M2-RULE-TRIAD-SANHE-MEMBERS-001 | 정책: M2-TRIAD-FOUR-SANHE-FOUR-SANHUI-MEMBERSHIP-V1 | 출처: CLASSIC-YUANHAI-ZIPING-LUN-SHIERZHI-SANHE, MODERN-CLARIFYHK-SANHE-PARTIAL-MEMBER-CATEGORIES-2026
+
+후보 2 [chart.candidates[1]]
+연주 丙午(병오) · 월주 庚寅(경인) · 일주 庚戌(경술) · 시주 丁丑(정축). 적용 정책: 일주 교체 CIVIL_MIDNIGHT, 시주 일간 참조 SELECTED_DAY_PILLAR. 절입의 표시 분에 해당해 두 상관 후보를 각각 제공합니다. 이 후보는 경계 후 분류입니다. 이 후보의 월주에 적용한 절입은 입춘 2026-02-05T01:20입니다.
+  근거: chart.candidates[1]#summary | 규칙: kasi-local-m2-composition-v1 | 정책: m2-basic-classification-local-v1
+이 후보의 일간은 庚입니다. 기존 천간 분류에서 양·금(金)에 해당하며, 십성을 분류할 때 이 일간을 기준으로 삼습니다.
+  근거: chart.candidates[1]#day-master | 규칙: src/domain/stems.ts#STEM_NATURE
+연주의 천간은 丙(양·화(火)), 지지는 午(양·대표 오행 화(火))입니다.
+  근거: chart.candidates[1]#year-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+연주 천간 丙의 분류는 일간 庚 기준 칠살(七殺)입니다.
+  근거: chart.candidates[1]#year-visible-ten-god | 규칙: M0-RULE-TEN-GODS-ELEMENT-RELATION
+선택한 지장간 정책에서 연주 지지 午의 장간은 다음과 같습니다: 丁(본기, 정관) · 己(기타 장간, 정인). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[1]#year-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+연주 지지 午의 십이운성은 일간 庚 기준 목욕(沐浴)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[1]#year-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+월주의 천간은 庚(양·금(金)), 지지는 寅(양·대표 오행 목(木))입니다.
+  근거: chart.candidates[1]#month-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+월주 천간 庚의 분류는 일간 庚 기준 비견(比肩)입니다.
+  근거: chart.candidates[1]#month-visible-ten-god | 규칙: M0-RULE-TEN-GODS-ELEMENT-RELATION
+선택한 지장간 정책에서 월주 지지 寅의 장간은 다음과 같습니다: 甲(본기, 편재) · 丙(기타 장간, 칠살) · 戊(기타 장간, 편인). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[1]#month-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+월주 지지 寅의 십이운성은 일간 庚 기준 절(絕)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[1]#month-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+일주의 천간은 庚(양·금(金)), 지지는 戌(양·대표 오행 토(土))입니다.
+  근거: chart.candidates[1]#day-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+선택한 지장간 정책에서 일주 지지 戌의 장간은 다음과 같습니다: 戊(본기, 편인) · 辛(기타 장간, 겁재) · 丁(기타 장간, 정관). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[1]#day-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+일주 지지 戌의 십이운성은 일간 庚 기준 쇠(衰)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[1]#day-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+시주의 천간은 丁(음·화(火)), 지지는 丑(음·대표 오행 토(土))입니다.
+  근거: chart.candidates[1]#hour-nature | 규칙: src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE
+시주 천간 丁의 분류는 일간 庚 기준 정관(正官)입니다.
+  근거: chart.candidates[1]#hour-visible-ten-god | 규칙: M0-RULE-TEN-GODS-ELEMENT-RELATION
+선택한 지장간 정책에서 시주 지지 丑의 장간은 다음과 같습니다: 己(본기, 정인) · 癸(기타 장간, 상관) · 辛(기타 장간, 겁재). 본기를 먼저 표시하는 순서이며, 장간별 십성도 일간 庚 기준으로 구분합니다.
+  근거: chart.candidates[1]#hour-hidden-stems | 규칙: M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1 | 출처: CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026
+시주 지지 丑의 십이운성은 일간 庚 기준 묘(墓)입니다. 선택한 양순음역·화토 동궁 정책의 단계 이름입니다.
+  근거: chart.candidates[1]#hour-twelve-growth | 규칙: M2-RULE-TWELVE-GROWTH-STAGES-001 | 정책: M2-12GROWTH-YANG-FWD-YIN-REV-FIRE-EARTH-V1 | 출처: MODERN-CLARIFYHK-12GROWTH-YANG-FWD-YIN-REV-2026, MODERN-MINGYUNHUB-12GROWTH-ANCHORS-2026
+연주 午·시주 丑 조합은 현재 정책의 해 분류에 해당합니다.
+  근거: chart.candidates[1]#relation-0 | 규칙: M2-RULE-BRANCH-LIUHAI-001 | 정책: M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1 | 출처: CLASSIC-YUANHAI-ZIPING-XIANGCHUAN
+일주 戌·시주 丑 조합은 현재 정책의 형 분류에 해당합니다. 방향은 시주→일주입니다.
+  근거: chart.candidates[1]#relation-1 | 규칙: M2-RULE-BRANCH-XING-001 | 정책: M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1 | 출처: CLASSIC-YUANHAI-ZIPING-XIANGXING
+화(火) 삼합의 관측 구성원: 寅(월주) · 午(연주) · 戌(일주). 서로 다른 세 구성원이 모두 있습니다. 구성원 존재만 분류하며 합화나 국의 성립을 판정하지 않습니다.
+  근거: chart.candidates[1]#triad-0 | 규칙: M2-RULE-TRIAD-SANHE-MEMBERS-001 | 정책: M2-TRIAD-FOUR-SANHE-FOUR-SANHUI-MEMBERSHIP-V1 | 출처: CLASSIC-YUANHAI-ZIPING-LUN-SHIERZHI-SANHE
