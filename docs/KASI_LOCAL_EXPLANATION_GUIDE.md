@@ -111,3 +111,21 @@ const result = explanationProfile.calculate(explicitBirthRequest);
 공개 검사는 합성 후보와 독립 유한 기대값을 사용한다. 대표 전문 snapshot은 [일반 합성 명식](../test/fixtures/kasi-explanation-ordinary-synthetic.txt), [절입 경계 합성 명식](../test/fixtures/kasi-explanation-boundary-synthetic.txt)이며 실제 API 원문이나 개인 기록이 아니다. 실제 비공개 후보의 전 범위 검사는 별도 실행 보고서에 코드 SHA·범위·개수를 기록한다. 기존 M2 함수와의 일치는 연결 일관성 검사이며 독립 원전 정확성 인증이 아니다.
 
 신강약·격국·용신·조후·종격·합화, 관계의 효력·상쇄·길흉, 대운·세운·월운, 새 신살·궁합, 성격·직업·재물·건강·연애 예측은 구현하지 않았다.1988년 출생/DST·1950년 역사시도 이번 범위가 아니다. 원전 판본·권리·외부 검증의 열린 항목, G1-P2 NO-GO와 G0 경계는 그대로다. 공개 API·화면·로그인·결제·배포를 추가하지 않았다.
+
+## 이번에 확인한 실행과 참조 이름공간
+
+코드 SHA **c80233f09108c7196c44dd26579358279ece3731**에서 위 가상 양력/음력 명령과 실제 입춘 JSON/TEXT를 직접 실행했다. 일반 명식은 丙午·癸巳·丙午·甲午이며 양·음력의 분류·설명이 같다. 입춘은 경계 전 乙巳·己丑·己酉·丁卯, 경계 후 丙午·庚寅·己酉·丁卯를 각각 유지한다. [전체 검사·실패·실제 집계](engineering/KASI_API_M2_EXPLANATION_EXECUTION_20261110.md)에419개 전체 검사와 UTC/AsiaSeoul 각47,975입력쌍을 기록했다.
+
+ref는 명시적 이름공간을 사용한다. `chart.candidates[i].role`은 같은 결과의 `m1.chart`(또는 불변 사본 `facts.calculation.chart`)에 있는 기둥이다. `chart.candidates[i]#...`는 후보의 `facts` 배열에서 ID로 찾는 사실이며 JSON 속성 경로가 아니다. 기존 M2의 `preview.candidates[i].role`은 `facts.preview.preview`를 기준으로 읽는다. `genericM2.*`는 `facts.genericM2`, `facts.candidates[i].pillars[j].branchTenGods.members[k]`는 그 결과의 실제 장간 위치다. 어느 후보의 경로인지 끝까지 유지한다.
+
+npm으로 결과 JSON만 읽으려면 부모 npm의 배너도 끈다. 기존 인자 전체를 그대로 넘기는 명령 형태는 `npm run --silent kasi:explain -- [인자 전체]`다. 현재 PC에서 Node22의 npm CLI를 확실히 사용할 때는 다음과 같이 실행한다. 이 PC별 경로는 가이드에만 있으며 핵심 모듈에는 없다.
+
+```powershell
+# 위 준비 블록의 $node와 $common을 사용한다.
+$npmCli = 'C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js'
+$env:PATH = (Split-Path -Parent $node) + ';' + $env:PATH
+& $node $npmCli run --silent kasi:explain -- @common `
+  --calendar GREGORIAN --date 2026-06-01 --time 12:00 --output json
+```
+
+이 명령은 설치된 고정 TypeScript로 빌드한 뒤 실행한다. 이번 문서 검토에서도 실제 실행해 exit0·stderr 공백이고, 배너 없는 JSON 전체가 Node 직접 실행과 같음을 확인했다. 생성된 JSON을 사용자가 직접 파일로 리다이렉트할 때만 파일이 생긴다. 개인 기록을 개발 로그나 Git에 보관하지 않는다.

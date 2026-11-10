@@ -1,5 +1,20 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-10 current checkpoint — modern M1 → M2 → Korean basic explanation implemented
+
+최신 사용자 우선순위는 **현대 API 명식 → 기존 M2 → 근거형 한국어 기초 설명**이다. 코드 **c80233f09108c7196c44dd26579358279ece3731**에서 실제 출생 형식의 가상 입력을 M1 한 번 → 후보별 M2 → 버전형 템플릿 → JSON/TEXT까지 실행했다. 전체419/419, M2 감사, Lab/KASI 실제 Chrome, 실제 비공개 UTC/AsiaSeoul 각47,975 양·음력 입력쌍이 통과했다. 모든13,879일 대표시각과38년 절입/지정경계·4정책 검사이며 외부 독립 인증은 아니다. 두 시간대 요약 bytes와 의미 지문이 같다. 원본/후보 불변·API0·키0이다.
+
+| 위치 | 범위·다음 판단 |
+| --- | --- |
+| 기본 엔진·G0 |2026~2027 유지, 자동 교체 없음 |
+| 선택형 API 명식+M2 기초 설명 |양력 환산 `[1989-01-01,2027-01-01)`, 양력/음력·시각·명시4정책·M2묶음 필수 |
+| 데이터 확보 |1950~2026, 역사 시각 명식 지원 아님 |
+| 이후 최소 검토 |대운·세운의 계산 정책과 최소 테스트 계약, 이번에 구현하지 않음 |
+| 별도 확장 |역사시·DST→1950 시각 명식, 이번에 착수하지 않음 |
+| 최종 제품 |심화 해석→Story/대화→별도 Astra 콘셉트·앱 연결, 이번 UI/배포 없음 |
+
+[실행 가이드](KASI_LOCAL_EXPLANATION_GUIDE.md) · [검사·실패·출처·제한](engineering/KASI_API_M2_EXPLANATION_EXECUTION_20261110.md). 십성·장간·십이운성·관계/구성원 분류와 강약·격국·용신·합화·길흉·예측은 구분한다. 판본·권리 미확인, 상위 원전 등록부 공백, G1-P2 NO-GO는 유지한다. 아래 각 체크포인트의1988DST 다음 단계 표시는 당시 기록이며 최신 주력 순서는 이 절을 따른다.
+
 ## 2026-11-10 current checkpoint — selectable local API charts implemented
 
 사용자 승인 순서 A→B를 실제 수행했다. A **183878fdfc1cecdd1f133eec41d0e7d978c48f00**에서2026년 API/기존fixture 통합18,240 양·음력 입력쌍·전체403/403·Lab/KASI 실제 Chrome을 통과한 뒤 B를 등록했다. B **6d75f24f7006a9dcabd701c410340d5ced7f1c51**에서 전체408/408·두 브라우저 PASS, 실제13,879일·47,975쌍 전수 내부/기존resolver 대조를UTC와AsiaSeoul에서 각각 통과했고 집계 bytes가 같았다. 원본과 기존후보는 불변, 추가 KASI 요청0건이다.

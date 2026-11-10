@@ -1,40 +1,44 @@
 # Manseryeok-engine — current execution handoff
 
-**Checkpoint: 2026-11-10 KST.** Owner-authorized A→B is implemented: API2026 actual chart integration passed first, then an explicit local1989–2026 profile. No collection/API-key work, default engine/G0 replacement, Story UI, Actions or deployment.
+**Checkpoint: 2026-11-10 KST.** Modern local API birth input → existing M2 ChartFacts → fact-linked deterministic Korean basic explanation is implemented and executed. This supersedes the former next-step priority of1988DST integration. No new UI, historical-clock extension, collector, LLM or public API.
 
-## Current executable paths
+## Current paths and priorities
 
-| Path | Actual coverage |
+| Path | Actual range/status |
 | --- | --- |
-| Existing default engine/G0 | Gregorian2026–2027; unchanged |
-| `kasi-api-2026-local-v1` | `[2026-01-01,2027-01-01)` civil birth dates, time required |
-| `kasi-api-1989-2026-local-v1` | `[1989-01-01,2027-01-01)` after lunar→Gregorian conversion, time required |
-| Collected data/research date index | Gregorian1950–2026; not historical timestamp chart support |
+| Default engine / production / Lab / G0 |2026–2027, unchanged |
+| Local API chart and basic explanation |`kasi-api-1989-2026-local-v1`, civil birth `[1989-01-01,2027-01-01)` after lunar conversion, HH:mm required |
+| Prior local2026 profile |`kasi-api-2026-local-v1`, retained |
+| Collected/research date index |1950–2026, not historical timestamp chart support |
 
-`node scripts/kasi/local-chart.mjs` or `npm run kasi:chart -- ...` requires explicit profile, candidate directory, independently held manifest pin, calendar/date or lunar date/leap flag, HH:mm, clock policy, day rollover and hour-stem reference. Output is JSON stdout only. [Copyable Node22/PowerShell G/L commands](KASI_LOCAL_CHART_GUIDE.md).
+Current completed focus: **modern API chart → M2 → evidence-linked basic explanation**. Next review: Da-yun/Se-yun calculation policies and a minimal test contract. Separate expansion: historical clocks/DST →1950 timestamps. Eventual product: deeper interpretation → Story/dialogue → separate Astra concept/app work. None of those follow-ups was implemented or authorized by this completion.
 
-## Exact tested code and evidence
+## Executable contract
 
-- A code/test SHA **183878fdfc1cecdd1f133eec41d0e7d978c48f00**: full403/403, fail/cancel/skip/todo0; Lab and KASI real Chrome PASS. Actual2026 API G/L vs existing fixture18,240pairs/54,720semantic comparisons/73,152event-receipt checks PASS. All365days×12hour branches×4policies plus Jie/minute and calendar/Zi edges. Only after this gate was B registered.
-- B final code/test SHA **6d75f24f7006a9dcabd701c410340d5ced7f1c51**: Windows portable Node22.23.3/npm11.12.1/TS5.8.3, full **408/408**, fail/cancel/skip/todo0; Lab/KASI real Chrome PASS. Actual13,879days and38years of Jie/calendar/Zi cases:47,975G/Lpairs,143,925semantic comparisons,200,002event/receipt checks PASS.2026A/B365days MATCH; valid/invalid leap, bounds, policy/time, alternating year/profile and result mutation isolation checked.
-- Separate network-blocked B runs under explicit UTC and Asia/Seoul used the same clean SHA. Summary bytes identical, content SHA **8ab48d86d3d38c5f431d0440ef389e02708223d3e039b7339d6724945025fde2**; three semantic digests **359d92dd0a5b07bf2fba0d0ac9988580e5d721c931d418410c31b5c5c84b5369**. Execution time/TZ are separate metadata. No full birth-result corpus saved.
-- Public tests are synthetic. Actual private checks are separate and fail if data is absent. CLI tests block network and fixture/Collector/research imports while performing actual subprocess calculations. No fallback/default policy/time.
-- [Full A/B evidence, scopes, limitations and private log paths](engineering/KASI_API_LOCAL_CHART_EXECUTION_20261110.md). Prior390/390 atfe84ab4 is a separate historical run.
+- `npm run --silent kasi:explain -- ...` or `node scripts/kasi/local-explain.mjs ...` adds explicit `--m2-profile m2-basic-classification-local-v1 --output json|text` to the existing mandatory chart/data/clock/day/hour arguments. [Copyable Node22 PowerShell G/L/boundary commands and imports](KASI_LOCAL_EXPLANATION_GUIDE.md). Existing `kasi:chart` remains compatible.
+- A product request invokes the existing local M1 calculate path once. Same-process issued calculation + request/content fingerprints gate the M2 adapter. Existing M2 v3, nature constants and twelve-growth function classify all candidates; no calendar/rule algorithm copies. Facts are fully reference-checked then deeply immutable. Korean template1.0.0 consumes facts only; explanation refs/text are validated. No file saving by default or network/keys/LLM.
+- M2 policy bundle discloses hidden stems, twelve-growth, raw pairs and triad membership policies. Preserve MAIN_QI/OTHER, full member gods, positional duplicates/directions/overlaps and partial groups; no strength, transformation or predictions. Seven native pair/triad rule version fields remain null. Classical editions/rights/upstream M0 registry gaps remain open.
+- `sourceRefs` links M2 rule records, `calculationSourceRefs` links actual KASI API event/date receipts. Generic M2 preview uses the explicitly declared actual-used event subset; it is not a full-corpus certificate. No forged TXT edition or G0 receipt. Serialized refs/hashes are traceability, not external authenticity.
 
-## Dataset, policy and preservation
+## Exact new verification
 
-- Input remains `.private/kasi-local-1950-2026/monthly-xml/`; export SHA **7b5584aca339b85c7e54e953c43b672358bda605a478831b6f260df00472e851**. Existing candidates `.private/kasi-research-1950-2026-fe84ab4-a/` and `...-b/` pin **8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf**. Both candidate directories and original whole-file tree were unchanged; original tree82c5a30c…66567 matches pinned manifest. API requests0, keys0, recollection0.
-- Existing loader/index extracted into `scripts/kasi/candidate.mjs` with no fixture/acquisition imports; research API re-exports preserve compatibility. Local profile calls the existing coverage-checked composer with each year's24terms+prior Daxue25events. API observed-date index handles lunar conversion without coercion into complete annual-TXT lunar types. Calendar ganji are not pillar inputs.
-- Event identity includes receipt+date+term; actual applied row/time policy/service/operation/query/response SHA is returned. API sourceKind is KASI_OPENAPI_RESPONSE, never TXT source IDs or a forged G0 receipt.
-- Clock policy **KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1 /1** compares modern Korea civil and API KST wall minutes atUTC+09/DST0.1988auxiliary guard is December Daxue after DST ended, not1988birth support. Original API_KST_AS_PUBLISHED/NOT_RESOLVED retained, derived interpretation separate, UTC instants not created. [Primary evidence and limits](research/KASI_MODERN_API_CLOCK_POLICY_20261110.md).
-- Existing four explicit day/hour combinations and correlated published-minute ambiguity retained.2027events are unnecessary for this birth resolver/coverage; future Da-yun next-Jie is separate. ZI_START may use2027effective day for a2026birth without granting2027birth support.
+Code/test SHA **c80233f09108c7196c44dd26579358279ece3731**; prior M2 bridge commit **d726a8d3910594ecbfbfa58e193b75f7951e257c**. Windows Node22.23.3/npm11.12.1/TS5.8.3/Chrome154.0.8037.98. Later checkpoint/report changes are documentation only.
 
-## Open boundaries and delivery
+- Full `npm run check` **419/419**, fail/cancel/skip/todo0. Prior408 at6d75f24 remains historical. New11 synthetic cases include independent finite expectations, M2 direct connection checks, adversarial refs/provenance, one-M1 measurement, full-prose snapshots and actual offline CLI subprocesses.
+- M2 audit exit0:4policies/9rules/12sources, editions/rights open and7native versions missing. Existing finite table tests ran in the full419.
+- KASI actual Chrome PASS/exit0 with synthetic upstream. Lab first CDP navigation/owned-exit timeout retained; same code/time limits after foreground load ended PASS/exit0 and owned process/profile cleanup. No skip, expectation override or general Chrome/Node kill.
+- Actual private **UTC and Asia/Seoul**, each clean sameSHA/module hashes:13,879daily +5,472Jie +28,624calendar/Zi cases =**47,975 G/L pairs**.96,575product calls =96,575local M1 calculate calls (includes invalid-input rejections);96,016direct M2,398,656growth,199,196event evidence,2,105,378fact and2,105,378explanation reference checks.152correlated Lichun pairs;14leap pairs/443invalid leap rejects;38alternation/38mutation-isolation checks PASS.
+- Summary bytes identical; content SHA **0ed3c658544f857e8532d34d80c432524435ba69ca6408c3398f52c3d53f39a9**. G/L meaning SHA **c78fa5bad08bdc080ec57f7e40ef2c22d77845af5fb98d55efdffd296b9ebbf3**. This is internal connection consistency for all-date representative times and specified boundaries, not all possible clocks or independent classical/calendar certification.
+- Five real virtual-demo CLI runs PASS: G2026-06-01 12:00=L2026-4-16 regular →丙午/癸巳/丙午/甲午; actual Lichun2026-02-04 05:02 →乙巳/己丑/己酉/丁卯 and丙午/庚寅/己酉/丁卯, separate facts/explanations. Full outputs remain private.
 
-1988birth DST gap/fold,1950historical clocks/24:00, partial end lunar months, external full-range certification and redistribution remain separate. Original null816leap rows/28groups, longitude null1392 and held1950Dahan are preserved. G1 annual-TXT original rows0/86/origin digests0/3/rights UNVERIFIED/P2 NO-GO remain unchanged. Default src/fixtures/web/G0/G1 contracts are unchanged.
+[Detailed counts, actual JSON/TEXT examples, failures and evidence](engineering/KASI_API_M2_EXPLANATION_EXECUTION_20261110.md). Private evidence dirs: `.private/kasi-m2-explanation-c80233f-utc-20261110/`, `...-seoul-20261110/`; timezone comparison and logs alongside. Final owned verification Node processes0. Do not claim private checks ran if these inputs are absent elsewhere.
 
-Approved branch remains `agent/kasi-local-1950-2026-20261109`; initial remote923f5cf0b361c98680a6c9c6658290574712cf43. A/B are separate normal commits; later checkpoint/report edits are documentation only. Only code/synthetic tests/non-secret reports may be pushed. `.private` stays ignored, no force-add. Re-read remote HEAD and every workflow before ordinary Push; current push workflow is foundation-only. No main/foundation/base branch changes, force push, Actions, merge or deployment.
+## Preserved data and boundaries
 
-Next minimum historical work: a separate1988DST gap/fold integration test normalizing civil birth clocks with existing time modules and comparing pinned API KST events. Do not promote1988/1950timestamp support before its policy/evidence closes.
+Original `.private/kasi-local-1950-2026/monthly-xml/` export SHA **7b5584aca339b85c7e54e953c43b672358bda605a478831b6f260df00472e851**. Existing candidatea/b manifest pin **8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf** is independently held, not read from the target as expectation. Original full tree82c5a30c…66567, candidatea b2a2560d…89bed andb b143a6cd…a6584 match prior fixed values before/after. Source bytes/export/checkpoints/candidates unchanged, API requests/keys/recollection0; no personal records saved.
 
-History: [previous checkpoint](archive/EXECUTION_HANDOFF_BEFORE_API_LOCAL_CHART_20261110.md), [DEVLOG](DEVLOG.md), [ROADMAP](ROADMAP.md), [prior research adapter execution](engineering/KASI_RESEARCH_ADAPTER_EXECUTION_20261110.md).
+Original leap-month ganji null816/28groups, longitude null1392,1950Dahan24:00, clipped lunar end months and historical unresolved clocks remain preserved.1988birth/DST,1950timestamp extension, full external authentication and redistribution remain separate. Modern clock policy KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1 and existing four day/hour combinations are unchanged. Default src/fixtures/web/G0/G1 are unchanged; G1-P2 NO-GO persists.
+
+Approved branch is still `agent/kasi-local-1950-2026-20261109`, initial remote22f9c0b15ee61f5e15e6dca375702dec50ac3cc1. Only code/synthetic tests/non-secret documents belong in ordinary Push. Recheck remote head/all workflows/final diff; foundation-only push workflow does not trigger on this branch. No main/foundation/base changes, force, Actions, merge or deployment; .private stays ignored.
+
+History: [previous checkpoint](archive/EXECUTION_HANDOFF_BEFORE_API_M2_20261110.md), [DEVLOG](DEVLOG.md), [ROADMAP](ROADMAP.md), [previous A/B evidence](engineering/KASI_API_LOCAL_CHART_EXECUTION_20261110.md).
