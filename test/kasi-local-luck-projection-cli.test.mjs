@@ -77,8 +77,12 @@ test('projection CLI keeps both Lichun candidates and missing-next-Jie states un
   const female=success(run(replace(boundary,'--traditional-sex','FEMALE')));
   for(const c of female.projection.candidates){assert.equal(c.calendar.status,'AMBIGUOUS');assert.equal(c.calendar.firstStartMinute,null);assert.equal(c.selection.status,'AMBIGUOUS');}
   const text=run(replace(replace(boundary,'--traditional-sex','FEMALE'),'--output','text'));assert.equal(text.status,0,text.stderr);assert.match(text.stdout,/후보 1/);assert.match(text.stdout,/후보 2/);assert.match(text.stdout,/미확정|AMBIGUOUS/);
+  assert.equal(text.stderr,'');assert.equal((text.stdout.match(/^10\. /gm)??[]).length,2);
+  assert.match(text.stdout,/^10\. 己亥: 명목 기간 AMBIGUOUS로 미정$/m);assert.match(text.stdout,/^10\. 庚辰: 명목 기간 AMBIGUOUS로 미정$/m);
   const late=success(run(replace(projected,'--date','2026-12-31')));assert.equal(late.projection.candidates[0].calendar.status,'NEEDS_DATA');assert.equal(late.projection.candidates[0].selection.status,'NEEDS_DATA');assert.equal(glyph(late.m7.luck.seyun.yearLabel.pillar),'丁未');
   assert.ok(late.projection.candidates[0].calendar.missingData.some(m=>m.year===2027&&m.term==='XIAOHAN'));
+  const lateText=run(replace(replace(projected,'--date','2026-12-31'),'--output','text'));assert.equal(lateText.status,0,lateText.stderr);assert.equal(lateText.stderr,'');
+  assert.equal((lateText.stdout.match(/^\d+\. /gm)??[]).length,10);assert.match(lateText.stdout,/^10\. 庚戌: 명목 기간 NEEDS_DATA로 미정$/m);
 }));
 
 test('projection CLI rejects incomplete policy/query, malformed dates, bad pins and absent candidates without fallback',async()=>setup(async context=>{

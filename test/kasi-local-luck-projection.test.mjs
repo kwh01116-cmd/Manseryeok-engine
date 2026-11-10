@@ -164,4 +164,8 @@ test('Korean projection text keeps nominal policy wording, separate candidates a
   assert.ok(text.includes(CALENDAR_PROJECTION_POLICY_V02));assert.match(text,/근거/);
   const boundary=assertValid(select(profile,chartRequest('1990-02-05','01:20'),'2026-11-01T12:00',features('FEMALE')));
   const held=renderLocalLuckProjectionText(boundary);assert.match(held,/후보 1/);assert.match(held,/후보 2/);assert.match(held,/미확정|AMBIGUOUS/);
+  assert.equal((held.match(/^10\. /gm)??[]).length,2,'both held candidates must print all ten preserved cycle entries');
+  assert.match(held,/^10\. 丁亥: 명목 기간 AMBIGUOUS로 미정$/m);assert.match(held,/^10\. 戊辰: 명목 기간 AMBIGUOUS로 미정$/m);
+  const late=renderLocalLuckProjectionText(assertValid(select(profile,chartRequest('2026-12-31','12:00'),'2026-12-31T12:00')));
+  assert.equal((late.match(/^\d+\. /gm)??[]).length,10);assert.match(late,/^10\. 庚戌: 명목 기간 NEEDS_DATA로 미정$/m);
 });

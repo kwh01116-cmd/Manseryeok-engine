@@ -143,6 +143,10 @@ export function renderLocalLuckProjectionText(result){
     if(c.calendar.status==='PROJECTED_UNDER_POLICY'){
       for(const step of c.calendar.steps)lines.push('  가산 단계: '+JSON.stringify(step));
       for(const period of c.calendar.periods)lines.push(`${period.ordinal}. ${glyph(period.pillar)}: [${period.startInclusive}, ${period.endExclusive}) 명목 민간시`);
+    }else{
+      const sequence=base.luck.candidates[c.candidateIndex].dayun.sequence;
+      if(sequence){for(const entry of sequence.entries)lines.push(`${entry.ordinal}. ${glyph(entry.pillar)}: 명목 기간 ${c.calendar.status}로 미정`);
+        lines.push('  기존 순서 근거: luck.candidates['+c.candidateIndex+']#sequence');}
     }
   }
   return lines.join('\n')+'\n';
