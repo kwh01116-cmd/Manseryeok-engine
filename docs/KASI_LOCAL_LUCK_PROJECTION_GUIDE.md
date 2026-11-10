@@ -116,3 +116,17 @@ const anotherQuery = projectLocalLuckResult(result.m7, {
 ```
 
 정상 JSON/TEXT는 stdout만 사용하고 오류는 안전한 stderr로 분리한다. 출생정보·결과의 기본 파일 저장이나 API 키·네트워크가 필요 없다. npm 실행을 선호하면 준비한 Node22 PATH에서 `npm run --silent kasi:luck -- [같은 전체 인자]`를 사용한다. 원문·export·후보·대량 결과는 Git에 넣지 않는다. [정책 근거·현대 구현 관례·반례](research/M7_CALENDAR_PROJECTION_V02.md), [기존 v0.1 계약](KASI_LOCAL_LUCK_GUIDE.md)을 함께 확인한다.
+
+## 실제 실행 결과와 검증
+
+위 가상2026-06-01 12:00은 MALE일 때 첫 명목2027-12-05 12:00, FEMALE일 때2035-04-17 10:00이다. 가상1990-06-01 12:00 MALE은 첫1992-01-10 08:00,2026-11-01 12:00 조회는 제4대운乙酉 [2022-01-10 08:00,2032-01-10 08:00)다.1991-01-01조회는 첫 대운 전이다.2022-01-10 07:59는 제3甲申,08:00과08:01은 제4乙酉로 직접 실행했다. 실제1990입춘02-04 11:14의 두 MALE 후보는 첫1999-12-02 21:14/2000-01-04 21:14와2026조회甲戌/辛巳로 나뉜다.2026입춘 FEMALE의 두 후보는 AMBIGUOUS라 날짜를 만들지 않고 전체 간지10개를 유지한다.
+
+최종 코드/검사 SHA **ebedd7bda54f0ff06273a73ab960897bd216818e**에서 전체469/469, 기존 M2 감사, Lab/KASI 실제 Chrome 첫 실행 exit0이었다. 실제 UTC/AsiaSeoul 각47,975입력 묶음·191,900제품=M1 호출에서 정상 투영191,738/미확정7,296/자료 부족162후보를 구분했고 기간1,917,380개와 집중255선택을 검사했다. v0.1 의미 지문은 이전 고정값과 같고 새 결과/요약 bytes도 시간대가 달라도 같다. 원본/후보a/b·실행12파일은 불변이다. [정확한 단위·추가 검사·실패/중단 이력·실행 SHA](engineering/M7_CALENDAR_PROJECTION_EXECUTION_20261111.md)를 따른다.
+
+실제 비공개 후보가 있는 작업 공간에서는 아래 별도 검증기를 새 비공개 결과 디렉터리로 실행할 수 있다. 원문·export·후보를 수정하거나 API를 호출하지 않으며, 결과 디렉터리는 아직 없어야 한다. 제품 명령의 기본 파일 저장과는 다른 명시적 검증 보고서 생성이다.
+
+```powershell
+& $node .\scripts\kasi\local-luck-projection-verify.mjs '.private\kasi-research-1950-2026-fe84ab4-a' '.private\m7-v02-new-local-check'
+```
+
+비공개 데이터가 없는 checkout에서는 공개 합성 검사만 수행할 수 있다. 실제 자료 전수까지 PASS라고 표시하지 않는다. npm --silent 명령도 실제 Node22에서 실행해 JSON stdout이 직접 Node 실행과 정확히 같음을 확인했다.
