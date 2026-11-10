@@ -196,9 +196,14 @@ export function parseLocalLuckArgs(args){
   if(base.length===0){check(features.dayun===undefined&&features.seyun?.yearLabel!==undefined&&features.seyun.queryMinute===undefined&&extra['--m2-profile']===undefined,'PURE_LABEL_ARGUMENTS');return {mode:'SEYUN_LABEL_ONLY',year:features.seyun.yearLabel,luckPolicyId:extra['--luck-profile'],output:extra['--output']};}
   return {...parseLocalChartArgs(base),mode:'BIRTH_LINKED',features:requested,luckPolicyId:extra['--luck-profile'],m2ProfileId:extra['--m2-profile'],output:extra['--output']};
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){try{
+if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){if(process.argv.slice(2).some(arg=>['--calendar-projection','--as-of-date','--as-of-time'].includes(arg))){
+  // Finish this module's evaluation before the optional adapter imports its v0.1 functions.
+  import('./local-luck-projection.mjs').then(({runLocalLuckProjectionCli})=>runLocalLuckProjectionCli(process.argv.slice(2))).catch(()=>{
+    process.stderr.write(JSON.stringify({status:'REJECTED',code:'LUCK_CALENDAR_MODULE_REJECTED'})+'\n');process.exitCode=1;
+  });
+}else{try{
   const options=parseLocalLuckArgs(process.argv.slice(2));
   const result=options.mode==='SEYUN_LABEL_ONLY'?calculateSeyunLabel(options.year,options.luckPolicyId):(await loadLocalLuckProfile(options)).calculate(options.request,options.features);
   if(result.status!=='OK'){process.stderr.write(JSON.stringify({status:result.status,code:'BIRTH_INPUT_NOT_SUPPORTED'})+'\n');process.exitCode=2;}
   else process.stdout.write(options.output==='json'?JSON.stringify(result,null,2)+'\n':renderLocalLuckText(result));
-}catch(error){process.stderr.write(JSON.stringify({status:'REJECTED',code:error instanceof LocalLuckError||error instanceof LocalChartError?error.code:'LUCK_DATA_OR_INPUT_REJECTED'})+'\n');process.exitCode=1;}}
+}catch(error){process.stderr.write(JSON.stringify({status:'REJECTED',code:error instanceof LocalLuckError||error instanceof LocalChartError?error.code:'LUCK_DATA_OR_INPUT_REJECTED'})+'\n');process.exitCode=1;}}}
