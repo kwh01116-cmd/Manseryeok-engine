@@ -23,6 +23,15 @@ const profiles=new Map([[STAGE_A_PROFILE_ID,{from:2026,to:2026,phase:'A'}],[MODE
 const frozen=value=>{if(value&&typeof value==='object'&&!Object.isFrozen(value)){Object.values(value).forEach(frozen);Object.freeze(value);}return value;};
 const lunarKey=r=>monthKey(r.lunarYear,r.lunarMonth,r.leap);
 const sourceId=row=>'KASI_OPENAPI_RESPONSE:'+row.sourceRef+':'+row.date+':'+row.termCode;
+// In-process execution continuity only; serialized hashes are not source authentication.
+// Weak keys retain neither birth inputs nor results beyond the caller's object lifetime.
+const issuedResults=new WeakMap();
+export function verifyLocalChartResult(result,{request}={}) {
+  const receipt=issuedResults.get(result);
+  requireValue(receipt && receipt.contentSha256===fingerprint(result),'LOCAL_CHART_EXECUTION_CHANGED_OR_UNISSUED');
+  if(request!==undefined)requireValue(receipt.requestSha256===fingerprint(request),'LOCAL_CHART_REQUEST_MISMATCH');
+  return result;
+}
 
 /** The manifest pin is supplied independently; this factory never reads one from the dataset. */
 export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256}) {
@@ -108,7 +117,9 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     const actualIds=[...new Set(chart.monthBoundaryTrace.candidateContexts.flatMap(c=>c.activeSince.sourceIds).concat(chart.monthBoundaryTrace.atPublishedBoundary?.sourceIds??[]))];
     const lichun=context.events.find(e=>e.term==='LICHUN');
     const evidence={appliedJie:actualIds.map(id=>evidenceById.get(id)),yearBoundary:evidenceById.get(lichun.sourceIds[0]),dateConversion:{method:request.calendar==='KOREAN_LUNAR'?'API_OBSERVED_DATE_INDEX':'GREGORIAN_WITH_API_OBSERVED_DATE_EVIDENCE',sourceRef:row.sourceRef,source:getSource(row,'lunar'),observed:{solarDate:row.solarDate,lunarYear:row.lunarYear,lunarMonth:row.lunarMonth,lunarDay:row.lunarDay,leap:row.leap},calendarGanjiUsedAsPillars:false}};
-    return {status:'OK',profile:structuredClone(metadata),dataset:structuredClone(dataset),input:{calendar:request.calendar,...(request.calendar==='KOREAN_LUNAR'?{lunarDate:structuredClone(request.lunarDate)}:{}),gregorianDate:date,time:request.time},policies:{clock:{id:MODERN_CLOCK_POLICY_ID,version:'1'},dayRollover:{id:policy.dayRollover,version:'EXISTING_ENGINE_V1'},hourStemReference:{id:policy.hourStemReference,version:'EXISTING_ENGINE_V1'},boundary:{id:'PUBLISHED_MINUTE_COMPARISON_ONLY',version:'EXISTING_ENGINE_V1'}},chart,evidence:structuredClone(evidence),limits:['PUBLISHED_MINUTE_AMBIGUITY_PRESERVED','NO_HISTORICAL_BIRTH_TIME_SUPPORT','NO_INDEPENDENT_FULL_RANGE_CERTIFICATION','NO_G0_RECEIPT','REDISTRIBUTION_REVIEW_OPEN']};
+    const result={status:'OK',profile:structuredClone(metadata),dataset:structuredClone(dataset),input:{calendar:request.calendar,...(request.calendar==='KOREAN_LUNAR'?{lunarDate:structuredClone(request.lunarDate)}:{}),gregorianDate:date,time:request.time},policies:{clock:{id:MODERN_CLOCK_POLICY_ID,version:'1'},dayRollover:{id:policy.dayRollover,version:'EXISTING_ENGINE_V1'},hourStemReference:{id:policy.hourStemReference,version:'EXISTING_ENGINE_V1'},boundary:{id:'PUBLISHED_MINUTE_COMPARISON_ONLY',version:'EXISTING_ENGINE_V1'}},chart,evidence:structuredClone(evidence),limits:['PUBLISHED_MINUTE_AMBIGUITY_PRESERVED','NO_HISTORICAL_BIRTH_TIME_SUPPORT','NO_INDEPENDENT_FULL_RANGE_CERTIFICATION','NO_G0_RECEIPT','REDISTRIBUTION_REVIEW_OPEN']};
+    issuedResults.set(result,{contentSha256:fingerprint(result),requestSha256:fingerprint(request)});
+    return result;
   };
   return Object.freeze({metadata,calculate,eventsForYear(year){const value=eventsByYear.get(year);requireValue(value,'YEAR_OUT_OF_PROFILE');return structuredClone(value);}});
 }
