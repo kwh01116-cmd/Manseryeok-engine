@@ -129,3 +129,7 @@ $env:PATH = (Split-Path -Parent $node) + ';' + $env:PATH
 ```
 
 이 명령은 설치된 고정 TypeScript로 빌드한 뒤 실행한다. 이번 문서 검토에서도 실제 실행해 exit0·stderr 공백이고, 배너 없는 JSON 전체가 Node 직접 실행과 같음을 확인했다. 생성된 JSON을 사용자가 직접 파일로 리다이렉트할 때만 파일이 생긴다. 개인 기록을 개발 로그나 Git에 보관하지 않는다.
+
+## 선택형 M3 구조 근거
+
+기존 kasi:explain의 출력·기본 동작은 그대로다. 명시적 kasi:evidence 명령은 같은 API 명식/M2 경로에서 요청당 M1 한 번과 M2 한 번으로 구조적 판단 근거를 만든다. EVIDENCE_ONLY와 NOT_IMPLEMENTED 상태이며 최종 강약·점수·효력·격국·용신 게이트를 해제하지 않는다. [복사 가능한 양력·음력 실행 명령과 참조 계약](KASI_LOCAL_M3_EVIDENCE_GUIDE.md)을 따른다.

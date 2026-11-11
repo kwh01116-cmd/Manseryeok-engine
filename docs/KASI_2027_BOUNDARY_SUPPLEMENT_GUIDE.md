@@ -52,3 +52,7 @@ $manifest = '8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf'
 공식 API 명세는 `kst`를 한국표준시각으로 설명한다. [공공데이터포털 특일 정보](https://www.data.go.kr/data/15012690/openapi.do). 연간 조회를 택한 것은 기존 수집기의 검증된 한 페이지 경로가 월별 두 번보다 요청 수가 적기 때문이다. 원문의 24절기 기능 표는 월 필수로 표시하므로 연간 사용 가능 여부는 실제 응답과 구별해 기록한다.
 
 [NAO 2027 暦要項](https://eco.mtk.nao.ac.jp/koyomi/yoko/2027/rekiyou272.html)은 2026-02-02 발표 자료로 소한 2027-01-05 23:10, 입춘 2027-02-04 10:46을 제시한다. 표의 중앙표준시는 [NAO 시각계 설명](https://eco.mtk.nao.ac.jp/koyomi/faq/ephemeris.html)에 따르면 UTC+9다. 확인일은 2026-11-11 KST다. 기존 엔진 fixture의 두 표시 분은 이 표와 일치하지만, 실제 KASI 응답의 확인을 대신하지 않는다. 초 단위 일치나 독립 역법 전수 인증도 의미하지 않는다.
+
+## 이번 최종 실행 상태
+
+2026-11-11 실제 전송은 총2회(최초 NETWORK_ERROR, 다음 연간XML24행 성공)였다. 원문 재검사와 NAO/기존fixture의 분 표시 독립 대조 뒤 수락한 supplement는 f6a0e6dd2b169b4e758f8d1326942556c59f569af714adcb36e73824c6ef02b7, 원문 SHA-256은 c3f44cf293a31acd600cae4ebf65063f7cdac55ab0adceba7e05ed36c5660dc0다. 비공개 디렉터리는 .private/kasi-2027-boundary-00379e9-20261111-b, 연결 base는 8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf이다. 실행 e3dab282ae781c5385c44aa6d68ff46081781c10의 UTC/Asia/Seoul 각각47975벡터에서81개 연말 벡터를 추려324미선택+324선택 제품/M1을 비교했다. 미선택의162부족 후보가 선택 시 모두OK, 역행170·AMBIGUOUS16은 불변이었다. 이는 특정 검사 코호트이며 모든 가능한 분의 전수 보증은 아니다. 소한만 기산에 사용하고 입춘은 데이터 준비/2027조회시계 POLICY_UNRESOLVED다. [실제 수락·출처·검사·실패 이력](engineering/KASI_2027_BOUNDARY_EXECUTION_20261111.md).
