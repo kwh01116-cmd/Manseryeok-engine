@@ -98,3 +98,7 @@ const evidence = deriveLocalM3Evidence(result.facts, {
 최종 비공개 UTC·Asia/Seoul 각 47975양력/음력 입력쌍, 95950제품=95950출생 M1, 99598후보의 M3 근거를 검증했다. 근거/설명 참조 1406856/1406856회, 입춘 상관 152쌍을 유지했다. 두 요약 파일은 bytes까지 같고 의미 지문 ed945e2e197463b8ba50cfd5cf626827ceca4afcc676d08f150d0d51e4e5c4b4이 일치했다. 원본/a/b·실행18파일 불변, API·키 없는 실행이다. 추가 호출·음양력 provenance·독립 유한 기대값/기존 M2 연결 검사와 미검증 효과의 단위는 상세 실행 보고서에서 분리한다.
 
 실제2027 KASI 두 이벤트는 별도 지문으로 수락했고 연말 기산 보강은 선택형으로 검증했다. 그것은 M3의 원국 근거/해석 규칙이나2027출생·조회 범위 확대가 아니다. [실제 가상 설명 전문·정확한 단위·실패·출처·보존](engineering/KASI_M3_EVIDENCE_EXECUTION_20261111.md).
+
+## 2026-11-11 — 별도 선택형 계절 판단
+
+기존 프로필 의미·미선택JSON/TEXT·구조적근거는 그대로다. 명시적 --seasonal-policy로만 제한적 왕상휴수사를 추가하며 기존 season의 세력/사령 미해결 필드를 덮어쓰지 않는다. 계절 판단만 RESOLVED_UNDER_POLICY 또는 계절말 POLICY_UNRESOLVED, 최종신강약 NOT_IMPLEMENTED다. [실제양력/음력 실행](KASI_LOCAL_M3_SEASONAL_GUIDE.md) · [확인한 문헌/프로젝트 범위](research/M3_SEASONAL_STATE_POLICY_V01.md).

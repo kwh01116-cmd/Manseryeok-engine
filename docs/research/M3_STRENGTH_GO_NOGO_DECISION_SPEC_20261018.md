@@ -46,3 +46,7 @@ A M3 gate must not put `READY` on the current M1/M2 facts; their evidence type i
 ## Required promotion record
 
 A real source-edition reference, declared school, all policy axes, reproducible exhaustive/boundary tests, independent rule review, language/harm audit, legal rights and at least one explicit alternate-school counterexample. Since this is interpretive and contested, **tests only demonstrate adherence to an encoded tradition**, not real-world predictive validity. Default is **BLOCK M3** until sign-off. This is a hard release gate, not an invitation to build a "strength score" without sources.
+
+## 2026-11-11 owner-authorized limited seasonal classification
+
+The owner separately authorized the opt-in M3-SEASONAL-FOUR-SEASONS-EARTH-MONTHS-DEFERRED-V01 classification: four seasonal tables for eight already-resolved saju month branches, with four earth-ending months deferred. Its RESOLVED_UNDER_POLICY is a limited traditional classification, not READY for final strength, root efficacy, commanding qi, structure, useful gods, prediction or release. This dated exception does not remove or satisfy this final interpretation/release gate. Existing structural evidence stays EVIDENCE_ONLY and finalStrength NOT_IMPLEMENTED. [Policy and observed transcription limits](M3_SEASONAL_STATE_POLICY_V01.md) · [executed evidence](../engineering/KASI_M3_SEASONAL_STATE_EXECUTION_20261111.md).

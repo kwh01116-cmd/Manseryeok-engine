@@ -1,5 +1,24 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-11 current checkpoint — M3 월령의 제한적 왕상휴수사 정책
+
+현재 구현 범위는 **기존 API 명식→M2→구조적 M3 근거→명시적 계절 판단→근거형 한국어 설명**이다. 선택 정책 `M3-SEASONAL-FOUR-SEASONS-EARTH-MONTHS-DEFERRED-V01`/0.1.0은 기존 절입 월지의8월에서20셀을 분류하고 辰未戌丑은 이 항목만 보류한다. 土 일간 戊己는 정상 계절 월에서 분류한다. 구조 근거는EVIDENCE_ONLY, 최종신강약은NOT_IMPLEMENTED로 유지한다.
+
+| 구분 | 이번 상태와 남은 경계 |
+| --- | --- |
+| 제한적 계절 판단 |寅卯/巳午/申酉/亥子의4계절·오행별旺相休囚死, 일간 상태와 후보별 문헌/계산 참조·설명. 명시적 옵션만 선택하며 기존 결과 유지 |
+| 계절말 월 |辰未戌丑은null/POLICY_UNRESOLVED/EARTH_MONTH_POLICY_NOT_SELECTED. 전체 명식 미지원이나API결손 아님 |
+| 문헌 확인 |Wikisource2292392의20셀,識典夏水因 차이와水囚 채택;東里본문검색캐시의확인수준/원서버실패를구분. 스캔·비평판본·권리·독립학파합의 아님 |
+| 기존 구조 근거 |장간의 정확 문자/동오행, 다섯 생극 방향, 표면 연결, 관계/구성원과겹침 유지; 계절 세력·유효통근·생조효력·관계효과 미해결 |
+| 최종 종합 판단 |신강/신약/중화, 점수·가중치·得令이진, 사령일수·격국·용신·길흉 미구현;기존M3해석/출시게이트차단 |
+| 지원·데이터 |기본2026–2027/G0/G1-P2 NO-GO와API출생1989–2026,2027조회정책보류·역사시·M7투영정책불변. 계절분류에2027supplement필수의존성없음 |
+
+실행 코드 **360e54a5c09588c34dc19cf3f1bcdf44cd1b74d3**(순수정책 be528a1e56393b880b4d1d2e49edf47a72ab9a60)에서 아래 최종 실제 집계와 종료 증거를 확인했다. 이전500/500·cf8199/e3증거를 새코드검증으로 재사용하지 않는다.
+
+실제 UTC→Asia/Seoul 순차 전수는 각47975양력/음력쌍, 95950제품=95950출생M1, 99598후보였고 계절 분류66518 / 계절말 보류33080였다. 두 요약bytes/양음력 의미가 같으며 지문 2530b2c726a673a34975afa45a54f1d76b557c2d4a3b1adce44e1c003c773e20이다. 원본/a/b/supplement·실행21파일 불변, 이번KASI/API키0이다. 이는 연결 검사이며 독립120조합의 규칙 검사와 구분한다. 전체518/518·M2감사·Lab/KASI·실제CLI14도같은360e54a에서통과했다.
+
+계절말 辰·未·戌·丑의 처리 정책 한 가지를 문헌 근거·범위·독립 반례와 함께 검토한다. 현재 정책을 소급 변경하거나 사령·통근 효력·최종 신강약을 자동 승인하지 않는다. 역사시·2027조회확대·M7정책·UI/LLM/배포는 이번 주력이 아니다. [실행가이드](KASI_LOCAL_M3_SEASONAL_GUIDE.md) · [정책/문헌](research/M3_SEASONAL_STATE_POLICY_V01.md) · [실행보고](engineering/KASI_M3_SEASONAL_STATE_EXECUTION_20261111.md).
+
 ## 2026-11-11 current checkpoint — M3 structural evidence implemented; actual2027 selected boundary cohort verified
 
 현재 주력은 **현대 API 명식 → 기존 M2 → 후보별 구조 근거 → 근거형 한국어 설명**이다. 명시적 `m3-structural-evidence-local-v1`/0.1.0과 실제 `kasi:evidence`를 최종 코드 **e3dab282ae781c5385c44aa6d68ff46081781c10**에서 구현했다. 출생 M1과 기존 M2를 요청당 각각 한 번 실행한 뒤 같은 후보의 위치·장간·오행 방향·기존 관계/구성원을 연결한다. `EVIDENCE_ONLY`, 최종 신강약 `NOT_IMPLEMENTED`, 기존 M3 최종 게이트 차단을 유지한다.
