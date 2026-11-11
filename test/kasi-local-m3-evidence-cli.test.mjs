@@ -117,3 +117,31 @@ test('seasonal CLI requires one supported explicit policy and never echoes an in
   rejection(context.run([...context.common,'--seasonal-policy',seasonalPolicy,'--seasonal-policy',seasonalPolicy]),context);
   rejection(context.run([...context.common,'--seasonal-policy']),context);
 }));
+
+const siliPolicy='M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02';
+test('v02 CLI separates derived B alternatives from M1 candidates and preserves v01 and no-option bytes offline',async()=>setup(async({run,common,lunar})=>{
+  const unselected=run(common),v1=run([...common,'--seasonal-policy',seasonalPolicy]);
+  assert.equal(unselected.status,0,unselected.stderr);assert.equal(v1.status,0,v1.stderr);
+  const args=[...common,'--seasonal-policy',siliPolicy],g=run(args),l=run([...lunar,'--seasonal-policy',siliPolicy]);
+  for(const r of[g,l]){assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+  const gv=JSON.parse(g.stdout),lv=JSON.parse(l.stdout);assert.deepEqual(gv.seasonal,lv.seasonal);
+  assert.equal(gv.schemaVersion,'kasi-local-m3-evidence-seasonal-v2');assert.equal(gv.seasonal.candidates[0].judgment.seasonalState,'WANG');
+  const b=replace(replace(args,'--date','2026-04-17'),'--time','01:20'),utc=run(b),seoul=run(b,{tz:'Asia/Seoul'});
+  assert.equal(utc.status,0,utc.stderr);assert.equal(seoul.status,0,seoul.stderr);assert.equal(utc.stdout,seoul.stdout);
+  const at=JSON.parse(utc.stdout);assert.equal(at.m1.chart.candidates.length,1);assert.equal(at.seasonal.candidates.length,1);
+  assert.equal(at.seasonal.candidates[0].judgment.alternatives.length,2);assert.equal(at.seasonal.candidates[0].judgment.status,'AMBIGUOUS');
+  assert.deepEqual(at.executionCounts,{birthM1Calls:1,m2Derivations:1});
+  const boundary=run(replace(replace(args,'--date','2026-02-05'),'--time','01:20'));assert.equal(boundary.status,0,boundary.stderr);
+  const parents=JSON.parse(boundary.stdout).seasonal.candidates;
+  assert.deepEqual(parents.map(c=>[c.judgment.monthBranch,c.judgment.season]),[['丑','EARTH_DOMINANT'],['寅','SPRING']]);
+  assert.ok(parents.every(c=>c.judgment.alternatives.length===1));
+  const text=run(replace(b,'--output','text'));assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');
+  assert.match(text.stdout,/원국 후보는 유지/);assert.match(text.stdout,/25,920명목 분/);assert.match(text.stdout,/NOT_IMPLEMENTED/);
+  assert.equal(run(common).stdout,unselected.stdout);assert.equal(run([...common,'--seasonal-policy',seasonalPolicy]).stdout,v1.stdout);
+}));
+test('v02 CLI rejects missing files, bad pins, duplicated policy and mixed time-axis options without fallback',async()=>setup(async context=>{
+  const args=[...context.common,'--seasonal-policy',siliPolicy];
+  rejection(context.run(replace(args,'--manifest-sha','f'.repeat(64))),context);
+  rejection(context.run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
+  for(const extra of[['--seasonal-policy',siliPolicy],['--as-of-date','2026-04-17'],['--traditional-sex','FEMALE']])rejection(context.run([...args,...extra]),context);
+}));

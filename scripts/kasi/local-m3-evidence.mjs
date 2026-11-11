@@ -2,7 +2,7 @@
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {fingerprint} from '../../.kasi-build/schema.js';
-import {loadLocalChartProfile, verifyLocalChartResult, LocalChartError} from './local-chart.mjs';
+import {loadLocalChartProfile, verifyLocalChartResult, getLocalChartEventContext, verifyLocalChartEventContext, LocalChartError} from './local-chart.mjs';
 import {deriveLocalChartFacts, validateLocalChartFacts, getM2PolicyBundle} from './local-chart-facts.mjs';
 import {parseLocalExplainArgs, LocalExplanationError} from './local-explain.mjs';
 import {
@@ -13,17 +13,23 @@ import {
   M3_SEASONAL_POLICY_ID,M3_SEASONAL_POLICY_METADATA,
   resolveSeasonalState,explainSeasonalState,validateSeasonalState,validateSeasonalStateExplanation,
 } from '../../dist/m3/seasonalStateV1.js';
+import {
+  M3_SEASONAL_SILI_POLICY_ID, M3_SEASONAL_SILI_POLICY_METADATA,
+  resolveSeasonalSiliState,explainSeasonalSiliState,validateSeasonalSiliState,validateSeasonalSiliStateExplanation,
+} from '../../dist/m3/seasonalStateV2.js';
+import {MONTH_BOUNDARY_JIE} from '../../dist/calendar/monthPillar.js';
 
 export const M3_LOCAL_PROFILE_ID=M3_EVIDENCE_PROFILE_ID;
 export const LOCAL_M3_EVIDENCE_SCHEMA='kasi-local-m3-evidence-v1';
 export const LOCAL_M3_SEASONAL_SCHEMA='kasi-local-m3-evidence-seasonal-v1';
-export {M3_SEASONAL_POLICY_ID};
+export const LOCAL_M3_SEASONAL_SILI_SCHEMA='kasi-local-m3-evidence-seasonal-v2';
+export {M3_SEASONAL_POLICY_ID,M3_SEASONAL_SILI_POLICY_ID};
 export {M3_EVIDENCE_VERSION};
 export class LocalM3EvidenceError extends Error {
   constructor(code){super(code);this.name='LocalM3EvidenceError';this.code=code;}
 }
 const check=(ok,code)=>{if(!ok)throw new LocalM3EvidenceError(code);};
-const evidenceContexts=new WeakMap(), seasonalContexts=new WeakMap(),issuedResults=new WeakMap(), sealed=new WeakSet();
+const evidenceContexts=new WeakMap(), seasonalContexts=new WeakMap(),evidenceExecutions=new WeakMap(),issuedResults=new WeakMap(), sealed=new WeakSet();
 function freeze(value){
   if(value&&typeof value==='object'&&!sealed.has(value)){
     Object.values(value).forEach(freeze);Object.freeze(value);sealed.add(value);
@@ -59,16 +65,54 @@ function seasonalInput(candidate){
     inputFactRefs:[...month.inputFactRefs],pillarRefs:[candidate.candidateRef+'.day',candidate.candidateRef+'.month'],
     calculationSourceRefs:[...month.calculationSourceRefs],appliedJie:structuredClone(candidate.monthContext.activeSince)};
 }
+const isSeasonalPolicy=id=>id===M3_SEASONAL_POLICY_ID||id===M3_SEASONAL_SILI_POLICY_ID;
+const earthMonthSili={辰:'LIXIA',未:'LIQIU',戌:'LIDONG',丑:'LICHUN'};
+const sideCondition={DEFINITE:'BETWEEN_PUBLISHED_BOUNDARIES',BEFORE_PUBLISHED_MINUTE:'BEFORE_PUBLISHED_BOUNDARY',AFTER_PUBLISHED_MINUTE:'AFTER_PUBLISHED_BOUNDARY'};
+/** One read-only index per selected profile. The already-pinned loader authenticates the local context. */
+function prepareSeasonalContext(profile){
+  const context=getLocalChartEventContext(profile);verifyLocalChartEventContext(context);
+  const byTermYear=new Map(),bySource=new Map(context.evidence.map(record=>[record.id,record]));
+  const jie=context.events.filter(event=>MONTH_BOUNDARY_JIE.includes(event.term));
+  for(const event of jie){
+    const key=event.displayedDateTime.slice(0,4)+':'+event.term;
+    check(!byTermYear.has(key),'SEASONAL_DUPLICATE_EVENT');byTermYear.set(key,event);
+    check(event.sourceIds.every(id=>bySource.has(id)),'SEASONAL_EVENT_SOURCE_MISSING');
+  }
+  return {context,byTermYear,bySource,jie};
+}
+function siliInput(candidate,execution){
+  check(execution,'SEASONAL_ISSUED_BIRTH_AND_EVENT_CONTEXT_REQUIRED');
+  const {m1,prepared}=execution,base=seasonalInput(candidate),index=candidate.candidateIndex;
+  const trace=m1.chart.monthBoundaryTrace.candidateContexts[index];
+  check(trace&&trace.monthBranch===base.monthBranch&&fingerprint({...trace.activeSince,koreanName:base.appliedJie.koreanName})===fingerprint(base.appliedJie),'SEASONAL_PARENT_MONTH_CONTEXT_MISMATCH');
+  check(sideCondition[trace.boundarySide],'SEASONAL_PARENT_CONDITION_REQUIRED');
+  verifyLocalChartEventContext(prepared.context,{calculation:m1});
+  const term=earthMonthSili[base.monthBranch];let nextSili=null;
+  if(term){
+    const start=prepared.byTermYear.get(base.appliedJie.displayedDateTime.slice(0,4)+':'+base.appliedJie.term);
+    check(start&&fingerprint(start)===fingerprint(trace.activeSince),'SEASONAL_APPLIED_EVENT_CONTEXT_MISMATCH');
+    const expectedKey=start.displayedDateTime.slice(0,4)+':'+term,target=prepared.byTermYear.get(expectedKey);
+    // Check the immediately adjacent Jie, never substitute a later same-name event or a mid-Qi.
+    const neighbor=prepared.jie[prepared.jie.indexOf(start)+1];
+    if(target){check(neighbor===target,'SEASONAL_REQUIRED_NEXT_SILI_NOT_ADJACENT');nextSili=structuredClone(target);}
+    // A missing exact event stays null/NEEDS_DATA; no later event is used as a substitute.
+  }
+  return {base,birthDateTime:m1.input.gregorianDate+'T'+m1.input.time,monthCondition:sideCondition[trace.boundarySide],nextSili};
+}
 /** Adds one selected judgment to already-issued M3; no M1/M2/structural derivation is repeated. */
 export function deriveLocalM3SeasonalJudgments(evidence,{seasonalPolicyId}={}){
   validateLocalM3Evidence(evidence);
-  check(seasonalPolicyId===M3_SEASONAL_POLICY_ID,'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');
+  check(isSeasonalPolicy(seasonalPolicyId),'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');
+  const sili=seasonalPolicyId===M3_SEASONAL_SILI_POLICY_ID,execution=sili?evidenceExecutions.get(evidence):null;
+  if(sili)check(execution,'SEASONAL_ISSUED_BIRTH_AND_EVENT_CONTEXT_REQUIRED');
   const candidates=evidence.candidates.map(candidate=>{
-    const judgment=resolveSeasonalState(seasonalInput(candidate),{policyId:seasonalPolicyId});
+    const judgment=sili?resolveSeasonalSiliState(siliInput(candidate,execution),{policyId:seasonalPolicyId}):resolveSeasonalState(seasonalInput(candidate),{policyId:seasonalPolicyId});
     return {candidateIndex:candidate.candidateIndex,candidateRef:candidate.candidateRef,
-      judgment,explanation:explainSeasonalState(judgment)};
+      judgment,explanation:sili?explainSeasonalSiliState(judgment):explainSeasonalState(judgment)};
   });
-  const value=freeze({schemaVersion:'local-m3-seasonal-judgments-v1',policy:M3_SEASONAL_POLICY_METADATA,candidates,
+  const extraSources=sili?[...new Set(candidates.flatMap(item=>item.judgment.input.nextSili?.sourceIds??[]))].map(id=>execution.prepared.bySource.get(id)):null;
+  const value=freeze({schemaVersion:sili?'local-m3-seasonal-judgments-v2':'local-m3-seasonal-judgments-v1',policy:sili?M3_SEASONAL_SILI_POLICY_METADATA:M3_SEASONAL_POLICY_METADATA,candidates,
+    ...(sili?{calculationSources:extraSources}:{}),
     validation:{level:'SAME_PROCESS_ISSUED_M3_TO_SELECTED_SEASONAL_POLICY',
       finalStrength:'NOT_IMPLEMENTED',m3FinalInterpretationGate:'BLOCKED_UNCHANGED'}});
   seasonalContexts.set(value,evidence);return value;
@@ -80,17 +124,23 @@ export function validateLocalM3SeasonalJudgments(value,{evidence}={}){
   for(let i=0;i<value.candidates.length;i++){
     const item=value.candidates[i],candidate=context.candidates[i];
     check(item.candidateRef===candidate.candidateRef&&item.candidateIndex===candidate.candidateIndex,'SEASONAL_CANDIDATE_CONTEXT_CHANGED');
-    validateSeasonalState(item.judgment);validateSeasonalStateExplanation(item.explanation,item.judgment);
-    check(fingerprint(item.judgment.input)===fingerprint(seasonalInput(candidate)),'SEASONAL_INPUT_CONTEXT_CHANGED');
+    if(value.policy.id===M3_SEASONAL_SILI_POLICY_ID){
+      validateSeasonalSiliState(item.judgment);validateSeasonalSiliStateExplanation(item.explanation,item.judgment);
+      check(fingerprint(item.judgment.input)===fingerprint(siliInput(candidate,evidenceExecutions.get(context))),'SEASONAL_INPUT_CONTEXT_CHANGED');
+    }else{
+      validateSeasonalState(item.judgment);validateSeasonalStateExplanation(item.explanation,item.judgment);
+      check(fingerprint(item.judgment.input)===fingerprint(seasonalInput(candidate)),'SEASONAL_INPUT_CONTEXT_CHANGED');
+    }
   }
   return true;
 }
 
 /** Product path: one birth calculation, one existing M2 derivation, then pure evidence/templates. */
-export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3ProfileId,seasonalPolicyId}={}){
+export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3ProfileId,seasonalPolicyId,contextProfile=chartProfile}={}){
   getM2PolicyBundle(m2ProfileId);explicitProfile(m3ProfileId);
-  if(seasonalPolicyId!==undefined)check(seasonalPolicyId===M3_SEASONAL_POLICY_ID,'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');
+  if(seasonalPolicyId!==undefined)check(isSeasonalPolicy(seasonalPolicyId),'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');
   check(typeof chartProfile?.calculate==='function','LOCAL_CHART_PROFILE_REQUIRED');
+  const prepared=seasonalPolicyId===M3_SEASONAL_SILI_POLICY_ID?prepareSeasonalContext(contextProfile):null;
   return Object.freeze({calculate(request){
     const m1=chartProfile.calculate(request);
     if(m1.status!=='OK')return {
@@ -99,8 +149,9 @@ export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3Profile
     verifyLocalChartResult(m1,{request});
     const facts=deriveLocalChartFacts(m1,{m2ProfileId,request});
     const evidence=deriveLocalM3Evidence(facts,{m3ProfileId}),explanation=explainM3Evidence(evidence);
+    if(prepared)evidenceExecutions.set(evidence,{m1,prepared});
     const seasonal=seasonalPolicyId===undefined?undefined:deriveLocalM3SeasonalJudgments(evidence,{seasonalPolicyId});
-    const result=freeze({schemaVersion:seasonal?LOCAL_M3_SEASONAL_SCHEMA:LOCAL_M3_EVIDENCE_SCHEMA,status:'EVIDENCE_ONLY',
+    const result=freeze({schemaVersion:seasonalPolicyId===M3_SEASONAL_SILI_POLICY_ID?LOCAL_M3_SEASONAL_SILI_SCHEMA:seasonal?LOCAL_M3_SEASONAL_SCHEMA:LOCAL_M3_EVIDENCE_SCHEMA,status:'EVIDENCE_ONLY',
       provenance:{profile:structuredClone(m1.profile),dataset:structuredClone(m1.dataset),
         policies:structuredClone(m1.policies),m2PolicyBundle:facts.policyBundle,m3Policy:M3_EVIDENCE_POLICY_METADATA,
         birthCalculationFingerprint:fingerprint(m1)},
@@ -118,7 +169,7 @@ export async function loadLocalM3EvidenceProfile(options){
 }
 export function validateLocalM3EvidenceResult(result){
   const receipt=issuedResults.get(result);
-  check(receipt&&Object.isFrozen(result)&&result.schemaVersion===(receipt.seasonal?LOCAL_M3_SEASONAL_SCHEMA:LOCAL_M3_EVIDENCE_SCHEMA)&&result.status==='EVIDENCE_ONLY','ISSUED_LOCAL_M3_RESULT_REQUIRED');
+  check(receipt&&Object.isFrozen(result)&&result.schemaVersion===(receipt.seasonal?.policy.id===M3_SEASONAL_SILI_POLICY_ID?LOCAL_M3_SEASONAL_SILI_SCHEMA:receipt.seasonal?LOCAL_M3_SEASONAL_SCHEMA:LOCAL_M3_EVIDENCE_SCHEMA)&&result.status==='EVIDENCE_ONLY','ISSUED_LOCAL_M3_RESULT_REQUIRED');
   for(const key of ['m1','facts','evidence','explanation'])check(result[key]===receipt[key],'M3_RESULT_CONTEXT_CHANGED');
   verifyLocalChartResult(result.m1);validateLocalM3Evidence(result.evidence,{facts:result.facts});
   validateLocalM3Explanation(result.explanation,result.evidence);
@@ -151,14 +202,18 @@ export function renderLocalM3EvidenceText(result){
   if(result.seasonal){
     const summary=['선택한 월령 계절 분류',`정책: ${result.seasonal.policy.id}`];
     for(const item of result.seasonal.candidates)summary.push(`후보 ${item.candidateIndex+1}: ${item.explanation.text}`);
-    summary.push('계절의 전통 분류입니다. 전체 명식의 신강약·득령·사령·통근 효력·길흉은 판단하지 않습니다.');
+    summary.push(result.seasonal.policy.id===M3_SEASONAL_SILI_POLICY_ID?result.seasonal.candidates[0].explanation.scopeNote:'계절의 전통 분류입니다. 전체 명식의 신강약·득령·사령·통근 효력·길흉은 판단하지 않습니다.');
     lines.unshift(...summary,'','구조적 근거와 상세 참조');
     lines.push('','계절 판단 상세 참조');
     for(const item of result.seasonal.candidates){const j=item.judgment;
       lines.push(`판단: ${j.id} [${j.candidateRef}] · ${j.status}`,
         `정책: ${result.seasonal.policy.id} | 규칙: ${j.ruleRefs.join(', ')}`,
-        `M3 근거: ${j.input.evidenceRefs.join(', ')} | M2 사실: ${j.input.inputFactRefs.join(', ')}`,
-        `문헌·구현 출처: ${j.sourceRefs.join(', ')} | 계산 출처: ${j.input.calculationSourceRefs.join(', ')}`);
+        `M3 근거: ${(j.input.base??j.input).evidenceRefs.join(', ')} | M2 사실: ${(j.input.base??j.input).inputFactRefs.join(', ')}`,
+        `문헌·구현 출처: ${j.sourceRefs.join(', ')} | 계산 출처: ${j.calculationSourceRefs.join(', ')}`);
+      if(result.seasonal.policy.id===M3_SEASONAL_SILI_POLICY_ID&&j.nextSili)lines.push(
+        `월 시작 S: ${j.appliedJie.koreanName} ${j.appliedJie.displayedDateTime} | 다음 사립 T: ${j.nextSili.term} ${j.nextSili.displayedDateTime}`,
+        `유도 경계 B: ${j.derivedBoundary.displayedDateTime} = T - 25,920명목 분; KASI가 발표한 추가 절기가 아닙니다.`,
+        '명목 구간: [S,B) 앞 계절 · [B,T) 토왕; 같은 표시 분의 조건은 후보별 결과를 따릅니다.');
     }
   }
   return lines.join('\n')+'\n';
@@ -171,7 +226,7 @@ export function parseLocalM3EvidenceArgs(args){
     if(args[i]==='--m3-profile'){
       check(m3ProfileId===undefined&&typeof args[i+1]==='string','ARGUMENTS');m3ProfileId=args[i+1];
     }else if(args[i]==='--seasonal-policy'){
-      check(seasonalPolicyId===undefined&&args[i+1]===M3_SEASONAL_POLICY_ID,'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');seasonalPolicyId=args[i+1];
+      check(seasonalPolicyId===undefined&&isSeasonalPolicy(args[i+1]),'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');seasonalPolicyId=args[i+1];
     }else base.push(args[i],args[i+1]);
   }
   explicitProfile(m3ProfileId);
