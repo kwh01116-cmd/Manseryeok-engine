@@ -11,7 +11,7 @@ export const TEN_GODS = Object.freeze([
 
 export type TenGod = (typeof TEN_GODS)[number];
 
-type ElementRelation =
+export type ElementRelation =
   | "SAME"
   | "DAY_MASTER_GENERATES"
   | "DAY_MASTER_CONTROLS"
@@ -34,7 +34,7 @@ const CONTROLS: Readonly<Record<FiveElement, FiveElement>> = {
   WATER: "FIRE",
 };
 
-function relation(dayMaster: FiveElement, target: FiveElement): ElementRelation {
+export function fiveElementRelation(dayMaster: FiveElement, target: FiveElement): ElementRelation {
   if (dayMaster === target) return "SAME";
   if (GENERATES[dayMaster] === target) return "DAY_MASTER_GENERATES";
   if (CONTROLS[dayMaster] === target) return "DAY_MASTER_CONTROLS";
@@ -52,7 +52,7 @@ export function tenGod(dayMaster: HeavenlyStem, target: HeavenlyStem): TenGod {
   const other = STEM_NATURE[target];
   const samePolarity = dm.polarity === other.polarity;
 
-  switch (relation(dm.element, other.element)) {
+  switch (fiveElementRelation(dm.element, other.element)) {
     case "SAME":
       return samePolarity ? "比肩" : "劫財";
     case "DAY_MASTER_GENERATES":
