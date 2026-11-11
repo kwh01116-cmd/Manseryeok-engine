@@ -1,0 +1,68 @@
+명식 강약 판단 근거 — M3 Evidence v0.1
+양력 환산 2026-06-01 12:00 · GREGORIAN
+명식 프로필: kasi-api-2026-local-v1
+데이터셋: kasi-openapi-local-f594b8640f3fdd49
+manifest: f594b8640f3fdd49c97ded9b8e1d81e98acd1828d5b2dd63e25a836c3910622c
+시계 정책: KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1
+일주 교체: CIVIL_MIDNIGHT · 시주 참조: SELECTED_DAY_PILLAR
+M2 정책: m2-basic-classification-local-v1 · M3 정책: m3-structural-evidence-local-v1 (0.1.0)
+상태: EVIDENCE_ONLY · 최종 신강약: NOT_IMPLEMENTED
+기존 M2의 위치·문자·오행 방향·구성원을 정리한 검토 자료입니다. 방향 묶음에서 일간 자신인 일주 표면 천간은 제외하되 문자 일치 연결에서는 포함합니다. 본기·표시 순서를 가중치로 쓰지 않으며 계절 세력·유효한 통근·관계 효력·최종 신강약·점수·격국·용신·길흉을 판정하지 않습니다. 출처·권리·예측 효력의 인증도 아닙니다.
+
+후보 1 [chart.candidates[0]]
+이 후보의 일간은 丙, 월주는 癸巳입니다. 월지 巳의 기존 표상 대표 오행은 화이며 적용 절입은 입하 2026-05-05T01:20입니다. 현재 입력은 절입 표시 분의 전후 분기 밖에 있습니다. 계절 세력과 사령은 미확정(UNRESOLVED)입니다.
+  근거: chart.candidates[0]#m3-evidence[0] | M2 사실: chart.candidates[0]#summary, chart.candidates[0]#day-master, chart.candidates[0]#month-nature, chart.candidates[0]#month-hidden-stems
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, kasi-local-m2-composition-v1, src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1, m2-basic-classification-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간과 천간 문자가 같은 장간 위치: 월주 장간[0, 본기] 丙. 통근 검토를 위한 문자 일치 자료입니다.
+  근거: chart.candidates[0]#m3-evidence[1] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#year-hidden-stems, chart.candidates[0]#month-hidden-stems, chart.candidates[0]#day-hidden-stems, chart.candidates[0]#hour-hidden-stems
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간과 오행은 같지만 천간 문자가 다른 장간 위치: 연주 장간[0, 본기] 丁 · 일주 장간[0, 본기] 丁 · 시주 장간[0, 본기] 丁. 정확한 천간 일치와 구분합니다.
+  근거: chart.candidates[0]#m3-evidence[2] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#year-hidden-stems, chart.candidates[0]#month-hidden-stems, chart.candidates[0]#day-hidden-stems, chart.candidates[0]#hour-hidden-stems
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간과 같은 오행의 위치: 연주 천간 丙 · 연주 장간[0, 본기] 丁 · 월주 장간[0, 본기] 丙 · 일주 장간[0, 본기] 丁 · 시주 장간[0, 본기] 丁.
+  근거: chart.candidates[0]#m3-evidence[3] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#year-nature, chart.candidates[0]#year-visible-ten-god, chart.candidates[0]#year-hidden-stems, chart.candidates[0]#month-hidden-stems, chart.candidates[0]#day-hidden-stems, chart.candidates[0]#hour-hidden-stems
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE, M0-RULE-TEN-GODS-ELEMENT-RELATION, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001 | 정책: m3-structural-evidence-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간을 생하는 방향의 위치: 시주 천간 甲.
+  근거: chart.candidates[0]#m3-evidence[4] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#hour-nature, chart.candidates[0]#hour-visible-ten-god
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간이 생하는 방향의 위치: 연주 장간[1, 기타 장간] 己 · 월주 장간[2, 기타 장간] 戊 · 일주 장간[1, 기타 장간] 己 · 시주 장간[1, 기타 장간] 己.
+  근거: chart.candidates[0]#m3-evidence[5] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#year-hidden-stems, chart.candidates[0]#month-hidden-stems, chart.candidates[0]#day-hidden-stems, chart.candidates[0]#hour-hidden-stems
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간이 극하는 방향의 위치: 월주 장간[1, 기타 장간] 庚.
+  근거: chart.candidates[0]#m3-evidence[6] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#month-hidden-stems
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일간을 극하는 방향의 위치: 월주 천간 癸.
+  근거: chart.candidates[0]#m3-evidence[7] | M2 사실: chart.candidates[0]#day-master, chart.candidates[0]#month-nature, chart.candidates[0]#month-visible-ten-god
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+장간과 표면 천간의 정확한 문자 일치 연결: 월주 장간[0, 본기] 丙 ↔ 연주 천간 丙 · 월주 장간[0, 본기] 丙 ↔ 일주 천간 丙. 일주 표면 천간도 연결 대상이며 전통적 투간의 효력 판정은 하지 않습니다.
+  근거: chart.candidates[0]#m3-evidence[8] | M2 사실: chart.candidates[0]#year-nature, chart.candidates[0]#month-nature, chart.candidates[0]#day-nature, chart.candidates[0]#hour-nature, chart.candidates[0]#year-hidden-stems, chart.candidates[0]#month-hidden-stems, chart.candidates[0]#day-hidden-stems, chart.candidates[0]#hour-hidden-stems, chart.candidates[0]#year-visible-ten-god, chart.candidates[0]#month-visible-ten-god, chart.candidates[0]#hour-visible-ten-god
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, src/domain/stems.ts#STEM_NATURE, src/domain/branches.ts#BRANCH_NATURE, M2-RULE-HIDDEN-STEMS-001, M2-RULE-BRANCH-TEN-GODS-001, M0-RULE-TEN-GODS-ELEMENT-RELATION | 정책: m3-structural-evidence-local-v1, M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE, MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+기존 M2의 지지 쌍 분류 3개와 삼합·삼회 구성원 분류 1개를 모두 보존했습니다. 겹침·부분 구성원과 관계의 실제 효력은 구분합니다.
+  근거: chart.candidates[0]#m3-evidence[9] | M2 사실: chart.candidates[0]#summary, chart.candidates[0]#relation-0, chart.candidates[0]#relation-1, chart.candidates[0]#relation-2, chart.candidates[0]#triad-0
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, kasi-local-m2-composition-v1, M2-RULE-BRANCH-XING-001, M2-RULE-TRIAD-SANHUI-MEMBERS-001 | 정책: m3-structural-evidence-local-v1, m2-basic-classification-local-v1, M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1, M2-TRIAD-FOUR-SANHE-FOUR-SANHUI-MEMBERSHIP-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-XIANGXING, MODERN-CLARIFYHK-FOUR-SEASONAL-SANHUI-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+연주 午 · 일주 午 조합은 현재 정책의 형 분류입니다(서로 다른 기둥에 반복된 지지의 자형).
+  근거: chart.candidates[0]#m3-evidence[10] | M2 사실: chart.candidates[0]#relation-0
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, M2-RULE-BRANCH-XING-001 | 정책: m3-structural-evidence-local-v1, M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-XIANGXING | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+연주 午 · 시주 午 조합은 현재 정책의 형 분류입니다(서로 다른 기둥에 반복된 지지의 자형).
+  근거: chart.candidates[0]#m3-evidence[11] | M2 사실: chart.candidates[0]#relation-1
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, M2-RULE-BRANCH-XING-001 | 정책: m3-structural-evidence-local-v1, M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-XIANGXING | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+일주 午 · 시주 午 조합은 현재 정책의 형 분류입니다(서로 다른 기둥에 반복된 지지의 자형).
+  근거: chart.candidates[0]#m3-evidence[12] | M2 사실: chart.candidates[0]#relation-2
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, M2-RULE-BRANCH-XING-001 | 정책: m3-structural-evidence-local-v1, M2-BRANCH-RELATIONS-YHZP-PAIRS-LIUPO-2026-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, CLASSIC-YUANHAI-ZIPING-XIANGXING | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
+기존 정책의 화 명칭 삼회에서 서로 다른 두 구성원이 있습니다: 巳(월주) · 午(연주·일주·시주). 부분 분류는 삼회 부분 구성원입니다. 빠진 구성원: 未.
+  근거: chart.candidates[0]#m3-evidence[13] | M2 사실: chart.candidates[0]#triad-0
+  규칙: M3-EVIDENCE-STRUCTURAL-ASSEMBLY-001, M2-RULE-TRIAD-SANHUI-MEMBERS-001 | 정책: m3-structural-evidence-local-v1, M2-TRIAD-FOUR-SANHE-FOUR-SANHUI-MEMBERSHIP-V1
+  명리·정의 출처: IMPL-M3-STRUCTURAL-EVIDENCE-V1, MODERN-CLARIFYHK-FOUR-SEASONAL-SANHUI-2026 | 계산 출처: KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-05-05:LIXIA, KASI_OPENAPI_RESPONSE:d986a48130cc0abf075bbe0bcdd92b0b0eddd35e173eee2ee286429562d7d7f1:2026-02-05:LICHUN, KASI_OPENAPI_RESPONSE_DATE:b62e6e0d7dc444edc561c890308e08eefab6ebfd0998444700b2480df2e0dea4:2026-06-01
