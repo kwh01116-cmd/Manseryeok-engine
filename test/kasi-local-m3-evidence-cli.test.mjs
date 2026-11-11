@@ -93,3 +93,27 @@ test('M3 CLI rejects absent or unsupported policies, time, pins, data and mixed 
   rejection(run(replace(common,'--manifest-sha','0'.repeat(64))),context);rejection(run(replace(common,'--candidate',join(directory,'MISSING_CANDIDATE'))),context);
   rejection(run(replace(common,'--date','2026-02-30')),context);rejection(run(replace(common,'--time','24:00')),context);rejection(run(replace(common,'--date','2025-12-31')),context,2);
 }));
+
+const seasonalPolicy='M3-SEASONAL-FOUR-SEASONS-EARTH-MONTHS-DEFERRED-V01';
+test('explicit seasonal CLI keeps unselected bytes and separates correlated judgments in offline JSON and Korean TEXT',async()=>setup(async({run,common,lunar})=>{
+  const old=run(common);success(old);
+  const selected=[...common,'--seasonal-policy',seasonalPolicy],solar=run(selected),moon=run([...lunar,'--seasonal-policy',seasonalPolicy]);
+  for(const value of [solar,moon]){assert.equal(value.status,0,value.stderr);assert.equal(value.stderr,'');}
+  const g=JSON.parse(solar.stdout),l=JSON.parse(moon.stdout);
+  assert.equal(g.schemaVersion,'kasi-local-m3-evidence-seasonal-v1');assert.equal(g.status,'EVIDENCE_ONLY');
+  assert.deepEqual(g.seasonal,l.seasonal);assert.equal(g.seasonal.candidates[0].judgment.seasonalState,'WANG');
+  assert.deepEqual(g.executionCounts,{birthM1Calls:1,m2Derivations:1});assert.equal(g.validation.finalStrength,'NOT_IMPLEMENTED');
+  const boundary=replace(replace(selected,'--date','2026-02-05'),'--time','01:20'),utc=run(boundary),seoul=run(boundary,{tz:'Asia/Seoul'});
+  assert.equal(utc.status,0,utc.stderr);assert.equal(seoul.status,0,seoul.stderr);assert.equal(utc.stdout,seoul.stdout);
+  const candidates=JSON.parse(utc.stdout).seasonal.candidates;
+  assert.deepEqual(candidates.map(c=>[c.judgment.monthBranch,c.judgment.seasonalState,c.judgment.status]),[['丑',null,'POLICY_UNRESOLVED'],['寅','QIU','RESOLVED_UNDER_POLICY']]);
+  const text=run(replace(selected,'--output','text'));assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');
+  assert.match(text.stdout,/巳월은 여름 구간/);assert.match(text.stdout,/왕\(旺\)/);assert.ok(text.stdout.indexOf('왕(旺)')<text.stdout.indexOf('장간'));
+  assert.match(text.stdout,/계절 판단 상세 참조/);assert.match(text.stdout,/TXT-SANMING-TONGHUI/);assert.match(text.stdout,/NOT_IMPLEMENTED/);
+  const after=run(common);success(after);assert.equal(after.stdout,old.stdout);
+}));
+test('seasonal CLI requires one supported explicit policy and never echoes an invalid policy value',async()=>setup(async context=>{
+  for(const value of ['','AUTO','INVALID_DO_NOT_ECHO'])rejection(context.run([...context.common,'--seasonal-policy',value]),context);
+  rejection(context.run([...context.common,'--seasonal-policy',seasonalPolicy,'--seasonal-policy',seasonalPolicy]),context);
+  rejection(context.run([...context.common,'--seasonal-policy']),context);
+}));
