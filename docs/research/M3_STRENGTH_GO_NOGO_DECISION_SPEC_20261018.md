@@ -56,3 +56,9 @@ The owner separately authorized the opt-in M3-SEASONAL-FOUR-SEASONS-EARTH-MONTHS
 The owner separately authorized M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02/0.2.0. It splits the four already-resolved ending months by the exact next Sili's published minute minus 25,920 nominal minutes, with conditional alternatives under the same natal parent at B and existing M1 conditions at T. Normal eight-month classifications reuse v0.1. This completes one selected seasonal classification across twelve months when its required events exist; it is not READY for final strength, 得令, commanding qi, effective root, relation efficacy, weights, useful gods, prediction or release. Existing structural evidence remains EVIDENCE_ONLY and finalStrength NOT_IMPLEMENTED. V0.1's deferred four-month policy and all final promotion requirements remain unchanged.
 
 [Source and implementation distinctions](M3_SEASONAL_SILI_PRE18_POLICY_V02.md) · [Actual execution, failures and test SHA](../engineering/KASI_M3_SEASONAL_SILI_EXECUTION_20261112.md).
+
+## 2026-11-12 owner-authorized selected structural root presence
+
+The owner separately authorized `M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01`/0.1.0: test each of the four natal visible stems against the actual members of the selected existing hidden-stem policy. `PRESENT_UNDER_POLICY` and `ABSENT_UNDER_POLICY` resolve this limited presence criterion. Exact-stem and opposite-polarity same-element evidence, all original positions, and surface resource/peer stems' own roots remain separate. Presence does not resolve root strength, damage, activation, support transmission, 得地/得勢, final strength, structure, useful gods, fortune or release. Existing structural evidence and both seasonal policies retain their contracts. This dated exception does not remove or satisfy any final interpretation/release promotion requirement.
+
+[Selected definition and original/commentary differences](M3_ROOT_PRESENCE_POLICY_V01.md).
