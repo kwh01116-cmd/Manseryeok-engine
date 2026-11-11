@@ -7,6 +7,7 @@ import {loadLocalChartProfile,parseLocalChartArgs,verifyLocalChartResult,getLoca
 import {createLocalExplanationProfile,validateExplanation} from './local-explain.mjs';
 import {isGregorianMinute} from '../../dist/calendar/solarTermTimeline.js';
 import {SOLAR_TERM_DEFINITIONS} from '../../dist/calendar/solarTerms.js';
+import {loadOptionalBoundarySupplement,verifyKasi2027BoundarySupplement,BoundarySupplementError} from './boundary-supplement.mjs';
 
 export const LOCAL_LUCK_SCHEMA='kasi-local-luck-v01';
 export const LUCK_TEMPLATE_VERSION='0.1.0';
@@ -58,10 +59,13 @@ function validateReferences(luck){
 function mintLuck(value){validateReferences(value);freeze(value);issuedLuck.add(value);return value;}
 function beforeBirth(query,birth){return query<birth?'BEFORE_BIRTH_REPORTED_MINUTE':query===birth?'SAME_REPORTED_MINUTE_NO_INSTANT_ORDER_CLAIM':'AFTER_BIRTH_REPORTED_MINUTE';}
 
-export function createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,contextProfile=chartProfile}={}){
+export function createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,contextProfile=chartProfile,boundarySupplement}={}){
   policy(luckPolicyId);check(typeof chartProfile?.calculate==='function','CHART_PROFILE_REQUIRED');
   const context=getLocalChartEventContext(contextProfile),timeline=core.compileLuckTimeline(context.events);
+  if(boundarySupplement)verifyKasi2027BoundarySupplement(boundarySupplement,{baseManifestSha256:context.dataset.candidateManifestContentSha256});
+  const dayunTimeline=boundarySupplement?core.compileLuckTimeline([...context.events,...boundarySupplement.events]):timeline;
   const evidenceMap=new Map(context.evidence.map(record=>[record.id,record]));
+  if(boundarySupplement)for(const record of boundarySupplement.evidence){check(!evidenceMap.has(record.id),'BOUNDARY_SOURCE_ID_CONFLICT');evidenceMap.set(record.id,record);}
   const baseProfile=m2ProfileId===undefined?null:createLocalExplanationProfile(chartProfile,{m2ProfileId});
   return Object.freeze({calculate(request,requested){
     const options=selectedOptions(requested),executionCounts={birthM1Calls:0,seyunYearQueries:0,seyunLabelCalls:0};
@@ -78,7 +82,7 @@ export function createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,co
     if(options.seyun?.yearLabel!==undefined){executionCounts.seyunLabelCalls++;seyun.yearLabel=core.annualLuckYearLabel(options.seyun.yearLabel,luckPolicyId);}
     if(options.seyun?.queryMinute!==undefined){executionCounts.seyunYearQueries++;
       const query=options.seyun.queryMinute;
-      seyun.atMinute=query<'1989-01-01T00:00'?{status:'POLICY_UNRESOLVED',queryMinute:query,confidence:null,entries:[],lichun:null,missingData:[],reason:'QUERY_OUTSIDE_VERIFIED_MODERN_CLOCK_POLICY',ruleRefs:[metadata.rules.find(r=>r.policyRefs.includes(core.LUCK_POLICIES.annualTime)).id],policyRefs:[core.LUCK_POLICIES.annualTime],sourceRefs:[]}:
+      seyun.atMinute=query<'1989-01-01T00:00'||(boundarySupplement&&query>='2027-01-01T00:00')?{status:'POLICY_UNRESOLVED',queryMinute:query,confidence:null,entries:[],lichun:null,missingData:[],reason:'QUERY_OUTSIDE_VERIFIED_MODERN_CLOCK_POLICY',...(boundarySupplement?{dataReadiness:boundarySupplement.dataReadiness}:{}),ruleRefs:[metadata.rules.find(r=>r.policyRefs.includes(core.LUCK_POLICIES.annualTime)).id],policyRefs:[core.LUCK_POLICIES.annualTime],sourceRefs:[]}:
         core.annualLuckAtMinute({timeline,queryMinute:query,policyId:luckPolicyId});
       if(seyun.atMinute.lichun)for(const id of seyun.atMinute.lichun.sourceIds)putEvent(id);
     }
@@ -93,7 +97,7 @@ export function createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,co
         else{
           const direction=core.resolveLuckDirection({yearPillar:natal.year,traditionalSex:options.dayun.traditionalSex,policyId:luckPolicyId});
           const sequence=core.luckPillarSequence({monthPillar:natal.month,direction:direction.direction,count:options.dayun.count,policyId:luckPolicyId});
-          const start=core.resolveLuckStart({timeline,birthMinute:m1.chart.recordedBirthKstMinute,direction:direction.direction,boundarySide:trace.boundarySide,policyId:luckPolicyId});
+          const start=core.resolveLuckStart({timeline:dayunTimeline,birthMinute:m1.chart.recordedBirthKstMinute,direction:direction.direction,boundarySide:trace.boundarySide,policyId:luckPolicyId});
           const eventRefs=start.selectedEvent?start.selectedEvent.sourceIds.map(putEvent):[];
           dayun={status:start.status==='OK'?'OK':'PARTIAL',traditionalSex:options.dayun.traditionalSex,direction,sequence,start,
             modelAgeIntervals:start.age?core.modelAgeIntervals(start.age,sequence.count,luckPolicyId):null,calendarProjection:start.calendarProjection,currentDecade:heldProjection()};
@@ -109,7 +113,7 @@ export function createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,co
       return {candidateRef,candidateIndex:index,boundarySide:trace.boundarySide,dayun,seyun:candidateSeyun,facts};
     });
     const luck=mintLuck({schemaVersion:'kasi-local-m7-facts-v01',mode:'BIRTH_LINKED',status:'READY',policy:metadata,
-      provenance:{profile:structuredClone(m1.profile),dataset:structuredClone(m1.dataset),policies:structuredClone(m1.policies),recordedBirthMinute:m1.chart.recordedBirthKstMinute,confidence:m1.chart.confidence},
+      provenance:{profile:structuredClone(m1.profile),dataset:structuredClone(m1.dataset),policies:structuredClone(m1.policies),recordedBirthMinute:m1.chart.recordedBirthKstMinute,confidence:m1.chart.confidence,...(boundarySupplement?{boundarySupplement:{contentSha256:boundarySupplement.contentSha256,baseManifestSha256:boundarySupplement.baseManifestSha256,compositionId:'kasi-base-plus-boundary-'+fingerprint({base:boundarySupplement.baseManifestSha256,supplement:boundarySupplement.contentSha256}),sourceKind:'KASI_OPENAPI_RESPONSE',interpretation:boundarySupplement.interpretation,dataReadiness:boundarySupplement.dataReadiness}}:{})},
       birthCalculationFingerprint:fingerprint(m1),executionCounts,candidates,seyun,rules,sources:[...sources.values()],
       validation:{level:'SAME_EXECUTION_PINNED_API_AND_SELECTED_TRADITIONAL_POLICY',g0Receipt:null,g1P2Promotion:false,editionVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',predictiveValidity:'NOT_CLAIMED'}});
     const result={schemaVersion:LOCAL_LUCK_SCHEMA,status:'OK',m1,baseExplanation,luck,explanation:explainLuck(luck)};
@@ -117,7 +121,7 @@ export function createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,co
   }});
 }
 
-export async function loadLocalLuckProfile(options){return createLocalLuckProfile(await loadLocalChartProfile(options),options);}
+export async function loadLocalLuckProfile(options){const chart=await loadLocalChartProfile(options),boundarySupplement=await loadOptionalBoundarySupplement(options);return createLocalLuckProfile(chart,{...options,boundarySupplement});}
 
 const templates={
   DAYUN_DIRECTION:v=>`후보의 연간은 ${v.yearStem}(${v.yearStemPolarity==='YANG'?'양':'음'})이며, 명시한 전통 방향 규칙용 성별값 ${v.traditionalSex==='MALE'?'남성(MALE)':'여성(FEMALE)'}을 적용해 ${dir(v.direction)}을 선택했습니다.`,
@@ -185,7 +189,7 @@ export function renderLocalLuckText(result){
 }
 export function parseLocalLuckArgs(args){
   check(args.length>0&&args.length%2===0,'EXPLICIT_ARGUMENTS_REQUIRED');const extra={},base=[];
-  const names=['--luck-profile','--output','--dayun','--traditional-sex','--dayun-count','--seyun-year','--query-minute','--m2-profile'];
+  const names=['--luck-profile','--output','--dayun','--traditional-sex','--dayun-count','--seyun-year','--query-minute','--m2-profile','--boundary-supplement','--boundary-supplement-sha'];
   for(let i=0;i<args.length;i+=2){if(names.includes(args[i])){check(!Object.hasOwn(extra,args[i])&&typeof args[i+1]==='string','ARGUMENTS');extra[args[i]]=args[i+1];}else base.push(args[i],args[i+1]);}
   policy(extra['--luck-profile']);check(['json','text'].includes(extra['--output']),'EXPLICIT_OUTPUT_REQUIRED');
   const requested={};
@@ -193,8 +197,10 @@ export function parseLocalLuckArgs(args){
   else check(extra['--traditional-sex']===undefined&&extra['--dayun-count']===undefined,'DAYUN_ARGUMENTS');
   if(extra['--seyun-year']!==undefined||extra['--query-minute']!==undefined){requested.seyun={};if(extra['--seyun-year']!==undefined){check(/^\d+$/.test(extra['--seyun-year']),'SEYUN_YEAR_INTEGER_REQUIRED');requested.seyun.yearLabel=Number(extra['--seyun-year']);}if(extra['--query-minute']!==undefined)requested.seyun.queryMinute=extra['--query-minute'];}
   const features=selectedOptions(requested);
-  if(base.length===0){check(features.dayun===undefined&&features.seyun?.yearLabel!==undefined&&features.seyun.queryMinute===undefined&&extra['--m2-profile']===undefined,'PURE_LABEL_ARGUMENTS');return {mode:'SEYUN_LABEL_ONLY',year:features.seyun.yearLabel,luckPolicyId:extra['--luck-profile'],output:extra['--output']};}
-  return {...parseLocalChartArgs(base),mode:'BIRTH_LINKED',features:requested,luckPolicyId:extra['--luck-profile'],m2ProfileId:extra['--m2-profile'],output:extra['--output']};
+  check((extra['--boundary-supplement']===undefined)===(extra['--boundary-supplement-sha']===undefined),'BOUNDARY_DIRECTORY_AND_PIN_REQUIRED_TOGETHER');
+  if(extra['--boundary-supplement']!==undefined)check(extra['--boundary-supplement'].length>0&&/^[a-f0-9]{64}$/.test(extra['--boundary-supplement-sha']),'BOUNDARY_INDEPENDENT_PIN_REQUIRED');
+  if(base.length===0){check(features.dayun===undefined&&features.seyun?.yearLabel!==undefined&&features.seyun.queryMinute===undefined&&extra['--m2-profile']===undefined&&extra['--boundary-supplement']===undefined,'PURE_LABEL_ARGUMENTS');return {mode:'SEYUN_LABEL_ONLY',year:features.seyun.yearLabel,luckPolicyId:extra['--luck-profile'],output:extra['--output']};}
+  return {...parseLocalChartArgs(base),mode:'BIRTH_LINKED',features:requested,luckPolicyId:extra['--luck-profile'],m2ProfileId:extra['--m2-profile'],output:extra['--output'],...(extra['--boundary-supplement']===undefined?{}:{boundarySupplementDirectory:extra['--boundary-supplement'],expectedBoundarySupplementSha256:extra['--boundary-supplement-sha']})};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){if(process.argv.slice(2).some(arg=>['--calendar-projection','--as-of-date','--as-of-time'].includes(arg))){
   // Finish this module's evaluation before the optional adapter imports its v0.1 functions.
@@ -206,4 +212,4 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).hr
   const result=options.mode==='SEYUN_LABEL_ONLY'?calculateSeyunLabel(options.year,options.luckPolicyId):(await loadLocalLuckProfile(options)).calculate(options.request,options.features);
   if(result.status!=='OK'){process.stderr.write(JSON.stringify({status:result.status,code:'BIRTH_INPUT_NOT_SUPPORTED'})+'\n');process.exitCode=2;}
   else process.stdout.write(options.output==='json'?JSON.stringify(result,null,2)+'\n':renderLocalLuckText(result));
-}catch(error){process.stderr.write(JSON.stringify({status:'REJECTED',code:error instanceof LocalLuckError||error instanceof LocalChartError?error.code:'LUCK_DATA_OR_INPUT_REJECTED'})+'\n');process.exitCode=1;}}}
+}catch(error){process.stderr.write(JSON.stringify({status:'REJECTED',code:error instanceof LocalLuckError||error instanceof LocalChartError||error instanceof BoundarySupplementError?error.code:'LUCK_DATA_OR_INPUT_REJECTED'})+'\n');process.exitCode=1;}}}

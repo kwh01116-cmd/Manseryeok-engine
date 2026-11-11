@@ -4,6 +4,7 @@ import {gregorianDayNumber} from '../../dist/calendar/koreanLunisolarValidation.
 import * as calendar from '../../dist/luck/calendarProjectionV02.js';
 import {createLocalLuckProfile,validateLocalLuckResult,parseLocalLuckArgs,LocalLuckError} from './local-luck.mjs';
 import {loadLocalChartProfile,LocalChartError} from './local-chart.mjs';
+import {loadOptionalBoundarySupplement,BoundarySupplementError} from './boundary-supplement.mjs';
 
 export const CALENDAR_PROJECTION_POLICY_V02=calendar.CALENDAR_PROJECTION_POLICY_V02;
 export const LOCAL_LUCK_PROJECTION_SCHEMA='kasi-local-luck-projection-v02';
@@ -82,8 +83,8 @@ export function projectLocalLuckResult(base,options={}){
   const result={schemaVersion:LOCAL_LUCK_PROJECTION_SCHEMA,status:'OK',m7:base,projection,explanation:explainLuckProjection(projection)};
   issuedResults.set(result,{base,projection});return result;
 }
-export function createLocalLuckProjectionProfile(chartProfile,{luckPolicyId,calendarProjectionPolicyId,m2ProfileId,contextProfile=chartProfile}={}){
-  policy(calendarProjectionPolicyId);const baseProfile=createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,contextProfile});
+export function createLocalLuckProjectionProfile(chartProfile,{luckPolicyId,calendarProjectionPolicyId,m2ProfileId,contextProfile=chartProfile,boundarySupplement}={}){
+  policy(calendarProjectionPolicyId);const baseProfile=createLocalLuckProfile(chartProfile,{luckPolicyId,m2ProfileId,contextProfile,boundarySupplement});
   return Object.freeze({calculate(request,features,query={}){
     const {asOfMinute}=queryOptions(query);check(features&&Object.hasOwn(features,'dayun'),'CALENDAR_PROJECTION_REQUIRES_DAYUN');
     const base=baseProfile.calculate(request,features);
@@ -91,7 +92,7 @@ export function createLocalLuckProjectionProfile(chartProfile,{luckPolicyId,cale
     return projectLocalLuckResult(base,{calendarProjectionPolicyId,asOfMinute});
   }});
 }
-export async function loadLocalLuckProjectionProfile(options){return createLocalLuckProjectionProfile(await loadLocalChartProfile(options),options);}
+export async function loadLocalLuckProjectionProfile(options){const chart=await loadLocalChartProfile(options),boundarySupplement=await loadOptionalBoundarySupplement(options);return createLocalLuckProjectionProfile(chart,{...options,boundarySupplement});}
 
 const templates={
   NOMINAL_CALENDAR:v=>v.status==='PROJECTED_UNDER_POLICY'?`선택한 달력 가산 정책에서 계산한 첫 명목 교운일은 ${v.firstStartMinute}입니다. 원래 간격 ${v.intervalMinutes}분을 ${v.decomposition.years}년 ${v.decomposition.months}개월 ${v.decomposition.days}일 ${v.decomposition.hours}시간으로 분해해 출생 기록 시각부터 순차 가산했습니다.`:
@@ -164,4 +165,4 @@ export async function runLocalLuckProjectionCli(args){try{
   const options=parseLocalLuckProjectionArgs(args),profile=await loadLocalLuckProjectionProfile(options),result=profile.calculate(options.request,options.features,{asOfMinute:options.asOfMinute});
   if(result.status!=='OK'){process.stderr.write(JSON.stringify({status:result.status,code:'BIRTH_INPUT_NOT_SUPPORTED'})+'\n');process.exitCode=2;}
   else process.stdout.write(options.output==='json'?JSON.stringify(result,null,2)+'\n':renderLocalLuckProjectionText(result));
-}catch(error){process.stderr.write(JSON.stringify({status:'REJECTED',code:error instanceof LocalLuckProjectionError||error instanceof LocalLuckError||error instanceof LocalChartError?error.code:'LUCK_CALENDAR_DATA_OR_INPUT_REJECTED'})+'\n');process.exitCode=1;}}
+}catch(error){process.stderr.write(JSON.stringify({status:'REJECTED',code:error instanceof LocalLuckProjectionError||error instanceof LocalLuckError||error instanceof LocalChartError||error instanceof BoundarySupplementError?error.code:'LUCK_CALENDAR_DATA_OR_INPUT_REJECTED'})+'\n');process.exitCode=1;}}
