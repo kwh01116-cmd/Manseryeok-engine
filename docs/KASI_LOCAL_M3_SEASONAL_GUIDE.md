@@ -106,3 +106,7 @@ $common = @(
 실제 UTC→Asia/Seoul 순차 전수는 각47975양력/음력쌍, 95950제품=95950출생M1, 99598후보였고 계절 분류66518 / 계절말 보류33080였다. 두 요약bytes/양음력 의미가 같으며 지문 2530b2c726a673a34975afa45a54f1d76b557c2d4a3b1adce44e1c003c773e20이다. 원본/a/b/supplement·실행21파일 불변, 이번KASI/API키0이다. 이는 연결 검사이며 독립120조합의 규칙 검사와 구분한다.
 
 [실제 설명·상태분포·검증SHA·실패 이력](engineering/KASI_M3_SEASONAL_STATE_EXECUTION_20261111.md).
+
+## 별도 선택형 계절말 정책 v0.2
+
+사립 발표 분 전18일의 명목 경계를 선택하려면 [계절 v0.2 실행 가이드](KASI_LOCAL_M3_SEASONAL_SILI_GUIDE.md)를 따른다. 이 문서의 v0.1 ID·표·네 달 보류·기존 예시는 그대로 유지되며 v0.2는 별도로 선택한다. [실제 검증·실패 기록](engineering/KASI_M3_SEASONAL_SILI_EXECUTION_20261112.md).

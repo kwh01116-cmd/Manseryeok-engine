@@ -50,3 +50,9 @@ A real source-edition reference, declared school, all policy axes, reproducible 
 ## 2026-11-11 owner-authorized limited seasonal classification
 
 The owner separately authorized the opt-in M3-SEASONAL-FOUR-SEASONS-EARTH-MONTHS-DEFERRED-V01 classification: four seasonal tables for eight already-resolved saju month branches, with four earth-ending months deferred. Its RESOLVED_UNDER_POLICY is a limited traditional classification, not READY for final strength, root efficacy, commanding qi, structure, useful gods, prediction or release. This dated exception does not remove or satisfy this final interpretation/release gate. Existing structural evidence stays EVIDENCE_ONLY and finalStrength NOT_IMPLEMENTED. [Policy and observed transcription limits](M3_SEASONAL_STATE_POLICY_V01.md) · [executed evidence](../engineering/KASI_M3_SEASONAL_STATE_EXECUTION_20261111.md).
+
+## 2026-11-12 owner-authorized selected Sili pre18 seasonal classification
+
+The owner separately authorized M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02/0.2.0. It splits the four already-resolved ending months by the exact next Sili's published minute minus 25,920 nominal minutes, with conditional alternatives under the same natal parent at B and existing M1 conditions at T. Normal eight-month classifications reuse v0.1. This completes one selected seasonal classification across twelve months when its required events exist; it is not READY for final strength, 得令, commanding qi, effective root, relation efficacy, weights, useful gods, prediction or release. Existing structural evidence remains EVIDENCE_ONLY and finalStrength NOT_IMPLEMENTED. V0.1's deferred four-month policy and all final promotion requirements remain unchanged.
+
+[Source and implementation distinctions](M3_SEASONAL_SILI_PRE18_POLICY_V02.md) · [Actual execution, failures and test SHA](../engineering/KASI_M3_SEASONAL_SILI_EXECUTION_20261112.md).
