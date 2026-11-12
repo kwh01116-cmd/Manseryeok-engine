@@ -1,7 +1,7 @@
 import { STEM_NATURE, type HeavenlyStem } from "../domain/stems.js";
 import { tenGod } from "../domain/tenGods.js";
 import { areStemCombinationPartners } from "../domain/stemCombinations.js";
-import { validateM3Evidence, type M3EvidenceResult, type M3InputEnvelope, type M3StemLocation, type M3EvidenceRecord } from "./structuralEvidenceV1.js";
+import { validateM3EvidenceInputContext, type M3EvidenceResult, type M3InputEnvelope, type M3StemLocation, type M3EvidenceRecord } from "./structuralEvidenceV1.js";
 import { M3_ROOT_POLICY_ID, validateM3RootPresence, type M3RootPresenceResult } from "./rootPresenceV1.js";
 
 export { areStemCombinationPartners, stemCombinationPartner, STEM_COMBINATION_PAIRS } from "../domain/stemCombinations.js";
@@ -92,7 +92,7 @@ function refsFrom(locations: readonly M3StemLocation[], records: readonly M3Evid
 
 /** Checks consumed original facts against issued immutable locations, without rerunning M1, M2, M3 or root derivation. */
 function validateContext(evidence: M3EvidenceResult, root: M3RootPresenceResult, m2Facts: M3InputEnvelope): void {
-  validateM3Evidence(evidence); validateM3RootPresence(root, { evidence, m2Facts });
+  validateM3EvidenceInputContext(evidence, m2Facts); validateM3RootPresence(root, { evidence, m2Facts });
   check(root.policy.id === M3_ROOT_POLICY_ID, "M3_SUPPORT_EXPLICIT_ROOT_DEPENDENCY_REQUIRED");
   check(m2Facts?.schemaVersion === "kasi-local-chart-facts-v1" && m2Facts.status === "READY" && equal(m2Facts.policyBundle, evidence.upstreamPolicyBundle), "M3_SUPPORT_ORIGINAL_M2_CONTEXT_REQUIRED");
   for (const kind of ["rules", "sources"] as const) {
@@ -144,7 +144,7 @@ function validateContext(evidence: M3EvidenceResult, root: M3RootPresenceResult,
           // and do not carry calculationSourceRefs. Preserve that native contract.
           if (key !== "calculationSourceRefs") {
             const refs = current[key] as unknown[]; dense(refs);
-            check(refs.every(ref => typeof ref === "string" && hf[key].includes(ref)) && new Set(refs).size === refs.length, "M3_SUPPORT_ROOT_MEMBER_PROVENANCE_CHANGED");
+            check(refs.length > 0 && refs.every(ref => typeof ref === "string" && hf[key].includes(ref)) && new Set(refs).size === refs.length, "M3_SUPPORT_ROOT_MEMBER_PROVENANCE_CHANGED");
           }
         }
       });
@@ -153,7 +153,7 @@ function validateContext(evidence: M3EvidenceResult, root: M3RootPresenceResult,
 }
 
 export type ResourceSupportDecision = "NO_HOLD_BY_THIS_RULE" | "OUT_OF_SCOPE_INTERACTION" | "SUPPORT_HELD_UNDER_SELECTED_RULE" | "ROOTED_COMBINATION_EFFECT_UNRESOLVED";
-interface SupportContext { readonly evidence: M3EvidenceResult; readonly root: M3RootPresenceResult; readonly m2Facts: M3InputEnvelope; readonly mutableInputSnapshot: string | null; }
+interface SupportContext { readonly evidence: M3EvidenceResult; readonly root: M3RootPresenceResult; readonly m2Facts: M3InputEnvelope; }
 const contexts = new WeakMap<object, SupportContext>();
 
 /** Consumes the already issued root result in the same M3/M2 execution; no calendar or rule-table derivation is repeated. */
@@ -204,7 +204,7 @@ export function deriveM3ResourceSupport(evidence: M3EvidenceResult,
     policy: M3_SUPPORT_POLICY_METADATA, candidates, rules: [...root.rules, ...M3_SUPPORT_POLICY_METADATA.rules], sources: [...root.sources, ...M3_SUPPORT_POLICY_METADATA.sources],
     totalSupportEfficacy: "NOT_EVALUATED" as const, finalStrength: { status: "NOT_IMPLEMENTED", releaseGate: "M3_FINAL_BLOCKED_UNCHANGED" },
     validation: { level: "ISSUED_SAME_EXECUTION_M3_ROOT_AND_CONSUMED_ORIGINAL_M2_CONSISTENCY", inputAuthentication: "NOT_PERFORMED_BY_PURE_MODULE", editionOrRightsApproval: false, predictiveValidity: "NOT_CLAIMED", upstreamRuleVersions: "PRESERVED_INCLUDING_NULL", g0Receipt: null, g1P2Promotion: false } });
-  contexts.set(result, { evidence, root, m2Facts, mutableInputSnapshot: frozenTree(m2Facts) ? null : JSON.stringify(m2Facts) }); return result;
+  contexts.set(result, { evidence, root, m2Facts }); return result;
 }
 export type M3ResourceSupportResult = ReturnType<typeof deriveM3ResourceSupport>;
 export function validateM3ResourceSupport(result: M3ResourceSupportResult,
@@ -214,8 +214,7 @@ export function validateM3ResourceSupport(result: M3ResourceSupportResult,
   if (context.evidence !== undefined) check(context.evidence === issued.evidence, "M3_SUPPORT_OTHER_EVIDENCE_CONTEXT");
   if (context.root !== undefined) check(context.root === issued.root, "M3_SUPPORT_OTHER_ROOT_CONTEXT");
   if (context.m2Facts !== undefined) check(context.m2Facts === issued.m2Facts, "M3_SUPPORT_OTHER_M2_CONTEXT");
-  validateM3Evidence(issued.evidence); validateM3RootPresence(issued.root, { evidence: issued.evidence, m2Facts: issued.m2Facts });
-  if (issued.mutableInputSnapshot !== null) check(JSON.stringify(issued.m2Facts) === issued.mutableInputSnapshot, "M3_SUPPORT_ORIGINAL_M2_CHANGED_AFTER_ISSUANCE");
+  validateM3EvidenceInputContext(issued.evidence, issued.m2Facts); validateM3RootPresence(issued.root, { evidence: issued.evidence, m2Facts: issued.m2Facts });
   return true;
 }
 

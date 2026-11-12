@@ -55,6 +55,7 @@ export interface M3InputEnvelope {readonly schemaVersion:"kasi-local-chart-facts
 export interface M3StemLocation {readonly locationId:string;readonly candidateRef:string;readonly locationKind:"VISIBLE_STEM"|"HIDDEN_STEM";readonly pillarRole:ChartPillarRole;readonly pillarRef:string;readonly stem:HeavenlyStem;readonly element:FiveElement;readonly polarity:YinYang;readonly position:"VISIBLE"|HiddenStemPosition;readonly index:number|null;readonly inputFactRef:string;readonly inputFactRefs:readonly string[];readonly inputMemberRef:string|null;readonly memberRef:string|null;readonly m2FactRef:string|null;readonly tenGod:TenGod|null;readonly relation:ElementRelation;readonly ruleRefs:readonly string[];readonly policyRefs:readonly string[];readonly sourceRefs:readonly string[];readonly calculationSourceRefs:readonly string[];}
 export interface M3EvidenceRecord {readonly id:string;readonly candidateRef:string;readonly kind:string;readonly value:unknown;readonly inputFactRefs:readonly string[];readonly inputMemberRefs:readonly string[];readonly pillarRefs:readonly string[];readonly ruleRefs:readonly string[];readonly policyRefs:readonly string[];readonly sourceRefs:readonly string[];readonly calculationSourceRefs:readonly string[];}
 const issued=new WeakSet<object>();
+const originalInputs=new WeakMap<object,{readonly input:M3InputEnvelope;readonly snapshot:string|null}>();
 function policy(id:unknown):void {requireValue(id===M3_EVIDENCE_PROFILE_ID,"EXPLICIT_SUPPORTED_M3_EVIDENCE_PROFILE_REQUIRED");}
 
 /** Structural M2 consistency only. The adapter must separately verify the live M1/M2 execution/source receipt. */
@@ -143,10 +144,18 @@ export function deriveM3Evidence(input:M3InputEnvelope,{policyId}:{policyId:stri
   const result=snapshot({schemaVersion:M3_EVIDENCE_SCHEMA,status:"EVIDENCE_ONLY" as const,policy:M3_EVIDENCE_POLICY_METADATA,finalStrength:M3_EVIDENCE_POLICY_METADATA.finalStrength,
     upstreamPolicyBundle:snapshot(bundle),candidates,rules:[...input.rules.map(snapshot),...M3_EVIDENCE_POLICY_METADATA.rules],sources:[...input.sources.map(snapshot),...M3_EVIDENCE_POLICY_METADATA.sources],
     validation:{level:"STRUCTURAL_M2_REFERENCE_AND_VALUE_CONSISTENCY_ONLY",inputAuthentication:"NOT_PERFORMED_BY_PURE_MODULE",upstreamRuleVersions:"PRESERVED_INCLUDING_NULL",editionVerification:"UNVERIFIED",rightsReview:"UNVERIFIED",predictiveValidity:"NOT_CLAIMED",g0Receipt:null,g1P2Promotion:false}});
-  issued.add(result);return result;
+  issued.add(result);originalInputs.set(result,{input,snapshot:deepFrozen(input)?null:JSON.stringify(input)});return result;
 }
 export type M3EvidenceResult=ReturnType<typeof deriveM3Evidence>;
 export function validateM3Evidence(value:M3EvidenceResult):true {requireValue(issued.has(value)&&Object.isFrozen(value),"ISSUED_IMMUTABLE_M3_EVIDENCE_REQUIRED");return true;}
+
+/** Optional same-execution connection check; does not change structural facts or authenticate external JSON. */
+export function validateM3EvidenceInputContext(value:M3EvidenceResult,input:M3InputEnvelope):true {
+  validateM3Evidence(value);const original=originalInputs.get(value);
+  requireValue(original&&original.input===input,"M3_ORIGINAL_INPUT_CONTEXT_REQUIRED");
+  if(original.snapshot!==null)requireValue(JSON.stringify(input)===original.snapshot,"M3_ORIGINAL_INPUT_CHANGED_AFTER_ISSUANCE");
+  return true;
+}
 
 const roleNames={year:"연주",month:"월주",day:"일주",hour:"시주"};
 const elementNames={WOOD:"목",FIRE:"화",EARTH:"토",METAL:"금",WATER:"수"};

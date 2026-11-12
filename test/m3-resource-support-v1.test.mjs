@@ -124,6 +124,8 @@ test('mutable original M2 tampering after root issuance is rejected by a new sup
   ['visible policy reference',s=>fact(s,'PILLAR_NATURE').policyRefs.push('MISSING_POLICY')],
   ['hidden member source reference',s=>fact(s,'HIDDEN_STEMS').value.members[0].sourceRefs.push('MISSING_SOURCE')],
   ['hidden member policy reference',s=>fact(s,'HIDDEN_STEMS').value.members[0].policyRefs.push('MISSING_POLICY')],
+  ...['ruleRefs','policyRefs','sourceRefs'].map(key=>['empty hidden member '+key,s=>{fact(s,'HIDDEN_STEMS').value.members[0][key]=[];}]),
+  ...['ruleRefs','policyRefs','sourceRefs'].map(key=>['removed hidden member '+key,s=>{fact(s,'HIDDEN_STEMS').value.members[0][key]=fact(s,'HIDDEN_STEMS').value.members[0][key].slice(1);}]),
   ['hidden member content',s=>{fact(s,'HIDDEN_STEMS').value.members[0].stem='丁';}],
   ['sparse original facts',s=>{delete s.m2Facts.candidates[0].facts[0];}],
   ['sparse original hidden members',s=>{delete fact(s,'HIDDEN_STEMS').value.members[0];}],
@@ -136,5 +138,12 @@ test('mutable original M2 tampering after root issuance is rejected by a new sup
   assert.throws(()=>validateM3ResourceSupport(state.support,{evidence:state.evidence,root:state.root,m2Facts:state.m2Facts}),label+' cannot validate earlier issuance against changed mutable inputs');
   assert.equal(JSON.stringify(state.support),issued,'already-issued immutable output is retained');
   const next=caseState(byId('adjacent-unrooted-zhengyin'));assert.equal(decision(next.support,'month').selectedRuleDecision,'SUPPORT_HELD_UNDER_SELECTED_RULE');assert.equal(validateM3ResourceSupport(next.support,{evidence:next.evidence,root:next.root,m2Facts:next.m2Facts}),true);
+ }
+ // Generic structural M3 keeps its existing contract; the selected support input requires these references.
+ for(const key of ['ruleRefs','policyRefs','sourceRefs']){
+  const m2Facts=structuralM2Unit([['戊午','癸巳','甲午','丙寅']],{monthTerms:['LIXIA']});
+  m2Facts.candidates[0].facts.find(f=>f.kind==='HIDDEN_STEMS'&&f.value.role==='month').value.members[0][key]=[];
+  const evidence=deriveM3Evidence(m2Facts,{policyId:M3_EVIDENCE_PROFILE_ID}),root=deriveM3RootPresence(evidence,{policyId:M3_ROOT_POLICY_ID,m2Facts});
+  assert.throws(()=>deriveM3ResourceSupport(evidence,{policyId:M3_SUPPORT_POLICY_ID,root,m2Facts}),'initially empty native '+key+' is not silently accepted');
  }
 });
