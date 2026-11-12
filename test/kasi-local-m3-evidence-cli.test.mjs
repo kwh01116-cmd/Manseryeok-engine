@@ -185,3 +185,41 @@ test('root CLI keeps B alternatives under one root result and existing Lichun na
   rejection(run(replace(args,'--manifest-sha','e'.repeat(64))),context);
   rejection(run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
 }));
+
+const supportPolicy='M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01';
+test('explicit resource support CLI leaves an unrooted unpaired resource unheld and preserves all earlier layers',async()=>setup(async({run,common,lunar})=>{
+  const baseline=[...common,'--root-policy',rootPolicy,'--seasonal-policy',siliPolicy],before=run(baseline);
+  assert.equal(before.status,0,before.stderr);
+  const selected=[...baseline,'--support-policy',supportPolicy],g=run(selected),l=run([...lunar,'--root-policy',rootPolicy,'--seasonal-policy',siliPolicy,'--support-policy',supportPolicy]);
+  for(const r of[g,l]){assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+  const value=JSON.parse(g.stdout),moon=JSON.parse(l.stdout),old=JSON.parse(before.stdout);
+  assert.equal(value.schemaVersion,'kasi-local-m3-evidence-seasonal-support-v1');
+  for(const key of['m1','facts','evidence','explanation','root','rootExplanation','seasonal','validation','provenance','executionCounts'])assert.deepEqual(value[key],old[key]);
+  assert.deepEqual(value.support.candidates,moon.support.candidates);assert.deepEqual(value.supportExplanation,moon.supportExplanation);
+  const resource=value.support.candidates[0].resources[0];assert.equal(value.support.candidates[0].resources.length,1);
+  assert.equal(resource.resource.stem,'甲');assert.equal(resource.resource.tenGod,'偏印');assert.equal(resource.rootPresence,'ABSENT_UNDER_POLICY');
+  assert.deepEqual(resource.combinationPartners,[]);assert.equal(resource.selectedRuleDecision,'NO_HOLD_BY_THIS_RULE');
+  assert.equal(resource.totalSupportEfficacy,'NOT_EVALUATED');assert.equal(value.support.finalStrength.status,'NOT_IMPLEMENTED');
+  const text=run(replace(selected,'--output','text'));assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');
+  assert.match(text.stdout,/甲/);assert.match(text.stdout,/인성/);assert.match(text.stdout,/합/);assert.match(text.stdout,/채택/);
+  assert.equal(run(baseline).stdout,before.stdout);
+  const alone=run([...common,'--root-policy',rootPolicy,'--support-policy',supportPolicy]);assert.equal(alone.status,0,alone.stderr);
+  assert.equal(JSON.parse(alone.stdout).schemaVersion,'kasi-local-m3-evidence-support-v1');assert.equal(JSON.parse(alone.stdout).seasonal,undefined);
+}));
+test('support CLI preserves B alternatives and correlated Lichun parents while requiring explicit root dependency and safe inputs',async()=>setup(async context=>{
+  const {run,common}=context,args=[...common,'--root-policy',rootPolicy,'--seasonal-policy',siliPolicy,'--support-policy',supportPolicy];
+  const b=replace(replace(args,'--date','2026-04-17'),'--time','01:20');
+  const before=run(replace(b,'--time','01:19')),at=run(b),after=run(replace(b,'--time','01:21'));
+  for(const r of[before,at,after]){assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+  const value=JSON.parse(at.stdout);assert.equal(value.m1.chart.candidates.length,1);assert.equal(value.support.candidates.length,1);
+  assert.equal(value.seasonal.candidates[0].judgment.alternatives.length,2);
+  assert.deepEqual(JSON.parse(before.stdout).support,value.support);assert.deepEqual(JSON.parse(after.stdout).support,value.support);
+  const t=replace(replace(args,'--date','2026-02-05'),'--time','01:20'),utc=run(t),seoul=run(t,{tz:'Asia/Seoul'});
+  assert.equal(utc.status,0,utc.stderr);assert.equal(seoul.status,0,seoul.stderr);assert.equal(utc.stdout,seoul.stdout);
+  const parents=JSON.parse(utc.stdout).support.candidates;assert.equal(parents.length,2);
+  for(const parent of parents)for(const resource of parent.resources){assert.equal(resource.resource.candidateRef,parent.candidateRef);for(const partner of resource.combinationPartners)assert.equal(partner.partner.candidateRef,parent.candidateRef);}
+  rejection(run([...common,'--support-policy',supportPolicy]),context);
+  for(const bad of['','AUTO','INVALID_DO_NOT_ECHO'])rejection(run([...common,'--root-policy',rootPolicy,'--support-policy',bad]),context);
+  rejection(run([...args,'--support-policy',supportPolicy]),context);rejection(run([...common,'--root-policy',rootPolicy,'--support-policy']),context);
+  rejection(run(replace(args,'--manifest-sha','d'.repeat(64))),context);rejection(run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
+}));

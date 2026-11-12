@@ -116,3 +116,25 @@ test('immutable results, unrelated metadata and later requests cannot change ori
  assert.deepEqual(caseState(byId('parallel-seasonal-alternatives')).support,state.support);
  state.m2Facts.candidates[0].pillars[0].stem='丙';assert.equal(JSON.stringify(state.support),before);assert.deepEqual(caseState(byId('adjacent-unrooted-zhengyin')).support,state.support);
 });
+
+test('mutable original M2 tampering after root issuance is rejected by a new support call and stays isolated',()=>{
+ const fact=(s,kind)=>s.m2Facts.candidates[0].facts.find(f=>f.kind===kind&&f.value.role==='month');
+ const mutations=[
+  ['visible source reference',s=>fact(s,'PILLAR_NATURE').sourceRefs.push('MISSING_SOURCE')],
+  ['visible policy reference',s=>fact(s,'PILLAR_NATURE').policyRefs.push('MISSING_POLICY')],
+  ['hidden member source reference',s=>fact(s,'HIDDEN_STEMS').value.members[0].sourceRefs.push('MISSING_SOURCE')],
+  ['hidden member policy reference',s=>fact(s,'HIDDEN_STEMS').value.members[0].policyRefs.push('MISSING_POLICY')],
+  ['hidden member content',s=>{fact(s,'HIDDEN_STEMS').value.members[0].stem='丁';}],
+  ['sparse original facts',s=>{delete s.m2Facts.candidates[0].facts[0];}],
+  ['sparse original hidden members',s=>{delete fact(s,'HIDDEN_STEMS').value.members[0];}],
+  ['duplicate original hidden member',s=>{const h=fact(s,'HIDDEN_STEMS');h.value.members.push(h.value.members[0]);}],
+  ['foreign fact candidate',s=>{fact(s,'PILLAR_NATURE').candidateRef='chart.candidates[1]';}],
+ ];
+ for(const [label,mutate]of mutations){
+  const state=caseState(byId('adjacent-unrooted-zhengyin')),issued=JSON.stringify(state.support);mutate(state);
+  assert.throws(()=>deriveM3ResourceSupport(state.evidence,{policyId:M3_SUPPORT_POLICY_ID,root:state.root,m2Facts:state.m2Facts}),label);
+  assert.throws(()=>validateM3ResourceSupport(state.support,{evidence:state.evidence,root:state.root,m2Facts:state.m2Facts}),label+' cannot validate earlier issuance against changed mutable inputs');
+  assert.equal(JSON.stringify(state.support),issued,'already-issued immutable output is retained');
+  const next=caseState(byId('adjacent-unrooted-zhengyin'));assert.equal(decision(next.support,'month').selectedRuleDecision,'SUPPORT_HELD_UNDER_SELECTED_RULE');assert.equal(validateM3ResourceSupport(next.support,{evidence:next.evidence,root:next.root,m2Facts:next.m2Facts}),true);
+ }
+});

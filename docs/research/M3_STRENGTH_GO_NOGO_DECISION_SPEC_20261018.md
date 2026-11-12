@@ -62,3 +62,9 @@ The owner separately authorized M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02/0.2.0
 The owner separately authorized `M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01`/0.1.0: test each of the four natal visible stems against the actual members of the selected existing hidden-stem policy. `PRESENT_UNDER_POLICY` and `ABSENT_UNDER_POLICY` resolve this limited presence criterion. Exact-stem and opposite-polarity same-element evidence, all original positions, and surface resource/peer stems' own roots remain separate. Presence does not resolve root strength, damage, activation, support transmission, 得地/得勢, final strength, structure, useful gods, fortune or release. Existing structural evidence and both seasonal policies retain their contracts. This dated exception does not remove or satisfy any final interpretation/release promotion requirement.
 
 [Selected definition and original/commentary differences](M3_ROOT_PRESENCE_POLICY_V01.md).
+
+## 2026-11-12 owner-authorized resource adoption restriction
+
+The owner separately authorized `M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01`/0.1.0. It consumes the existing surface resource classification and issued root presence, enumerates all natal visible five-combination partners, and holds automatic independent support adoption only for one adjacent other-stem partner with no competition and absent resource roots. Rooted adjacent pairs remain effect-unresolved; remote, multiple and competing interactions remain out of scope with every reason retained. No partner means no hold **by this rule**, including an unrooted resource. This limited decision is neither resource deletion nor complete support efficacy. Original M1/M2/M3, seasonal/root/M7 policies, `totalSupportEfficacy=NOT_EVALUATED`, `finalStrength=NOT_IMPLEMENTED` and the final interpretation/release gate are unchanged.
+
+[Primary transcription, commentary and project decision-table distinctions](M3_RESOURCE_SUPPORT_POLICY_V01.md).
