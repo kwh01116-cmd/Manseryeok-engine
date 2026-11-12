@@ -1,33 +1,27 @@
 # Manseryeok-engine — current execution handoff
 
-**Checkpoint:2026-11-12 KST.** 인성의 특정 천간합 조건에 대한 생조 자동 채택 제한을 선택형으로 연결했다. 계절·구성상 통근·표면 인성/비겁의 자체 근은 그대로다. 생조 전체 효력·관계의 종합 작용·전체 신강약과 최종 해석/상용 출시는 미완료다.
+**Checkpoint:2026-11-13 KST. M3 제한적 종합 판단 로컬 v0.1 완료.** 명시적 연구 프로필에서 기존 계산·분류·판단을 소비해 좁은 신약 결론 또는 구체적 보류와 한국어 리포트까지 연결했다. 전체 M3강약/효력·상용 출시는 미완료다.11월12일 구현/공개검사 후 중단된Seoul만13일 복구하고 원UTC완주를 재사용했다.
 
-## 현재 실행 계약
+## 현재 계약과 근거
 
-| 계층 | 실제 상태 |
-| --- | --- |
-| 기본/출생/데이터 | 기본2026–2027/G0불변. API출생1989–2026·시각/기존4정책 필수. 수집자료1950–2026과 구별 |
-| 기존 계절·통근 | 기존 두 계절 정책·rootPresence/위치·원래 구조적EVIDENCE_ONLY와M7불변 |
-| 새 인성 선택 | M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01/0.1.0. 기존 kasi:evidence --support-policy, 의존 --root-policy 둘 다 명시 |
-| 실제 결정 | 상대없음 NO_HOLD, 원격/복수/경쟁 OUT_OF_SCOPE, 유일한 인접·무근 HELD, 같은조건 유근 ROOTED_EXCEPTION. 표면대상없음 NOT_APPLICABLE |
-| 연결 | 모든 표면 짝·고정 연월일시 위치·자체근·정확facts/후보/문헌/API참조 보존. M1요청당1회·기존M2/M3/root 재사용 |
-| 후보 | B동분은 원국/근/합1과 계절대안2. 입춘T동분은 기존 부모별 계산. 첫후보선택/확률/혼합 없음 |
-| 미평가 | totalSupportEfficacy/rootEfficacy NOT_EVALUATED, finalStrength NOT_IMPLEMENTED. 인성삭제·합화·점수·강약·용신·길흉 없음 |
+- 기본2026–2027/G0/G1-P2불변. API출생[1989-01-01,2027-01-01), 시각과 기존4정책 필수. 수집1950–2026과 구별한다.
+- 선택: --synthesis-profile M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01/0.1.0. M2/1·구조M3/0.1.0·계절v0.2/0.2.0·root/0.1.0·support/0.1.0을 정확히 묶고 충돌은 M1전 거절한다.
+- 휴·수·사+실제 근/인성 부재+표면 비겁 무근+반대 방향 구성+관계 제외 조건이 모두 맞을 때만 선택 정책의 약이다. 徐주석 반례의 프로젝트 일반화이며 exact 고전 공식·전체학파 정답이 아니다. 신강·중화는 미지원이다.
+- 자료부족/효력필요/혼재/범위밖을 구별한다. B는 원국1 아래 계절경로2, 입춘은 기존부모별 보존. 근 존재·NO_HOLD를 힘 확정으로, HELD를 인성 삭제로 소비하지 않는다.
+- 원래 EVIDENCE_ONLY/finalStrength NOT_IMPLEMENTED·전체M3해석/출시 차단·기존 계절/root/support/M7과 역사시/2027조회 범위를 유지한다. 새 연구 종합 결과는 별도 필드다.
 
-## 실제 검증과 실패
+## 실제 검증과 보존
 
-최종 실행SHA **730c1e1b08da6f5862b5dbe90627367658dbc626**에서 Node22.23.3 전체578/578(fail/cancel/skip/todo0), M2감사, Lab/KASI실제브라우저, 실제CLI30을 확인했다.10개순수·7어댑터·2CLI그룹이 추가됐고 과거559는 과거기록으로 보존했다.100천간쌍/독립20사례(정상17·거절3), M2발급 후15종 변조·최초 빈 참조3종과 후보/정책/누락/fallback거절을 검사했다.
+실행 SHA **8a45611b05ab7bfe72a68406430e7f1b2e7661ed**, Nodev22.23.3: 전체602/602(실패/취소/skip/todo0), M2감사·Lab/KASI실제브라우저·가상CLI36회 종료0. 선작성20기대(약4/혼재4/효력필요9/범위밖3), 순수15·어댑터7·CLI2그룹을 추가했고 기존578 의미를 보존했다. AI별도 검토자가16개TEXT 전문을 읽었으며 인간 전문가/판본 인증은 아니다.
 
-UTC→Seoul각49,799쌍은 각99,598제품=M1·103,246부모·62,104표면인성·12,536합연결이었다. NO_HOLD50,214/OUT8,710/HELD464/ROOTED_EXCEPTION2,716, 표면대상없는부모52,760을 다른 단위로 집계했다. 추가279M3제품과2M7참조호출은 별도다. 두시간대 동일요약/양음력 의미SHA **fe3f2cae973f59dd4c4a1468c85af481c4ccd24e5a4b873c1443467e66440462**, 두 자식·부모와 별도 비교기의 자연0을 확인했다. 내부 연결검사이며 문헌판본/예측효력 인증이 아니다.
+원UTC+복구Seoul각49,799쌍·99,598제품=M1·103,246부모·104,462조건경로. grid약0/혼재398/효력필요62,178/범위밖41,886/자료부족0. 추가176종합제품의 약8경로는 한날짜4정책×두달력이며8독립출생이아니다. 기존 경로의 M1 호출 114회는 별도다. 의미SHA6c5cb47a810e09903f8be4723e95b7089bb0b5b52aafe36d5330927448a9e8c1, 두요약bytes와 원UTC자식·복구Seoul자식/새부모도구의실측종료0·순서도확인했다. 원driver5372종료는미확인이다. 내부연결/선택규칙 재현이며 예측정답률이아니다.
 
-초기TS오류·기존day파생[day,day]참조 오인19/28을 보존했다. 중간808의 전체577/578은 기존 M7자식의 V8semi할당실패였고, 무변경4/4 후 새TEMP에서 한 번 수동 재검사해578/578이었다. 뒤늦게 빈 native참조 반례를 찾아 중간 Seoul28,250쌍을 소유 자식 하나만 확인해 중단했다. 최초 M2문맥 검사 helper와 필수 참조 검사를 보강한 뒤 최종 SHA에서 전체·브라우저·CLI·UTC→Seoul각1회를 다시 실행했다. 첫 driver의 시작 전 ENOENT도 남겼다. skip/무한재시도/일괄종료/timeout확대는 없다. old192/semi2와 표본메모리 한계는 실행보고서에 있다.
+초기TS2538·발급후계절/출처컨테이너/최초T출처형태 공백·집중21/22→입력계약보완22/22를 기록했다. 중간31a의602/602·CLI36 뒤 실제관계가 리포트에 안 나오는 품질 공백을 찾아 고쳤고, 표현구현의TS7053/TS7006도 원래M2타입으로 해결했다. 최종8a에서 전체·CLI·브라우저를 새로 맞췄다. tool5372소실/Seoul49,750뒤summary·close없음을 미완료로보존하고 같은코드/제한의Seoul만수동1회재실행했다. UTC재수행/원본덮어쓰기/skip/무한자동재시도/일괄종료/timeout확대는없었다. 중단원인/원driver종료는추정하지않는다.
 
-## 보존·전달·다음 한 단위
+원문2086·후보a/b각8·보강5파일과 base/export/supplement 독립핀 불변, API/키/재수집0. 보강본은 보존감사에만 읽었고 제품에 전달하지 않았다. .private추적0, workflow기존foundation푸시만 유지한다. 문서 이후 HEAD와 실제 원격HEAD는 테스트SHA와 구별해 최종응답/전달receipt에 확인한다. 승인ref는 agent/kasi-local-1950-2026-20261109뿐이다.
 
-원본2086파일·후보a/b각8·보강5파일과 base/export/supplement의 독립 고정지문 불변, KASI/키/재수집0이다. 보강본은 보존감사에만 읽고 제품에 전달하지 않았다. 출생/역사시/2027조회·기본/G0/G1-P2 NO-GO·M3최종게이트·기존7개null규칙버전/판본/권리미확인을 유지한다. 원저/서락오주석/프로젝트 결정표와 원격/경쟁의 범위밖을 구별한다.
+## 다음 마일스톤 제안
 
-승인ref는 agent/kasi-local-1950-2026-20261109뿐이다. 이후 기록커밋은 문서만 바꾸며 테스트SHA와 최종문서HEAD/독립조회원격HEAD를 구별한다. 실제원격HEAD는 최종응답·전달receipt에 남긴다. .private는 추적0, workflow는 foundation push만 대상으로 유지한다. main/foundation/기반브랜치·force/merge/Actions/배포 변경 없음.
+**B: 이 제한적 M3를 고정하고 M4의 첫 격국 구조 성립 묶음을 검토한다.** 강약/효력이 필요한 분기는 미지원/보류로 분리해야 한다. 전체M3의 신강·중화·근력·생조전체·관계효력은 미완료이며 다음 규칙을 이번에 자동 추가하지 않는다. M4도 이번에 착수하지 않았다.
 
-다음 한 단위는 **고정20사례를 바탕으로 계절·근·생조 제한·설기/극 근거를 종합할 좁은 결정표와 대표 명식 검증**이다. 다른합학파·생조전체·강약·용신·UI를 자동 구현하지 않는다.
-
-[가이드](KASI_LOCAL_M3_RESOURCE_SUPPORT_GUIDE.md) · [원저/주석/결정표](research/M3_RESOURCE_SUPPORT_POLICY_V01.md) · [실행·실패](engineering/KASI_M3_RESOURCE_SUPPORT_EXECUTION_20261112.md) · [DEVLOG](DEVLOG.md) · [직전인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_M3_RESOURCE_SUPPORT_20261112.md)
+[실행 가이드](KASI_LOCAL_M3_EVIDENCE_GUIDE.md) · [선택정책/사례](research/M3_LIMITED_SYNTHESIS_POLICY_V01.md) · [실제 실행/실패/집계](engineering/KASI_M3_LIMITED_SYNTHESIS_EXECUTION_20261112.md) · [DEVLOG](DEVLOG.md) · [직전인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_M3_LIMITED_SYNTHESIS_20261112.md)
