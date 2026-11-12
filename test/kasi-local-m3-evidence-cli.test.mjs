@@ -223,3 +223,37 @@ test('support CLI preserves B alternatives and correlated Lichun parents while r
   rejection(run([...args,'--support-policy',supportPolicy]),context);rejection(run([...common,'--root-policy',rootPolicy,'--support-policy']),context);
   rejection(run(replace(args,'--manifest-sha','d'.repeat(64))),context);rejection(run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
 }));
+
+const synthesisProfile='M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01';
+test('explicit synthesis CLI bundles declared dependencies once and emits JSON or a concise Korean research report offline',async()=>setup(async({run,common,lunar,directory,candidate})=>{
+  const before=run(common);success(before);const beforeFiles=await readdir(directory),beforeHashes=await hashes(candidate);
+  const bundle=args=>[...without(without(args,'--m2-profile'),'--m3-profile'),'--synthesis-profile',synthesisProfile];
+  const solar=run(bundle(common)),moon=run(bundle(lunar));
+  for(const value of [solar,moon]){assert.equal(value.error,undefined);assert.equal(value.status,0,value.stderr);assert.equal(value.stderr,'');}
+  const g=JSON.parse(solar.stdout),l=JSON.parse(moon.stdout);
+  assert.equal(g.schemaVersion,'kasi-local-m3-evidence-synthesis-v1');assert.equal(g.status,'EVIDENCE_ONLY');
+  assert.equal(g.facts.policyBundle.id,m2);assert.equal(g.evidence.policy.id,m3);assert.equal(g.seasonal.policy.id,siliPolicy);assert.equal(g.root.policy.id,rootPolicy);assert.equal(g.support.policy.id,supportPolicy);
+  assert.deepEqual(g.executionCounts,{birthM1Calls:1,m2Derivations:1});assert.deepEqual(g.researchSynthesis.candidates,l.researchSynthesis.candidates);assert.deepEqual(g.researchReport,l.researchReport);
+  assert.equal(g.validation.finalStrength,'NOT_IMPLEMENTED');assert.equal(g.validation.m3FinalInterpretationGate,'BLOCKED_UNCHANGED');assert.equal(g.validation.g0Receipt,null);assert.equal(g.validation.g1P2Promotion,false);
+  const text=run(replace(bundle(common),'--output','text'));assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');
+  assert.match(text.stdout,/제한적 종합/);assert.match(text.stdout,/연구/);assert.match(text.stdout,/보류|신약/);assert.match(text.stdout,/JSON/);assert.ok(text.stdout.length<10000);
+  assert.ok(!text.stdout.includes('기존 구조 근거·통근·계절의 상세 참조'));
+  const after=run(common);success(after);assert.equal(after.stdout,before.stdout);
+  assert.deepEqual(await hashes(candidate),beforeHashes);assert.deepEqual(await readdir(directory),beforeFiles);
+}));
+
+test('synthesis CLI retains B child paths and Lichun parents across timezones and rejects policy conflicts or incomplete inputs without fallback',async()=>setup(async context=>{
+  const {run,common,directory}=context,args=[...common,'--synthesis-profile',synthesisProfile];
+  const b=replace(replace(args,'--date','2026-04-17'),'--time','01:20'),utc=run(b),seoul=run(b,{tz:'Asia/Seoul'});
+  for(const value of [utc,seoul]){assert.equal(value.status,0,value.stderr);assert.equal(value.stderr,'');}
+  assert.equal(utc.stdout,seoul.stdout);const bv=JSON.parse(utc.stdout);
+  assert.equal(bv.m1.chart.candidates.length,1);assert.equal(bv.researchSynthesis.candidates.length,1);assert.equal(bv.researchSynthesis.candidates[0].paths.length,2);
+  const boundary=run(replace(replace(args,'--date','2026-02-05'),'--time','01:20'));assert.equal(boundary.status,0,boundary.stderr);assert.equal(boundary.stderr,'');
+  const tv=JSON.parse(boundary.stdout);assert.equal(tv.m1.chart.candidates.length,2);assert.equal(tv.researchSynthesis.candidates.length,2);
+  assert.deepEqual(tv.researchSynthesis.candidates.map(item=>[item.candidateRef,item.paths.length]),[['chart.candidates[0]',1],['chart.candidates[1]',1]]);
+  for(const flags of [['--synthesis-profile',synthesisProfile],['--seasonal-policy',seasonalPolicy],['--root-policy','AUTO'],['--support-policy','AUTO']])rejection(run([...args,...flags]),context);
+  rejection(run(replace(args,'--synthesis-profile','INVALID_DO_NOT_ECHO')),context);
+  rejection(run(replace(args,'--m2-profile','INVALID_DO_NOT_ECHO')),context);rejection(run(replace(args,'--m3-profile','INVALID_DO_NOT_ECHO')),context);
+  rejection(run(without(args,'--time')),context);rejection(run(without(args,'--clock-policy')),context);
+  rejection(run(replace(args,'--manifest-sha','0'.repeat(64))),context);rejection(run(replace(args,'--candidate',join(directory,'MISSING_CANDIDATE'))),context);
+}));

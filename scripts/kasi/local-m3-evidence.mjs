@@ -3,7 +3,7 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {fingerprint} from '../../.kasi-build/schema.js';
 import {loadLocalChartProfile, verifyLocalChartResult, getLocalChartEventContext, verifyLocalChartEventContext, LocalChartError} from './local-chart.mjs';
-import {deriveLocalChartFacts, validateLocalChartFacts, getM2PolicyBundle} from './local-chart-facts.mjs';
+import {deriveLocalChartFacts, validateLocalChartFacts, getM2PolicyBundle, M2_LOCAL_PROFILE_ID} from './local-chart-facts.mjs';
 import {parseLocalExplainArgs, LocalExplanationError} from './local-explain.mjs';
 import {
   M3_EVIDENCE_PROFILE_ID, M3_EVIDENCE_VERSION, M3_EVIDENCE_POLICY_METADATA,
@@ -26,6 +26,10 @@ import {
   M3_SUPPORT_POLICY_ID,M3_SUPPORT_POLICY_METADATA,deriveM3ResourceSupport,explainM3ResourceSupport,
   validateM3ResourceSupport,validateM3ResourceSupportExplanation,
 } from '../../dist/m3/resourceSupportV1.js';
+import {
+  M3_SYNTHESIS_PROFILE_ID,M3_SYNTHESIS_METADATA,deriveM3LimitedSynthesis,explainM3LimitedSynthesis,
+  validateM3LimitedSynthesis,validateM3LimitedSynthesisExplanation,renderM3LimitedSynthesisText,
+} from '../../dist/m3/limitedSynthesisV1.js';
 
 export const M3_LOCAL_PROFILE_ID=M3_EVIDENCE_PROFILE_ID;
 export const LOCAL_M3_EVIDENCE_SCHEMA='kasi-local-m3-evidence-v1';
@@ -35,13 +39,15 @@ export const LOCAL_M3_ROOT_SCHEMA='kasi-local-m3-evidence-root-v1';
 export const LOCAL_M3_SEASONAL_ROOT_SCHEMA='kasi-local-m3-evidence-seasonal-root-v1';
 export const LOCAL_M3_SUPPORT_SCHEMA='kasi-local-m3-evidence-support-v1';
 export const LOCAL_M3_SEASONAL_SUPPORT_SCHEMA='kasi-local-m3-evidence-seasonal-support-v1';
+export const LOCAL_M3_SYNTHESIS_SCHEMA='kasi-local-m3-evidence-synthesis-v1';
 export {M3_SEASONAL_POLICY_ID,M3_SEASONAL_SILI_POLICY_ID,M3_ROOT_POLICY_ID,M3_SUPPORT_POLICY_ID};
+export {M3_SYNTHESIS_PROFILE_ID,M3_SYNTHESIS_METADATA};
 export {M3_EVIDENCE_VERSION};
 export class LocalM3EvidenceError extends Error {
   constructor(code){super(code);this.name='LocalM3EvidenceError';this.code=code;}
 }
 const check=(ok,code)=>{if(!ok)throw new LocalM3EvidenceError(code);};
-const evidenceContexts=new WeakMap(), seasonalContexts=new WeakMap(),rootContexts=new WeakMap(),supportContexts=new WeakMap(),evidenceExecutions=new WeakMap(),issuedResults=new WeakMap(), sealed=new WeakSet();
+const evidenceContexts=new WeakMap(), seasonalContexts=new WeakMap(),rootContexts=new WeakMap(),supportContexts=new WeakMap(),synthesisContexts=new WeakMap(),evidenceExecutions=new WeakMap(),issuedResults=new WeakMap(), sealed=new WeakSet();
 function freeze(value){
   if(value&&typeof value==='object'&&!sealed.has(value)){
     Object.values(value).forEach(freeze);Object.freeze(value);sealed.add(value);
@@ -49,6 +55,13 @@ function freeze(value){
   return value;
 }
 function explicitProfile(id){check(id===M3_LOCAL_PROFILE_ID,'EXPLICIT_SUPPORTED_M3_PROFILE_REQUIRED');}
+function synthesisPolicies(synthesisProfileId,overrides={}){
+  check(synthesisProfileId===M3_SYNTHESIS_PROFILE_ID,'EXPLICIT_SUPPORTED_SYNTHESIS_PROFILE_REQUIRED');
+  const required={m2ProfileId:M2_LOCAL_PROFILE_ID,m3ProfileId:M3_LOCAL_PROFILE_ID,
+    seasonalPolicyId:M3_SEASONAL_SILI_POLICY_ID,rootPolicyId:M3_ROOT_POLICY_ID,supportPolicyId:M3_SUPPORT_POLICY_ID};
+  for(const [key,value]of Object.entries(required))check(overrides[key]===undefined||overrides[key]===value,'SYNTHESIS_POLICY_CONFLICT');
+  return required;
+}
 
 /** The pure module checks structure. This bridge additionally requires this process's issued M2. */
 export function deriveLocalM3Evidence(facts,{m3ProfileId}={}){
@@ -178,7 +191,27 @@ export function validateLocalM3ResourceSupport(support,{evidence,root}={}){
   validateM3ResourceSupport(support,{evidence:context.evidence,root:context.root,m2Facts:context.facts});
   return true;
 }
-function resultSchema(seasonal,root,support){
+/** The opt-in research profile consumes one original execution and the already-issued selected judgments. */
+export function deriveLocalM3LimitedSynthesis(evidence,{synthesisProfileId,root,support,seasonal}={}){
+  synthesisPolicies(synthesisProfileId);
+  validateLocalM3Evidence(evidence);validateLocalM3RootJudgments(root,{evidence});
+  validateLocalM3ResourceSupport(support,{evidence,root});validateLocalM3SeasonalJudgments(seasonal,{evidence});
+  check(seasonal.policy.id===M3_SEASONAL_SILI_POLICY_ID,'SYNTHESIS_SELECTED_SEASONAL_DEPENDENCY_REQUIRED');
+  const facts=evidenceContexts.get(evidence),seasonalJudgments=seasonal.candidates.map(item=>item.judgment),seasonalCalculationSources=seasonal.calculationSources??[];
+  const value=deriveM3LimitedSynthesis(evidence,{profileId:synthesisProfileId,root,support,m2Facts:facts,seasonalJudgments,seasonalCalculationSources});
+  synthesisContexts.set(value,{evidence,root,support,seasonal,facts,seasonalJudgments,seasonalCalculationSources});return value;
+}
+export function validateLocalM3LimitedSynthesis(value,{evidence,root,support,seasonal}={}){
+  const context=synthesisContexts.get(value);
+  check(context&&(!evidence||evidence===context.evidence)&&(!root||root===context.root)&&(!support||support===context.support)&&(!seasonal||seasonal===context.seasonal),'ISSUED_LOCAL_SYNTHESIS_CONTEXT_REQUIRED');
+  validateLocalM3Evidence(context.evidence,{facts:context.facts});validateLocalM3RootJudgments(context.root,{evidence:context.evidence});
+  validateLocalM3ResourceSupport(context.support,{evidence:context.evidence,root:context.root});
+  validateLocalM3SeasonalJudgments(context.seasonal,{evidence:context.evidence});
+  validateM3LimitedSynthesis(value,{evidence:context.evidence,root:context.root,support:context.support,m2Facts:context.facts,seasonalJudgments:context.seasonalJudgments,seasonalCalculationSources:context.seasonalCalculationSources});
+  return true;
+}
+function resultSchema(seasonal,root,support,researchSynthesis){
+  if(researchSynthesis)return LOCAL_M3_SYNTHESIS_SCHEMA;
   if(support)return seasonal?LOCAL_M3_SEASONAL_SUPPORT_SCHEMA:LOCAL_M3_SUPPORT_SCHEMA;
   return root?(seasonal?LOCAL_M3_SEASONAL_ROOT_SCHEMA:LOCAL_M3_ROOT_SCHEMA)
     :seasonal?.policy.id===M3_SEASONAL_SILI_POLICY_ID?LOCAL_M3_SEASONAL_SILI_SCHEMA
@@ -186,7 +219,8 @@ function resultSchema(seasonal,root,support){
 }
 
 /** Product path: one birth calculation, one existing M2 derivation, then pure evidence/templates. */
-export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,contextProfile=chartProfile}={}){
+export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,synthesisProfileId,contextProfile=chartProfile}={}){
+  if(synthesisProfileId!==undefined)({m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId}=synthesisPolicies(synthesisProfileId,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId}));
   getM2PolicyBundle(m2ProfileId);explicitProfile(m3ProfileId);
   if(seasonalPolicyId!==undefined)check(isSeasonalPolicy(seasonalPolicyId),'EXPLICIT_SUPPORTED_SEASONAL_POLICY_REQUIRED');
   if(rootPolicyId!==undefined)check(rootPolicyId===M3_ROOT_POLICY_ID,'EXPLICIT_SUPPORTED_ROOT_POLICY_REQUIRED');
@@ -210,16 +244,18 @@ export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3Profile
     const rootExplanation=root?explainM3RootPresence(root):undefined;
     const support=supportPolicyId===undefined?undefined:deriveLocalM3ResourceSupport(evidence,{supportPolicyId,root});
     const supportExplanation=support?explainM3ResourceSupport(support):undefined;
-    const result=freeze({schemaVersion:resultSchema(seasonal,root,support),status:'EVIDENCE_ONLY',
+    const researchSynthesis=synthesisProfileId===undefined?undefined:deriveLocalM3LimitedSynthesis(evidence,{synthesisProfileId,root,support,seasonal});
+    const researchReport=researchSynthesis?explainM3LimitedSynthesis(researchSynthesis):undefined;
+    const result=freeze({schemaVersion:resultSchema(seasonal,root,support,researchSynthesis),status:'EVIDENCE_ONLY',
       provenance:{profile:structuredClone(m1.profile),dataset:structuredClone(m1.dataset),
         policies:structuredClone(m1.policies),m2PolicyBundle:facts.policyBundle,m3Policy:M3_EVIDENCE_POLICY_METADATA,
         birthCalculationFingerprint:fingerprint(m1)},
-      m1,facts,evidence,explanation,...(seasonal?{seasonal}:{}),...(root?{root,rootExplanation}:{}),...(support?{support,supportExplanation}:{}),executionCounts:{birthM1Calls:1,m2Derivations:1},
+      m1,facts,evidence,explanation,...(seasonal?{seasonal}:{}),...(root?{root,rootExplanation}:{}),...(support?{support,supportExplanation}:{}),...(researchSynthesis?{researchSynthesis,researchReport}:{}),executionCounts:{birthM1Calls:1,m2Derivations:1},
       validation:{level:'SAME_PROCESS_PINNED_M1_ISSUED_M2_STRUCTURAL_M3_EVIDENCE',
         serializedReferences:'TRACEABILITY_NOT_EXTERNAL_AUTHENTICATION',
         finalStrength:'NOT_IMPLEMENTED',m3FinalInterpretationGate:'BLOCKED_UNCHANGED',
         g0Receipt:null,g1P2Promotion:false,editionVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',predictiveValidity:'NOT_CLAIMED'}});
-    issuedResults.set(result,{m1,facts,evidence,explanation,seasonal,root,rootExplanation,support,supportExplanation});
+    issuedResults.set(result,{m1,facts,evidence,explanation,seasonal,root,rootExplanation,support,supportExplanation,researchSynthesis,researchReport});
     return result;
   }});
 }
@@ -228,7 +264,7 @@ export async function loadLocalM3EvidenceProfile(options){
 }
 export function validateLocalM3EvidenceResult(result){
   const receipt=issuedResults.get(result);
-  check(receipt&&Object.isFrozen(result)&&result.schemaVersion===resultSchema(receipt.seasonal,receipt.root,receipt.support)&&result.status==='EVIDENCE_ONLY','ISSUED_LOCAL_M3_RESULT_REQUIRED');
+  check(receipt&&Object.isFrozen(result)&&result.schemaVersion===resultSchema(receipt.seasonal,receipt.root,receipt.support,receipt.researchSynthesis)&&result.status==='EVIDENCE_ONLY','ISSUED_LOCAL_M3_RESULT_REQUIRED');
   for(const key of ['m1','facts','evidence','explanation'])check(result[key]===receipt[key],'M3_RESULT_CONTEXT_CHANGED');
   verifyLocalChartResult(result.m1);validateLocalM3Evidence(result.evidence,{facts:result.facts});
   validateLocalM3Explanation(result.explanation,result.evidence);
@@ -244,12 +280,29 @@ export function validateLocalM3EvidenceResult(result){
     validateLocalM3ResourceSupport(receipt.support,{evidence:result.evidence,root:result.root});
     validateM3ResourceSupportExplanation(receipt.supportExplanation,receipt.support);
   }
+  check(result.researchSynthesis===receipt.researchSynthesis&&result.researchReport===receipt.researchReport,'SYNTHESIS_RESULT_CONTEXT_CHANGED');
+  if(receipt.researchSynthesis){
+    validateLocalM3LimitedSynthesis(receipt.researchSynthesis,{evidence:result.evidence,root:result.root,support:result.support,seasonal:result.seasonal});
+    validateM3LimitedSynthesisExplanation(receipt.researchReport,receipt.researchSynthesis);
+  }
   return true;
 }
 
 export function renderLocalM3EvidenceText(result){
   validateLocalM3EvidenceResult(result);
   const {m1,facts,evidence,explanation}=result;
+  if(result.researchSynthesis)return [
+    '명식 제한적 종합 분석 — 로컬 연구 프로필 v0.1',
+    `양력 환산 ${m1.input.gregorianDate} ${m1.input.time} · ${m1.input.calendar}`,
+    `명식 프로필: ${m1.profile.id} · 데이터셋: ${m1.dataset.id}`,
+    `manifest: ${m1.dataset.candidateManifestContentSha256}`,
+    `시계 정책: ${m1.policies.clock.id}`,
+    `일주 교체: ${m1.policies.dayRollover.id} · 시주 참조: ${m1.policies.hourStemReference.id}`,
+    `선택한 종합 프로필: ${M3_SYNTHESIS_PROFILE_ID}`,
+    `하위 정책: ${M3_SYNTHESIS_METADATA.dependencies.map(policy=>policy.id+' ('+policy.version+')').join(' / ')}`,
+    '',renderM3LimitedSynthesisText(result.researchReport).trimEnd(),
+    '', '원전 판본·권리·현실 예측 타당성은 인증하지 않았으며 기존 M3 전체 출시 게이트는 유지됩니다. 상세 위치와 근거 참조는 JSON 출력에서 확인할 수 있습니다.',
+  ].join('\n')+'\n';
   const lines=['명식 강약 판단 근거 — M3 Evidence v0.1',
     `양력 환산 ${m1.input.gregorianDate} ${m1.input.time} · ${m1.input.calendar}`,
     `명식 프로필: ${m1.profile.id}`,`데이터셋: ${m1.dataset.id}`,
@@ -338,7 +391,7 @@ export function renderLocalM3EvidenceText(result){
 
 export function parseLocalM3EvidenceArgs(args){
   check(args.length>0&&args.length%2===0,'EXPLICIT_ARGUMENTS_REQUIRED');
-  const base=[];let m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId;
+  const base=[];let m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,synthesisProfileId;
   for(let i=0;i<args.length;i+=2){
     if(args[i]==='--m3-profile'){
       check(m3ProfileId===undefined&&typeof args[i+1]==='string','ARGUMENTS');m3ProfileId=args[i+1];
@@ -348,11 +401,19 @@ export function parseLocalM3EvidenceArgs(args){
       check(rootPolicyId===undefined&&args[i+1]===M3_ROOT_POLICY_ID,'EXPLICIT_SUPPORTED_ROOT_POLICY_REQUIRED');rootPolicyId=args[i+1];
     }else if(args[i]==='--support-policy'){
       check(supportPolicyId===undefined&&args[i+1]===M3_SUPPORT_POLICY_ID,'EXPLICIT_SUPPORTED_SUPPORT_POLICY_REQUIRED');supportPolicyId=args[i+1];
+    }else if(args[i]==='--synthesis-profile'){
+      check(synthesisProfileId===undefined&&args[i+1]===M3_SYNTHESIS_PROFILE_ID,'EXPLICIT_SUPPORTED_SYNTHESIS_PROFILE_REQUIRED');synthesisProfileId=args[i+1];
     }else base.push(args[i],args[i+1]);
+  }
+  if(synthesisProfileId!==undefined){
+    const at=base.indexOf('--m2-profile'),m2ProfileId=at<0?undefined:base[at+1];
+    const selected=synthesisPolicies(synthesisProfileId,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId});
+    ({m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId}=selected);
+    if(at<0)base.push('--m2-profile',selected.m2ProfileId);
   }
   explicitProfile(m3ProfileId);
   if(supportPolicyId!==undefined)check(rootPolicyId===M3_ROOT_POLICY_ID,'EXPLICIT_SUPPORT_ROOT_POLICY_REQUIRED');
-  return {...parseLocalExplainArgs(base),m3ProfileId,...(seasonalPolicyId===undefined?{}:{seasonalPolicyId}),...(rootPolicyId===undefined?{}:{rootPolicyId}),...(supportPolicyId===undefined?{}:{supportPolicyId})};
+  return {...parseLocalExplainArgs(base),m3ProfileId,...(seasonalPolicyId===undefined?{}:{seasonalPolicyId}),...(rootPolicyId===undefined?{}:{rootPolicyId}),...(supportPolicyId===undefined?{}:{supportPolicyId}),...(synthesisProfileId===undefined?{}:{synthesisProfileId})};
 }
 export async function runLocalM3EvidenceCli(args){
   const options=parseLocalM3EvidenceArgs(args),profile=await loadLocalM3EvidenceProfile(options);

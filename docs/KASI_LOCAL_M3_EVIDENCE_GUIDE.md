@@ -102,3 +102,53 @@ const evidence = deriveLocalM3Evidence(result.facts, {
 ## 2026-11-11 — 별도 선택형 계절 판단
 
 기존 프로필 의미·미선택JSON/TEXT·구조적근거는 그대로다. 명시적 --seasonal-policy로만 제한적 왕상휴수사를 추가하며 기존 season의 세력/사령 미해결 필드를 덮어쓰지 않는다. 계절 판단만 RESOLVED_UNDER_POLICY 또는 계절말 POLICY_UNRESOLVED, 최종신강약 NOT_IMPLEMENTED다. [실제양력/음력 실행](KASI_LOCAL_M3_SEASONAL_GUIDE.md) · [확인한 문헌/프로젝트 범위](research/M3_SEASONAL_STATE_POLICY_V01.md).
+
+## 2026-11-12 — 제한적 종합 판단과 첫 분석 리포트
+
+기존 구조 근거 출력은 유지한다. 새 `--synthesis-profile M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01`을 명시하면 같은 요청의 M1 한 번과 기존 M2/M3/계절/통근/인성 합 제한 결과를 소비하여 `researchSynthesis`와 `researchReport`를 추가한다. JSON은 전체 참조를, TEXT는 짧은 한국어 분석 리포트를 제공한다. 기본 stdout 출력이며 출생정보·결과를 자동 저장하지 않는다.
+
+이 선택은 M2 `m2-basic-classification-local-v1`/1, M3 `m3-structural-evidence-local-v1`/0.1.0, 계절 `M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02`/0.2.0, 통근 `M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01`/0.1.0, 인성 `M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01`/0.1.0을 명시적으로 묶는다. 다른 개별 정책을 함께 주면 계산 전에 거절한다. 출생 프로필·시각·시계·일주/시주 정책은 여전히 필수다.
+
+수락한 결론은 휴·수·사의 선택 계절, 원국 전체의 실제 근·인성 부재, 표면 비겁의 무근, 설기/소모/제어 구성과 관계 제외 조건이 모두 닫힌 경우의 **선택 정책상 신약** 하나다. 문헌의 exact 공식이 아니라 주석의 무근 반례를 좁게 일반화한 프로젝트 연구 정책이다. 신강·중화는 지원하지 않으며 적용 범위 밖이나 보류를 반대 강약 라벨로 바꾸지 않는다. 기존 `finalStrength`·M3 전체 출시/G1-P2는 그대로다.
+
+현재 검증 PC의 복사 가능한 PowerShell 예:
+
+```powershell
+Set-Location 'C:\Users\Home\Desktop\만세력 엔진\source'
+$node = 'C:\Users\Home\Desktop\Manseryeok-KASI-1950-2026-windows-x64\Manseryeok-KASI-1950-2026\runtime\node.exe'
+$env:PATH = (Split-Path -Parent $node) + ';' + $env:PATH
+& $node 'C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js' run --silent build
+
+$common = @(
+  '--profile', 'kasi-api-1989-2026-local-v1',
+  '--candidate', '.private\kasi-research-1950-2026-fe84ab4-a',
+  '--manifest-sha', '8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf',
+  '--clock-policy', 'KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1',
+  '--day-rollover', 'CIVIL_MIDNIGHT',
+  '--hour-stem-reference', 'SELECTED_DAY_PILLAR',
+  '--synthesis-profile', 'M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01'
+)
+
+# 가상 날짜의 좁은 결론 사례
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --calendar GREGORIAN --date 1996-12-29 --time 00:30 --output text
+
+# 기존 일반 입력: 火旺만으로 신강을 만들지 않음
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --calendar GREGORIAN --date 2026-06-01 --time 12:00 --output json
+
+# 같은 날짜의 음력 동등 입력
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --calendar KOREAN_LUNAR --lunar-year 2026 --lunar-month 4 --lunar-day 16 --leap false --time 12:00 --output text
+
+# B: 한 원국 아래 계절 경로 둘 / 입춘: 기존 원국 부모 둘
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --calendar GREGORIAN --date 2026-04-17 --time 20:49 --output text
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --calendar GREGORIAN --date 2026-02-04 --time 05:02 --output json
+```
+
+앱에서 import할 때도 기존 `createLocalM3EvidenceProfile(verifiedChartProfile, {synthesisProfileId: ...})`을 사용한다. 순수 resolver·설명/검증 함수는 `src/m3/limitedSynthesisV1.ts`에 있으며 CLI를 재실행하지 않는다. 구조 오류·교차 후보·미지원 정책은 거절하고, 필요한 자료 부족·혼재·미구현 효과·범위 밖은 별도 결과다. 원격/경쟁·유근 예외의 인성을 지우거나 NO_HOLD를 충분한 생조로 소비하지 않는다. 상세 근거는 JSON의 후보별 `observed`, `paths`, `conditions`, `importantUnresolvedEffects`와 설명 참조에서 추적한다.
+
+검증기는 원본을 읽기 전용으로 확인하고 새 비공개 출력 폴더에 스트리밍 집계만 쓴다. 실제 자료가 없으면 수행하지 않았다고 보고한다.
+
+```powershell
+& $node --max-old-space-size=192 --max-semi-space-size=2 .\scripts\kasi\local-m3-synthesis-verify.mjs '.private\kasi-research-1950-2026-fe84ab4-a' '.private\m3-synthesis-fresh-check' --pilot
+```
+
+[선택 정책·원저/주석·충분조건·사전 사례](research/M3_LIMITED_SYNTHESIS_POLICY_V01.md). 실행 SHA·실제 상태별 집계와 실패/재검사는 별도의 최신 실행 기록에 남긴다. 많은 내부 일치 검사를 전통 해석의 정답률·현실 예측 검증으로 표시하지 않는다.
