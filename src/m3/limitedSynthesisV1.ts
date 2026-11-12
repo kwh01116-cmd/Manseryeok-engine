@@ -168,9 +168,9 @@ export function deriveM3LimitedSynthesis(evidence: M3EvidenceResult, options: Om
       inputEvidenceRefs: unique(groupRecords.map(e => e.id)), inputFactRefs: unique(groupRecords.flatMap(e => e.inputFactRefs)), inputMemberRefs: unique(groupRecords.flatMap(e => e.inputMemberRefs)),
       pillarRefs: ROLES.map(role => candidate.candidateRef + "." + role), rootJudgmentRefs: roots.targets.map(t => t.id), rootMatchRefs: unique(roots.targets.flatMap(t => t.branches.flatMap(b => b.matches.map(m => m.id)))),
       supportJudgmentRefs: support.resources.map(r => r.id), seasonalJudgmentRefs: [seasonal.id],
-      ruleRefs: unique([ASSUMPTION, SCOPE, DEFERRAL, ...support.ruleRefs, ...seasonal.ruleRefs]),
-      policyRefs: unique([M3_SYNTHESIS_PROFILE_ID, ...support.policyRefs, ...seasonal.policyRefs, ...M3_SYNTHESIS_METADATA.dependencies.map(d => d.id)]),
-      sourceRefs: unique([TEXT, CONFLICT_TEXT, IMPL, ...support.sourceRefs, ...seasonal.sourceRefs]), calculationSourceRefs: unique([...support.calculationSourceRefs, ...seasonal.calculationSourceRefs]),
+      ruleRefs: unique([ASSUMPTION, SCOPE, DEFERRAL, ...support.ruleRefs, ...seasonal.ruleRefs, ...groupRecords.flatMap(record => record.ruleRefs)]),
+      policyRefs: unique([M3_SYNTHESIS_PROFILE_ID, ...support.policyRefs, ...seasonal.policyRefs, ...groupRecords.flatMap(record => record.policyRefs), ...M3_SYNTHESIS_METADATA.dependencies.map(d => d.id)]),
+      sourceRefs: unique([TEXT, CONFLICT_TEXT, IMPL, ...support.sourceRefs, ...seasonal.sourceRefs, ...groupRecords.flatMap(record => record.sourceRefs)]), calculationSourceRefs: unique([...support.calculationSourceRefs, ...seasonal.calculationSourceRefs, ...groupRecords.flatMap(record => record.calculationSourceRefs)]),
     };
     check(references.sourceRefs.every(id => sourceIds.has(id)) && references.calculationSourceRefs.every(id => sourceIds.has(id)), "M3_SYNTHESIS_UNRESOLVED_SOURCE_REFERENCE");
     const structuralConditions = [
@@ -241,10 +241,39 @@ function locationsText(locations: readonly M3StemLocation[]): string {
   const selected = locations.slice(0, 3).map(l => ROLE_KO[l.pillarRole] + (l.locationKind === "VISIBLE_STEM" ? "간 " : "지 장간 ") + l.stem);
   return selected.join("·") + (locations.length > 3 ? ` 외 ${locations.length - 3}곳` : "");
 }
+/** Display existing guards, without ranking their effects or deleting overlaps. */
+function interactionText(observed: ReturnType<typeof observations>, native: M3InputEnvelope["candidates"][number]): string {
+  const pairNames = { LIUHE: "육합", LIUCHONG: "충", LIUHAI: "해", LIUPO: "파", XING: "형" } as const;
+  const elementNames = { WOOD: "목", FIRE: "화", EARTH: "토", METAL: "금", WATER: "수" } as const;
+  const branchPairs = new Map<string, { label: string; kinds: string[] }>();
+  for (const pair of native.branchRelations) {
+    const key = pair.leftPillarIndex + ":" + pair.rightPillarIndex;
+    const group = branchPairs.get(key) ?? { label: `${ROLE_KO[pair.leftPillarRole]}지 ${pair.leftBranch}–${ROLE_KO[pair.rightPillarRole]}지 ${pair.rightBranch}`, kinds: [] };
+    group.kinds.push(pairNames[pair.kind]); branchPairs.set(key, group);
+  }
+  const summaries: string[] = [];
+  if (branchPairs.size) {
+    const first = [...branchPairs.values()][0]!;
+    summaries.push(`${first.label}의 ${unique(first.kinds).join("·")}${branchPairs.size > 1 ? ` 외 ${branchPairs.size - 1}개 지지 쌍` : ""}`);
+  }
+  const triads = native.triadMemberships.filter(triad => triad.distinctMemberCount >= 2);
+  if (triads.length) {
+    const triad = triads[0]!;
+    const present = triad.members.filter(m => m.pillarRoles.length).map(m => `${m.pillarRoles.map(role => ROLE_KO[role]).join("·")}지 ${m.branch}`).join(" / ");
+    const missing = triad.missingBranches.length ? `, ${triad.missingBranches.join("·")} 미포함` : "";
+    summaries.push(`${elementNames[triad.namedElement]} ${triad.family === "SANHE" ? "삼합" : "삼회"} ${triad.distinctMemberCount === 2 ? "부분 구성원" : "세 구성원"}: ${present}${missing}${triads.length > 1 ? ` 외 ${triads.length - 1}개 구성원 분류` : ""}`);
+  }
+  if (observed.interactions.visibleFiveCombinations.length) {
+    const pair = observed.interactions.visibleFiveCombinations[0]!;
+    summaries.push(`표면 오합: ${ROLE_KO[pair.left.pillarRole]}간 ${pair.left.stem}–${ROLE_KO[pair.right.pillarRole]}간 ${pair.right.stem}${observed.interactions.visibleFiveCombinations.length > 1 ? ` 외 ${observed.interactions.visibleFiveCombinations.length - 1}쌍` : ""}`);
+  }
+  return summaries.length ? summaries.join("; ") + ". 표시 순서는 효력의 우선순위가 아니며 전체 위치·겹침은 JSON에 보존합니다" : "선택 범위의 표면 오합·지지 쌍·복수 구성원 관계 없음";
+}
 function reportContent(result: M3LimitedSynthesisResult) {
   validateM3LimitedSynthesis(result);
   const candidates = result.candidates.map(candidate => {
     const o = candidate.observed;
+    const native = contexts.get(result)!.context.m2Facts.candidates[candidate.candidateIndex]!;
     const paths = candidate.paths.map(path => {
       const season = path.seasonalState ? STATE_KO[path.seasonalState] : "자료 부족";
       const conditions = path.conditions;
@@ -262,7 +291,6 @@ function reportContent(result: M3LimitedSynthesisResult) {
       const adverse = `반대 방향 검토: 설기 ${locationsText(o.directionalGroups.DAY_MASTER_GENERATES)} / 소모 ${locationsText(o.directionalGroups.DAY_MASTER_CONTROLS)} / 제어 ${locationsText(o.directionalGroups.TARGET_CONTROLS_DAY_MASTER)}. 존재와 방향만 확인하며 실제 힘의 크기로 해석하지 않습니다.`;
       const decisionNames = { NO_HOLD_BY_THIS_RULE: "이번 합 규칙의 채택 제한 없음", SUPPORT_HELD_UNDER_SELECTED_RULE: "단일 인접 합·무근으로 독립 생조 자동 채택 유보", ROOTED_COMBINATION_EFFECT_UNRESOLVED: "통근 예외의 실제 효과 미정", OUT_OF_SCOPE_INTERACTION: "원격·복수·경쟁 관계의 범위 밖" } as const;
       const holds = o.resources.surfaceDecisions.map(r => `${ROLE_KO[r.resource.pillarRole]}간 ${r.resource.stem}: ${decisionNames[r.selectedRuleDecision]}`).join("; ");
-      const relation = o.interactions.rawBranchPairs.length + o.interactions.multiMemberTriads.length + o.interactions.visibleFiveCombinations.length;
       const effectNames: Readonly<Record<string, string>> = { ROOT_EFFICACY: "구성상 근의 실제 작용", RESOURCE_SUPPORT_EFFICACY: "인성의 실제 생조 작용", NATAL_INTERACTION_EFFECT: "합·지지 관계의 작용", DRAIN_CONSUME_CONTROL_EFFICACY: "지원과 설기·소모·제어 사이의 실제 작용" };
       const reasons = path.importantUnresolvedEffects.filter(e => e.material).map(e => effectNames[e.code]).join(", ") || "이 충분조건에서는 근·인성 자체가 없어 해당 효력의 비교를 요구하지 않음";
       return { id: path.id + "#ko", candidateRef: candidate.candidateRef, pathRef: path.id, templateId: "KO_M3_LIMITED_SYNTHESIS_PATH", templateVersion: M3_SYNTHESIS_VERSION,
@@ -270,7 +298,7 @@ function reportContent(result: M3LimitedSynthesisResult) {
         rootJudgmentRefs: path.rootJudgmentRefs, rootMatchRefs: path.rootMatchRefs, supportJudgmentRefs: path.supportJudgmentRefs, seasonalJudgmentRefs: path.seasonalJudgmentRefs, seasonalAlternativeRefs: path.seasonalAlternativeRefs,
         ruleRefs: path.ruleRefs, policyRefs: path.policyRefs, sourceRefs: path.sourceRefs, calculationSourceRefs: path.calculationSourceRefs,
         status: path.status, conclusion: path.conclusion, seasonalCondition: path.seasonalCondition, summary: conclusion,
-        text: [conclusion, detail, `표면 비겁: ${peers}. 장간의 동류는 직접 근의 위치에 별도로 보존합니다.`, adverse, ...(holds ? [`표면 인성의 합 제한: ${holds}. 제한 없음과 생조 확정은 다릅니다.`] : []), `관계 검토: ${relation ? "기존 합·충·형·해·파/구성원과 표면 오합을 모두 보존" : "선택 범위의 표면 오합·지지 쌍·복수 구성원 관계 없음"}. 중요한 미정: ${reasons}.`].join("\n"),
+        text: [conclusion, detail, `표면 비겁: ${peers}. 장간의 동류는 직접 근의 위치에 별도로 보존합니다.`, adverse, ...(holds ? [`표면 인성의 합 제한: ${holds}. 제한 없음과 생조 확정은 다릅니다.`] : []), `관계 검토: ${interactionText(o, native)}. 중요한 미정: ${reasons}.`].join("\n"),
         checkedConditionIds: conditions.map(c => c.id), missingSufficientConditions: path.missingSufficientConditions,
       };
     });

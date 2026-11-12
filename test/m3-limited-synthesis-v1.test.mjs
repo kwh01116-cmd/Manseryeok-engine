@@ -130,9 +130,18 @@ test('raw pair, partial triad and all visible five-combinations are separate mat
  assert.equal(condition(triad,'NO_RAW_BRANCH_PAIR').satisfied,true);assert.equal(condition(triad,'NO_MULTI_MEMBER_TRIAD').satisfied,false);
  assert.equal(condition(stem,'NO_RAW_BRANCH_PAIR').satisfied,true);assert.equal(condition(stem,'NO_MULTI_MEMBER_TRIAD').satisfied,true);assert.equal(condition(stem,'NO_VISIBLE_FIVE_COMBINATION').satisfied,false);
  for(const value of [raw,triad,stem]){assert.equal(path(value).status,'DEFERRED_EFFECT_POLICY_REQUIRED');assert.equal(path(value).conclusion,null);assert.ok(path(value).importantUnresolvedEffects.some(e=>e.code==='NATAL_INTERACTION_EFFECT'&&e.material));}
- const overlap=first(run(stateFor(byId('overlapping-si-shen-relations-not-prioritized-away')))).observed.interactions.rawBranchPairs;
+ const overlapResult=run(stateFor(byId('overlapping-si-shen-relations-not-prioritized-away')));
+ const overlap=first(overlapResult).observed.interactions.rawBranchPairs;
  const kinds=new Set(overlap.filter(r=>new Set([r.leftBranch,r.rightBranch]).size===2&&[r.leftBranch,r.rightBranch].includes('巳')&&[r.leftBranch,r.rightBranch].includes('申')).map(r=>r.kind));
  for(const kind of ['LIUHE','XING','LIUPO'])assert.ok(kinds.has(kind),kind+' preserved');
+ // Reports must explain the actual guard, not just say that some relationship is unresolved.
+ assert.match(explainM3LimitedSynthesis(raw).candidates[0].paths[0].text,/연지 午–월지 子의 충/);
+ const triadText=explainM3LimitedSynthesis(triad).candidates[0].paths[0].text;
+ assert.match(triadText,/수 삼합 부분 구성원: 연·월지 申 \/ 일·시지 子, 辰 미포함/);
+ assert.match(explainM3LimitedSynthesis(stem).candidates[0].paths[0].text,/표면 오합: 연간 己–일간 甲/);
+ const overlapText=explainM3LimitedSynthesis(overlapResult).candidates[0].paths[0].text;
+ for(const label of ['연지 申–월지 巳','육합','형','파','표시 순서는 효력의 우선순위가 아니며'])assert.ok(overlapText.includes(label),label);
+ for(const rule of ['M2-RULE-BRANCH-LIUHE-001','M2-RULE-BRANCH-XING-001','M2-RULE-BRANCH-LIUPO-001'])assert.ok(path(overlapResult).ruleRefs.includes(rule),rule+' is directly traceable from the decision and explanation');
 });
 
 test('same parent at derived B keeps one root/support context and two correlated seasonal decision paths',()=>{
