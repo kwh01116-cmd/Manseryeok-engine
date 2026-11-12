@@ -145,3 +145,43 @@ test('v02 CLI rejects missing files, bad pins, duplicated policy and mixed time-
   rejection(context.run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
   for(const extra of[['--seasonal-policy',siliPolicy],['--as-of-date','2026-04-17'],['--traditional-sex','FEMALE']])rejection(context.run([...args,...extra]),context);
 }));
+
+const rootPolicy='M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01';
+test('explicit root CLI resolves four separate targets and their surface support roots without replacing seasonal or structural output',async()=>setup(async({run,common,lunar})=>{
+  const old=run(common),oldSeason=run([...common,'--seasonal-policy',siliPolicy]);
+  const rootOnly=run([...common,'--root-policy',rootPolicy]);
+  assert.equal(rootOnly.status,0,rootOnly.stderr);assert.equal(rootOnly.stderr,'');
+  const ro=JSON.parse(rootOnly.stdout);assert.equal(ro.schemaVersion,'kasi-local-m3-evidence-root-v1');
+  assert.equal(ro.root.status,'RESOLVED_UNDER_POLICY');assert.equal(ro.seasonal,undefined);
+  assert.equal(ro.root.candidates[0].targets.length,4);
+  assert.deepEqual(ro.executionCounts,{birthM1Calls:1,m2Derivations:1});
+  const args=[...common,'--root-policy',rootPolicy,'--seasonal-policy',siliPolicy];
+  const g=run(args),l=run([...lunar,'--root-policy',rootPolicy,'--seasonal-policy',siliPolicy]);
+  for(const r of[g,l]){assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+  const gv=JSON.parse(g.stdout),lv=JSON.parse(l.stdout);
+  assert.equal(gv.schemaVersion,'kasi-local-m3-evidence-seasonal-root-v1');
+  assert.deepEqual(gv.root.candidates,lv.root.candidates);assert.deepEqual(gv.root.policy,lv.root.policy);
+  assert.deepEqual(gv.rootExplanation,lv.rootExplanation);
+  for(const value of[gv,lv])for(const source of value.evidence.sources)assert.deepEqual(value.root.sources.find(s=>s.id===source.id),source);
+  for(const key of ['m1','facts','evidence','explanation','seasonal','validation','provenance'])assert.deepEqual(gv[key],JSON.parse(oldSeason.stdout)[key]);
+  const targets=gv.root.candidates[0].targets;
+  assert.deepEqual(targets.map(t=>t.target.pillarRole),['year','month','day','hour']);
+  assert.deepEqual(targets.map(t=>t.chartRootPresence),['PRESENT_UNDER_POLICY','ABSENT_UNDER_POLICY','PRESENT_UNDER_POLICY','ABSENT_UNDER_POLICY']);
+  const text=run(replace(args,'--output','text'));assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');
+  assert.match(text.stdout,/통근/);assert.match(text.stdout,/인성/);assert.match(text.stdout,/甲/);assert.match(text.stdout,/NOT_IMPLEMENTED/);
+  assert.equal(run(common).stdout,old.stdout);assert.equal(run([...common,'--seasonal-policy',siliPolicy]).stdout,oldSeason.stdout);
+}));
+test('root CLI keeps B alternatives under one root result and existing Lichun natal candidates separate, rejecting invalid options and data offline',async()=>setup(async context=>{
+  const {run,common}=context,args=[...common,'--root-policy',rootPolicy,'--seasonal-policy',siliPolicy];
+  const b=replace(replace(args,'--date','2026-04-17'),'--time','01:20'),before=run(replace(b,'--time','01:19')),at=run(b),after=run(replace(b,'--time','01:21'));
+  for(const r of[before,at,after]){assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+  const value=JSON.parse(at.stdout);assert.equal(value.root.candidates.length,1);assert.equal(value.seasonal.candidates[0].judgment.alternatives.length,2);
+  assert.deepEqual(JSON.parse(before.stdout).root,value.root);assert.deepEqual(JSON.parse(after.stdout).root,value.root);
+  const boundary=replace(replace(args,'--date','2026-02-05'),'--time','01:20'),utc=run(boundary),seoul=run(boundary,{tz:'Asia/Seoul'});
+  assert.equal(utc.status,0,utc.stderr);assert.equal(seoul.status,0,seoul.stderr);assert.equal(utc.stdout,seoul.stdout);
+  assert.equal(JSON.parse(utc.stdout).root.candidates.length,2);
+  for(const bad of['','AUTO','INVALID_DO_NOT_ECHO'])rejection(run([...common,'--root-policy',bad]),context);
+  rejection(run([...args,'--root-policy',rootPolicy]),context);rejection(run([...common,'--root-policy']),context);
+  rejection(run(replace(args,'--manifest-sha','e'.repeat(64))),context);
+  rejection(run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
+}));
