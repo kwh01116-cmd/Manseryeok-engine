@@ -34,6 +34,10 @@ import {
   M4_PATTERN_PROFILE_ID,M4_PATTERN_METADATA,deriveM4ZhengguanStructure,validateM4ZhengguanStructure,
   explainM4ZhengguanStructure,validateM4ZhengguanExplanation,renderM4ZhengguanText,
 } from '../../dist/m4/zhengguanStructureV1.js';
+import {
+  M4_POSITION_PROFILE_ID,M4_POSITION_METADATA,deriveM4WealthResourcePosition,validateM4WealthResourcePosition,
+  explainM4WealthResourcePosition,validateM4WealthResourcePositionExplanation,renderM4WealthResourcePositionText,
+} from '../../dist/m4/wealthResourcePositionV1.js';
 
 export const M3_LOCAL_PROFILE_ID=M3_EVIDENCE_PROFILE_ID;
 export const LOCAL_M3_EVIDENCE_SCHEMA='kasi-local-m3-evidence-v1';
@@ -45,15 +49,18 @@ export const LOCAL_M3_SUPPORT_SCHEMA='kasi-local-m3-evidence-support-v1';
 export const LOCAL_M3_SEASONAL_SUPPORT_SCHEMA='kasi-local-m3-evidence-seasonal-support-v1';
 export const LOCAL_M3_SYNTHESIS_SCHEMA='kasi-local-m3-evidence-synthesis-v1';
 export const LOCAL_M4_PATTERN_SCHEMA='kasi-local-m3-evidence-pattern-v1';
+export const LOCAL_M4_POSITION_SCHEMA='kasi-local-m4-wealth-resource-position-v1';
 export {M3_SEASONAL_POLICY_ID,M3_SEASONAL_SILI_POLICY_ID,M3_ROOT_POLICY_ID,M3_SUPPORT_POLICY_ID};
 export {M3_SYNTHESIS_PROFILE_ID,M3_SYNTHESIS_METADATA};
 export {M4_PATTERN_PROFILE_ID,M4_PATTERN_METADATA};
+export {M4_POSITION_PROFILE_ID,M4_POSITION_METADATA};
 export {M3_EVIDENCE_VERSION};
 export class LocalM3EvidenceError extends Error {
   constructor(code){super(code);this.name='LocalM3EvidenceError';this.code=code;}
 }
 const check=(ok,code)=>{if(!ok)throw new LocalM3EvidenceError(code);};
 const evidenceContexts=new WeakMap(), seasonalContexts=new WeakMap(),rootContexts=new WeakMap(),supportContexts=new WeakMap(),synthesisContexts=new WeakMap(),patternContexts=new WeakMap(),evidenceExecutions=new WeakMap(),issuedResults=new WeakMap(), sealed=new WeakSet();
+const positionContexts=new WeakMap();
 function freeze(value){
   if(value&&typeof value==='object'&&!sealed.has(value)){
     Object.values(value).forEach(freeze);Object.freeze(value);sealed.add(value);
@@ -66,6 +73,11 @@ function patternPolicies(patternProfileId,overrides={}){
   const required={m2ProfileId:M2_LOCAL_PROFILE_ID,m3ProfileId:M3_LOCAL_PROFILE_ID};
   for(const [key,value]of Object.entries(required))check(overrides[key]===undefined||overrides[key]===value,'PATTERN_POLICY_CONFLICT');
   return required;
+}
+function positionPolicies(positionProfileId,patternProfileId){
+  check(positionProfileId===M4_POSITION_PROFILE_ID,'EXPLICIT_SUPPORTED_POSITION_PROFILE_REQUIRED');
+  check(patternProfileId===undefined||patternProfileId===M4_PATTERN_PROFILE_ID,'POSITION_PATTERN_POLICY_CONFLICT');
+  return M4_PATTERN_PROFILE_ID;
 }
 function synthesisPolicies(synthesisProfileId,overrides={}){
   check(synthesisProfileId===M3_SYNTHESIS_PROFILE_ID,'EXPLICIT_SUPPORTED_SYNTHESIS_PROFILE_REQUIRED');
@@ -235,7 +247,20 @@ export function validateLocalM4Pattern(value,{evidence,facts}={}){
   validateLocalM3Evidence(context.evidence,{facts:context.facts});
   validateM4ZhengguanStructure(value,{evidence:context.evidence,m2Facts:context.facts});return true;
 }
-function resultSchema(seasonal,root,support,researchSynthesis,patternAnalysis){
+export function deriveLocalM4Position(patternAnalysis,{positionProfileId}={}){
+  positionPolicies(positionProfileId,patternAnalysis?.profile?.id);validateLocalM4Pattern(patternAnalysis);
+  const {evidence}=patternContexts.get(patternAnalysis);
+  const value=deriveM4WealthResourcePosition(patternAnalysis,{profileId:positionProfileId,evidence});
+  positionContexts.set(value,{pattern:patternAnalysis,evidence});return value;
+}
+export function validateLocalM4Position(value,{pattern,evidence}={}){
+  const context=positionContexts.get(value);
+  check(context&&(!pattern||pattern===context.pattern)&&(!evidence||evidence===context.evidence),'ISSUED_LOCAL_POSITION_CONTEXT_REQUIRED');
+  validateLocalM4Pattern(context.pattern,{evidence:context.evidence});
+  return validateM4WealthResourcePosition(value,{pattern:context.pattern,evidence:context.evidence});
+}
+function resultSchema(seasonal,root,support,researchSynthesis,patternAnalysis,wealthResourcePosition){
+  if(wealthResourcePosition)return LOCAL_M4_POSITION_SCHEMA;
   if(patternAnalysis)return LOCAL_M4_PATTERN_SCHEMA;
   if(researchSynthesis)return LOCAL_M3_SYNTHESIS_SCHEMA;
   if(support)return seasonal?LOCAL_M3_SEASONAL_SUPPORT_SCHEMA:LOCAL_M3_SUPPORT_SCHEMA;
@@ -245,7 +270,8 @@ function resultSchema(seasonal,root,support,researchSynthesis,patternAnalysis){
 }
 
 /** Product path: one birth calculation, one existing M2 derivation, then pure evidence/templates. */
-export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,synthesisProfileId,patternProfileId,contextProfile=chartProfile}={}){
+export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,synthesisProfileId,patternProfileId,positionProfileId,contextProfile=chartProfile}={}){
+  if(positionProfileId!==undefined)patternProfileId=positionPolicies(positionProfileId,patternProfileId);
   if(patternProfileId!==undefined)({m2ProfileId,m3ProfileId}=patternPolicies(patternProfileId,{m2ProfileId,m3ProfileId}));
   if(synthesisProfileId!==undefined)({m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId}=synthesisPolicies(synthesisProfileId,{m2ProfileId,m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId}));
   getM2PolicyBundle(m2ProfileId);explicitProfile(m3ProfileId);
@@ -275,16 +301,18 @@ export function createLocalM3EvidenceProfile(chartProfile,{m2ProfileId,m3Profile
     const researchReport=researchSynthesis?explainM3LimitedSynthesis(researchSynthesis):undefined;
     const patternAnalysis=patternProfileId===undefined?undefined:deriveLocalM4Pattern(evidence,{patternProfileId});
     const patternReport=patternAnalysis?explainM4ZhengguanStructure(patternAnalysis):undefined;
-    const result=freeze({schemaVersion:resultSchema(seasonal,root,support,researchSynthesis,patternAnalysis),status:'EVIDENCE_ONLY',
+    const wealthResourcePosition=positionProfileId===undefined?undefined:deriveLocalM4Position(patternAnalysis,{positionProfileId});
+    const wealthResourcePositionReport=wealthResourcePosition?explainM4WealthResourcePosition(wealthResourcePosition):undefined;
+    const result=freeze({schemaVersion:resultSchema(seasonal,root,support,researchSynthesis,patternAnalysis,wealthResourcePosition),status:'EVIDENCE_ONLY',
       provenance:{profile:structuredClone(m1.profile),dataset:structuredClone(m1.dataset),
         policies:structuredClone(m1.policies),m2PolicyBundle:facts.policyBundle,m3Policy:M3_EVIDENCE_POLICY_METADATA,
-        birthCalculationFingerprint:fingerprint(m1),...(patternAnalysis?{m4Policy:M4_PATTERN_METADATA}:{})},
-      m1,facts,evidence,explanation,...(seasonal?{seasonal}:{}),...(root?{root,rootExplanation}:{}),...(support?{support,supportExplanation}:{}),...(researchSynthesis?{researchSynthesis,researchReport}:{}),...(patternAnalysis?{patternAnalysis,patternReport}:{}),executionCounts:{birthM1Calls:1,m2Derivations:1,...(patternAnalysis?{m4Derivations:1}:{})},
+        birthCalculationFingerprint:fingerprint(m1),...(patternAnalysis?{m4Policy:M4_PATTERN_METADATA}:{}),...(wealthResourcePosition?{m4PositionPolicy:M4_POSITION_METADATA}:{})},
+      m1,facts,evidence,explanation,...(seasonal?{seasonal}:{}),...(root?{root,rootExplanation}:{}),...(support?{support,supportExplanation}:{}),...(researchSynthesis?{researchSynthesis,researchReport}:{}),...(patternAnalysis?{patternAnalysis,patternReport}:{}),...(wealthResourcePosition?{wealthResourcePosition,wealthResourcePositionReport}:{}),executionCounts:{birthM1Calls:1,m2Derivations:1,...(patternAnalysis?{m4Derivations:1}:{}),...(wealthResourcePosition?{m4PositionDerivations:1}:{})},
       validation:{level:'SAME_PROCESS_PINNED_M1_ISSUED_M2_STRUCTURAL_M3_EVIDENCE',
         serializedReferences:'TRACEABILITY_NOT_EXTERNAL_AUTHENTICATION',
         finalStrength:'NOT_IMPLEMENTED',m3FinalInterpretationGate:'BLOCKED_UNCHANGED',
         g0Receipt:null,g1P2Promotion:false,editionVerification:'UNVERIFIED',rightsReview:'UNVERIFIED',predictiveValidity:'NOT_CLAIMED'}});
-    issuedResults.set(result,{m1,facts,evidence,explanation,seasonal,root,rootExplanation,support,supportExplanation,researchSynthesis,researchReport,patternAnalysis,patternReport});
+    issuedResults.set(result,{m1,facts,evidence,explanation,seasonal,root,rootExplanation,support,supportExplanation,researchSynthesis,researchReport,patternAnalysis,patternReport,wealthResourcePosition,wealthResourcePositionReport});
     return result;
   }});
 }
@@ -293,7 +321,7 @@ export async function loadLocalM3EvidenceProfile(options){
 }
 export function validateLocalM3EvidenceResult(result){
   const receipt=issuedResults.get(result);
-  check(receipt&&Object.isFrozen(result)&&result.schemaVersion===resultSchema(receipt.seasonal,receipt.root,receipt.support,receipt.researchSynthesis,receipt.patternAnalysis)&&result.status==='EVIDENCE_ONLY','ISSUED_LOCAL_M3_RESULT_REQUIRED');
+  check(receipt&&Object.isFrozen(result)&&result.schemaVersion===resultSchema(receipt.seasonal,receipt.root,receipt.support,receipt.researchSynthesis,receipt.patternAnalysis,receipt.wealthResourcePosition)&&result.status==='EVIDENCE_ONLY','ISSUED_LOCAL_M3_RESULT_REQUIRED');
   for(const key of ['m1','facts','evidence','explanation'])check(result[key]===receipt[key],'M3_RESULT_CONTEXT_CHANGED');
   verifyLocalChartResult(result.m1);validateLocalM3Evidence(result.evidence,{facts:result.facts});
   validateLocalM3Explanation(result.explanation,result.evidence);
@@ -319,6 +347,11 @@ export function validateLocalM3EvidenceResult(result){
     validateLocalM4Pattern(receipt.patternAnalysis,{evidence:result.evidence,facts:result.facts});
     validateM4ZhengguanExplanation(receipt.patternReport,receipt.patternAnalysis);
   }
+  check(result.wealthResourcePosition===receipt.wealthResourcePosition&&result.wealthResourcePositionReport===receipt.wealthResourcePositionReport,'POSITION_RESULT_CONTEXT_CHANGED');
+  if(receipt.wealthResourcePosition){
+    validateLocalM4Position(receipt.wealthResourcePosition,{pattern:result.patternAnalysis,evidence:result.evidence});
+    validateM4WealthResourcePositionExplanation(receipt.wealthResourcePositionReport,receipt.wealthResourcePosition);
+  }
   return true;
 }
 
@@ -326,14 +359,18 @@ export function renderLocalM3EvidenceText(result){
   validateLocalM3EvidenceResult(result);
   const {m1,facts,evidence,explanation}=result;
   if(result.patternAnalysis){
-    const lines=['정관격 구조 분석 — 선택형 로컬 연구 v0.1',
+    const lines=[result.wealthResourcePosition?'정관격 재·인 위치 검토 — 선택형 로컬 연구 v0.1':'정관격 구조 분석 — 선택형 로컬 연구 v0.1',
       `양력 환산 ${m1.input.gregorianDate} ${m1.input.time} · ${m1.input.calendar}`,
       `명식 프로필: ${m1.profile.id} · 데이터셋: ${m1.dataset.id}`,
       `manifest: ${m1.dataset.candidateManifestContentSha256}`,
       `시계 정책: ${m1.policies.clock.id}`,
       `일주 교체: ${m1.policies.dayRollover.id} · 시주 참조: ${m1.policies.hourStemReference.id}`,
       `선택한 격국 구조 정책: ${M4_PATTERN_PROFILE_ID} (${M4_PATTERN_METADATA.version})`,
-      '',renderM4ZhengguanText(result.patternReport).trimEnd()];
+      ''];
+    if(result.wealthResourcePosition){
+      lines.push(renderM4WealthResourcePositionText(result.wealthResourcePositionReport).trimEnd(),'','기존 월령 후보와 원국 관계의 근거');
+      for(const c of result.patternReport.candidates)lines.push(`후보 ${c.candidateIndex+1}: ${c.pillars}`,c.items[0].text,c.items.find(i=>i.templateId==='KO_M4_INTERACTION_POSITIONS').text);
+    }else lines.push(renderM4ZhengguanText(result.patternReport).trimEnd());
     if(result.seasonal){
       lines.push('','별도로 선택한 M3 계절 판단');
       for(const item of result.seasonal.candidates)lines.push(`원국 후보 ${item.candidateIndex+1}: ${item.explanation.text}`);
@@ -442,7 +479,7 @@ export function renderLocalM3EvidenceText(result){
 
 export function parseLocalM3EvidenceArgs(args){
   check(args.length>0&&args.length%2===0,'EXPLICIT_ARGUMENTS_REQUIRED');
-  const base=[];let m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,synthesisProfileId,patternProfileId;
+  const base=[];let m3ProfileId,seasonalPolicyId,rootPolicyId,supportPolicyId,synthesisProfileId,patternProfileId,positionProfileId;
   for(let i=0;i<args.length;i+=2){
     if(args[i]==='--m3-profile'){
       check(m3ProfileId===undefined&&typeof args[i+1]==='string','ARGUMENTS');m3ProfileId=args[i+1];
@@ -456,8 +493,11 @@ export function parseLocalM3EvidenceArgs(args){
       check(synthesisProfileId===undefined&&args[i+1]===M3_SYNTHESIS_PROFILE_ID,'EXPLICIT_SUPPORTED_SYNTHESIS_PROFILE_REQUIRED');synthesisProfileId=args[i+1];
     }else if(args[i]==='--pattern-profile'){
       check(patternProfileId===undefined&&args[i+1]===M4_PATTERN_PROFILE_ID,'EXPLICIT_SUPPORTED_PATTERN_PROFILE_REQUIRED');patternProfileId=args[i+1];
+    }else if(args[i]==='--position-profile'){
+      check(positionProfileId===undefined&&args[i+1]===M4_POSITION_PROFILE_ID,'EXPLICIT_SUPPORTED_POSITION_PROFILE_REQUIRED');positionProfileId=args[i+1];
     }else base.push(args[i],args[i+1]);
   }
+  if(positionProfileId!==undefined)patternProfileId=positionPolicies(positionProfileId,patternProfileId);
   if(patternProfileId!==undefined){
     const at=base.indexOf('--m2-profile'),m2ProfileId=at<0?undefined:base[at+1];
     const selected=patternPolicies(patternProfileId,{m2ProfileId,m3ProfileId});
@@ -471,7 +511,7 @@ export function parseLocalM3EvidenceArgs(args){
   }
   explicitProfile(m3ProfileId);
   if(supportPolicyId!==undefined)check(rootPolicyId===M3_ROOT_POLICY_ID,'EXPLICIT_SUPPORT_ROOT_POLICY_REQUIRED');
-  return {...parseLocalExplainArgs(base),m3ProfileId,...(seasonalPolicyId===undefined?{}:{seasonalPolicyId}),...(rootPolicyId===undefined?{}:{rootPolicyId}),...(supportPolicyId===undefined?{}:{supportPolicyId}),...(synthesisProfileId===undefined?{}:{synthesisProfileId}),...(patternProfileId===undefined?{}:{patternProfileId})};
+  return {...parseLocalExplainArgs(base),m3ProfileId,...(seasonalPolicyId===undefined?{}:{seasonalPolicyId}),...(rootPolicyId===undefined?{}:{rootPolicyId}),...(supportPolicyId===undefined?{}:{supportPolicyId}),...(synthesisProfileId===undefined?{}:{synthesisProfileId}),...(patternProfileId===undefined?{}:{patternProfileId}),...(positionProfileId===undefined?{}:{positionProfileId})};
 }
 export async function runLocalM3EvidenceCli(args){
   const options=parseLocalM3EvidenceArgs(args),profile=await loadLocalM3EvidenceProfile(options);

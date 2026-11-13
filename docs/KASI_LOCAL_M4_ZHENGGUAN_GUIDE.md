@@ -70,3 +70,21 @@ API 출생 지원은 양력 환산 `[1989-01-01, 2027-01-01)` 그대로다. 원�
 ```
 
 검증 코드 32bf5eaca047139b827637a5278432e0bb1ebde1에서 전체 627/627, M2 감사·두 브라우저, CLI 46회와 TEXT 15개 전문 검토, 각 시간대 3,956양음력쌍 연결검사를 수행했다. 원국 9,040개 중 후보 1,194/비후보 7,742/호환 보류 104였으며 실제 성패 효력은 미구현이다. 이는 모든 날짜 전수·외부 원전 정답률 인증이 아니다. 최초 private 비교 문맥 누락 실패와 재검사는 실행 기록에 분리했다. 일부 한자 뒤 조사 표현은 편집 한계로 남긴다.
+# M4-C0/C1 — 선택형 재·인 위치 검토
+
+`--position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01`을 명시하면 기존 M4/M2/구조 M3의 정확한 묶음을 공개해 선택한다. 별도 M1은 만들지 않고 요청당 출생 계산 한 번을 재사용한다. 기존 `--pattern-profile`과 함께 지정해도 같은 ID만 허용하며 하위 정책이 충돌하면 거절한다. 이 옵션을 생략하면 C1 필드는 생성하지 않는다.
+
+결과는 `wealthResourcePosition`과 `wealthResourcePositionReport`이며 실제 효력은 `NOT_EVALUATED`다. 기존 `FORMATION_CONDITIONS_OBSERVED`는 표면·장간을 합친 재 또는 인의 존재 조건이므로 C1의 표면 양투·위치 적합성과 같지 않다. 새 프로필은 인접, 일간만 사이, 관과 일간 사이, 다른 격위, 복수 쌍, 표면 양투 미충족을 구별한다. 격위라고 무간섭, 인접이라고 파인, 관이 중간이라고 실제 통관이 성립하는 것으로 출력하지 않는다.
+
+아래는 이 가이드의 `$node`와 `$common`을 준비한 뒤 실행한다. 모두 가상 입력이다.
+
+```powershell
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01 --calendar GREGORIAN --date 2026-01-08 --time 12:00 --output text
+
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01 --calendar KOREAN_LUNAR --lunar-year 2025 --lunar-month 11 --lunar-day 20 --leap false --time 12:00 --output json
+
+# 기존의 넓은 성립 관련 조건에도 해당하지 않는 월령 정관 후보
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01 --calendar GREGORIAN --date 2003-01-03 --time 00:30 --output text
+```
+
+M4 구조 정책 0.1.0과 C1 위치 정책 0.1.0은 구별한다. 기존 구조 리포트의 조사·관계 누락·관측 범위 설명만 템플릿 0.1.1로 보완했으며 정책/템플릿 버전은 TEXT에서 따로 표시한다. 기존 월령 후보와 성립 관련 조건 JSON 값은 바꾸지 않는다. 원문·기대·GO/NO-GO와 효력 전제는 [M4-C0 정책 연구](research/M4_C0_WEALTH_RESOURCE_POSITION_POLICY_V01.md)에 정리했다. 최종 검사 결과는 실제 실행 후 별도 기록한다.

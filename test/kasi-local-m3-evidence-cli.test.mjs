@@ -300,3 +300,33 @@ test('M4 CLI keeps correlated Lichun candidates and rejects profile conflicts, m
   rejection(context.run(replace(args,'--manifest-sha','0'.repeat(64))),context);
   rejection(context.run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
 }));
+
+test('M4 C1 CLI reuses one explicit bundle and keeps solar lunar and timezone meaning with readable text',async()=>setup(async context=>{
+ const id='M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01',select=args=>[...args,'--position-profile',id];
+ const gRun=context.run(select(context.common)),lRun=context.run(select(context.lunar)),seoul=context.run(select(context.common),{tz:'Asia/Seoul'});
+ for(const r of [gRun,lRun,seoul]){assert.equal(r.error,undefined);assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+ const g=JSON.parse(gRun.stdout),l=JSON.parse(lRun.stdout);
+ assert.equal(g.schemaVersion,'kasi-local-m4-wealth-resource-position-v1');assert.deepEqual(g.executionCounts,{birthM1Calls:1,m2Derivations:1,m4Derivations:1,m4PositionDerivations:1});
+ const normalized=value=>{const copy=structuredClone(value.wealthResourcePosition),entries=copy.sources.filter(s=>s.evidence?.method);assert.equal(entries.length,1);assert.equal(entries[0].evidence.method,value.m1.input.calendar==='GREGORIAN'?'GREGORIAN_WITH_API_OBSERVED_DATE_EVIDENCE':'API_OBSERVED_DATE_INDEX');entries[0].evidence.method='INPUT_CALENDAR_METHOD_VALIDATED_SEPARATELY';return copy;};
+ assert.deepEqual(normalized(g),normalized(l));assert.deepEqual(g.wealthResourcePositionReport,l.wealthResourcePositionReport);assert.equal(gRun.stdout,seoul.stdout);
+ const beforeFiles=await readdir(context.directory),beforeHashes=await hashes(context.candidate);
+ const positive=context.run(replace(select(context.common),'--date','2026-01-08')),value=JSON.parse(positive.stdout);
+ assert.equal(positive.status,0,positive.stderr);assert.equal(value.patternAnalysis.candidates[0].candidateAssessment.status,'STRUCTURAL_CANDIDATE');
+ assert.equal(value.wealthResourcePosition.candidates[0].decision.status,'SURFACE_BOTH_NOT_PRESENT');assert.equal(value.wealthResourcePosition.candidates[0].exposureState,'WEALTH_ONLY_VISIBLE');
+ const text=context.run(replace(replace(select(context.common),'--date','2026-01-08'),'--output','text'));
+ assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');assert.match(text.stdout,/표면 재·인 양투.*적용 전제.*충족되지 않습니다/);assert.match(text.stdout,/실제 효력에 남은 전제/);
+ assert.ok(!text.stdout.includes('己은'));assert.ok(!text.stdout.includes('그 밖의 1개 지지 쌍'));
+ for(const c of value.wealthResourcePosition.candidates){assert.equal(c.effects.status,'NOT_EVALUATED');assert.equal(c.effects.geCheng,'NOT_IMPLEMENTED');}
+ assert.deepEqual(await readdir(context.directory),beforeFiles);assert.deepEqual(await hashes(context.candidate),beforeHashes);
+}));
+
+test('M4 C1 CLI retains correlated parents and rejects missing input forged provenance and policy conflicts',async()=>setup(async context=>{
+ const id='M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01',args=[...context.common,'--position-profile',id];
+ const at=context.run(replace(replace(args,'--date','2026-02-05'),'--time','01:20'));
+ assert.equal(at.status,0,at.stderr);const value=JSON.parse(at.stdout);assert.equal(value.wealthResourcePosition.candidates.length,2);
+ for(let i=0;i<2;i++)for(const item of value.wealthResourcePositionReport.candidates[i].items)assert.equal(item.candidateRef,'chart.candidates['+i+']');
+ for(const extra of [['--position-profile',id],['--pattern-profile','INVALID_DO_NOT_ECHO'],['--m3-profile','INVALID_DO_NOT_ECHO']])rejection(context.run([...args,...extra]),context);
+ rejection(context.run(replace(args,'--position-profile','INVALID_DO_NOT_ECHO')),context);
+ rejection(context.run(without(args,'--time')),context);rejection(context.run(without(args,'--clock-policy')),context);
+ rejection(context.run(replace(args,'--manifest-sha','0'.repeat(64))),context);rejection(context.run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
+}));
