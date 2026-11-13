@@ -1,0 +1,1878 @@
+{
+  "schemaVersion": "m3-s1-strength-prerequisite-research-case-record-v01",
+  "researchDecision": "NO_GO_NEW_RUNTIME",
+  "recordedOn": "2026-11-13",
+  "purpose": "DATA_ONLY_RESEARCH_CONTRACT_FOR_EXISTING_FIELDS_NOT_A_NEW_RELATIVE_STRENGTH_POLICY",
+  "newRuntimePolicyId": null,
+  "origin": {
+    "frozenAtUtc": "2026-11-13T13:46:15.253Z",
+    "frozenSnapshot": {
+      "relativeEvidenceRef": ".private/m3-s1-frozen-case-contract-20261113.json",
+      "sha256": "76815438a8e66ea409d5304276ee8851f0f088cc858232aa2f64bc215b146992"
+    },
+    "preResolverSource": {
+      "relativeEvidenceRef": ".private/m3-s1-case-contract-draft-20261113.mjs",
+      "sha256": "c7fb0ac28826c327cc7ad0e3c348f3c146a64a5cf9b15088918ebd28504ae634"
+    }
+  },
+  "recordTreatment": {
+    "contractAndCases": "EXACT_DEEP_EQUAL_COPY_OF_PRE_EXECUTION_FROZEN_RECORD_NO_EXPECTATION_EDITS",
+    "originalDraftMetadata": "PRESERVED_AS_THE_ORIGINAL_PRE_EXECUTION_RECORD_NOT_RELABELED_AS_PRODUCTION_GO",
+    "privateEvidenceReferences": "RELATIVE_PROVENANCE_FILENAMES_ONLY_REFERENCED_ARTIFACTS_DATASETS_AND_OUTPUT_DTOS_REMAIN_PRIVATE",
+    "examplePrivacy": "API_DATES_ARE_EXPLICITLY_VIRTUAL_TEST_INPUTS_SYNTHETIC_CHARTS_ARE_NOT_VERIFIED_BIRTHS_LITERARY_EXAMPLES_HAVE_NO_INVENTED_BIRTH_DATE",
+    "verificationMeaning": "EXISTING_FIELD_CONSISTENCY_IS_DISTINCT_FROM_NEW_STRENGTH_RULE_ACCEPTANCE_HUMAN_EXPERT_REVIEW_OR_PREDICTIVE_VALIDITY"
+  },
+  "contract": {
+    "id": "S1-NO_NEW_RELATIVE_STRENGTH_POLICY",
+    "status": "RESEARCH_CASE_DRAFT_NOT_RUNTIME_OR_PRODUCTION_GO",
+    "createdOn": "2026-11-13",
+    "newRuntimePolicyId": null,
+    "newRelativeStrengthDecisionAccepted": false,
+    "method": "MANUAL_EXISTING_TABLE_AND_LITERAL_CONTRACT_REVIEW_BEFORE_NEW_RESOLVER_NOT_EXPECTED_FROM_RESOLVER_OUTPUT",
+    "sourceReviewLevel": "EXISTING_REPOSITORY_RECORDS_AND_SEPARATE_AI_SOURCE_ROLE_NOT_THIS_AGENT_NEW_SCAN_OR_HUMAN_EXPERT_REVIEW",
+    "targetScopeUnderReview": "EXISTING_M2_VISIBLE_ZHENGGUAN_POSITIONS_ONLY_HIDDEN_MONTH_OFFICER_IS_NOT_A_NEW_VISIBLE_ROOT_TARGET",
+    "existingPolicyRefs": [
+      {
+        "id": "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "version": "0.2.0"
+      },
+      {
+        "id": "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "version": "0.1.0"
+      },
+      {
+        "id": "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01",
+        "version": "0.1.0"
+      },
+      {
+        "id": "M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01",
+        "version": "0.1.0"
+      },
+      {
+        "id": "M4-ZHENGGUAN-MONTH-STRUCTURE-V01",
+        "version": "0.1.0"
+      }
+    ],
+    "sourceLayerNotes": [
+      "NCC §6 旺衰=時令 / 強弱=黨助 and 四辛卯/四丙申 are the 徐 commentary layer according to the source-role transcription comparison, not silently attributed to the original author.",
+      "The original §6 criticizes season-only conclusions and discusses roots; neither layer supplies a complete executable new relative-strength decision table.",
+      "Existing M4-C1 22 cases may supply prior positional records but are not 22 new independent strength validations."
+    ],
+    "syntheticMeaning": "STRUCTURAL_POLICY_UNIT_NOT_A_VERIFIED_SIMULTANEOUS_CALENDAR_BIRTH",
+    "pairedComparisonLimit": "A changed branch necessarily changes hidden members and can change raw relations. Fixed comparison factors are listed explicitly; no claim that the whole chart differs only in an invisible strength quantity.",
+    "noForceFromPresence": {
+      "rootEfficacy": "NOT_EVALUATED",
+      "rootStrength": "NOT_EVALUATED",
+      "totalSupportEfficacy": "NOT_EVALUATED",
+      "originalFinalStrength": "NOT_IMPLEMENTED"
+    },
+    "universalForbidden": [
+      "GUAN_QING",
+      "GUAN_ZHONG",
+      "SHEN_WANG_GUAN_QING",
+      "SHEN_RUO_GUAN_ZHONG",
+      "RELATIVE_FORCE_ORDER",
+      "NUMERICAL_STRENGTH_SCORE",
+      "PRESENCE_IS_FORCE",
+      "ABSENCE_IS_PHYSICAL_ZERO",
+      "GE_CHENG",
+      "GE_BAI",
+      "JIU_YING_EFFICACY",
+      "M5_YONGSHEN",
+      "FORTUNE_OR_EVENTS",
+      "RELEASE_GATE_PROMOTION"
+    ],
+    "requiredTypeCoverage": {
+      "1": [
+        "s1-root-absent-autumn",
+        "s1-root-added-same-autumn"
+      ],
+      "2": [
+        "s1-root-absent-autumn",
+        "s1-visible-resource-added-same-roots"
+      ],
+      "3": [
+        "s1-visible-resource-added-same-roots",
+        "s1-resource-own-root-added"
+      ],
+      "4": [
+        "s1-root-added-same-autumn",
+        "s1-root-and-clash-overlap"
+      ],
+      "5": [
+        "s1-main-month-officer-hidden-only",
+        "s1-four-bing-zi-old-weak-month-officer"
+      ],
+      "6": [
+        "s1-main-month-officer-exact-visible"
+      ],
+      "7": [
+        "s1-main-month-officer-hidden-only",
+        "s1-main-month-officer-exact-visible",
+        "s1-four-bing-zi-old-weak-month-officer"
+      ],
+      "8": [
+        "s1-wealth-resource-location-a",
+        "s1-wealth-resource-location-b"
+      ],
+      "9": [
+        "s1-unrooted-resource-combination-hold",
+        "s1-rooted-resource-combination-exception"
+      ],
+      "10": [
+        "s1-api-19891001"
+      ],
+      "11": [
+        "s1-root-and-clash-overlap"
+      ],
+      "12": [
+        "s1-literature-four-xin-mao",
+        "s1-literature-four-bing-shen",
+        "s1-four-bing-zi-old-weak-month-officer"
+      ],
+      "13": [
+        "s1-existing-rooted-deferred"
+      ],
+      "14": [
+        "s1-same-month-officer-day-root-absent",
+        "s1-same-month-officer-day-root-present"
+      ],
+      "15": [
+        "s1-api-pre18-one-parent-two-seasonal-alternatives"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "s1-root-absent-autumn",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        1,
+        2
+      ],
+      "input": {
+        "pillars": [
+          "壬子",
+          "辛酉",
+          "丙子",
+          "癸丑"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "visibleOfficerPositions": [
+          {
+            "role": "hour",
+            "stem": "癸",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "XIANG"
+          }
+        ],
+        "officerRootIncludes": [
+          {
+            "targetRole": "hour",
+            "rootRole": "year",
+            "branch": "子",
+            "stem": "癸",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "rootEfficacy": "NOT_EVALUATED",
+        "rootStrength": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-root-added-same-autumn",
+        "s1-visible-resource-added-same-roots"
+      ],
+      "sourceRef": [
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md",
+        "docs/research/M3_SEASONAL_STATE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02"
+      ],
+      "reason": "子酉子丑의 승인 장간에는 화근과 목인성이 없다. 시간 癸官의 수근 존재는 현재 표의 위치 사실이며 丙보다 강하다는 비교가 아니다.",
+      "forbidden": [
+        "UNROOTED_DAY_PROVES_OFFICER_HEAVY",
+        "WATER_SEASONAL_XIANG_PROVES_RELATIVE_DOMINANCE",
+        "TREAT_RESOURCE_ABSENCE_AS_ZERO_FORCE"
+      ]
+    },
+    {
+      "id": "s1-root-added-same-autumn",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        1,
+        4
+      ],
+      "input": {
+        "pillars": [
+          "壬午",
+          "辛酉",
+          "丙子",
+          "癸丑"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "year",
+            "branch": "午",
+            "stem": "丁",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "visibleOfficerPositions": [
+          {
+            "role": "hour",
+            "stem": "癸",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "XIANG"
+          }
+        ],
+        "rootEfficacy": "NOT_EVALUATED",
+        "rootStrength": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-root-absent-autumn"
+      ],
+      "controlledFactors": [
+        "FOUR_VISIBLE_STEMS",
+        "MONTH_BRANCH_AND_SELECTED_SEASON",
+        "RESOURCE_COMPLETE_ABSENCE",
+        "OFFICER_ROOT_PRESENCE"
+      ],
+      "changedFactsRetained": [
+        "YEAR_ZI_TO_WU_CHANGES_HIDDEN_MEMBERS",
+        "RAW_ZI_WU_CLASH_AND_OTHER_RELATIONS_MUST_REMAIN"
+      ],
+      "sourceRef": [
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02"
+      ],
+      "reason": "연지 午의 丁은 丙의 동오행 근이다. 계절과 인성 부재는 고정되지만 근력을 측정한 것은 아니고 지지 변경에 따른 다른 장간·관계도 숨기지 않는다.",
+      "forbidden": [
+        "ROOT_PRESENT_PROVES_STRONG",
+        "SAME_SEASON_AND_ROOT_CHANGE_IS_COMPLETE_CAUSAL_STRENGTH_EXPERIMENT",
+        "DELETE_CLASHED_ROOT"
+      ]
+    },
+    {
+      "id": "s1-visible-resource-added-same-roots",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        2,
+        3
+      ],
+      "input": {
+        "pillars": [
+          "甲子",
+          "辛酉",
+          "丙子",
+          "癸丑"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleResourcePositions": [
+          {
+            "role": "year",
+            "stem": "甲",
+            "tenGod": "偏印",
+            "chartRootPresence": "ABSENT_UNDER_POLICY"
+          }
+        ],
+        "hiddenResourcePositions": [],
+        "resourceDecisions": [
+          {
+            "role": "year",
+            "decision": "NO_HOLD_BY_THIS_RULE"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "hour",
+            "stem": "癸",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "XIANG"
+          }
+        ],
+        "totalSupportEfficacy": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-root-absent-autumn",
+        "s1-resource-own-root-added"
+      ],
+      "controlledFactors": [
+        "FOUR_BRANCHES",
+        "DAY_MASTER",
+        "MONTH_AND_SEASON",
+        "DAY_ROOT_PRESENCE",
+        "OFFICER_TARGET"
+      ],
+      "changedFactsRetained": [
+        "YEAR_VISIBLE_REN_KILLING_IS_REPLACED_BY_JIA_RESOURCE_NOT_DELETED_FROM_COMPARISON_HISTORY"
+      ],
+      "sourceRef": [
+        "docs/research/M3_RESOURCE_SUPPORT_POLICY_V01.md",
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "가지와 일간 근을 그대로 둔 채 연간이 壬에서 甲으로 바뀌어 표면 편인 한 위치가 생긴다. 무근과 NO_HOLD는 인성의 충분한 전달을 뜻하지 않는다.",
+      "forbidden": [
+        "UNROOTED_RESOURCE_DELETED",
+        "NO_HOLD_MEANS_EFFECTIVE_SUPPORT",
+        "ADDED_RESOURCE_PROVES_DAY_STRONGER_THAN_OFFICER"
+      ]
+    },
+    {
+      "id": "s1-resource-own-root-added",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        3
+      ],
+      "input": {
+        "pillars": [
+          "甲辰",
+          "辛酉",
+          "丙子",
+          "癸丑"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleResourcePositions": [
+          {
+            "role": "year",
+            "stem": "甲",
+            "tenGod": "偏印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "resourceRootIncludes": [
+          {
+            "targetRole": "year",
+            "rootRole": "year",
+            "branch": "辰",
+            "stem": "乙",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "resourceDecisions": [
+          {
+            "role": "year",
+            "decision": "NO_HOLD_BY_THIS_RULE"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "hour",
+            "stem": "癸",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "XIANG"
+          }
+        ],
+        "totalSupportEfficacy": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-visible-resource-added-same-roots"
+      ],
+      "controlledFactors": [
+        "FOUR_VISIBLE_STEMS",
+        "MONTH_AND_SEASON",
+        "DAY_ROOT_ABSENCE",
+        "VISIBLE_RESOURCE_TARGET",
+        "OFFICER_ROOT_PRESENCE"
+      ],
+      "changedFactsRetained": [
+        "YEAR_ZI_TO_CHEN_CHANGES_HIDDEN_MEMBERS",
+        "CHEN_YOU_RELATION_IS_RETAINED_NOT_ASSUMED_EFFECTIVE"
+      ],
+      "sourceRef": [
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md",
+        "docs/research/M3_RESOURCE_SUPPORT_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01"
+      ],
+      "reason": "甲 편인의 자신의 근은 辰乙 때문에 성립하지만 丙 일간의 화근은 여전히 없다. 인성의 근을 일간의 직접 근으로 복사하지 않는다.",
+      "forbidden": [
+        "RESOURCE_ROOT_IS_DAY_MASTER_ROOT",
+        "ROOTED_RESOURCE_GUARANTEES_TRANSMISSION",
+        "IGNORE_CHANGED_BRANCH_RELATIONS"
+      ]
+    },
+    {
+      "id": "s1-main-month-officer-hidden-only",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        5,
+        7
+      ],
+      "input": {
+        "pillars": [
+          "癸亥",
+          "乙酉",
+          "甲午",
+          "壬申"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "year",
+            "branch": "亥",
+            "stem": "甲",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "visibleOfficerPositions": [],
+        "monthOfficerMembers": [
+          {
+            "stem": "辛",
+            "position": "MAIN_QI",
+            "tenGod": "正官"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE"
+      },
+      "pairedWith": [
+        "s1-main-month-officer-exact-visible"
+      ],
+      "sourceRef": [
+        "docs/research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md",
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M4-ZHENGGUAN-MONTH-STRUCTURE-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "월 酉의 辛官은 월령 후보 근거이나 표면에는 辛이 없다. 기존 네 표면 천간 대상 통근 결과에 숨은 辛을 다섯째 표면 타깃으로 추가하지 않는다.",
+      "forbidden": [
+        "MONTH_OFFICER_CREATES_VISIBLE_OFFICER_TARGET",
+        "HIDDEN_OFFICER_HAS_NO_ROOT_BECAUSE_NOT_SURFACE_TARGET",
+        "MONTH_OFFICER_PROVES_GUAN_ZHONG"
+      ]
+    },
+    {
+      "id": "s1-main-month-officer-exact-visible",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        6,
+        7
+      ],
+      "input": {
+        "pillars": [
+          "辛亥",
+          "乙酉",
+          "甲午",
+          "壬申"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "visibleOfficerPositions": [
+          {
+            "role": "year",
+            "stem": "辛",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "officerRootIncludes": [
+          {
+            "targetRole": "year",
+            "rootRole": "month",
+            "branch": "酉",
+            "stem": "辛",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "rootEfficacy": "NOT_EVALUATED",
+        "rootStrength": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-main-month-officer-hidden-only"
+      ],
+      "sourceRef": [
+        "docs/research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md",
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M4-ZHENGGUAN-MONTH-STRUCTURE-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "辛이 연간에 정확 투출한다. 官이 이미 월령 辛 장간을 근거로 선택됐다면 동오행 장간 존재 정책에서 그 월지의 근은 조건상 자동으로 확인된다. 이를 독립적인 官 강도 증거로 중복 승격하지 않는다.",
+      "forbidden": [
+        "MONTH_OFFICER_PLUS_ROOT_PROVES_HEAVY",
+        "SEASON_WANG_PROVES_ACTUAL_OFFICER_FORCE",
+        "ROOT_PRESENCE_AND_MONTH_CANDIDATE_ARE_INDEPENDENT_FORCE_MEASUREMENTS"
+      ]
+    },
+    {
+      "id": "s1-wealth-resource-location-a",
+      "kind": "REUSED_C1_SYNTHETIC_STRUCTURE_NOT_NEW_STRENGTH_VALIDATION",
+      "types": [
+        8
+      ],
+      "input": {
+        "pillars": [
+          "戊午",
+          "辛酉",
+          "甲午",
+          "壬申"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleWealthPositions": [
+          {
+            "role": "year",
+            "stem": "戊",
+            "tenGod": "偏財"
+          }
+        ],
+        "visibleResourcePositions": [
+          {
+            "role": "hour",
+            "stem": "壬",
+            "tenGod": "偏印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "month",
+            "stem": "辛",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "wealthResourceGeometry": "OFFICER_AND_DAY_MASTER_BETWEEN",
+        "intermediateRoles": [
+          "month",
+          "day"
+        ]
+      },
+      "pairedWith": [
+        "s1-wealth-resource-location-b"
+      ],
+      "sourceRef": [
+        "test/fixtures/m4-wealth-resource-position-cases.mjs#synthetic-officer-and-day-between"
+      ],
+      "policyRef": [
+        "M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "기존 C1 위치 계약을 재사용하는 연결 반례다. 재·인 양투와 官 중간은 실제 생조 전달이나 상대 강약 충분조건으로 새 인증하지 않는다.",
+      "forbidden": [
+        "C1_CASE_IS_NEW_INDEPENDENT_STRENGTH_CERTIFICATE",
+        "OFFICER_BETWEEN_PROVES_MEDIATION",
+        "WEALTH_POSITION_PROVES_OFFICER_FORCE"
+      ]
+    },
+    {
+      "id": "s1-wealth-resource-location-b",
+      "kind": "REUSED_C1_SYNTHETIC_STRUCTURE_NOT_NEW_STRENGTH_VALIDATION",
+      "types": [
+        8
+      ],
+      "input": {
+        "pillars": [
+          "壬申",
+          "辛酉",
+          "甲午",
+          "戊午"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleWealthPositions": [
+          {
+            "role": "hour",
+            "stem": "戊",
+            "tenGod": "偏財"
+          }
+        ],
+        "visibleResourcePositions": [
+          {
+            "role": "year",
+            "stem": "壬",
+            "tenGod": "偏印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "month",
+            "stem": "辛",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "wealthResourceGeometry": "OFFICER_AND_DAY_MASTER_BETWEEN",
+        "intermediateRoles": [
+          "month",
+          "day"
+        ]
+      },
+      "pairedWith": [
+        "s1-wealth-resource-location-a"
+      ],
+      "controlledFactors": [
+        "SAME_STEM_AND_BRANCH_MULTISET",
+        "DAY_AND_MONTH",
+        "ROOT_PRESENCE_NOT_ROOT_LOCATION"
+      ],
+      "changedFactsRetained": [
+        "WEALTH_RESOURCE_AND_HIDDEN_MEMBER_POSITIONS_CHANGE"
+      ],
+      "sourceRef": [
+        "docs/research/M4_C0_WEALTH_RESOURCE_POSITION_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "연·시의 재·인 위치를 바꾸면서 글자 구성과 일간/관의 근 presence를 유지한다. 위치가 다르다는 사실을 임의의 힘 감소율이나 官 우열로 번역하지 않는다.",
+      "forbidden": [
+        "YEAR_HOUR_SWAP_IS_NO_CHANGE_IN_LOCATION_EVIDENCE",
+        "DISTANCE_GIVES_FORCE_RATIO",
+        "AUTO_EFFECTIVE_WEALTH_RESOURCE_TRANSMISSION"
+      ]
+    },
+    {
+      "id": "s1-unrooted-resource-combination-hold",
+      "kind": "REUSED_M3_SYNTHETIC_POLICY_UNIT",
+      "types": [
+        9
+      ],
+      "input": {
+        "pillars": [
+          "戊午",
+          "癸巳",
+          "甲午",
+          "丙寅"
+        ],
+        "monthTerm": "LIXIA",
+        "seasonalContext": {
+          "season": "SUMMER",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "XIU",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "visibleResourcePositions": [
+          {
+            "role": "month",
+            "stem": "癸",
+            "tenGod": "正印",
+            "chartRootPresence": "ABSENT_UNDER_POLICY"
+          }
+        ],
+        "resourceDecisions": [
+          {
+            "role": "month",
+            "decision": "SUPPORT_HELD_UNDER_SELECTED_RULE"
+          }
+        ],
+        "resourceCombinationPartners": [
+          {
+            "targetRole": "month",
+            "partnerRole": "year",
+            "targetStem": "癸",
+            "partnerStem": "戊",
+            "adjacent": true
+          }
+        ],
+        "visibleOfficerPositions": [],
+        "totalSupportEfficacy": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-rooted-resource-combination-exception"
+      ],
+      "sourceRef": [
+        "test/fixtures/m3-limited-synthesis-cases.mjs#resource-adjacent-held-kept-in-synthesis",
+        "docs/research/M3_RESOURCE_SUPPORT_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "기존 무근 인성의 인접 단일 합 채택 유보를 그대로 소비한다. HELD는 癸 인성을 삭제하거나 실제 생조를 물리적 0으로 만든 상태가 아니다.",
+      "forbidden": [
+        "HELD_RESOURCE_IS_ABSENT",
+        "HELD_RESOURCE_IMPLIES_DAY_WEAK_OR_OFFICER_HEAVY",
+        "COMBINATION_TRANSFORMATION"
+      ]
+    },
+    {
+      "id": "s1-rooted-resource-combination-exception",
+      "kind": "REUSED_M3_SYNTHETIC_POLICY_UNIT",
+      "types": [
+        3,
+        9
+      ],
+      "input": {
+        "pillars": [
+          "戊子",
+          "癸巳",
+          "甲午",
+          "丙寅"
+        ],
+        "monthTerm": "LIXIA",
+        "seasonalContext": {
+          "season": "SUMMER",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "XIU",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "visibleResourcePositions": [
+          {
+            "role": "month",
+            "stem": "癸",
+            "tenGod": "正印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "resourceRootIncludes": [
+          {
+            "targetRole": "month",
+            "rootRole": "year",
+            "branch": "子",
+            "stem": "癸",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "resourceDecisions": [
+          {
+            "role": "month",
+            "decision": "ROOTED_COMBINATION_EFFECT_UNRESOLVED"
+          }
+        ],
+        "resourceCombinationPartners": [
+          {
+            "targetRole": "month",
+            "partnerRole": "year",
+            "targetStem": "癸",
+            "partnerStem": "戊",
+            "adjacent": true
+          }
+        ],
+        "visibleOfficerPositions": [],
+        "totalSupportEfficacy": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-unrooted-resource-combination-hold"
+      ],
+      "controlledFactors": [
+        "FOUR_VISIBLE_STEMS",
+        "MONTH_AND_SEASON",
+        "DAY_ROOT_PRESENCE",
+        "SAME_RESOURCE_COMBINATION_PAIR"
+      ],
+      "changedFactsRetained": [
+        "YEAR_BRANCH_CHANGES",
+        "ZI_WU_CLASH_RETAINED"
+      ],
+      "sourceRef": [
+        "test/fixtures/m3-limited-synthesis-cases.mjs#resource-same-pair-rooted-exception"
+      ],
+      "policyRef": [
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "인성 자체 통근만 presence 관점에서 달라져 기존 통근 예외 분기로 바뀐다. 합·근 효력이 모두 정해지지 않았으므로 실제 지원 충분 여부는 여전히 판단하지 않는다.",
+      "forbidden": [
+        "ROOTED_EXCEPTION_MEANS_EFFECTIVE_SUPPORT",
+        "DELETE_ZI_WU_CLASH",
+        "RESOURCE_ROOT_BECOMES_DAY_ROOT"
+      ]
+    },
+    {
+      "id": "s1-root-and-clash-overlap",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        4,
+        11
+      ],
+      "input": {
+        "pillars": [
+          "辛酉",
+          "乙酉",
+          "甲寅",
+          "丁卯"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "day",
+            "branch": "寅",
+            "stem": "甲",
+            "matchType": "EXACT_STEM"
+          },
+          {
+            "role": "hour",
+            "branch": "卯",
+            "stem": "乙",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "year",
+            "stem": "辛",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "officerRootIncludes": [
+          {
+            "targetRole": "year",
+            "rootRole": "year",
+            "branch": "酉",
+            "stem": "辛",
+            "matchType": "EXACT_STEM"
+          },
+          {
+            "targetRole": "year",
+            "rootRole": "month",
+            "branch": "酉",
+            "stem": "辛",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "branchRelationsInclude": [
+          {
+            "roles": [
+              "year",
+              "month"
+            ],
+            "kind": "XING"
+          },
+          {
+            "roles": [
+              "year",
+              "hour"
+            ],
+            "kind": "LIUCHONG"
+          },
+          {
+            "roles": [
+              "month",
+              "hour"
+            ],
+            "kind": "LIUCHONG"
+          }
+        ],
+        "rootEfficacy": "NOT_EVALUATED",
+        "rootStrength": "NOT_EVALUATED"
+      },
+      "sourceRef": [
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md",
+        "test/m4-zhengguan-structure.test.mjs"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "卯 목근과 酉 금근 위치가 충·형의 구성원에 함께 포함된다. 근 연결과 모든 겹친 관계를 보존하되 충이 있어 근을 삭제하거나 근 손상 정도를 계산하지 않는다.",
+      "forbidden": [
+        "CLASH_DELETES_ROOT",
+        "NO_EFFECT_POLICY_MEANS_NO_RELATION",
+        "OFFICER_ROOT_IN_MONTH_IS_STRONGER_THAN_DAY_ROOT"
+      ]
+    },
+    {
+      "id": "s1-literature-four-xin-mao",
+      "kind": "LITERATURE_COMMENTARY_ILLUSTRATION_NOT_BIRTH_DATE",
+      "types": [
+        12
+      ],
+      "input": {
+        "pillars": [
+          "辛卯",
+          "辛卯",
+          "辛卯",
+          "辛卯"
+        ],
+        "monthTerm": "JINGZHE",
+        "seasonalContext": {
+          "season": "SPRING",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "辛",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "visibleOfficerPositions": [],
+        "legacySynthesis": {
+          "status": "RESOLVED_UNDER_POLICY",
+          "conclusion": "WEAK_UNDER_SELECTED_POLICY"
+        },
+        "legacyEightConditions": {
+          "nonWangXiangSeason": true,
+          "dayRootAbsent": true,
+          "allResourceAbsent": true,
+          "allNonDayVisiblePeersUnrooted": true,
+          "adverseLocationPresent": true,
+          "noVisibleFiveCombination": true,
+          "noRawBranchPair": true,
+          "noTriadWithTwoDistinctMembers": true
+        }
+      },
+      "sourceRef": [
+        "test/fixtures/m3-limited-synthesis-cases.mjs#literature-four-xin-mao",
+        "docs/research/M3_LIMITED_SYNTHESIS_POLICY_V01.md",
+        "TXT-ZIPING-ZHENQUAN-NCC-XU-ROOT-COMMENTARY"
+      ],
+      "policyRef": [
+        "M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01"
+      ],
+      "reason": "이는 徐 주석의 무근 예시와 기존 좁은 프로젝트 충분조건에 대한 고정 사례다. 원저의 완전 알고리즘이나 실제 양력 생일로 보충하지 않는다.",
+      "forbidden": [
+        "ATTRIBUTE_XU_ILLUSTRATION_TO_ORIGINAL_AUTHOR",
+        "WEAK_MEANS_GUAN_ZHONG",
+        "INVENT_OFFICER_TARGET",
+        "INVENT_GREGORIAN_BIRTH"
+      ]
+    },
+    {
+      "id": "s1-literature-four-bing-shen",
+      "kind": "LITERATURE_COMMENTARY_ILLUSTRATION_NOT_BIRTH_DATE",
+      "types": [
+        12
+      ],
+      "input": {
+        "pillars": [
+          "丙申",
+          "丙申",
+          "丙申",
+          "丙申"
+        ],
+        "monthTerm": "LIQIU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "visibleOfficerPositions": [],
+        "legacySynthesis": {
+          "status": "RESOLVED_UNDER_POLICY",
+          "conclusion": "WEAK_UNDER_SELECTED_POLICY"
+        },
+        "legacyEightConditions": {
+          "nonWangXiangSeason": true,
+          "dayRootAbsent": true,
+          "allResourceAbsent": true,
+          "allNonDayVisiblePeersUnrooted": true,
+          "adverseLocationPresent": true,
+          "noVisibleFiveCombination": true,
+          "noRawBranchPair": true,
+          "noTriadWithTwoDistinctMembers": true
+        }
+      },
+      "sourceRef": [
+        "test/fixtures/m3-limited-synthesis-cases.mjs#literature-four-bing-shen",
+        "docs/research/M3_LIMITED_SYNTHESIS_POLICY_V01.md",
+        "TXT-ZIPING-ZHENQUAN-NCC-XU-ROOT-COMMENTARY"
+      ],
+      "policyRef": [
+        "M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01"
+      ],
+      "reason": "申藏 庚壬戊에는 火근과 木인성이 없으며 壬은 丙의 七殺이고 癸 정관이 아니다. 기존 약 결론을 官重 또는 관살 구분 변경에 사용하지 않는다.",
+      "forbidden": [
+        "FOUR_VISIBLE_FIRE_PROVES_STRONG",
+        "REN_KILLING_IS_GUI_OFFICER",
+        "WEAK_MEANS_SHEN_RUO_GUAN_ZHONG",
+        "INVENT_BIRTH_DATE"
+      ]
+    },
+    {
+      "id": "s1-four-bing-zi-old-weak-month-officer",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        5,
+        7,
+        12
+      ],
+      "input": {
+        "pillars": [
+          "丙子",
+          "丙子",
+          "丙子",
+          "丙子"
+        ],
+        "monthTerm": "DAXUE",
+        "seasonalContext": {
+          "season": "WINTER",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "nonDayVisiblePeerRoles": [
+          "year",
+          "month",
+          "hour"
+        ],
+        "visibleOfficerPositions": [],
+        "monthOfficerMembers": [
+          {
+            "stem": "癸",
+            "position": "MAIN_QI",
+            "tenGod": "正官"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "legacySynthesis": {
+          "status": "RESOLVED_UNDER_POLICY",
+          "conclusion": "WEAK_UNDER_SELECTED_POLICY"
+        },
+        "legacyEightConditions": {
+          "nonWangXiangSeason": true,
+          "dayRootAbsent": true,
+          "allResourceAbsent": true,
+          "allNonDayVisiblePeersUnrooted": true,
+          "adverseLocationPresent": true,
+          "noVisibleFiveCombination": true,
+          "noRawBranchPair": true,
+          "noTriadWithTwoDistinctMembers": true
+        }
+      },
+      "sourceRef": [
+        "docs/research/M3_LIMITED_SYNTHESIS_POLICY_V01.md",
+        "docs/research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01",
+        "M4-ZHENGGUAN-MONTH-STRUCTURE-V01"
+      ],
+      "reason": "네 子의 癸 본기 제어와 비旺相/무화근/무목인/무표면합/무쌍관계/서로 다른 구성원 1개를 손으로 확인해 기존8조건을 모두 만족시킨다. 표면 官은 없어 S1 비교 타깃을 생성하지 않는다. 일간 무근이면 동오행 표면 비겁도 같은 지지 집합에서 무근이라는 중복 전제도 드러낸다.",
+      "forbidden": [
+        "ACTUAL_CALENDAR_BIRTH_FEASIBILITY",
+        "OLD_WEAK_PLUS_MONTH_OFFICER_PROVES_GUAN_ZHONG",
+        "HIDDEN_OFFICER_BECOMES_FIFTH_SURFACE",
+        "COUNT_MONTH_OFFICER_ADVERSE_PRESENCE_TWICE_AS_FORCE"
+      ]
+    },
+    {
+      "id": "s1-existing-rooted-deferred",
+      "kind": "REUSED_M3_SYNTHETIC_POLICY_UNIT",
+      "types": [
+        13
+      ],
+      "input": {
+        "pillars": [
+          "丙戌",
+          "丙戌",
+          "丙戌",
+          "丙戌"
+        ],
+        "monthTerm": "HANLU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "endMonthPart": "BEFORE_DERIVED_PRE18_BOUNDARY",
+          "meaning": "EXPLICIT_POLICY_UNIT_CONTEXT_NOT_A_VERIFIED_BIRTH_S_T_INTERVAL"
+        }
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "day",
+            "branch": "戌",
+            "stem": "丁",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "visibleOfficerPositions": [],
+        "legacySynthesis": {
+          "status": "DEFERRED_MIXED_EVIDENCE",
+          "conclusion": null
+        },
+        "rootEfficacy": "NOT_EVALUATED",
+        "rootStrength": "NOT_EVALUATED"
+      },
+      "sourceRef": [
+        "test/fixtures/m3-limited-synthesis-cases.mjs#declining-season-root-present-no-raw-pair"
+      ],
+      "policyRef": [
+        "M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "기존 고정 사례의 선행 계절 문맥과 보류를 그대로 명시한다. 戌의 丁근과 戊설기·辛소모가 함께 있어 선택된 무근 충분조건은 적용되지 않는다.",
+      "forbidden": [
+        "ROOT_PRESENT_PROVES_STRONG",
+        "QIU_PROVES_WEAK",
+        "DEFERRED_MEANS_BALANCED",
+        "INVENT_ACTUAL_PRE18_TIME"
+      ]
+    },
+    {
+      "id": "s1-same-month-officer-day-root-absent",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        14
+      ],
+      "input": {
+        "pillars": [
+          "辛酉",
+          "乙酉",
+          "甲午",
+          "壬申"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleOfficerPositions": [
+          {
+            "role": "year",
+            "stem": "辛",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "visibleResourcePositions": [
+          {
+            "role": "hour",
+            "stem": "壬",
+            "tenGod": "偏印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE"
+      },
+      "pairedWith": [
+        "s1-same-month-officer-day-root-present"
+      ],
+      "sourceRef": [
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md",
+        "docs/research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M4-ZHENGGUAN-MONTH-STRUCTURE-V01"
+      ],
+      "reason": "酉월 辛官 후보와 실제 표면 辛, 壬 인성 유근을 고정해도 午에는 甲의 목근이 없다. 인성의 근을 일간 근으로 복사하지 않는다.",
+      "forbidden": [
+        "SAME_OFFICER_CANDIDATE_IMPLIES_SAME_DAY_STRENGTH",
+        "RESOURCE_ROOT_IS_DAY_ROOT",
+        "UNROOTED_DAY_MEANS_OFFICER_HEAVY"
+      ]
+    },
+    {
+      "id": "s1-same-month-officer-day-root-present",
+      "kind": "SYNTHETIC_STRUCTURAL_UNIT",
+      "types": [
+        14
+      ],
+      "input": {
+        "pillars": [
+          "辛酉",
+          "乙酉",
+          "甲寅",
+          "壬申"
+        ],
+        "monthTerm": "BAILU",
+        "seasonalContext": {
+          "season": "AUTUMN",
+          "meaning": "EXISTING_POLICY_TABLE_UNIT_NOT_API_BIRTH_EVENT"
+        }
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "day",
+            "branch": "寅",
+            "stem": "甲",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "year",
+            "stem": "辛",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "visibleResourcePositions": [
+          {
+            "role": "hour",
+            "stem": "壬",
+            "tenGod": "偏印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "rootEfficacy": "NOT_EVALUATED",
+        "rootStrength": "NOT_EVALUATED"
+      },
+      "pairedWith": [
+        "s1-same-month-officer-day-root-absent"
+      ],
+      "controlledFactors": [
+        "FOUR_VISIBLE_STEMS",
+        "MONTH_AND_SEASON",
+        "OFFICER_ROOT_PRESENCE",
+        "RESOURCE_OWN_ROOT_PRESENCE"
+      ],
+      "changedFactsRetained": [
+        "DAY_BRANCH_WU_TO_YIN_CHANGES_HIDDEN_MEMBERS",
+        "YIN_SHEN_RELATION_REMAINS_UNEVALUATED"
+      ],
+      "sourceRef": [
+        "docs/research/M3_ROOT_PRESENCE_POLICY_V01.md",
+        "docs/research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M4-ZHENGGUAN-MONTH-STRUCTURE-V01"
+      ],
+      "reason": "같은 월령 정관 후보라도 일지 寅으로 甲의 정확 장간 근이 새로 확인된다. 이 presence 변화와 寅申의 관계를 모두 남기며 근력/상대강약으로 승격하지 않는다.",
+      "forbidden": [
+        "ROOT_ADDITION_PROVES_SHEN_WANG_GUAN_QING",
+        "CLASH_AUTOMATICALLY_REMOVES_NEW_ROOT",
+        "IGNORE_OTHER_CHANGED_HIDDEN_MEMBERS"
+      ]
+    },
+    {
+      "id": "s1-api-pre18-one-parent-two-seasonal-alternatives",
+      "kind": "EXISTING_API_VIRTUAL_BIRTH_CONNECTIVITY_RECORD",
+      "types": [
+        15
+      ],
+      "input": {
+        "calendar": "GREGORIAN",
+        "date": "2026-04-17",
+        "time": "20:49",
+        "pillars": [
+          "丙午",
+          "壬辰",
+          "辛酉",
+          "戊戌"
+        ]
+      },
+      "expected": {
+        "parentCount": 1,
+        "seasonalAlternativeCount": 2,
+        "dayMaster": "辛",
+        "daySeasonalStates": [
+          "QIU",
+          "XIANG"
+        ],
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "day",
+            "branch": "酉",
+            "stem": "辛",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "year",
+            "stem": "丙",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "officerRootIncludes": [
+          {
+            "targetRole": "year",
+            "rootRole": "year",
+            "branch": "午",
+            "stem": "丁",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "monthOfficerCandidateStatus": "NOT_A_CANDIDATE_UNDER_POLICY"
+      },
+      "sourceRef": [
+        ".private/m4-c0-examples-c96230f-20261113/b-at.json",
+        "docs/engineering/KASI_M3_LIMITED_SYNTHESIS_EXECUTION_20261112.md"
+      ],
+      "policyRef": [
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "기존 실제 API 계산의 B동분은 한 원국 아래 봄/토왕 대안이다. 표면 丙官의 존재와 辰월 비후보는 함께 보존하고 계절 대안마다 근을 재생성하지 않는다.",
+      "forbidden": [
+        "CARTESIAN_PRODUCT_NEW_NATAL_PARENTS",
+        "SEASON_CHANGE_CHANGES_ROOT_MEMBERS",
+        "VISIBLE_OFFICER_MEANS_MONTH_OFFICER_PATTERN",
+        "QIU_OR_XIANG_PROVES_RELATIVE_STRENGTH"
+      ]
+    },
+    {
+      "id": "s1-api-20260108",
+      "kind": "EXISTING_API_VIRTUAL_BIRTH_CONNECTIVITY_RECORD",
+      "types": [
+        6,
+        7
+      ],
+      "input": {
+        "calendar": "GREGORIAN",
+        "date": "2026-01-08",
+        "time": "12:00",
+        "pillars": [
+          "乙巳",
+          "己丑",
+          "壬午",
+          "丙午"
+        ]
+      },
+      "expected": {
+        "dayMaster": "壬",
+        "daySeasonalState": "WANG",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "month",
+            "branch": "丑",
+            "stem": "癸",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "month",
+            "stem": "己",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "QIU"
+          }
+        ],
+        "officerRootIncludes": [
+          {
+            "targetRole": "month",
+            "rootRole": "month",
+            "branch": "丑",
+            "stem": "己",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "visibleResourcePositions": [],
+        "hiddenResourceIncludes": [
+          {
+            "role": "year",
+            "branch": "巳",
+            "stem": "庚",
+            "tenGod": "偏印"
+          },
+          {
+            "role": "month",
+            "branch": "丑",
+            "stem": "辛",
+            "tenGod": "正印"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE"
+      },
+      "sourceRef": [
+        ".private/m4-c0-examples-c96230f-20261113/jan8.json"
+      ],
+      "policyRef": [
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M4-ZHENGGUAN-MONTH-STRUCTURE-V01"
+      ],
+      "reason": "지정 API 가상 날짜 1. 기존 월간 己官은 월지 己를 이미 가지므로 rootPresence 재확인은 관의 강도라는 새 정보가 아니다. 일간 壬의 물근 癸와 官己의 토근을 분리한다. 1월8일은 해당 기존 丑월의 PRE18 경계 전 겨울 문맥이다.",
+      "forbidden": [
+        "DAY_WANG_OFFICER_QIU_PROVES_SHEN_WANG_GUAN_QING",
+        "MONTH_OFFICER_ROOT_IS_INDEPENDENT_FORCE_CERTIFICATE",
+        "HIDDEN_RESOURCE_ABSENT_BECAUSE_NO_VISIBLE_RESOURCE"
+      ]
+    },
+    {
+      "id": "s1-api-19891001",
+      "kind": "EXISTING_API_VIRTUAL_BIRTH_CONNECTIVITY_RECORD",
+      "types": [
+        5,
+        10
+      ],
+      "input": {
+        "calendar": "GREGORIAN",
+        "date": "1989-10-01",
+        "time": "12:00",
+        "pillars": [
+          "己巳",
+          "癸酉",
+          "甲午",
+          "庚午"
+        ]
+      },
+      "expected": {
+        "dayMaster": "甲",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleOfficerPositions": [],
+        "monthOfficerMembers": [
+          {
+            "stem": "辛",
+            "position": "MAIN_QI",
+            "tenGod": "正官"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "visibleResourcePositions": [
+          {
+            "role": "month",
+            "stem": "癸",
+            "tenGod": "正印",
+            "chartRootPresence": "ABSENT_UNDER_POLICY"
+          }
+        ],
+        "resourceDecisions": [
+          {
+            "role": "month",
+            "decision": "NO_HOLD_BY_THIS_RULE"
+          }
+        ],
+        "visibleSevenKillings": [
+          {
+            "role": "hour",
+            "stem": "庚",
+            "tenGod": "七殺"
+          }
+        ],
+        "hiddenHurtingOfficerIncludes": [
+          {
+            "role": "day",
+            "branch": "午",
+            "stem": "丁",
+            "tenGod": "傷官"
+          },
+          {
+            "role": "hour",
+            "branch": "午",
+            "stem": "丁",
+            "tenGod": "傷官"
+          }
+        ]
+      },
+      "sourceRef": [
+        ".private/m4-c0-examples-c96230f-20261113/observed-adjacent_control_review_context.json"
+      ],
+      "policyRef": [
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01"
+      ],
+      "reason": "지정 API 가상 날짜 2. 正官辛은 월지에만, 七殺庚은 시간에 있다. 상관·칠살·정관 구조 병존을 모두 남기고 庚을 표면 正官 비교 타깃으로 잘못 선택하지 않는다.",
+      "forbidden": [
+        "GENG_IS_JIA_ZHENGGUAN",
+        "OFFICER_KILLING_COEXISTENCE_PROVES_OFFICER_HEAVY",
+        "NO_HOLD_PROVES_EFFECTIVE_GUI_SUPPORT"
+      ]
+    },
+    {
+      "id": "s1-api-19940715",
+      "kind": "EXISTING_API_VIRTUAL_BIRTH_CONNECTIVITY_RECORD",
+      "types": [
+        5,
+        9
+      ],
+      "input": {
+        "calendar": "GREGORIAN",
+        "date": "1994-07-15",
+        "time": "12:00",
+        "pillars": [
+          "甲戌",
+          "辛未",
+          "壬寅",
+          "丙午"
+        ]
+      },
+      "expected": {
+        "dayMaster": "壬",
+        "daySeasonalState": "QIU",
+        "dayChartRootPresence": "ABSENT_UNDER_POLICY",
+        "visibleOfficerPositions": [],
+        "monthOfficerMembers": [
+          {
+            "stem": "己",
+            "position": "MAIN_QI",
+            "tenGod": "正官"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "visibleResourcePositions": [
+          {
+            "role": "month",
+            "stem": "辛",
+            "tenGod": "正印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "resourceRootIncludes": [
+          {
+            "targetRole": "month",
+            "rootRole": "year",
+            "branch": "戌",
+            "stem": "辛",
+            "matchType": "EXACT_STEM"
+          }
+        ],
+        "resourceDecisions": [
+          {
+            "role": "month",
+            "decision": "OUT_OF_SCOPE_INTERACTION"
+          }
+        ],
+        "resourceCombinationPartners": [
+          {
+            "targetRole": "month",
+            "targetStem": "辛",
+            "partnerRole": "hour",
+            "partnerStem": "丙",
+            "adjacent": false
+          }
+        ]
+      },
+      "sourceRef": [
+        ".private/m4-c0-examples-c96230f-20261113/observed-day_master_separated_context.json"
+      ],
+      "policyRef": [
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01"
+      ],
+      "reason": "지정 API 가상 날짜 3. 未월 PRE18 전 여름 문맥의 壬은 囚이나 월辛印은 자신의 金근을 가진다. 월辛–시丙의 격위 합은 기존 제한 정책상 범위 밖이지 무합·합거 확정이 아니다.",
+      "forbidden": [
+        "RESOURCE_ROOT_COPIED_TO_DAY",
+        "REMOTE_COMBINATION_IS_NO_INTERACTION",
+        "SUMMER_QIU_ALONE_PROVES_DAY_WEAK",
+        "HIDDEN_JI_CREATES_VISIBLE_OFFICER_TARGET"
+      ]
+    },
+    {
+      "id": "s1-api-19910201",
+      "kind": "EXISTING_API_VIRTUAL_BIRTH_CONNECTIVITY_RECORD",
+      "types": [
+        6,
+        7,
+        8
+      ],
+      "input": {
+        "calendar": "GREGORIAN",
+        "date": "1991-02-01",
+        "time": "12:00",
+        "pillars": [
+          "庚午",
+          "己丑",
+          "壬寅",
+          "丙午"
+        ]
+      },
+      "expected": {
+        "dayMaster": "壬",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "month",
+            "branch": "丑",
+            "stem": "癸",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "visibleOfficerPositions": [
+          {
+            "role": "month",
+            "stem": "己",
+            "tenGod": "正官",
+            "chartRootPresence": "PRESENT_UNDER_POLICY",
+            "seasonalState": "WANG"
+          }
+        ],
+        "visibleResourcePositions": [
+          {
+            "role": "year",
+            "stem": "庚",
+            "tenGod": "偏印",
+            "chartRootPresence": "PRESENT_UNDER_POLICY"
+          }
+        ],
+        "resourceRootIncludes": [
+          {
+            "targetRole": "year",
+            "rootRole": "month",
+            "branch": "丑",
+            "stem": "辛",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "resourceDecisions": [
+          {
+            "role": "year",
+            "decision": "NO_HOLD_BY_THIS_RULE"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "wealthResourceGeometry": "OFFICER_AND_DAY_MASTER_BETWEEN",
+        "intermediateRoles": [
+          "month",
+          "day"
+        ]
+      },
+      "sourceRef": [
+        ".private/m4-c0-examples-c96230f-20261113/observed-officer_intervening_context.json"
+      ],
+      "policyRef": [
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-RESOURCE-ADJACENT-COMBINATION-HOLD-V01"
+      ],
+      "reason": "지정 API 가상 날짜 4. 입춘 전18일 토왕 구간의 水死/土旺과 일간·관·인성의 구성상 근을 나란히 기록한다. 계절표와 근 presence를 실제 身弱官重 공식으로 결합하지 않는다.",
+      "forbidden": [
+        "EARTH_WANG_AND_WATER_SI_PROVES_SHEN_RUO_GUAN_ZHONG",
+        "ROOTED_RESOURCE_MEANS_ENOUGH_SUPPORT",
+        "OFFICER_BETWEEN_PROVES_TRANSMISSION"
+      ]
+    },
+    {
+      "id": "s1-api-20030103",
+      "kind": "EXISTING_API_VIRTUAL_BIRTH_CONNECTIVITY_RECORD",
+      "types": [
+        5,
+        7,
+        13
+      ],
+      "input": {
+        "calendar": "GREGORIAN",
+        "date": "2003-01-03",
+        "time": "00:30",
+        "pillars": [
+          "壬午",
+          "壬子",
+          "丙子",
+          "戊子"
+        ]
+      },
+      "expected": {
+        "dayMaster": "丙",
+        "daySeasonalState": "SI",
+        "dayChartRootPresence": "PRESENT_UNDER_POLICY",
+        "dayRootIncludes": [
+          {
+            "role": "year",
+            "branch": "午",
+            "stem": "丁",
+            "matchType": "SAME_ELEMENT_DIFFERENT_STEM"
+          }
+        ],
+        "visibleResourcePositions": [],
+        "hiddenResourcePositions": [],
+        "visibleOfficerPositions": [],
+        "monthOfficerMembers": [
+          {
+            "stem": "癸",
+            "position": "MAIN_QI",
+            "tenGod": "正官"
+          }
+        ],
+        "monthOfficerCandidateStatus": "STRUCTURAL_CANDIDATE",
+        "legacySynthesis": {
+          "status": "DEFERRED_EFFECT_POLICY_REQUIRED",
+          "conclusion": null
+        },
+        "branchRelationsInclude": [
+          {
+            "roles": [
+              "year",
+              "month"
+            ],
+            "kind": "LIUCHONG"
+          },
+          {
+            "roles": [
+              "year",
+              "day"
+            ],
+            "kind": "LIUCHONG"
+          },
+          {
+            "roles": [
+              "year",
+              "hour"
+            ],
+            "kind": "LIUCHONG"
+          }
+        ]
+      },
+      "sourceRef": [
+        ".private/m4-c0-examples-c96230f-20261113/absent-both-probe.json",
+        "docs/research/M3_LIMITED_SYNTHESIS_POLICY_V01.md"
+      ],
+      "policyRef": [
+        "M3-SEASONAL-SILI-PRE18-NOMINAL-MINUTES-V02",
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01",
+        "M3-LIMITED-ABSENT-ROOT-RESOURCE-SYNTHESIS-V01"
+      ],
+      "reason": "지정 API 가상 날짜 5. 재·인 전체 부재가 일간 근까지 부재라는 뜻은 아니다. 실제 年午丁의 火근과 세 午子충이 있어 기존 좁은 무근 약 규칙을 충족하지 않는다. 장간月官만으로 상대 비교 표면 타깃을 만들지 않는다.",
+      "forbidden": [
+        "NO_WEALTH_RESOURCE_MEANS_NO_DAY_ROOT",
+        "ROOT_PRESENT_BUT_CLASHED_MEANS_ROOT_DELETED",
+        "OLD_WEAK_ALWAYS_APPLIES_WITHOUT_RESOURCE",
+        "MONTH_OFFICER_PROVES_HEAVY"
+      ]
+    },
+    {
+      "id": "s1-required-root-and-parent-integrity",
+      "kind": "INVALID_INPUT_REJECTION_CONTRACT",
+      "types": [],
+      "input": {
+        "mutationCases": [
+          "REMOVE_REQUIRED_ROOT_TARGET_RESULT",
+          "USE_OFFICER_ROOT_FROM_DIFFERENT_PARENT",
+          "USE_DAY_RESOURCE_FACT_FROM_DIFFERENT_REQUEST",
+          "SPARSE_HIDDEN_MEMBER_ARRAY",
+          "FAKE_SOURCE_OR_POLICY_REFERENCE"
+        ]
+      },
+      "expected": {
+        "inputRejected": true,
+        "fillMissingAsRootAbsent": false,
+        "originalFinalStrength": "NOT_IMPLEMENTED"
+      },
+      "sourceRef": [
+        "src/m3/rootPresenceV1.ts",
+        "src/m3/structuralEvidenceV1.ts",
+        "test/m4-wealth-resource-position.test.mjs"
+      ],
+      "policyRef": [
+        "M3-ROOT-PRESENCE-HIDDEN-SAME-ELEMENT-V01"
+      ],
+      "reason": "기존 같은 실행 발급·근·장간·후보 참조 계약의 거절을 보존한다. 새 S1 비교 정책이 없다는 연구 상태와 입력 완전성 오류는 다른 문제다.",
+      "forbidden": [
+        "MISSING_ROOT_BECOMES_ABSENT",
+        "FOREIGN_PARENT_ROOT_ACCEPTED_BY_EQUAL_GLYPH",
+        "INVALID_INPUT_BECOMES_WEAK_OR_OFFICER_LIGHT"
+      ]
+    }
+  ]
+}
