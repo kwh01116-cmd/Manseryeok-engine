@@ -1,5 +1,14 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-13 current checkpoint — M4 정관격 구조 분석 v0.1
+
+**완료: 월령 기반 후보·정확 투출/경쟁·성패 관련 구조 관측·후보별 한국어 리포트. 미완료: 실제 成格/破格/救應 효력과 전체 해석/출시.** 명시적 M4-ZHENGGUAN-MONTH-STRUCTURE-V01/0.1.0은 기존 M2와 구조 M3를 재사용하며 원국의 정관 존재만으로 후보를 만들지 않는다. 午 OTHER 己의 호환 정책만 별도 보류한다. M5 희용신·강약·관계 효력으로 자동 승격하지 않는다.
+
+실행SHA 32bf5eaca047139b827637a5278432e0bb1ebde1: 전체627/627, M2감사·Lab/KASI Chromium·CLI46 종료0와 TEXT15 검토. 사전29사례·120조합 및 UTC→Seoul 각3,956양음력쌍의 bounded 연결검사(9,040부모, 후보1,194/비후보7,742/호환보류104)를 확인했다. 전체 날짜 전수/원전·예측 정답률 인증이 아니다. 중간cc10 private UTC1/Seoul미시작과 contextProfile 한줄 보완 후의 최종 성공을 구분해 보존했다. 원문/후보/보강·기존602검사·기본/G0/G1-P2·M3/M7·출생/역사시/2027조회는 유지한다.
+
+다음 제안은 **C: 정관격 실제 효력의 별도 정책 연구**다. 다른 구조 계열을 재사용할 기반은 준비됐지만, 소비자 성패 해석은 존재·위치만으로 확정할 수 없다. 재·인 위치 조건 한 가지의 효력 전제·반례·금지 결론을 먼저 고정한다. 새 기능의 자동 착수 승인이 아니다. [가이드](KASI_LOCAL_M4_ZHENGGUAN_GUIDE.md) · [정책](research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md) · [실행/실패](engineering/KASI_M4_ZHENGGUAN_EXECUTION_20261113.md). 아래는 당시 체크포인트로 보존한다.
+
+
 ## 2026-11-13 current checkpoint — M3 제한적 종합 판단과 첫 분석 리포트
 
 **완료: 명시적 로컬 연구 프로필의 좁은 약 충분조건·구체적 보류·한국어 리포트. 미완료: M3전체 강약/효력과 상용출시.** 계절·통근·인성 합 제한·설기/소모/제어·관계의 실제 위치를 종합하며 미정 효과를0으로 채우지 않는다. 약은 프로젝트의 명시적 일반화이고 신강/중화는 지원하지 않는다. B계절 경로와 기존 M1부모의 상관관계를 유지한다.
@@ -219,6 +228,8 @@ A feature is assessed along separate axes: (1) implemented algorithm and adversa
 
 ## Current M1–M8 assessment
 
+2026-11-13 기록 구분: 아래 표는 이전 체크포인트의 평가를 보존한 것이다. 현재 M3/M4/M7 구현 범위와 정확한 검증은 이 문서 상단의 최신 체크포인트를 따른다.
+
 | Milestone | Overall status | Actual scope and evidence | Unclosed gate |
 | --- | --- | --- | --- |
 | M1 modern calendar / Four Pillars | **PARTIALLY_VERIFIED** | 2026–2027 default Gregorian/lunar, explicit day/hour policies, minute Jie trace and correlated candidates; all 48 2026/27 term dates match pinned KASA day witnesses, all 48 minutes match independently transcribed NAOJ tables | Modern lunar independent daily oracle, minute rounding/seconds, per-field source rights, broader years and historical-time integration |
@@ -273,6 +284,8 @@ Exit: named school profiles, independently reviewed text-to-rule mapping, confli
 After source/policy boundaries stabilize, define immutable versioned DTOs with candidate identity, source/edition, coverage, precision, rule/policy versions, failure reasons and invalidation. Document generic vs trusted entry points. Receipts are in-process capabilities, not serialized signatures. Keep the Lab as a regression consumer. Future Astra product design may consume the verified engine through a separately authorized integration; no current UI migration or public service is scheduled.
 
 ## Delivery and current restrictions
+
+2026-11-13 기록 구분: 아래 기반 브랜치 전달 문구는 당시 규칙의 보존본이다. 이번 작업의 승인 ref는 상단의 `agent/kasi-local-1950-2026-20261109`이며 아래 과거 문구는 다른 브랜치에 Push할 권한이 아니다.
 
 Each narrow executable unit: counterexample → implementation → Node 22 TypeScript + full `npm run check` → relevant actual Lab Chromium → independent code/test/doc commits → ordinary fast-forward push only to `agent/m1-applied-jie-slice1-20261019`, after workflow inspection. No Actions, force push, main/foundation update, merge, public deployment, personal-data storage or paid service. Do not implement an unsupported feature merely to fill the roadmap.
 
