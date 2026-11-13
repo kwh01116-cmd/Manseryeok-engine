@@ -160,3 +160,13 @@ The owner authorized the opt-in local research profile M4-ZHENGGUAN-MONTH-STRUCT
 Verification level: public transcription only. NCC immutable revision, critical edition, scan reading and rights remain UNVERIFIED. The NLC PDF metadata was accessible but its scanned pages were not successfully read. The invalid transcribed pillar 戊甲 is quarantined, not silently corrected. NCC's four-centre-branch discussion and the selected M2 午[丁,己] table are not treated as identical; OTHER 己 officer selection is deferred. MAIN_QI is existing membership metadata, not commanding days or strength. Existing native rule versions, including seven null versions, remain unchanged. Calendar API sources remain separate from these interpretive sources.
 
 [Policy, source variants and fixed cases](M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md) · [Local execution guide](../KASI_LOCAL_M4_ZHENGGUAN_GUIDE.md). This registry entry records source scope; implementation and execution success require their own receipts.
+# M4-C0 재·인 위치 연구 — 2026-11-13 추가 기록
+
+기존 M4의 `M4-ZPZQ-ORIGINAL-ZHENGGUAN-NCC`, `M4-ZPZQ-ORIGINAL-CHENGBAI-NCC`, `M4-ZPZQ-XU-COMMENTARY-NCC`, `M4-ZPZQ-DONGLI-CACHED-TRANSCRIPTION`을 의미 변경 없이 재사용한다. C1 위치 판단만 GO이며 실제 무간섭·생조·성패 효력은 NO-GO다.
+
+| ID | 구분·확인 | 실제 사용·한계 |
+| --- | --- | --- |
+| M4-C0-ZPZQ-COMBINATION-CONTEXT-NCC | [NCC 제2권](https://ncc.com.tw/fate/paleo/bg/bg_032.htm)의 제4·5절 웹 전사, 2026-11-13 직접 확인. 원저와 徐 주석의 합 위치·통근 예외를 구별 | 표면 오합과 실제 합거/효력을 구분할 제한 근거. 판본 revision·스캔·비평판본·권리 미확인, native 규칙 버전 null 유지 |
+| M4-C0-PROJECT-WEALTH-RESOURCE-POSITION-V01 | `M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01` / 0.1.0, 정책 문서·사전 22기대·순수 모듈 | 표면 양투 전제와 8행 위치 검토 문맥. 재격의 관 중간 문맥을 정관격 위치형으로 옮긴 부분은 PROJECT_POLICY이며 실제 통관·무간섭의 정관격 충분조건으로 취급하지 않음 |
+
+원전의 인물 품계·질병·직업·사건은 기대 결과로 사용하지 않는다. 동리 직접 502/검색 캐시, PDF OCR 접근/판면 미판독을 구별한 상세는 [정책 연구](M4_C0_WEALTH_RESOURCE_POSITION_POLICY_V01.md)를 참조한다. 새 모듈 버전으로 기존 7개 null 규칙 버전을 채우거나 상용 해석을 승인하지 않는다.
