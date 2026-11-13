@@ -110,6 +110,10 @@ test('surface absence, hidden-only presence and total category absence preserve 
   assert.equal(first(overlap.pattern).formationAssessment.status,'FORMATION_CONDITIONS_OBSERVED');
   assert.equal(first(neither.pattern).formationAssessment.status,'BASE_STRUCTURE_ONLY');
   assert.equal(first(run(overlap)).decision.status,first(run(neither)).decision.status);
+  // Missing a category is not an unimplemented interaction between two
+  // categories. Hidden presence still supplies a real two-category context.
+  for(const id of ['api-20260108-wealth-visible-resource-hidden-only','synthetic-resource-visible-wealth-hidden-only','synthetic-both-groups-hidden-only'])assert.ok(first(run(stateFor(byId(id)))).requiredPolicies.includes('WEALTH_RESOURCE_TRANSMISSION_AND_ROOT_EFFICACY'),id+' both categories really present');
+  for(const id of ['api-20030103-officer-candidate-with-neither-category','synthetic-wealth-truly-absent-resource-present','synthetic-resource-truly-absent-wealth-present'])assert.ok(!first(run(stateFor(byId(id)))).requiredPolicies.includes('WEALTH_RESOURCE_TRANSMISSION_AND_ROOT_EFFICACY'),id+' missing category is not a deferred transmission effect');
 });
 
 test('noncandidate and source-policy priorities coexist with raw pairs while overlays never decide actual efficacy',()=>{
