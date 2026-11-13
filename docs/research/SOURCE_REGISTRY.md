@@ -142,3 +142,21 @@ Status: **RESEARCH / NOT A NEW COMPUTATIONAL SOURCE**. Retrieved and inspected l
 5. **2000 archived source**: retain restricted use warning and research-only status; open-source MIT implementation does not guarantee rights of every underlying datum.
 
 Current aggregate release permission: `UNVERIFIED` / paid public product gate **BLOCKED**. A provider inquiry draft exists but has not been sent. Existing fixture source IDs/authority must not be silently rewritten.
+
+
+## M4-ZPZQ structural candidate sources — 2026-11-13
+
+The owner authorized the opt-in local research profile M4-ZHENGGUAN-MONTH-STRUCTURE-V01/0.1.0. These records concern month-order officer candidates and observed structures, not complete formation/break/rescue efficacy, M5 helpfulness, source rights or public release.
+
+| Source IDs | Checked surface and layer |
+| --- | --- |
+| M4-ZPZQ-ORIGINAL-YONGSHEN-NCC | Direct NCC transcription, [section8](https://ncc.com.tw/fate/paleo/bg/bg_032.htm), original month-order context. |
+| M4-ZPZQ-ORIGINAL-CHENGBAI-NCC / M4-ZPZQ-ORIGINAL-BIANHUA-NCC | Direct NCC transcription, [sections9/10](https://ncc.com.tw/fate/paleo/bg/bg_033.htm), original condition and month-member exposure contexts. |
+| M4-ZPZQ-ORIGINAL-ZHENGGUAN-NCC | Direct NCC transcription, [section31](https://ncc.com.tw/fate/paleo/bg/bg_034.htm), original officer examples and positions. |
+| M4-ZPZQ-XU-COMMENTARY-NCC | Xu commentary on the same surfaces, separately attributed; strength, positional qualifications and disagreements remain distinct from the base text. |
+| M4-ZPZQ-DONGLI-CACHED-TRANSCRIPTION | Search-tool transcription cache for chapters3721/3722/3723/3744; direct origin timed out or returned502. URL/section matching and editorial interventions are recorded in the policy. Not independent-school agreement. |
+| M4-PROJECT-ZHENGGUAN-STRUCTURE-V01 | Explicit project selector, exact-character exposure, non-day competition scope, deferred effects and existing M2 table compatibility. |
+
+Verification level: public transcription only. NCC immutable revision, critical edition, scan reading and rights remain UNVERIFIED. The NLC PDF metadata was accessible but its scanned pages were not successfully read. The invalid transcribed pillar 戊甲 is quarantined, not silently corrected. NCC's four-centre-branch discussion and the selected M2 午[丁,己] table are not treated as identical; OTHER 己 officer selection is deferred. MAIN_QI is existing membership metadata, not commanding days or strength. Existing native rule versions, including seven null versions, remain unchanged. Calendar API sources remain separate from these interpretive sources.
+
+[Policy, source variants and fixed cases](M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md) · [Local execution guide](../KASI_LOCAL_M4_ZHENGGUAN_GUIDE.md). This registry entry records source scope; implementation and execution success require their own receipts.

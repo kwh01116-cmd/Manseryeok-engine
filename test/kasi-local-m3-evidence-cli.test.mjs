@@ -257,3 +257,46 @@ test('synthesis CLI retains B child paths and Lichun parents across timezones an
   rejection(run(without(args,'--time')),context);rejection(run(without(args,'--clock-policy')),context);
   rejection(run(replace(args,'--manifest-sha','0'.repeat(64))),context);rejection(run(replace(args,'--candidate',join(directory,'MISSING_CANDIDATE'))),context);
 }));
+
+test('M4 CLI explicitly selects the month structure profile, keeps solar/lunar meaning and writes no birth files',async()=>setup(async context=>{
+  const pattern='M4-ZHENGGUAN-MONTH-STRUCTURE-V01';
+  const {run,common,lunar,directory,candidate}=context,beforeFiles=await readdir(directory),beforeHashes=await hashes(candidate);
+  const select=args=>[...without(without(args,'--m2-profile'),'--m3-profile'),'--pattern-profile',pattern];
+  const gRun=run(select(common)),lRun=run(select(lunar)),sRun=run(select(common),{tz:'Asia/Seoul'});
+  for(const r of [gRun,lRun,sRun]){assert.equal(r.error,undefined);assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');}
+  const g=JSON.parse(gRun.stdout),l=JSON.parse(lRun.stdout);
+  assert.equal(g.schemaVersion,'kasi-local-m3-evidence-pattern-v1');assert.equal(g.patternAnalysis.profile.id,pattern);
+  assert.deepEqual(g.executionCounts,{birthM1Calls:1,m2Derivations:1,m4Derivations:1});assert.deepEqual(g.m1.chart,l.m1.chart);
+  const meaning=v=>v.patternAnalysis.candidates.map(c=>({candidateRef:c.candidateRef,dayMaster:c.dayMaster,
+    status:c.candidateAssessment.status,basis:c.candidateAssessment.basis,conditions:c.conditions.map(x=>[x.kind,x.status]),
+    effects:c.effects,text:v.patternReport.candidates[c.candidateIndex].items.map(x=>x.text)}));
+  assert.deepEqual(meaning(g),meaning(l));assert.equal(gRun.stdout,sRun.stdout);
+  assert.equal(g.patternAnalysis.candidates[0].officerPresence.status,'PRESENT');
+  assert.equal(g.patternAnalysis.candidates[0].candidateAssessment.status,'NOT_A_CANDIDATE_UNDER_POLICY');
+  assert.equal(g.validation.finalStrength,'NOT_IMPLEMENTED');assert.equal(g.validation.g0Receipt,null);assert.equal(g.validation.g1P2Promotion,false);
+  const positive=run(replace(select(common),'--date','2026-01-02')),value=JSON.parse(positive.stdout);
+  assert.equal(positive.status,0,positive.stderr);assert.equal(value.patternAnalysis.candidates[0].candidateAssessment.status,'STRUCTURAL_CANDIDATE');
+  const text=run(replace(replace(select(common),'--date','2026-01-02'),'--output','text'));
+  assert.equal(text.status,0,text.stderr);assert.equal(text.stderr,'');assert.match(text.stdout,/정관격 구조 분석/);assert.match(text.stdout,/월지|월령/);assert.match(text.stdout,/후보/);assert.match(text.stdout,/효력|성패/);assert.ok(!text.stdout.startsWith('{'));
+  assert.deepEqual(await hashes(candidate),beforeHashes);assert.deepEqual(await readdir(directory),beforeFiles);
+}));
+
+test('M4 CLI keeps correlated Lichun candidates and rejects profile conflicts, missing data and forged pins without fallback',async()=>setup(async context=>{
+  const pattern='M4-ZHENGGUAN-MONTH-STRUCTURE-V01',args=[...without(without(context.common,'--m2-profile'),'--m3-profile'),'--pattern-profile',pattern];
+  const boundary=replace(replace(args,'--date','2026-02-05'),'--time','01:20'),r=context.run(boundary);
+  assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');const value=JSON.parse(r.stdout);
+  assert.equal(value.m1.chart.candidates.length,2);assert.equal(value.patternAnalysis.candidates.length,2);assert.equal(value.patternReport.candidates.length,2);
+  // This fictional corpus places Lichun on Feb 5, not the real API's Feb 4.
+  // Feb 5 has 庚 day: 丁 is its officer; neither 丑[己癸辛] nor 寅[甲丙戊] contains 丁.
+  // The real-API Feb 4 己-day not/candidate contrast is verified separately.
+  assert.ok(value.patternAnalysis.candidates.every(c=>c.dayMaster==='庚'));
+  assert.deepEqual(value.patternAnalysis.candidates.map(c=>c.monthContext.monthPillar.branch),['丑','寅']);
+  assert.deepEqual(value.patternAnalysis.candidates.map(c=>c.candidateAssessment.status),['NOT_A_CANDIDATE_UNDER_POLICY','NOT_A_CANDIDATE_UNDER_POLICY']);
+  for(let i=0;i<2;i++)for(const item of value.patternReport.candidates[i].items)assert.equal(item.candidateRef,'chart.candidates['+i+']');
+  const text=context.run(replace(boundary,'--output','text'));assert.equal(text.status,0,text.stderr);assert.match(text.stdout,/후보 1/);assert.match(text.stdout,/후보 2/);
+  for(const extra of [['--pattern-profile',pattern],['--m2-profile','INVALID_DO_NOT_ECHO'],['--m3-profile','INVALID_DO_NOT_ECHO']])rejection(context.run([...args,...extra]),context);
+  rejection(context.run(replace(args,'--pattern-profile','INVALID_DO_NOT_ECHO')),context);
+  rejection(context.run(without(args,'--time')),context);
+  rejection(context.run(replace(args,'--manifest-sha','0'.repeat(64))),context);
+  rejection(context.run(replace(args,'--candidate',join(context.directory,'MISSING_CANDIDATE'))),context);
+}));
