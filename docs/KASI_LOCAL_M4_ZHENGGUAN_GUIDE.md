@@ -88,3 +88,23 @@ API 출생 지원은 양력 환산 `[1989-01-01, 2027-01-01)` 그대로다. 원�
 ```
 
 M4 구조 정책 0.1.0과 C1 위치 정책 0.1.0은 구별한다. 기존 구조 리포트의 조사·관계 누락·관측 범위 설명만 템플릿 0.1.1로 보완했으며 정책/템플릿 버전은 TEXT에서 따로 표시한다. 기존 월령 후보와 성립 관련 조건 JSON 값은 바꾸지 않는다. 원문·기대·GO/NO-GO와 효력 전제는 [M4-C0 정책 연구](research/M4_C0_WEALTH_RESOURCE_POSITION_POLICY_V01.md)에 정리했다. 최종 검사 결과는 실제 실행 후 별도 기록한다.
+
+
+## C0/C1 최종 수락과 실제 위치 대조
+
+실행 SHA `c96230f691b520ac56c0c9edbe21bfaacdbc2ed8`: 전체650/650, M2감사·Lab/KASI Chromium, 각3,956양음력쌍의 UTC→Seoul 연결·CLI60회·TEXT26개 전문 검토를 완료했다. 기존의 ‘일부 조사 편집 한계’는 이전 SHA 기록이며 이번 구조 설명 템플릿0.1.1에서 해당 표현을 보완했다. 기존 M4 계산 JSON은 유지하고 보고서만 의도적으로 바꿨다. plain/synthesis4제품의 기존 JSON/TEXT는 바이트까지 같았다.
+
+앞의 `$node`/`$common`을 준비한 뒤 다음은 실제 실행한 가상 입력이다. `--output json`으로 바꾸면 같은 정책의 구조화 결과를 받는다.
+
+```powershell
+# 표면 재–인의 인접: 己巳·癸酉·甲午·庚午
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01 --calendar GREGORIAN --date 1989-10-01 --time 12:00 --output text
+
+# 일간만 사이: 甲戌·辛未·壬寅·丙午. 丙辛 합도 함께 보존
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01 --calendar GREGORIAN --date 1994-07-15 --time 12:00 --output text
+
+# 정관과 일간이 사이: 庚午·己丑·壬寅·丙午
+& $node .\scripts\kasi\local-m3-evidence.mjs @common --position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01 --calendar GREGORIAN --date 1991-02-01 --time 12:00 --output json
+```
+
+표면 양투 미충족은 장간 부재와 다르고, 재·인 두 범주 중 하나가 명식 전체에 없으면 두 범주의 상호 전달을 ‘필요하지만 미구현’으로 요구하지 않는다. 실제 양쪽이 있으면 그 효력은 계속 미평가다. [실제 전문·반례·실패/재검사·분포](engineering/M4_C0_WEALTH_RESOURCE_POSITION_EXECUTION_20261113.md). 이번 수락은 실제 財印無礙·成格/破格/救應 판단의 승인이 아니다.

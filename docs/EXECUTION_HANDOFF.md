@@ -1,21 +1,21 @@
 # Manseryeok-engine — current execution handoff
 
-**2026-11-13 KST: M4 정관격 구조 분석 로컬 v0.1 완료. 실제 성격/파격/구응 효력과 상용 출시는 미완료.** 기존 출생 명식 1회→M2/구조 M3→명시적 M4→후보별 한국어 리포트를 연결했다. 기본 엔진·기존 해석 정책은 바꾸지 않았다.
+**2026-11-13 KST: M4-C0 연구와 C1 제한적 재·인 위치 판단 완료. 실제 財印無礙·파인·생조·格成/格敗/救應은 NO-GO다.** 승인 브랜치 `agent/kasi-local-1950-2026-20261109`만 사용한다. 기본/G0/G1-P2와 전체 해석/출시 게이트는 바꾸지 않았다.
 
-- 선택: --pattern-profile M4-ZHENGGUAN-MONTH-STRUCTURE-V01 / 0.1.0. 기존 M2/1·구조 M3/0.1.0을 공개된 묶음으로 고정하며 충돌은 M1 전에 거절한다. 계절/root/support/synthesis는 선택 사항이다.
-- MAIN_QI 정관은 투출과 별도로 후보, OTHER 정관은 정확 천간 투출 시 후보. 다른 월령 장간의 투출은 경쟁 조건으로 보존한다. 午 OTHER 己 정관의 문헌/장간표 호환만 SOURCE_OR_POLICY_UNRESOLVED다. MAIN을 사령·힘으로 쓰지 않는다.
-- 후보 여부, 원국 정관 존재, 재·인·상관·칠살/오합/지지 관계의 구조 관측, 실제 효력은 별도 필드다. geCheng/geBai/jiuYing NOT_IMPLEMENTED. M4 patternBasis는 M5 희용신과 다르다. B계절 대안으로 원국/M4를 늘리지 않고 실제 입춘 부모2는 따로 분석한다.
+- 선택 옵션은 `--position-profile M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01` / 0.1.0이다. 기존 M4/M2/구조 M3의 정책 묶음을 공개해 재사용하며 M1은 요청당 한 번 계산한다. 선택하지 않으면 C1 필드는 없다.
+- 표면 양투의 전제와 인접/일간만 사이/관과 일간 사이/다른 격위/복수 쌍을 분류한다. 장간에만 있는 경우와 전체 범주의 부재도 구분한다. 모든 중간 위치·합·상관·칠살·지지 관계를 보존하고 실제 무간섭·파격으로 승격하지 않는다.
+- 원 M4 후보/formation 값과 정책 0.1.0은 불변이다. 넓은 관측의 오독, 조사 오류, 숫자로 숨긴 관계 이름을 보고서 템플릿 0.1.1에서 보완했다. 재·인 전체 부재를 상호 효력의 구현 미비로 보류하지 않는다. 午 OTHER 己의 호환 미정도 유지한다.
 
-실행 SHA **32bf5eaca047139b827637a5278432e0bb1ebde1**, 고정 Node 22.23.3: 전체 627/627(fail/cancel/skip/todo 0), M2 감사·Lab/KASI 실제 Chromium 첫 실행 0, CLI 46회 자연 종료 0·빈 stderr, TEXT 15개 전문 검토. resolver 전에 고정한 29기대와 120리터럴 조합, 새 pure 15/adapter 8/CLI 2그룹을 확인했다. 기존 602검사의 의미는 유지했다. 스캔·비평판본·권리·인간 전문가/독립 학파·예측 정확성 인증은 아니다. 일부 조사 표현은 편집 한계로 기록했다.
+최종 실행 SHA는 **c96230f691b520ac56c0c9edbe21bfaacdbc2ed8**다. 고정 Node 22.23.3에서 전체 650/650(fail/cancel/skip/todo 0), M2 감사·Lab/KASI Chromium 첫 시도, CLI 60회가 자연 종료 0이었다. TEXT 26개 전문을 검토했다. 사전 22기대와 원 29/기존 627검사의 의미를 보존했다. root의 9개 추가 검토와 별도 AI의 26개 검토를 합쳐 35개로 세지 않는다. 인간 전문가·스캔/비평판본·권리·예측 인증은 아니다.
 
-UTC→Seoul 순차 실행에서 각 3,956입력쌍/7,912제품=M1/9,040부모=M4였다. 후보 1,194/비후보 7,742/호환 보류 104, 경쟁 386, 오류·미완료 0이다. 부가 M4 37요청/39부모와 legacy 8을 합한 실제 M1은 각 7,957회다. 양음력 공통 의미 SHA는 4d9ce2b37ac971baaf0194baa2413f5927eb0fb146ebbdad2531ae5b3fe2beca이며 두 시간대에서 같다. summary 파일 bytes도 같고 그 SHA는 d2299e1fef4416bebb40705707a16219a4fd09ec80140f9e52d9cb42685495af다. 모든 날짜 전수나 원전 외부 정답률 인증이 아니다. old256/semi4·17메모리 표본과 부모/자식 자연 종료 0·flush를 확인했다.
+UTC→Seoul 순차 검사에서 각 3,956양음력쌍/7,912제품=M1/9,040부모였다. 후보 1,194건은 전제 미충족 976/복수 46/인접 100/일간만 사이 34/관 중간 16/기타 22로 나뉘었다. 비후보 7,742/호환 미정 104는 별도다. 추가 39제품/44부모와 legacy 12를 합한 M1은 시간대별 7,963회다. 의미 SHA `cdf9a367da870a14c86a39fe37145dc1268bf028fde17eb0579341827e5d64c6`와 summary bytes SHA `d2b159351984876e721f09a5d856ec4a551386875e7bfa2bebbb096654e1b457`이 두 시간대에서 같다. 제한 코호트 연결 검사이며 49,799쌍/모든 출생 전수는 아니다. driver45124의 자연 종료 0·flush·순서와 old256/semi4·17표본을 확인했다.
 
-중간 cc10 공개 검사는 627통과했지만 private UTC 추가 legacy 비교가 contextProfile 누락으로 종료 1, Seoul 미시작이었다. 해당 실패를 보존하고 검증기 한 줄 보완 후 32bf에서 전체·브라우저·private·CLI를 새로 맞췄다. 초기 새 테스트 계약 오류와 등록 장간 rule 버전 변조 공백, 합성 2월 5일 기대 오류도 기록했다. skip·무한 재시도·일괄 종료·timeout 확대는 없었다.
+중간 20/21은 새 테스트가 양음력의 서로 다른 method를 같다고 강제한 오류였다. afb의 650검사·자동 실행 성공 뒤에는 전문 검토에서 전체 부재 요청에 전달 전제를 요구하는 실제 오류를 찾아 c962로 고쳤다. 마지막 읽기 대조기의 console 오타와 종료 1도 보존하고 출력만 고친 대조기의 자연 종료 0을 확인했다. 이전 성공을 수정 후 실행으로 재사용하지 않았다.
 
-완료본 디렉터리 2,086파일/후보 a·b 각 8파일/보강 5파일과 외부 base/export/supplement 지문은 불변이다. 2,086은 캐시·원문·export 등을 포함한 디렉터리 파일 수이며 원문 응답 1,001개와 다르다. 보강본은 보존감사에만 읽었고 제품에 전달하지 않았다. API·키·재수집 0, .private 추적 0이다. 기본 2026~2027/G0/G1-P2 NO-GO, API출생 1989~2026, 역사시·2027조회, 기존 계절·근·인성·M7 및 전체 M3 게이트는 그대로다. 기존 M3의 grid 약 0/추가 약 8은 한 날짜의 4정책×두 달력이라는 한계도 유지한다.
+완료본 2,086파일/후보 a,b 각 8/보강 5와 고정 base/export/supplement 지문은 불변이다. API·키·재수집 0, .private 추적 0이다. 보강은 보존 감사만 했다. 기존 기본 2026~2027/G0/G1-P2 NO-GO, API 출생 1989~2026, 역사시·2027조회, M3의 과거 grid 신약 0/한 날짜의 추가 신약 8경로라는 한계, 계절/root/support/M7와 전체 M3/M4 효력 게이트를 유지한다.
 
-후속 문서 HEAD와 테스트 SHA를 구별한다. 승인ref agent/kasi-local-1950-2026-20261109 외 변경하지 않는다. 유일workflow의 push조건은 foundation뿐이며 최종diff/원격을 다시 확인한 일반Push의 실제fullSHA는 전달receipt/최종응답에서 확인한다.
+테스트 SHA 뒤에는 문서만 커밋하고 source/build 불변을 증명한다. 실제 full 원격 HEAD는 일반 Push 뒤 전달 receipt와 최종 응답에서 확인한다. 유일 workflow는 foundation push만 대상이므로 승인 브랜치에 Actions가 발생하지 않는지 최종 diff와 함께 다시 확인한다.
 
-다음 제안은 **C: 실제 成格/破格/救應을 위한 별도 효력 정책 연구**다. 구조 v0.1은 고정하고 正官 재·인 위치 조건 한 가지의 효력 전제/반례/금지 결론부터 검토한다. 다른 격국·M5/M6·전체강약·새UI·LLM을 이번에 자동 구현하지 않았다.
+다음 최소 제안은 C1 위치 정책을 고정하고, 실제 재·인 전달에 필요한 일간·관성의 상대 강약 전제 하나를 독립 사례로 검토하는 것이다. 다른 격국의 구조 확장으로 이 효력 결손을 대신할 수는 없다. 이번에 후속 기능을 자동 구현하지 않았다.
 
-[가이드](KASI_LOCAL_M4_ZHENGGUAN_GUIDE.md) · [정책·문헌/사례](research/M4_ZHENGGUAN_STRUCTURE_POLICY_V01.md) · [실행·실패·분포](engineering/KASI_M4_ZHENGGUAN_EXECUTION_20261113.md) · [DEVLOG](DEVLOG.md) · [직전 인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_M4_ZHENGGUAN_20261113.md)
+[가이드](KASI_LOCAL_M4_ZHENGGUAN_GUIDE.md) · [C0정책/결정표](research/M4_C0_WEALTH_RESOURCE_POSITION_POLICY_V01.md) · [실행/전문/실패](engineering/M4_C0_WEALTH_RESOURCE_POSITION_EXECUTION_20261113.md) · [개발일지](DEVLOG.md) · [직전인수인계원문](archive/EXECUTION_HANDOFF_BEFORE_M4_C0_POSITION_20261113.md)
