@@ -21,7 +21,7 @@ export function extractSchema(source,ts){
   check(found.size===required.size&&selected.length===5,'SCHEMA_EXTRACTION_CONTRACT');
   return '// Exact selected declarations from compiled schema.js; source hash is in artifact-manifest.json.\n'+selected.join('\n')+'\n';
 }
-function importsIn(source,path,ts){
+export function importsIn(source,path,ts){
   const ast=ts.createSourceFile(path,source,ts.ScriptTarget.ES2022,true,ts.ScriptKind.JS),imports=[];
   function visit(node){
     if((ts.isImportDeclaration(node)||ts.isExportDeclaration(node))&&node.moduleSpecifier)imports.push(node.moduleSpecifier.text);
@@ -31,7 +31,7 @@ function importsIn(source,path,ts){
   visit(ast);return imports;
 }
 /** Compile in memory: packaged JS can never silently come from a stale dist. */
-function freshCompilation(root,ts){
+export function freshCompilation(root,ts){
   const emitted=new Map(),inputs=new Map();
   for(const configPath of ['tsconfig.json','tsconfig.kasi.json']){
     const absolute=join(root,configPath),raw=ts.sys.readFile(absolute);check(typeof raw==='string','TSCONFIG_REQUIRED');inputs.set(configPath,raw);
