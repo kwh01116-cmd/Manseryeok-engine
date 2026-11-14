@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "inner-pattern-real-case-contracts-v1",
+  "fixedBeforeTargetResolverExecution": true,
+  "inputKind": "PUBLIC_VIRTUAL_DATES_NOT_PERSONAL_BIRTH_RECORDS",
+  "oracleBoundary": "Dates and literal pillar/member facts selected using only the pre-existing pinned M1/M2. These expectations are policy contracts, not independent astronomical or predictive truth.",
+  "selection": {
+    "method": "First eligible MAIN_QI example for each of eight non-peer tenGods; January 8 officer example seeded first. The final representative set intentionally retains the January concentration.",
+    "pilotM1Requests": 14,
+    "separateDiversityM1Requests": 45,
+    "totalBoundedM1RequestsBeforeTargetExecution": 59,
+    "excludedFromPrimaryEight": "Four exactly exposed OTHER probes are kept private as additional unresolved/competing examples. They do not replace unambiguous MAIN_QI representatives."
+  },
+  "sharedInput": {
+    "calendar": "GREGORIAN",
+    "time": "12:00",
+    "profileId": "kasi-api-1989-2026-local-v1",
+    "clockPolicyId": "KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1",
+    "dayRollover": "CIVIL_MIDNIGHT",
+    "hourStemReference": "SELECTED_DAY_PILLAR"
+  },
+  "cases": [
+    {
+      "id": "REAL-FOOD-MAIN-20260113",
+      "date": "2026-01-13",
+      "expected": {
+        "pillars": ["乙巳", "己丑", "丁亥", "丙午"],
+        "dayMaster": "丁", "monthBranch": "丑",
+        "primaryTenGod": "食神", "basisStem": "己", "basisPosition": "MAIN_QI", "exactVisibleRoles": ["month"],
+        "monthMembers": [["己", "MAIN_QI", "食神"], ["癸", "OTHER", "七殺"], ["辛", "OTHER", "偏財"]],
+        "candidateTenGods": ["食神"], "unexposedOtherTenGods": ["七殺", "偏財"], "peerExcludedTenGods": []
+      }
+    },
+    {
+      "id": "REAL-HURTING-MAIN-20260112",
+      "date": "2026-01-12",
+      "expected": {
+        "pillars": ["乙巳", "己丑", "丙戌", "甲午"],
+        "dayMaster": "丙", "monthBranch": "丑",
+        "primaryTenGod": "傷官", "basisStem": "己", "basisPosition": "MAIN_QI", "exactVisibleRoles": ["month"],
+        "monthMembers": [["己", "MAIN_QI", "傷官"], ["癸", "OTHER", "正官"], ["辛", "OTHER", "正財"]],
+        "candidateTenGods": ["傷官"], "unexposedOtherTenGods": ["正官", "正財"], "peerExcludedTenGods": []
+      }
+    },
+    {
+      "id": "REAL-INDIRECT-WEALTH-MAIN-20260105",
+      "date": "2026-01-05",
+      "expected": {
+        "pillars": ["乙巳", "戊子", "己卯", "庚午"],
+        "dayMaster": "己", "monthBranch": "子",
+        "primaryTenGod": "偏財", "basisStem": "癸", "basisPosition": "MAIN_QI", "exactVisibleRoles": [],
+        "monthMembers": [["癸", "MAIN_QI", "偏財"]],
+        "candidateTenGods": ["偏財"], "unexposedOtherTenGods": [], "peerExcludedTenGods": []
+      }
+    },
+    {
+      "id": "REAL-DIRECT-WEALTH-MAIN-20260104",
+      "date": "2026-01-04",
+      "expected": {
+        "pillars": ["乙巳", "戊子", "戊寅", "戊午"],
+        "dayMaster": "戊", "monthBranch": "子",
+        "primaryTenGod": "正財", "basisStem": "癸", "basisPosition": "MAIN_QI", "exactVisibleRoles": [],
+        "monthMembers": [["癸", "MAIN_QI", "正財"]],
+        "candidateTenGods": ["正財"], "unexposedOtherTenGods": [], "peerExcludedTenGods": []
+      }
+    },
+    {
+      "id": "REAL-KILLING-MAIN-20260103",
+      "date": "2026-01-03",
+      "expected": {
+        "pillars": ["乙巳", "戊子", "丁丑", "丙午"],
+        "dayMaster": "丁", "monthBranch": "子",
+        "primaryTenGod": "七殺", "basisStem": "癸", "basisPosition": "MAIN_QI", "exactVisibleRoles": [],
+        "monthMembers": [["癸", "MAIN_QI", "七殺"]],
+        "candidateTenGods": ["七殺"], "unexposedOtherTenGods": [], "peerExcludedTenGods": []
+      }
+    },
+    {
+      "id": "REAL-OFFICER-MAIN-20260108",
+      "date": "2026-01-08",
+      "expected": {
+        "pillars": ["乙巳", "己丑", "壬午", "丙午"],
+        "dayMaster": "壬", "monthBranch": "丑",
+        "primaryTenGod": "正官", "basisStem": "己", "basisPosition": "MAIN_QI", "exactVisibleRoles": ["month"],
+        "monthMembers": [["己", "MAIN_QI", "正官"], ["癸", "OTHER", "劫財"], ["辛", "OTHER", "正印"]],
+        "candidateTenGods": ["正官"], "unexposedOtherTenGods": ["正印"], "peerExcludedTenGods": ["劫財"]
+      }
+    },
+    {
+      "id": "REAL-INDIRECT-RESOURCE-MAIN-20260101",
+      "date": "2026-01-01",
+      "expected": {
+        "pillars": ["乙巳", "戊子", "乙亥", "壬午"],
+        "dayMaster": "乙", "monthBranch": "子",
+        "primaryTenGod": "偏印", "basisStem": "癸", "basisPosition": "MAIN_QI", "exactVisibleRoles": [],
+        "monthMembers": [["癸", "MAIN_QI", "偏印"]],
+        "candidateTenGods": ["偏印"], "unexposedOtherTenGods": [], "peerExcludedTenGods": []
+      }
+    },
+    {
+      "id": "REAL-DIRECT-RESOURCE-MAIN-20260106",
+      "date": "2026-01-06",
+      "expected": {
+        "pillars": ["乙巳", "己丑", "庚辰", "壬午"],
+        "dayMaster": "庚", "monthBranch": "丑",
+        "primaryTenGod": "正印", "basisStem": "己", "basisPosition": "MAIN_QI", "exactVisibleRoles": ["month"],
+        "monthMembers": [["己", "MAIN_QI", "正印"], ["癸", "OTHER", "傷官"], ["辛", "OTHER", "劫財"]],
+        "candidateTenGods": ["正印"], "unexposedOtherTenGods": ["傷官"], "peerExcludedTenGods": ["劫財"]
+      }
+    }
+  ]
+}
