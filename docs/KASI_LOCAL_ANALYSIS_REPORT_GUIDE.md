@@ -128,4 +128,6 @@ $reportLuck = @(
 
 KASI private 자료의 외부 재배포는 `RIGHTS_BLOCKED`, 상업 자료 권리 확정은 `UNKNOWN`을 유지한다. 내부 로컬 실행 가능과 공개 서비스/상용 출시 승인은 별개다. 원응답·키·private attachment를 공개 artifact나 저장소에 추가하지 않는다. 기존 M3 전체 해석·G0/G1-P2·공개 서비스 게이트를 유지한다.
 
-[내격8 정책](research/M4_INNER_PATTERNS_POLICY_V01.md) · [제품19기능 행렬](research/SPRINT2_PRODUCT_FEATURE_MATRIX_20261114.md) · [실행 소스](../scripts/kasi/local-analysis-report.mjs). 현재 내격8/통합 보고서의 집중 검사27개 PASS가 보고됐으며 최종 전체 검사·실제 CLI 검증은 대기 중이다. 최종 코드 SHA와 실행 증거는 Sprint 2 실행 기록에서 별도로 확정한다. 이 가이드의 명령 서술 자체를 검사 PASS로 세지 않는다.
+[내격8 정책](research/M4_INNER_PATTERNS_POLICY_V01.md) · [제품19기능 행렬](research/SPRINT2_PRODUCT_FEATURE_MATRIX_20261114.md) · [실행 소스](../scripts/kasi/local-analysis-report.mjs).
+
+최종 실행 코드 **`db26b38b9b40dcefba0ae94d5187daff7ab55656`**에서 전체811/811·M2 감사·Lab/KASI 실제 Chromium 회귀를 통과했다. M2 감사의 상태는 `CATALOG_CONSISTENT_EVIDENCE_OPEN`이며 판본·권리 수락이 아니다. KASI 브라우저 검사는 합성 upstream을 사용한다. 실제 private 자료의26논리 조건을 JSON/TEXT·UTC·Asia/Seoul에서 실행해104성공·별도24거절, 시간대별 출력52쌍 bytes 동일을 확인했다. 대표 양력/음력112쌍+자시4쌍=116쌍/시간대의232요청·256원국 부모·2048유형 판정도 UTC→Asia/Seoul 순차로 일치했다. 이 수치를 독립 출생 수나 외부 예측 정확도로 해석하지 않는다. [검사·실패·실제 CLI와 보존 기록](engineering/SPRINT2_INNER_PATTERNS_REPORT_EXECUTION_20261114.md)에서 정확한 범위를 확인할 수 있다.

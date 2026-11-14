@@ -1,6 +1,6 @@
 # Sprint 2 제품 기능 행렬 — 2026-11-14
 
-**DRAFT — Sprint 2 최종 코드·회귀·실제 CLI 증거를 연결하기 전이다.** 현재 표는 기존 실행 소스와 공개 제품 설명을 대조한 기능 감사다. 상용 만세력이 제공한다고 안내하는 기능과 우리 코드에서 실제 지원하는 범위를 나란히 놓았다. 기능 수나 광고 문구는 정확도·예측 효력의 증거가 아니다.
+**Sprint 2 최종 실행 코드 `db26b38b9b40dcefba0ae94d5187daff7ab55656`의 검증을 반영했다.** 이 표는 실행 소스와 공개 제품 설명을 대조한 기능 감사다. 상용 만세력이 제공한다고 안내하는 기능과 우리 코드에서 실제 지원하는 범위를 나란히 놓았다. 기능 수나 광고 문구는 정확도·예측 효력의 증거가 아니다.
 
 `PRODUCT_READY`는 명시한 범위의 로컬 기술 기능이 기존 구현·계약·회귀를 갖췄다는 뜻이다. 공개 서비스 출시·데이터 재배포·상업 이용권 승인은 별도 게이트다. `EXPERIMENTAL`은 명시적 선택 연구 정책, `PARTIAL`은 요구 기능의 일부만 구현, `NOT_IMPLEMENTED`는 실행 정책/경로 없음, `BLOCKED`는 별도 외부 조건 때문에 실행/출시할 수 없는 상태다. 표에서 관측 구성과 실제 작용, 후보와 최종 판정을 구별한다.
 
@@ -19,14 +19,14 @@
 
 ## 요청한 19개 기능
 
-시장 열의 링크는 해당 기능을 **제공한다고 명시**한 사례다. 한 서비스의 설명에 없는 기능을 곧 미지원이라고 판정하지 않는다. 우리 열은 README 기능 목록 대신 실행 함수/소스를 기준으로 썼다. 기존 검증의 기준은 [Sprint 1 실행 기록](../engineering/SPRINT1_OFFLINE_M3_EXECUTION_20261114.md)의 최종 실행 코드 `131a0c551a5093e22ea22d6a66b37c31dae058df`이며, 이번 문서만으로 새 Sprint 2 PASS를 주장하지 않는다.
+시장 열의 링크는 해당 기능을 **제공한다고 명시**한 사례다. 한 서비스의 설명에 없는 기능을 곧 미지원이라고 판정하지 않는다. 우리 열은 README 기능 목록 대신 실행 함수/소스를 기준으로 썼다. 최종 회귀·실제 CLI·보존 근거는 [Sprint 2 실행 기록](../engineering/SPRINT2_INNER_PATTERNS_REPORT_EXECUTION_20261114.md), 기존 단독 artifact의 범위는 [Sprint 1 실행 기록](../engineering/SPRINT1_OFFLINE_M3_EXECUTION_20261114.md)에서 구분한다.
 
 | # | 기능 | 시장의 명시적 제공 예 | 우리 상태 | 실제 구현·지원 범위 | 남은 한계/완료 조건 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | 원국 8자 | [C](https://play.google.com/store/apps/details?id=com.gooddaytoday.mynobleman&hl=ko) | PRODUCT_READY | [`createLocalChartProfile`](../../scripts/kasi/local-chart.mjs#L52) → [`resolveCoverageCheckedModernKoreanCivilFourPillars`](../../src/calendar/fourPillars.ts#L95). 현대 한국 범위의 연·월·일·시주와 후보를 반환 | 1989–2026·분 시각·명시 정책. 시간 미상/역사시/2027은 해당 프로필 지원 밖 |
 | 2 | 음양력·윤달 | [H](https://play.google.com/store/apps/details?id=com.hamsaju.app&hl=ko) | PRODUCT_READY | [`local-chart.mjs`](../../scripts/kasi/local-chart.mjs)의 GREGORIAN/KOREAN_LUNAR 입력과 기존 관측 인덱스 변환·윤달 검증 | 양력 환산 날짜가 출생 지원 범위 안이어야 함. 자료 양끝의 부분 음력 월을 완전 월로 꾸미지 않음 |
 | 3 | 절입·자시 | [F](https://play.google.com/store/apps/details?id=com.forceteller.sajuAlmanac&hl=ko), [C](https://play.google.com/store/apps/details?id=com.gooddaytoday.mynobleman&hl=ko) | PRODUCT_READY | [`yearMonthPillars.ts`](../../src/calendar/yearMonthPillars.ts), [`dayRollover.ts`](../../src/calendar/dayRollover.ts), [`dayHourPillars.ts`](../../src/calendar/dayHourPillars.ts). 발표 절입 분의 상관된 후보와 네 일주/시주 정책 조합 | 초 단위 결정·확률·태양시 자동 보정은 제공하지 않음. 다른 자시 관례와 동일하다고 하지 않음 |
-| 4 | 오행 분포 | [G](https://play.google.com/store/apps/details?id=com.haegongmanse.app&hl=ko) | PRODUCT_READY | [`local-analysis-report.mjs`](../../scripts/kasi/local-analysis-report.mjs#L110)는 기존 [`STEM_NATURE`](../../src/domain/stems.ts#L18)/[`BRANCH_NATURE`](../../src/domain/branches.ts#L17)로 천간4+지지 대표오행4의 무가중 개수·총8자리·장간 제외 정책을 JSON/TEXT에 표시 | 단순 표면 개수만 지원. 장간 수·계절 가중치·실제 힘·확률/비율·오행 차트와 구별. [`integrated-analysis-report.test.mjs`](../../test/integrated-analysis-report.test.mjs)의 고정 합성 명식은 목1/화6/토0/금0/수1을 독립 리터럴 검사 |
+| 4 | 오행 분포 | [G](https://play.google.com/store/apps/details?id=com.haegongmanse.app&hl=ko) | PRODUCT_READY | [`local-analysis-report.mjs`](../../scripts/kasi/local-analysis-report.mjs#L110)는 기존 [`STEM_NATURE`](../../src/domain/stems.ts#L18)/[`BRANCH_NATURE`](../../src/domain/branches.ts#L17)로 각 글자의 음양/오행과 천간4+지지 대표오행4의 무가중 개수·총8자리·장간 제외 정책을 JSON/TEXT에 표시 | 단순 표면 개수만 지원. 장간 수·계절 가중치·실제 힘·확률/비율·오행 차트와 구별. [`integrated-analysis-report.test.mjs`](../../test/integrated-analysis-report.test.mjs)의 고정 합성 명식은 목1/화6/토0/금0/수1을 독립 리터럴 검사 |
 | 5 | 십성 | [C](https://play.google.com/store/apps/details?id=com.gooddaytoday.mynobleman&hl=ko) | PRODUCT_READY | [`tenGod`](../../src/domain/tenGods.ts#L47), [`branchTenGodFacts`](../../src/domain/branchTenGods.ts), M2 표면·장간 분류 및 한국어 설명 | 일간 표면 자신은 일반 십성 해석 슬롯에서 제외. 분류가 성격/직업 예측은 아님 |
 | 6 | 지장간 | [C](https://play.google.com/store/apps/details?id=com.gooddaytoday.mynobleman&hl=ko) | PRODUCT_READY | [`hiddenStemsForBranch`](../../src/domain/hiddenStems.ts#L58), M2 `MAIN_QI/OTHER`와 member·rule·source 참조 | 본기는 이름 붙인 속성/표시 순서. 실제 사령일수·강도·비율은 미판정 |
 | 7 | 12운성 | [C](https://play.google.com/store/apps/details?id=com.gooddaytoday.mynobleman&hl=ko) | PRODUCT_READY | [`twelveGrowthStage`](../../src/domain/twelveGrowthStages.ts#L46). 양순음역·화토동궁 선택 정책, 한국어 템플릿 | 다른 학파의 봉법/거법 전체나 12신살을 포함한 기능으로 확장하지 않음 |
@@ -42,6 +42,8 @@
 | 17 | 조후 | [G](https://play.google.com/store/apps/details?id=com.haegongmanse.app&hl=ko) | NOT_IMPLEMENTED | [`seasonalStateV2.ts`](../../src/m3/seasonalStateV2.ts)는 계절 분류·경계 대안을 제공하며 조후 처방 경로는 없음 | 계절 존재를 조후용신으로 부르지 않음. 별도 온습/처방 정책과 예외/반례 필요 |
 | 18 | 종합풀이 | [F](https://play.google.com/store/apps/details?id=com.forceteller.sajuAlmanac&hl=ko), [J](https://apps.apple.com/kr/app/id960571015) | PARTIAL | [`createLocalAnalysisReportProfile`](../../scripts/kasi/local-analysis-report.mjs#L170)는 기존 M1/M2/M3·내격8·선택 점수/M7을 한국어6섹션과 요약으로 조합. 근거 참조와 미요청/보류 상태 보존. [`v0StoryProjection.ts`](../../src/story/v0StoryProjection.ts)는 별도 교육용 사실 투영 | 전 생애/개인 성향의 종합 해석은 없음. 근거 설명과 제한적 구조 리포트를 전체 사주풀이 완료라고 세지 않음 |
 | 19 | 연애·직업·재물 풀이 | [J](https://apps.apple.com/kr/app/id960571015) | NOT_IMPLEMENTED | [`local-explain.mjs`](../../scripts/kasi/local-explain.mjs#L24)가 이 범위를 명시적으로 제외. 주제별 실행 해석/창작 정책 없음 | 財/官 분류를 부·직업·배우자 사건으로 직접 번역하지 않음. 사실·전통 풀이·창작을 구별하는 별도 콘텐츠 계약 필요 |
+
+요청19기능의 상태는 **PRODUCT_READY10 / PARTIAL2 / EXPERIMENTAL1 / NOT_IMPLEMENTED6**이다. 기능별 크기·범위가 다르므로 제품 완성률이나 정확도 퍼센트로 환산하지 않는다.
 
 오프라인 artifact는 [`build.mjs`](../../scripts/offline/build.mjs), [`attach.mjs`](../../scripts/offline/attach.mjs), [`verify.mjs`](../../scripts/offline/verify.mjs), [`restore.mjs`](../../scripts/offline/restore.mjs), [`run.mjs`](../../scripts/offline/run.mjs)로 만들고 검증한다. 이는 위 기능 전부가 artifact에 포함됐다는 뜻은 아니다. Sprint 1 artifact의 chart/explain/evidence/experimental 네 모드는 유지한다. 새 통합 report는 저장소 [`local-analysis-report.mjs`](../../scripts/kasi/local-analysis-report.mjs) CLI이며 **Sprint 1 artifact에 포함하지 않는다**. 고정 Node22·저장소의 고정 의존성·기존 private 데이터로 네트워크/API키 없이 실행한다. M7 import에 연결된 기존 XML parser 의존성까지 이번 runtime bundling 범위를 넓히지 않았다. LLM 상담·궁합·택일·개인 명식 클라우드 저장/관리 서비스는 현재 구현 범위에 없다.
 
@@ -76,4 +78,8 @@
 
 추가 정확 OTHER 사례 네 건은 별도 보류/경쟁 probe로만 보존한다. 食神02-09甲/寅과傷官02-10乙/寅의 peer 본기를 무시해 단독격을 확정하면 안 된다. 偏印02-13戊/寅·正印02-04己/寅에서는 비노출 MAIN의 七殺/正官과 정확 노출 OTHER印을 함께 보존해야 한다. 따라서 다양성이 좋다는 이유로 이 네 건을 명확한 primary8 대표에 끼워 넣지 않았다. 이는 새 resolver 결과에서 기대값을 뽑아 맞춘 것이 아니다.
 
-기본 fixture 최초 고정 SHA256은 `63e7d999cee3d27ffe6b3ff1cf5d3a3f18aa7d9cf2719039843bfdf4d57cb14a`다. **새 resolver와의 실제 비교·JSON/TEXT 전문·최종 SHA·검사 수치는 부모의 Sprint 2 최종 실행 기록에 연결 대기**다. 이 문서 작성/선정 자체를 해당 검사의 PASS로 세지 않는다.
+기본 fixture 최초 고정 SHA256은 `63e7d999cee3d27ffe6b3ff1cf5d3a3f18aa7d9cf2719039843bfdf4d57cb14a`이며 최종 실행에서도 같았다. 새 resolver의 기대값을 출력에서 생성하지 않았다. 실제 비교와 실패 기록은 [Sprint 2 실행 기록](../engineering/SPRINT2_INNER_PATTERNS_REPORT_EXECUTION_20261114.md)에 남겼다.
+
+최종 코드 `db26b38b9b40dcefba0ae94d5187daff7ab55656`, Node22.23.3·TS5.8.3에서 **전체811/811 PASS**, 실패/취소/skip/todo0을 확인했다. M2 감사는 `CATALOG_CONSISTENT_EVIDENCE_OPEN`이며 판본·권리 수락이나 해석 승격은 아니다. Lab/KASI 페이지의 실제 Chromium 회귀도 PASS했다. KASI 페이지 검사는 합성 upstream을 사용한 브라우저 회귀이며 외부 API 재수집이 아니다.
+
+실제 private 자료의 CLI는 **26논리 조건×JSON/TEXT×두 시간대(UTC·Asia/Seoul)=104성공**, 별도24거절을 확인했고52개 출력 쌍의 시간대별 bytes가 같았다. 대표 양력/음력112쌍과 자시 네 정책4쌍을 더한 **116쌍/시간대**는232요청·256원국 부모·2048개 유형 assessment/시간대로 검사했다. 유형 판정은 후보292·비후보1748·출처/정책 보류8이며 합계2048이다. UTC→Asia/Seoul 순차 실행의 의미·분포가 같았다. 이는 유한 내부 정책/출처 연결 검증이고2048개의 독립 출생이나 외부 정확도 검사가 아니다. 원자료·기존 실행 소스/JavaScript와 기존 보존 게이트도 유지했다.

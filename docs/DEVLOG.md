@@ -775,3 +775,21 @@ ssaju의격국은월간십성과score극단값宗格,용신은일간별고정3�
 **[최종 실행]** 131a0c551a5093e22ea22d6a66b37c31dae058df에서 전체784/784(fail/cancel/skip/todo0), M2감사·Lab/KASI Chromium 자연0이었다. 기존668 의미를 유지한 새116검사다. 해당 SHA로 만든 artifact59payload/435278bytes와 내부 자료를 저장소 밖 새 임시 폴더에 복원했다. 네트워크·키·쓰기·원본 import·fixture·child-process 차단 가드에서 실제 CLI104회 중 성공96(JSON48/TEXT48)/거절8, 위험 경로4거절, 별도 원본 참조24를 구분했다. UTC48→Seoul48 순차, 양음력 명식/점수·시간대bytes·입춘2부모/B1부모·계절대안2·23:30 네 정책을 확인했다. 실제 stdout/stderr는 가상 입력의 명시적 private 검사 파일이며 제품의 자동 저장이 아니다. root AI가 TEXT8개 전문을 읽었고 인간 전문가 인증으로 표시하지 않았다.
 
 **[보존/전달/다음]** 완료본2086/후보a,b각8/보강5의 트리·base/export/supplement와 기존 실행 파일은 그대로다. 이전320의317byte+3이전 선언순서 차이도 유지했다. API·키·재수집·private추적·배포·UI/LLM은0이다. workflow와 최종 diff를 확인해 승인 브랜치에만 일반 Push하며 실행 SHA와 문서 후속 원격 HEAD는 별도 전달한다. 다음 Sprint 2는 P2의 선택형 M4 내격8 구조 묶음을 권고하고 자료 권리/넓은 출생범위를 별도 출시 과제로 남긴다. 추가 강약·용신·격국 규칙은 이번에 구현하지 않았다. [실행 가이드](SPRINT1_OFFLINE_GUIDE.md) · [실패와 검증](engineering/SPRINT1_OFFLINE_M3_EXECUTION_20261114.md).
+
+## 2026-11-14 — Sprint 2: 내격8 구조와 실제 한국어 통합 분석
+
+**[기준선/범위]** 시작 로컬·직접 조회 원격5790b18fa5849662edc6eb51a1513fc5afd5bbcd, 승인 브랜치 clean/0·0을 확인했다. 개별 강약 연구를 재개하는 대신 기존 M2/M3를 소비하는 내격8 구조 후보와 사용자용 리포트를 구현했다. 기존 정관격/C1·M3·M7의 정책·기본 경로를 바꾸지 않았다.
+
+**[정책/구현]** M4-INNER-EIGHT-MONTH-STRUCTURE-V01/0.1.0은 기존 본기·정확 비일간 투출·장간/표면 위치를 사용하고, 비겁 본기·경쟁 OTHER·午 OTHER己 호환성을 분리한다. primary는 프로젝트의 표시 기준이고 사령/강도/단독격 확정이 아니다. 여덟 유형은 서로 다른 생극 방향 관측을 갖되 실제 成格/破格/救應은 발급하지 않는다. 상관→칠살까지 방해로 일반화하던 검토 이름은 중립 CONTROL_REVIEW로 고쳤다. 원전 월령 문맥·기존 분류·이번 PROJECT_POLICY를 구분했다.
+
+**[사례/실질 결과]** resolver 전에 고정한26계약과 기존M1/M2로만 선정한 실제8대표를 사용했다. reason의 노출 수 two→one 설명 한 곳만 정정했으며 입력/expected/source/policy는 그대로다. 실제8대표가2026년1월 子/丑에 집중된 한계와 추가 OTHER4건의 경쟁/보류를 기록했다. 01-08은 정관 본기·월간 투출, 01-04는 정관이 원국에 있어도 월령은 정재다. 입춘은 丑 비겁 본기 범위 밖/寅 정관·정인 경쟁 두 원국을 유지하고, B분은 정인 원국 하나 아래 봄金囚/토왕金相만 갈린다.
+
+**[리포트/연속성]** KASI-LOCAL-INTEGRATED-ANALYSIS-V01/0.1.0은 6섹션·관측값 기반6문장 요약과 JSON 참조를 제공한다. root가 실제TEXT2개 전문을 읽어 개별 음양오행 누락을 기존 템플릿4줄로 보완하고 정재/편재 조사·반복 술어를 고쳤다. 실험 점수·M7·명목 투영은 명시 선택만 허용한다. 실제 guard에서 제품 성공 요청당 출생M1/M2/M3 bridge각1회이며 M7은 같은 issued M1을 재사용했다. 새 report는 저장소CLI이고 Sprint1 독립 artifact의 네 mode는 그대로다. 새 artifact bundling/UI/LLM은 만들지 않았다.
+
+**[실패/보완]** 초기 M4 11/13은 광범위 M3 연결 ref의 검사 범위를 월령으로만 제한한 시험 오류와 범위 밖 설명의 제한 누락이었다. 추가 peer/午OTHER literal1실패는 보류된 노출을 놓친 선정 predicate였다. 보고서11/12는 양음력의 정상 변환 provenance 차이를 전체동일로 기대한 오류, 이후12/13은 원래 연간 완비 가드의 선행 거절을 NEEDS_DATA 보고서로 기대한 오류였다. 결론 기대/기존 가드·계산을 완화하지 않았다. 보조 파일명 오독 ENOENT는 stdout 파일명을 바로잡았고 실제 엔진 실패와 분리했다. 기존검사 skip·무한재시도·사용자 프로세스 일괄 종료는 없었다.
+
+**[최종 검증]** 12926eae455a6f32cefaa9d398b26d9d0edd034d에서811/811·M2·Lab/KASI PASS 후 문구만 보완했다. 최종 실행 SHA **db26b38b9b40dcefba0ae94d5187daff7ab55656**에서 다시 전체811/811(fail/cancel/skip/todo0)·M2 catalog일관/EVIDENCE_OPEN·두 Chromium 자연0이었다. 새집중14+13이며 기존784 의미를 유지했다. 고정Node22.23.3/TS5.8.3·소스 밖 소유TEMP를 사용했다.
+
+**[실제 자료]** 최종 private 통합은 첫1회 PASS. 26논리조건×JSON/TEXT×2TZ의 CLI104성공·별도24거절, timezone52출력쌍 byte 동일이다. 38년 대표76+2026절입전/동분/후36의112양음력쌍에 자시4정책쌍을 더해116쌍/TZ,232요청·256부모·2048유형판정/TZ를 순차 집계했다. 후보292/비후보1748/정책출처보류8이며 원국 선택120본기·82경쟁·28peer선택미정·26peer범위밖이다. 두TZ 의미SHA5fa1d420896f492d04f3254ea31224881de3cfa22cb77113961ec2471ffdecc3 동일. 실제 M1총580(성공CLI104+거절진입12+대표464), M2/M3각568이다. 서로 다른 집계 단위를 정확도/사람수로 바꾸지 않는다. 기존49,799전수·M7 private190만기간은 이번에 반복하지 않았고 독립 원전/전문가/예측 검증으로 표시하지 않는다.
+
+**[보존/제품/다음]** 완료본2086·후보a,b각8·보강5의 외부 수락 지문과 기존317원byte+3이전 선언순서차이·JavaScript191·이전QA61/76·생성115출력을 유지했다. API/키/재수집/private추적/Actions/배포0. M3 과거 grid신약0/추가8이 한 날짜 반복이라는 한계를 남겼다. 기능19개는 범위내기술READY10/PARTIAL2/EXPERIMENTAL1/미구현6이며 완성률이 아니다. M4구조·리포트·M5구조화입력은GO, 상용기능동등·공개출시는NO-GO다. 권리와1950–1988/2027/역사시 차단을 유지하고 다음은 목적하나M5 및 공망/월운 등 유한 묶음에서 선택한다. workflow와 최종 diff/원격을 확인해 승인 브랜치에만 일반Push하며 테스트SHA와 문서후속HEAD를 구분한다. [정책](research/M4_INNER_PATTERNS_POLICY_V01.md) · [실행](KASI_LOCAL_ANALYSIS_REPORT_GUIDE.md) · [증거/한계](engineering/SPRINT2_INNER_PATTERNS_REPORT_EXECUTION_20261114.md) · [기능 행렬](research/SPRINT2_PRODUCT_FEATURE_MATRIX_20261114.md).
