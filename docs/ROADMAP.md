@@ -1,5 +1,30 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-14 current checkpoint — Sprint 3 목적별 후보·공망·월운·사용자 요약
+
+**완료:** 별도 선택형 `M5-WINTER-WOOD-WARMING-CANDIDATE-V01`/0.1.0, 일주 순공 `M2-DAY-XUN-VOID-BRANCHES-V01`, 12절 월운 `M7-MONTHLY-TWELVE-JIE-PUBLISHED-MINUTE-V01`, 사용자/상세 두 view의 `KASI-LOCAL-PRODUCT-ANALYSIS-V01`, 이 경로와 기존 M1/M2/M3/M4/M7을 묶은 내부 오프라인 v2. 기존 Sprint2 리포트·기본 API/CLI·계절/통근/정관/C1/내격/M7 정책은 유지했다. M4는 새 구현 대신12월지·10일간의 고정21사례로 보강했다.
+
+M5는 **甲乙×亥子의 온기 검토 한 목적**이다. 선택 장간/표면에 화가 없으면 FIRE 후보, 이미 있으면 충분성 미평가로 HOLD, 다른 일간/월지는 범위 밖 HOLD다. 무화 후보/유화 보류는 원전의 보편 충분조건이 아닌 PROJECT_POLICY다. 전체 조후·억부/격국 용신·희기 순위·강약 점수 결합은 하지 않는다. 공망은 존재/위치만, 월운은 절입 간지/기간만 계산한다.
+
+**최종 실행 SHA `10196ab0acb8ed60774e2d98051ae670548725bf`: 전체858/858, fail/cancel/skip/todo0, M2감사·Lab/KASI Chromium PASS.** 새47검사는 기존811 의미를 보존한다. 실제 내부 artifact를 저장소 밖에 복원해 Node22만으로80성공/입력8·경로3거절,36시간대 출력쌍 동일을 확인했다. 원본 소스 import·Git/npm·네트워크·키가 필요 없다. private 자료는 엔진과 별도 attachment이고 외부 재배포를 허용하지 않는다.
+
+실제 연결은228층화 양음력쌍+31probe쌍/TZ,518요청·520부모/TZ와 월운40독립조회/TZ다. 두TZ 의미지문이 같고 제품 M1/M2/M3는 요청당1회다. 전체520부모/TZ의 M5 후보8/HOLD512, 넓은228쌍 자체는 후보2/유화보류12/범위밖214다. 기존49,799쌍 전수나 예측 정답률 인증으로 세지 않는다. 공개 회귀 전 하니스 preflight 실패와 재검사·생성 선언 순서 증명도 실행 기록에 분리했다.
+
+19기능 행렬은 범위 내 기술 **PRODUCT_READY12 / PARTIAL4 / EXPERIMENTAL1 / NOT_IMPLEMENTED2**다. 용신·조후 두 행은 같은 한정 M5 기능이며 두 독립 완성 기능으로 합산하지 않는다. 사용자 정보는 목적별 후보/구체적 보류·공망·월운과 간결한 읽기로 확대됐다. **상용 기능 동등·공개 출시는 NO-GO**다.
+
+### 다음 Sprint — 제안만, 자동 착수하지 않음
+
+| 우선순위 | 유한 묶음·대략 작업량 | 종료 기준 |
+| --- | --- | --- |
+| P0 병행 | 자료 상업/재배포권과 지원 연대의 제품 결정 | 권리별 허용 사용/배포를 별도 수락.1950–1988·역사시/DST·2027이후를 자동 지원하지 않음. 외부 회신 일정은 미산정 |
+| P1 | M5 동일 목적의 적용 범위 확장 검토·정책4–6인일 | 기존 화의 충분성 또는 다른 일간/월령 중 **한 유한 범위**만 선정. 독립 반례·충돌/HOLD·실제 출력과 새 버전으로 수락. 모든 학파/최종 용신을 한 번에 통합하지 않음 |
+| P1 | 선택 신살 최대4종·콘텐츠 계약2–4인일 | 기준·표·대상 위치와 길흉 미추론을 고정하고 facts/선택 해석/창작을 구분. 주제별 예측·LLM·UI는 별도 승인 |
+| P2 | 사용자 리포트 사용성 검토·내부 패키징 보완1–2인일 | 실제 사람이 핵심/보류를 이해하는지 확인. 기존 사용자/상세 동일 데이터·오프라인 무의존성과 권리 분리 유지 |
+
+작업량은 기존 저장소를 아는 개발자의 구현·검토·회귀 기준 대략치(약±50%)이고 권리 협상/새 자료 수집은 제외한다. 전체 신강약·근력/생조 전달·격국 성패·M5 최종 처방·스토리/주제별 해석은 여전히 미완료다. 과거 M3 grid신약0·추가8경로가한날짜 반복이라는 한계, G0/G1-P2·최종 출시 게이트와 데이터 pin을 유지한다.
+
+[실행 가이드](SPRINT3_PRODUCT_ANALYSIS_GUIDE.md) · [실제 검사/실패/보존](engineering/SPRINT3_PRODUCT_ANALYSIS_EXECUTION_20261114.md) · [M5 정책](research/M5_LIMITED_PURPOSE_POLICY_V01.md) · [공망/월운](research/GONGMANG_MONTHLY_TIME_AXIS_POLICY_V01.md) · [19기능 행렬](research/SPRINT3_PRODUCT_FEATURE_MATRIX_20261114.md) · [오프라인 v2 계약](contracts/OFFLINE_INTEGRATED_ANALYSIS_V2.md). 아래 체크포인트는 당시 상태로 보존한다.
+
 ## 2026-11-14 current checkpoint — Sprint 2 내격8과 통합 리포트
 
 **완료:** 선택형 `M4-INNER-EIGHT-MONTH-STRUCTURE-V01`/0.1.0의 내격8 구조 후보·정확 투출/비투출·본기/OTHER·경쟁/범위/호환성 보류, `KASI-LOCAL-INTEGRATED-ANALYSIS-V01`/0.1.0의 JSON/TEXT6섹션·6문장 요약·선택 점수/M7 연결. 기존 정관격/C1·M1/M2/M3/M7·기본CLI/API/독립 artifact는 보존했다. 새 보고서는 저장소CLI이며 Sprint1 artifact에는 추가하지 않았다.
