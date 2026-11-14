@@ -1,625 +1,143 @@
 <title>달무리 골목</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=Jua&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@700&display=swap">
 <style>
-/* Layout: one fixed-seat stage. A night alley strip of lit booths; pick one and the view
-   becomes the customer's seat: reader above, table with cards in the middle, dialogue below. */
+/* Layout: a full-bleed 3D night alley (three.js). HTML only carries the title card,
+   the booth plate, and the dialogue panel that sits under the seated camera. */
 :root {
   color-scheme: dark;
-  --night: #0c0a1d;
-  --plum: #24103f;
+  --night: #0b0919;
   --ink: #150e28;
   --violet: #b455ff;
   --lime: #e6ff3d;
   --bulb: #ffd98a;
   --red: #e8322f;
   --paper: #fff4dc;
-  --jade: #1f9a7a;
   --gold: #e2b659;
-  --crimson: #8e1b2e;
   --f-sign: "Black Han Sans", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
   --f-label: "Jua", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
   --f-body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
 }
 html { box-sizing: border-box; height: 100%; }
 *, *::before, *::after { box-sizing: inherit; }
-body {
-  height: 100%;
-  background: var(--night);
-  color: var(--paper);
-  font-family: var(--f-body);
-  overflow-x: hidden;
-}
-button { font: inherit; color: inherit; cursor: pointer; }
+body { height: 100%; background: var(--night); color: var(--paper); font-family: var(--f-body); overflow-x: hidden; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
 .gutter {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 
-.stage {
-  position: relative;
-  height: 100%;
-  min-height: 540px;
-  overflow: hidden;
-  container-type: size;
+.stage { position: relative; height: 100%; min-height: 540px; overflow: hidden; container-type: size; background: var(--night); }
+#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.lens { /* 큰 판형 렌즈 느낌: 가장자리 광량 저하 */
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 95% at 50% 46%, transparent 52%, rgba(4, 3, 12, .5) 100%);
+}
+.loading {
+  position: absolute; inset: 0; z-index: 9;
+  display: grid; place-items: center;
+  padding: 24px; text-align: center;
   background: var(--night);
+  font-family: var(--f-label); font-size: 18px; color: var(--bulb);
+  transition: opacity .8s ease;
 }
-.scene {
-  position: absolute;
-  inset: 0;
-  transition: opacity .55s ease, transform .7s ease, visibility 0s;
-}
-.scene[aria-hidden="true"] {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .55s ease, transform .7s ease, visibility 0s .55s;
-}
+.loading.done { opacity: 0; pointer-events: none; }
 
-/* ───────────── 골목 ───────────── */
-.alley { display: flex; flex-direction: column; }
-.alley[aria-hidden="true"] { transform: scale(1.14); }
-#sky { position: absolute; inset: 0; width: 100%; height: 100%; }
-.alley::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 13cqh;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 118px, rgba(255, 244, 220, .05) 118px 120px),
-    linear-gradient(#1d1638, #07060f);
-  border-top: 2px solid #2c2350;
-}
-.alley-head {
-  position: relative;
-  z-index: 2;
-  padding-top: clamp(14px, 3cqh, 30px);
-}
-.alley-head h1 {
+/* 골목 UI */
+.alley-ui { position: absolute; inset: 0; pointer-events: none; transition: opacity .5s ease; }
+.alley-ui[hidden] { display: block !important; opacity: 0; visibility: hidden; }
+.alley-ui > * { pointer-events: auto; }
+.title { position: absolute; left: 0; top: clamp(14px, 3cqh, 30px); pointer-events: none; }
+.title h1 {
   margin: 0;
-  font-family: var(--f-sign);
-  font-weight: 400;
-  font-size: clamp(30px, 6.4cqw, 54px);
-  line-height: 1.05;
+  font-family: var(--f-sign); font-weight: 400;
+  font-size: clamp(30px, 6.4cqw, 58px); line-height: 1.05;
   color: var(--lime);
-  text-shadow: 0 0 18px rgba(180, 85, 255, .9), 0 0 2px #fff;
+  text-shadow: 0 0 18px rgba(180, 85, 255, .9), 0 2px 0 #1a1160;
 }
-.alley-head p {
-  margin: 6px 0 0;
-  font-family: var(--f-label);
-  font-size: clamp(14px, 2.2cqw, 17px);
-  color: var(--bulb);
-}
-.strip {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(18px, 5cqw, 56px);
-  padding-top: 12px;
-  padding-bottom: 13cqh;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-}
-.strip::-webkit-scrollbar { display: none; }
-
-.booth {
-  --glow: var(--violet);
-  position: relative;
-  flex: 0 0 auto;
-  width: min(80cqw, 430px);
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  border: 0;
-  background: none;
-  text-align: left;
-  scroll-snap-align: center;
-  transition: transform .25s ease, filter .25s ease;
-}
-.booth:first-child { margin-left: auto; }
-.booth:last-child { margin-right: auto; }
-.booth::after {
-  content: "";
-  position: absolute;
-  left: 4%; right: 4%; top: calc(100% + 12px);
-  height: 10cqh;
-  background: linear-gradient(var(--glow), transparent 85%);
-  filter: blur(9px);
-  opacity: .34;
+.title p { margin: 6px 0 0; font-family: var(--f-label); font-size: clamp(14px, 2.2cqw, 17px); color: var(--bulb); text-shadow: 0 1px 6px #000; }
+.plate {
+  position: absolute; left: 0; right: 0;
+  bottom: max(34px, calc(env(safe-area-inset-bottom, 0px) + 30px));
+  display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap;
   pointer-events: none;
 }
-.booth.open:hover, .booth.open:focus-visible { transform: translateY(-4px); filter: brightness(1.08); }
-
-.sb {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  min-height: clamp(70px, 13cqh, 104px);
-  padding: 8px 16px 10px;
-  border-radius: 10px 10px 0 0;
-  border: 3px solid #d79bff;
-  border-bottom-width: 0;
-  background:
-    radial-gradient(circle at 12px 12px, rgba(255, 255, 255, .16) 0 2px, transparent 3px) 0 0 / 24px 24px,
-    linear-gradient(#3b2bd1, #2a1a9a);
-  box-shadow: 0 0 26px rgba(180, 85, 255, .65);
+.plate > * { pointer-events: auto; }
+.plate .name {
+  min-width: 9.5em; padding: 9px 14px 7px;
+  border-radius: 10px; border: 2px solid #d79bff;
+  background: rgba(42, 26, 154, .9);
+  font-family: var(--f-sign); font-size: 20px; line-height: 1; text-align: center; color: var(--lime);
+  box-shadow: 0 0 18px rgba(180, 85, 255, .6);
 }
-.sb-sub {
-  font-family: var(--f-label);
-  font-size: clamp(12px, 3.2cqw, 15px);
-  color: #fff;
-  letter-spacing: .08em;
+.round {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1.5px solid rgba(255, 244, 220, .55); background: rgba(21, 14, 40, .8);
+  font-size: 18px; line-height: 1;
 }
-.sb-main {
-  font-family: var(--f-sign);
-  font-size: min(11cqw, 56px);
-  line-height: 1;
-  color: var(--lime);
-  -webkit-text-stroke: 6px #1a1160;
-  paint-order: stroke fill;
-  white-space: nowrap;
+.go {
+  min-height: 44px; padding: 9px 20px 7px; border-radius: 999px; border: 0;
+  background: var(--lime); color: var(--ink);
+  font-family: var(--f-label); font-size: 18px;
+  box-shadow: 0 0 18px rgba(230, 255, 61, .65);
 }
-.bd {
-  display: flex;
-  height: clamp(190px, 36cqh, 310px);
-  background: #17141f;
-  border: 3px solid #2a2634;
-}
-.signs {
-  flex: 0 0 31%;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 6px 5px;
-  background: #0f0d16;
-}
-.sg {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9px;
-  font-family: var(--f-label);
-  font-size: clamp(11px, 2.9cqw, 14px);
-  line-height: 1.15;
-  text-align: center;
-  color: var(--ink);
-  box-shadow: 0 0 10px rgba(255, 255, 255, .25);
-}
-.sg b { font-family: var(--f-sign); font-weight: 400; font-size: 1.5em; }
-.sg small { font-size: .9em; }
-.sg.y { background: #ffee4d; }
-.sg.r { background: var(--red); color: #fff; }
-.sg.r b { color: #ffee4d; }
-.sg.w { background: #f4f7ff; }
-.sg.p { background: #b23cf0; color: #fff; }
-.sg.p b { color: var(--lime); }
-.win {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  background: #1a1550;
-}
-.win svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.win::before { /* 알전구 */
-  content: "";
-  position: absolute;
-  left: 0; right: 0; top: 2px;
-  height: 20px;
-  z-index: 2;
-  background: radial-gradient(circle, #fffbe6 0 4px, rgba(255, 217, 138, .7) 5px, transparent 10px) 0 0 / 32px 20px repeat-x;
-}
-.win::after { /* 비닐 천막 */
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background:
-    linear-gradient(90deg, transparent 49.4%, rgba(255, 255, 255, .28) 49.6% 50.2%, transparent 50.6%),
-    linear-gradient(104deg, transparent 12%, rgba(255, 255, 255, .13) 17%, transparent 24%, transparent 62%, rgba(255, 255, 255, .1) 68%, transparent 74%),
-    radial-gradient(120% 70% at 50% 0, rgba(255, 217, 138, .34), transparent 70%);
-  pointer-events: none;
-}
-.enter {
-  position: absolute;
-  z-index: 4;
-  left: 50%; bottom: 10px;
-  transform: translateX(-50%);
-  padding: 6px 16px 5px;
-  border-radius: 999px;
-  background: var(--lime);
-  color: var(--ink);
-  font-family: var(--f-label);
-  font-size: 15px;
-  white-space: nowrap;
-  box-shadow: 0 0 16px rgba(230, 255, 61, .7);
-}
-.chassis {
-  position: relative;
-  height: 14px;
-  background: #1b1826;
-  border-radius: 0 0 4px 4px;
-}
-.chassis::before {
-  content: "";
-  position: absolute;
-  left: 9%; top: 2px;
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #8d8a96 0 5px, #2b2833 6px 9px, #0d0c12 10px);
-}
-
-.booth.closed { --glow: #5a5670; cursor: default; }
-.booth.closed .sb { filter: saturate(.2) brightness(.5); box-shadow: none; }
-.booth.closed .signs { filter: saturate(.15) brightness(.42); }
-.booth.closed .win { background: repeating-linear-gradient(#23202e 0 11px, #191622 11px 13px); }
-.booth.closed .win::before, .booth.closed .win::after { display: none; }
-.note {
-  position: absolute;
-  left: 50%; top: 50%;
-  width: min(78%, 190px);
-  transform: translate(-50%, -50%) rotate(-3deg);
-  padding: 12px 10px 10px;
-  background: #e9e1cd;
-  color: var(--ink);
-  text-align: center;
-  font-family: var(--f-label);
-  font-size: 13px;
-  line-height: 1.35;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, .5);
-}
-.note b { display: block; font-family: var(--f-sign); font-weight: 400; font-size: 26px; color: var(--red); }
-
 .proto {
-  position: absolute;
-  z-index: 3;
-  left: 0; right: 0;
-  bottom: max(10px, env(safe-area-inset-bottom, 0px));
-  margin: 0;
-  font-size: 12px;
-  text-align: center;
-  color: rgba(255, 244, 220, .62);
-}
-.toast {
-  position: absolute;
-  z-index: 5;
-  left: 50%; bottom: 15cqh;
-  transform: translateX(-50%);
-  max-width: calc(100% - 32px);
-  padding: 10px 16px;
-  border-radius: 10px;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--f-label);
-  font-size: 15px;
-  text-align: center;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, .6);
+  position: absolute; left: 0; right: 0; bottom: max(8px, env(safe-area-inset-bottom, 0px));
+  margin: 0; font-size: 12px; text-align: center; color: rgba(255, 244, 220, .66); text-shadow: 0 1px 4px #000; pointer-events: none;
 }
 
-/* ───────────── 부스 안 ───────────── */
-.room {
-  --tt: 50cqh;                       /* 테이블 윗선 */
-  --card-h: min(17.5cqh, 36cqw);
-  --card-w: calc(var(--card-h) / 1.55);
-  background: #151042;
-}
-.room[aria-hidden="true"] { transform: scale(.94); }
-.wall {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle, rgba(255, 244, 220, .85) 0 1px, transparent 1.6px) 14px 22px / 92px 76px,
-    radial-gradient(circle, rgba(226, 182, 89, .8) 0 1.3px, transparent 2px) 50px 60px / 138px 112px,
-    radial-gradient(90% 60% at 50% 12%, #2d2390, #151042 72%);
-}
-.room::before, .room::after { /* 양옆 비닐 */
-  content: "";
-  position: absolute;
-  z-index: 1;
-  top: 0; bottom: 0;
-  width: 8cqw;
-  background: linear-gradient(90deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .03) 55%, rgba(255, 255, 255, .12) 70%, transparent);
-  pointer-events: none;
-}
-.room::before { left: 0; }
-.room::after { right: 0; transform: scaleX(-1); }
-.awning {
-  position: absolute;
-  z-index: 5;
-  left: 0; right: 0; top: 0;
-  height: clamp(44px, 7cqh, 60px);
-  background: linear-gradient(#3b2bd1, #2a1a9a);
-  border-bottom: 3px solid #d79bff;
-  box-shadow: 0 6px 30px rgba(255, 217, 138, .28);
-}
-.awning::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; top: 100%;
-  height: 30px;
-  background: radial-gradient(circle, #fffbe6 0 6px, rgba(255, 217, 138, .75) 7px, transparent 15px) 0 0 / 58px 30px repeat-x;
-}
-.wallpaper { display: none; }
-@container (min-width: 720px) {
-  .wallpaper {
-    display: block;
-    position: absolute;
-    z-index: 1;
-    top: 20cqh;
-    width: 168px;
-    word-break: keep-all;
-    padding: 12px 12px 10px;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--f-label);
-    font-size: 14px;
-    line-height: 1.5;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .45);
-  }
-  .wallpaper b { display: block; font-family: var(--f-sign); font-weight: 400; font-size: 20px; color: var(--red); }
-  .wallpaper.l { left: calc(50% - 26cqh - 210px); transform: rotate(-2.5deg); }
-  .wallpaper.r { left: calc(50% + 26cqh + 42px); transform: rotate(2deg); }
-}
-
-.reader {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: calc(100cqh - var(--tt) - 1cqh);
-  height: 42cqh;
-  aspect-ratio: 360 / 420;
-  transform: translateX(-50%);
-}
-.halo {
-  position: absolute;
-  left: 50%; top: 40%;
-  width: 138%;
-  transform: translate(-50%, -50%);
-  color: var(--gold);
-}
-.char { position: absolute; inset: 0; width: 100%; height: 100%; animation: bob 4.6s ease-in-out infinite; }
-@keyframes bob { 50% { transform: translateY(-1.1%); } }
-.char .m, .char .eyes-smile { display: none; }
-.reader[data-mood="neutral"] .m-neutral,
-.reader[data-mood="think"] .m-neutral,
-.reader[data-mood="smile"] .m-smile,
-.reader[data-mood="surprise"] .m-o { display: block; }
-.reader[data-mood="smile"] .eyes-open { display: none; }
-.reader[data-mood="smile"] .eyes-smile { display: block; }
-.char .brows { transition: transform .25s ease; transform-box: fill-box; transform-origin: center; }
-.reader[data-mood="think"] .brows { transform: translateY(-3px) rotate(-2deg); }
-.reader[data-mood="surprise"] .brows { transform: translateY(-7px); }
-.reader.talking .m { display: none; }
-.reader.talking .m-talk { display: block; transform-box: fill-box; transform-origin: center; animation: talk .3s steps(2, jump-none) infinite; }
-@keyframes talk { from { transform: scaleY(.3); } to { transform: scaleY(1); } }
-.char .eyes-open { transform-box: fill-box; transform-origin: center; animation: blink 5.2s infinite; }
-@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96.5% { transform: scaleY(.08); } }
-
-.table {
-  position: absolute;
-  z-index: 3;
-  left: 0; right: 0;
-  top: var(--tt);
-  bottom: 0;
-  background:
-    radial-gradient(80% 60% at 50% 0, rgba(255, 217, 138, .22), transparent 70%),
-    linear-gradient(#a52238, var(--crimson) 46%, #4d0d1b);
-  box-shadow: 0 -8px 26px rgba(0, 0, 0, .45);
-}
-.table::before { /* 금박 테두리 */
-  content: "";
-  position: absolute;
-  left: 0; right: 0; top: 0;
-  height: 12px;
-  background:
-    repeating-linear-gradient(90deg, transparent 0 14px, rgba(142, 27, 46, .75) 14px 18px),
-    linear-gradient(#f5d58a, var(--gold));
-}
-.spread {
-  position: absolute;
-  left: 0; right: 0;
-  top: calc(12px + 2.4cqh);
-  height: calc(var(--card-h) + 40px);
-}
-
-/* 카드 */
-.card {
-  display: block;
-  width: var(--card-w);
-  height: var(--card-h);
-  padding: 0;
-  border: 0;
-  background: none;
-  perspective: 700px;
-}
-.card-in {
-  position: relative;
-  display: block;
-  width: 100%; height: 100%;
-  transform-style: preserve-3d;
-  transition: transform .75s cubic-bezier(.2, .7, .2, 1);
-}
-.card.flipped .card-in { transform: rotateY(180deg); }
-.back, .face {
-  position: absolute;
-  inset: 0;
-  border-radius: calc(var(--card-h) * .055);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, .45);
-}
-.back {
-  border: 2px solid var(--gold);
-  background:
-    radial-gradient(circle at 50% 50%, var(--gold) 0 11%, transparent 12%),
-    radial-gradient(circle at 58% 46%, #231a70 0 11%, transparent 12%),
-    repeating-linear-gradient(45deg, transparent 0 7px, rgba(226, 182, 89, .32) 7px 8px),
-    repeating-linear-gradient(-45deg, transparent 0 7px, rgba(226, 182, 89, .32) 7px 8px),
-    #231a70;
-}
-.face {
-  transform: rotateY(180deg);
-  background: var(--paper);
-  border: 2px solid var(--gold);
-  color: #231a70;
-}
-.face-in {
-  position: absolute;
-  inset: 4%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5% 2% 6%;
-  border: 1px solid rgba(35, 26, 112, .45);
-  border-radius: calc(var(--card-h) * .035);
-}
-.face.rev .face-in { transform: rotate(180deg); }
-.face .num { font-family: var(--f-label); font-style: normal; font-size: calc(var(--card-h) * .095); line-height: 1; color: var(--red); }
-.face svg { width: 74%; flex: 0 1 auto; min-height: 0; }
-.face .nm {
-  font-family: var(--f-label);
-  font-weight: 400;
-  font-size: calc(var(--card-h) * .1);
-  line-height: 1.08;
-  text-align: center;
-  word-break: keep-all;
-}
-
-.deck { position: absolute; left: 50%; top: 0; width: var(--card-w); height: var(--card-h); transform: translateX(-50%); }
-.deck .card { position: absolute; inset: 0; }
-.deck .card:nth-child(odd) { animation: riffle-l .42s ease-in-out 4 alternate; }
-.deck .card:nth-child(even) { animation: riffle-r .42s ease-in-out 4 alternate; }
-@keyframes riffle-l { to { transform: translateX(-62%) rotate(-7deg); } }
-@keyframes riffle-r { to { transform: translateX(62%) rotate(7deg); } }
-
-.fan {
-  position: absolute;
-  left: 50%; top: 0;
-  width: min(88cqw, 620px);
-  height: var(--card-h);
-  transform: translateX(-50%);
-}
-.fan .card {
-  position: absolute;
-  top: 0;
-  left: calc(var(--i) * (100% - var(--card-w)) / 8);
-  transform: translateY(var(--dy)) rotate(var(--rot));
-  transition: transform .3s ease, opacity .35s ease;
-  animation: deal .45s ease backwards;
-  animation-delay: calc(var(--i) * 45ms);
-}
-.fan .card:hover, .fan .card:focus-visible { transform: translateY(calc(var(--dy) - 12%)) rotate(var(--rot)); z-index: 2; }
-.fan .card.gone { transform: translateY(-70%) rotate(var(--rot)); opacity: 0; pointer-events: none; }
-@keyframes deal { from { opacity: 0; transform: translateY(40%); } }
-
-.slots { display: flex; justify-content: center; gap: min(5cqw, 34px); }
-.slot { display: flex; flex-direction: column; align-items: center; gap: 5px; animation: deal .5s ease backwards; }
-.slot:nth-child(2) { animation-delay: .12s; }
-.slot:nth-child(3) { animation-delay: .24s; }
-.slot .card { transition: transform .35s ease, filter .35s ease; }
-.slot.active .card { transform: translateY(-5%) scale(1.1); filter: drop-shadow(0 0 12px rgba(255, 217, 138, .85)); }
-.cap {
-  font-family: var(--f-label);
-  font-size: 13px;
-  line-height: 1.2;
-  color: var(--bulb);
-  text-align: center;
-  word-break: keep-all;
-  max-width: calc(var(--card-w) + 5cqw);
-}
-
-/* HUD · 대화창 */
+/* 부스 안 UI */
+.room-ui { position: absolute; inset: 0; pointer-events: none; transition: opacity .5s ease; }
+.room-ui[hidden] { display: block !important; opacity: 0; visibility: hidden; }
+.room-ui > * { pointer-events: auto; }
 .hud {
-  position: absolute;
-  z-index: 7;
-  left: 0; right: 0;
-  top: max(8px, env(safe-area-inset-top, 0px));
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  position: absolute; left: 0; right: 0; top: max(8px, env(safe-area-inset-top, 0px));
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; pointer-events: none;
 }
+.hud > * { pointer-events: auto; }
 .pill {
-  padding: 7px 13px 6px;
-  border-radius: 999px;
-  border: 1.5px solid rgba(255, 244, 220, .5);
-  background: rgba(21, 14, 40, .78);
-  font-family: var(--f-label);
-  font-size: 14px;
-  line-height: 1;
+  padding: 8px 13px 7px; border-radius: 999px;
+  border: 1.5px solid rgba(255, 244, 220, .5); background: rgba(21, 14, 40, .78);
+  font-family: var(--f-label); font-size: 14px; line-height: 1;
 }
 .pill:hover { background: rgba(21, 14, 40, .95); border-color: var(--paper); }
-.pill:disabled { opacity: .55; cursor: default; }
-
-.dlg-wrap {
-  position: absolute;
-  z-index: 6;
-  left: 0; right: 0;
-  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+.chip {
+  padding: 6px 12px 5px; border-radius: 8px;
+  background: rgba(255, 244, 220, .94); color: var(--ink);
+  font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 16px; letter-spacing: .12em; line-height: 1.2;
 }
+.dlg-wrap { position: absolute; left: 0; right: 0; bottom: max(14px, env(safe-area-inset-bottom, 0px)); pointer-events: none; }
 .dlg {
-  position: relative;
-  max-width: 680px;
-  min-height: clamp(128px, 19cqh, 168px);
-  margin: 0 auto;
-  padding: 26px 18px 16px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(226, 182, 89, .6);
-  background: rgba(21, 14, 40, .93);
+  position: relative; pointer-events: auto;
+  max-width: 680px; min-height: clamp(120px, 18cqh, 160px);
+  margin: 0 auto; padding: 26px 18px 16px;
+  border-radius: 14px; border: 1.5px solid rgba(226, 182, 89, .6);
+  background: rgba(21, 14, 40, .9);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
 }
 .who {
-  position: absolute;
-  left: 14px; top: -15px;
-  padding: 3px 12px 2px;
-  border-radius: 7px;
-  background: var(--lime);
-  color: var(--ink);
-  font-family: var(--f-sign);
-  font-size: 18px;
-  transform: rotate(-2deg);
-  box-shadow: 0 0 14px rgba(230, 255, 61, .5);
+  position: absolute; left: 14px; top: -15px;
+  padding: 3px 12px 2px; border-radius: 7px;
+  background: var(--lime); color: var(--ink);
+  font-family: var(--f-sign); font-size: 18px;
+  transform: rotate(-2deg); box-shadow: 0 0 14px rgba(230, 255, 61, .5);
 }
-.line {
-  margin: 0;
-  min-height: 3.2em;
-  font-size: clamp(16px, 2.3cqw, 18px);
-  line-height: 1.62;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-}
+.line { margin: 0; min-height: 3.2em; font-size: clamp(16px, 2.3cqw, 18px); line-height: 1.62; word-break: keep-all; overflow-wrap: anywhere; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .next {
-  position: absolute;
-  right: 10px; bottom: 6px;
-  padding: 6px 8px;
-  border: 0;
-  background: none;
-  color: var(--lime);
-  font-size: 15px;
+  position: absolute; right: 10px; bottom: 6px; padding: 6px 8px;
+  border: 0; background: none; color: var(--lime); font-size: 15px;
   animation: nudge 1s ease-in-out infinite;
 }
 @keyframes nudge { 50% { transform: translateY(4px); } }
 .opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
 .opts:empty { display: none; }
 .opt {
-  min-height: 44px;
-  padding: 8px 10px 7px;
-  border-radius: 11px;
-  border: 2px solid var(--ink);
-  font-family: var(--f-label);
-  font-size: 16px;
-  line-height: 1.15;
-  color: var(--ink);
+  min-height: 44px; padding: 8px 10px 7px;
+  border-radius: 11px; border: 2px solid var(--ink);
+  font-family: var(--f-label); font-size: 16px; line-height: 1.15; color: var(--ink);
   box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .5), 0 0 12px rgba(255, 255, 255, .18);
   transition: transform .15s ease;
 }
@@ -628,21 +146,27 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .opt:nth-child(4n+2) { background: var(--red); color: #fff; }
 .opt:nth-child(4n+3) { background: #f4f7ff; }
 .opt:nth-child(4n+4) { background: #b23cf0; color: #fff; }
-.ask { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.ask { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .ask input {
-  flex: 1 1 180px;
-  min-width: 0;
-  min-height: 44px;
-  padding: 8px 12px;
-  border-radius: 11px;
-  border: 2px solid var(--gold);
-  background: var(--paper);
-  color: var(--ink);
-  font: inherit;
-  font-size: 16px;
+  flex: 1 1 180px; min-width: 0; min-height: 44px; padding: 8px 10px;
+  border-radius: 11px; border: 2px solid var(--gold);
+  background: var(--paper); color: var(--ink); font-size: 16px;
 }
 .ask .opt { flex: 0 0 auto; }
-.count { grid-column: 1 / -1; margin: 0; font-family: var(--f-label); font-size: 14px; color: var(--bulb); }
+.birth { grid-column: 1 / -1; display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 8px; }
+.birth label { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-family: var(--f-label); font-size: 13px; color: var(--bulb); }
+.birth input, .birth select {
+  width: 100%; min-width: 0; min-height: 44px; padding: 8px 8px;
+  border-radius: 11px; border: 2px solid var(--gold);
+  background: var(--paper); color: var(--ink); font-size: 16px;
+}
+.birth .wide { grid-column: span 2; }
+.birth .checks { grid-column: 1 / -1; }
+.birth .checks label { flex-direction: row; align-items: center; gap: 8px; font-size: 15px; color: var(--paper); }
+.birth .checks input { width: 20px; height: 20px; min-height: 0; padding: 0; accent-color: #b23cf0; }
+.birth .opt { grid-column: 1 / -1; }
+.count { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0; font-family: var(--f-label); font-size: 14px; color: var(--bulb); }
+.count button { padding: 6px 12px 5px; border-radius: 999px; border: 1.5px solid var(--bulb); background: none; font-size: 14px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: .01s !important; }
@@ -650,162 +174,67 @@ button { font: inherit; color: inherit; cursor: pointer; }
 </style>
 
 <div class="stage" id="stage">
+  <canvas id="gl" aria-label="비 오는 밤, 사주·타로 부스가 늘어선 골목"></canvas>
+  <div class="lens"></div>
 
-  <!-- 골목 -->
-  <section class="scene alley" id="alley" aria-label="달무리 골목">
-    <canvas id="sky" aria-hidden="true"></canvas>
-    <header class="alley-head gutter">
+  <div class="alley-ui" id="alleyUi" hidden>
+    <header class="title gutter">
       <h1>달무리 골목</h1>
-      <p>불 켜진 부스에 들어가 앉아 보세요</p>
+      <p>불 켜진 부스의 비닐을 걷고 들어가 앉아 보세요</p>
     </header>
-
-    <div class="strip gutter" id="strip">
-      <button class="booth open" id="booth-tarot" type="button" aria-label="달무리 타로 부스에 들어가기">
-        <span class="sb">
-          <span class="sb-sub">신점 · 연애 · 진로</span>
-          <span class="sb-main">달무리 타로</span>
-        </span>
-        <span class="bd">
-          <span class="signs">
-            <span class="sg y">고민 한 장이면<b>OK!!</b></span>
-            <span class="sg r"><b>신점 타로</b><small>5,000원</small></span>
-            <span class="sg w"><b>세 장 뽑기</b></span>
-            <span class="sg p">26·27년 운세<b>신수</b></span>
-          </span>
-          <span class="win">
-            <svg viewBox="0 0 320 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-              <rect width="320" height="210" fill="#1a1550"/>
-              <g fill="#fff4dc"><circle cx="40" cy="50" r="1.6"/><circle cx="78" cy="96" r="1.2"/><circle cx="262" cy="44" r="1.6"/><circle cx="286" cy="104" r="1.2"/><circle cx="232" cy="80" r="1"/><circle cx="58" cy="128" r="1"/></g>
-              <circle cx="160" cy="86" r="58" fill="none" stroke="#e2b659" stroke-width="2.4"/>
-              <circle cx="160" cy="86" r="46" fill="none" stroke="#e2b659" stroke-width="1" opacity=".6"/>
-              <circle cx="160" cy="63" r="9" fill="#2b1a1a"/>
-              <circle cx="160" cy="86" r="17" fill="#f6cdae"/>
-              <path d="M143 85a17 17 0 0 1 34 0c-7-9-27-9-34 0z" fill="#2b1a1a"/>
-              <path d="M116 152c2-30 21-45 44-45s42 15 44 45z" fill="#1f9a7a"/>
-              <path d="M151 107l9 15 9-15" fill="none" stroke="#fff" stroke-width="4"/>
-              <rect x="64" y="142" width="192" height="50" fill="#8e1b2e"/>
-              <rect x="64" y="142" width="192" height="7" fill="#e2b659"/>
-              <g fill="#fff4dc" stroke="#e2b659"><rect x="134" y="152" width="13" height="19" rx="2"/><rect x="153" y="152" width="13" height="19" rx="2"/><rect x="172" y="152" width="13" height="19" rx="2"/></g>
-              <g fill="#221c2b"><path d="M82 170h46l6 40H76z"/><path d="M192 170h46l6 40h-58z"/></g>
-            </svg>
-            <span class="enter">들어가기</span>
-          </span>
-        </span>
-        <span class="chassis"></span>
-      </button>
-
-      <button class="booth closed" id="booth-saju" type="button" aria-label="보름달 사주, 준비중">
-        <span class="sb">
-          <span class="sb-sub">평생 사주 · 궁합 · 신수</span>
-          <span class="sb-main">보름달 사주</span>
-        </span>
-        <span class="bd">
-          <span class="signs">
-            <span class="sg w">정통<b>사주</b></span>
-            <span class="sg y">커플<b>궁합</b></span>
-            <span class="sg p">손금 · 관상</span>
-          </span>
-          <span class="win">
-            <span class="note"><b>준비중</b>만세력 엔진이 연결되면 문 엽니다</span>
-          </span>
-        </span>
-        <span class="chassis"></span>
-      </button>
+    <div class="plate gutter">
+      <button class="round" id="prev" type="button" aria-label="왼쪽 부스">◀</button>
+      <span class="name" id="plateName" aria-live="polite">달무리 타로</span>
+      <button class="round" id="nextBooth" type="button" aria-label="오른쪽 부스">▶</button>
+      <button class="go" id="go" type="button">들어가기</button>
     </div>
+    <p class="proto gutter">프로토타입 · 대사는 고정 대본, 목소리는 브라우저 기본 음성 · 사주 계산은 Manseryeok-engine</p>
+  </div>
 
-    <p class="proto gutter">프로토타입 · 대사는 고정 대본, 목소리는 브라우저 기본 음성입니다</p>
-    <div class="toast" id="toast" role="status" hidden></div>
-  </section>
-
-  <!-- 부스 안 -->
-  <section class="scene room" id="room" aria-label="달무리 타로 부스 안" aria-hidden="true">
-    <div class="wall"></div>
-    <div class="wallpaper l"><b>복채 안내</b>타로 세 장 5,000원<br>카드 · 이체 가능<br>개업 전이라 오늘은 무료</div>
-    <div class="wallpaper r"><b>English OK</b>中國語 OK<br>CCTV 녹화중</div>
-    <div class="awning"></div>
-
-    <div class="reader" id="reader" data-mood="neutral">
-      <svg class="halo" id="halo" viewBox="-200 -200 400 400" aria-hidden="true"></svg>
-      <svg class="char" viewBox="0 0 360 420" role="img" aria-label="타로 상담사 달무리">
-        <!-- 뒷머리 · 쪽 -->
-        <path d="M92 190C80 92 130 54 180 54s100 38 88 136c4 40-6 72-18 90H110c-12-18-22-50-18-90z" fill="#2b1a1a"/>
-        <circle cx="180" cy="46" r="30" fill="#2b1a1a"/>
-        <g transform="rotate(-9 180 44)">
-          <rect x="122" y="40" width="116" height="7" rx="3.5" fill="#e2b659"/>
-          <circle cx="240" cy="43.5" r="8" fill="#e8322f"/>
-          <circle cx="240" cy="43.5" r="3" fill="#ffd98a"/>
-        </g>
-        <!-- 목 · 저고리 -->
-        <rect x="158" y="232" width="44" height="60" fill="#e9b796"/>
-        <path d="M34 420c4-92 58-128 116-140l30 32 30-32c58 12 112 48 116 140z" fill="#1f9a7a"/>
-        <path d="M34 420c3-60 26-96 58-116l-14 116zM326 420c-3-60-26-96-58-116l14 116z" fill="#17806a"/>
-        <path d="M150 278l40 70-12 12-42-70z" fill="#fff"/>
-        <path d="M210 278l-46 78 13 10 47-76z" fill="#fff"/>
-        <path d="M168 372l-16 48h16l10-44zM178 372l12 48h16l-20-50z" fill="#e8322f"/>
-        <rect x="160" y="356" width="22" height="18" rx="5" fill="#c9273a"/>
-        <!-- 얼굴 -->
-        <circle cx="110" cy="180" r="10" fill="#f0c1a0"/>
-        <circle cx="250" cy="180" r="10" fill="#f0c1a0"/>
-        <circle cx="108" cy="199" r="5.5" fill="#e2b659"/>
-        <circle cx="252" cy="199" r="5.5" fill="#e2b659"/>
-        <path d="M112 160c0-62 136-62 136 0 0 62-34 98-68 98s-68-36-68-98z" fill="#f6cdae"/>
-        <path d="M108 172c-4-62 40-86 76-80-32 16-58 40-76 80zM252 172c4-62-40-86-76-80 32 16 58 40 76 80z" fill="#2b1a1a"/>
-        <ellipse cx="132" cy="198" rx="13" ry="7" fill="#f29a9a" opacity=".5"/>
-        <ellipse cx="228" cy="198" rx="13" ry="7" fill="#f29a9a" opacity=".5"/>
-        <g class="brows" fill="none" stroke="#2b1a1a" stroke-width="4.5" stroke-linecap="round">
-          <path d="M133 153q14-8 29-3"/><path d="M198 150q15-5 29 3"/>
-        </g>
-        <g class="eyes-open">
-          <ellipse cx="148" cy="174" rx="7.5" ry="9.5" fill="#2b1a1a"/>
-          <ellipse cx="212" cy="174" rx="7.5" ry="9.5" fill="#2b1a1a"/>
-          <circle cx="150.500" cy="170.500" r="2.6" fill="#fff"/>
-          <circle cx="214.500" cy="170.500" r="2.6" fill="#fff"/>
-        </g>
-        <g class="eyes-smile" fill="none" stroke="#2b1a1a" stroke-width="4.5" stroke-linecap="round">
-          <path d="M138 177q10-11 20 0"/><path d="M202 177q10-11 20 0"/>
-        </g>
-        <path d="M177 190q3 9 9 6" fill="none" stroke="#d99f80" stroke-width="2.6" stroke-linecap="round"/>
-        <circle cx="204" cy="229" r="2.4" fill="#2b1a1a"/>
-        <path class="m m-neutral" d="M167 220q13 5 26 0" fill="none" stroke="#b03a48" stroke-width="4.5" stroke-linecap="round"/>
-        <path class="m m-smile" d="M163 215q17 15 34 0" fill="none" stroke="#b03a48" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse class="m m-o" cx="180" cy="221" rx="7" ry="9" fill="#8c2233"/>
-        <path class="m-talk" d="M166 213q14 24 28 0q-14 6-28 0z" fill="#8c2233" style="display:none"/>
-      </svg>
-    </div>
-
-    <div class="table"><div class="spread" id="spread"></div></div>
-
+  <div class="room-ui" id="roomUi" hidden>
     <div class="hud gutter">
       <button class="pill" id="exit" type="button">← 골목으로</button>
+      <span class="chip" id="chip" hidden></span>
       <button class="pill" id="sound" type="button" aria-pressed="true">소리 켬</button>
     </div>
-
     <div class="dlg-wrap gutter">
       <div class="dlg" id="dlg">
-        <span class="who">달무리</span>
+        <span class="who" id="who">달무리</span>
         <p class="line" id="line" aria-hidden="true"></p>
         <p class="sr" id="live" aria-live="polite"></p>
         <div class="opts" id="opts"></div>
         <button class="next" id="next" type="button" aria-label="다음" hidden>▼</button>
       </div>
     </div>
-  </section>
+  </div>
+
+  <div class="loading" id="loading">골목 불 켜는 중…</div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.7/lunar.js"></script>
+<script>
+/* Manseryeok-engine 번들. 손으로 고치지 말고 build.mjs로 다시 만든다. */
+/*ENGINE_BUNDLE_START*/
+var ManseEngine=(()=>{var v=Object.defineProperty;var de=Object.getOwnPropertyDescriptor;var me=Object.getOwnPropertyNames;var Ee=Object.prototype.hasOwnProperty;var ue=(e,r)=>{for(var n in r)v(e,n,{get:r[n],enumerable:!0})},ye=(e,r,n,o)=>{if(r&&typeof r=="object"||typeof r=="function")for(let t of me(r))!Ee.call(e,t)&&t!==n&&v(e,t,{get:()=>r[t],enumerable:!(o=de(r,t))||o.enumerable});return e};var Te=e=>ye(v({},"__esModule",{value:!0}),e);var Ze={};ue(Ze,{KASI_FIXTURE_2026_2027:()=>ze,TERM_CODES:()=>ke,annual:()=>Ve,chart:()=>je});var i=Object.freeze(["\u7532","\u4E59","\u4E19","\u4E01","\u620A","\u5DF1","\u5E9A","\u8F9B","\u58EC","\u7678"]),Xe=Object.freeze(["WOOD","FIRE","EARTH","METAL","WATER"]),$e=Object.freeze(["YANG","YIN"]),u=Object.freeze({\u7532:Object.freeze({element:"WOOD",polarity:"YANG"}),\u4E59:Object.freeze({element:"WOOD",polarity:"YIN"}),\u4E19:Object.freeze({element:"FIRE",polarity:"YANG"}),\u4E01:Object.freeze({element:"FIRE",polarity:"YIN"}),\u620A:Object.freeze({element:"EARTH",polarity:"YANG"}),\u5DF1:Object.freeze({element:"EARTH",polarity:"YIN"}),\u5E9A:Object.freeze({element:"METAL",polarity:"YANG"}),\u8F9B:Object.freeze({element:"METAL",polarity:"YIN"}),\u58EC:Object.freeze({element:"WATER",polarity:"YANG"}),\u7678:Object.freeze({element:"WATER",polarity:"YIN"})});var Ie=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;function c(e){let r=Ie.exec(e);if(!r)return!1;let[,n,o,t,a,s]=r,_=Number(n),D=Number(o),V=Number(t),le=Number(a),ce=Number(s);if(D<1||D>12||le>23||ce>59)return!1;let C=new Date(Date.UTC(_,D-1,V));return C.getUTCFullYear()===_&&C.getUTCMonth()===D-1&&C.getUTCDate()===V}function m(e){let r="",n=new Set;for(let o of e){if(o.timeBasis!=="KST")throw new Error("solar-term timeline requires KST events");if(o.sourcePrecision!=="MINUTE")throw new Error("solar-term timeline requires MINUTE source precision");if(!c(o.displayedDateTime))throw new Error(`invalid Gregorian minute: ${o.displayedDateTime}`);if(r&&o.displayedDateTime<=r)throw new Error("solar-term timeline must be strictly increasing without duplicates");let t=`${o.displayedDateTime.slice(0,4)}:${o.term}`;if(n.has(t))throw new Error(`duplicate solar term within civil year: ${t}`);n.add(t),r=o.displayedDateTime}}var E=["LICHUN","JINGZHE","QINGMING","LIXIA","MANGZHONG","XIAOSHU","LIQIU","BAILU","HANLU","LIDONG","DAXUE","XIAOHAN"],M={LICHUN:"\u5BC5",JINGZHE:"\u536F",QINGMING:"\u8FB0",LIXIA:"\u5DF3",MANGZHONG:"\u5348",XIAOSHU:"\u672A",LIQIU:"\u7533",BAILU:"\u9149",HANLU:"\u620C",LIDONG:"\u4EA5",DAXUE:"\u5B50",XIAOHAN:"\u4E11"};function pe(e){return E.includes(e.term)}function fe(e){for(let r=1;r<e.length;r++){let n=e[r-1],o=e[r],t=E[(E.indexOf(n.term)+1)%E.length];if(o.term!==t)throw new Error(`nonconsecutive month-boundary Jie: expected ${t} after ${n.term}, got ${o.term}`)}}function k(e,r){if(!c(r))throw new Error(`invalid Gregorian minute: ${r}`);m(e);let n=e.filter(pe);fe(n);let o;for(let a of n){if(a.displayedDateTime>r)break;if(a.displayedDateTime===r){if(!o)throw new Error("missing previous month-boundary Jie fixture");return{branchBeforeBoundary:M[o.term],branchAfterBoundary:M[a.term],confidence:"PUBLISHED_MINUTE_AMBIGUOUS",activeJieBeforeBoundary:o,boundaryJie:a}}o=a}if(!o)throw new Error("missing previous month-boundary Jie fixture");let t=M[o.term];return{branchBeforeBoundary:t,branchAfterBoundary:t,selected:t,confidence:"DEFINITE",activeJieBeforeBoundary:o}}var he={\u7532:2,\u5DF1:2,\u4E59:4,\u5E9A:4,\u4E19:6,\u8F9B:6,\u4E01:8,\u58EC:8,\u620A:0,\u7678:0},Ae=["\u5BC5","\u536F","\u8FB0","\u5DF3","\u5348","\u672A","\u7533","\u9149","\u620C","\u4EA5","\u5B50","\u4E11"];function y(e,r){if(i.indexOf(e)<0)throw new RangeError("Unsupported year stem.");let n=Ae.indexOf(r);if(n<0)throw new Error(`unsupported month branch: ${r}`);return{stem:i[(he[e]+n)%10],branch:r}}var l=Object.freeze(["\u5B50","\u4E11","\u5BC5","\u536F","\u8FB0","\u5DF3","\u5348","\u672A","\u7533","\u9149","\u620C","\u4EA5"]),z=Object.freeze({\u5B50:Object.freeze({principalElement:"WATER",polarity:"YANG"}),\u4E11:Object.freeze({principalElement:"EARTH",polarity:"YIN"}),\u5BC5:Object.freeze({principalElement:"WOOD",polarity:"YANG"}),\u536F:Object.freeze({principalElement:"WOOD",polarity:"YIN"}),\u8FB0:Object.freeze({principalElement:"EARTH",polarity:"YANG"}),\u5DF3:Object.freeze({principalElement:"FIRE",polarity:"YIN"}),\u5348:Object.freeze({principalElement:"FIRE",polarity:"YANG"}),\u672A:Object.freeze({principalElement:"EARTH",polarity:"YIN"}),\u7533:Object.freeze({principalElement:"METAL",polarity:"YANG"}),\u9149:Object.freeze({principalElement:"METAL",polarity:"YIN"}),\u620C:Object.freeze({principalElement:"EARTH",polarity:"YANG"}),\u4EA5:Object.freeze({principalElement:"WATER",polarity:"YIN"})});var Z=Object.freeze(Array.from({length:60},(e,r)=>Object.freeze({stem:i[r%i.length],branch:l[r%l.length]})));function T(e){if(!Number.isInteger(e))throw new TypeError("Sexagenary index must be an integer.");let r=(e%60+60)%60;return Z[r]}function b(e,r){let n=Z.findIndex(o=>o.stem===e&&o.branch===r);return n===-1?null:n}function f(e){if(!Number.isInteger(e))throw new TypeError("civil year must be an integer");return T(e-1984)}function B(e,r){if(!c(r))throw new Error(`invalid Gregorian minute: ${r}`);m(e);let n=Number(r.slice(0,4)),o=e.find(s=>s.term==="LICHUN"&&s.displayedDateTime.startsWith(`${n}-`));if(!o)throw new Error(`missing Lichun fixture for civil year ${n}`);let t=f(n-1),a=f(n);return r===o.displayedDateTime?{pillarBeforeBoundary:t,pillarAfterBoundary:a,confidence:"PUBLISHED_MINUTE_AMBIGUOUS",lichun:o}:{pillarBeforeBoundary:t,pillarAfterBoundary:a,selected:r<o.displayedDateTime?t:a,confidence:"DEFINITE",lichun:o}}function J(e){if(!E.includes(e.term)||e.timeBasis!=="KST"||e.sourcePrecision!=="MINUTE")throw new Error("applied Jie evidence requires a KST MINUTE month-boundary event");let r=Array.isArray(e.sourceIds)?[...e.sourceIds]:[];if(r.length===0||r.some(n=>typeof n!="string"||n.trim().length===0))throw new Error("applied Jie evidence requires nonempty event source IDs");return Object.freeze({term:e.term,displayedDateTime:e.displayedDateTime,timeBasis:"KST",sourcePrecision:"MINUTE",sourceIds:Object.freeze(r)})}function Ne(e){let r=J(e.activeJieBeforeBoundary),n=Object.freeze({candidateIndex:0,monthBranch:e.branchBeforeBoundary,boundarySide:e.confidence==="DEFINITE"?"DEFINITE":"BEFORE_PUBLISHED_MINUTE",activeSince:r});if(e.confidence==="DEFINITE")return Object.freeze({schemaVersion:"m1-month-boundary-trace-v1",confidence:e.confidence,candidateContexts:Object.freeze([n])});if(!e.boundaryJie)throw new Error("ambiguous month resolution is missing a boundary Jie");let o=J(e.boundaryJie);return Object.freeze({schemaVersion:"m1-month-boundary-trace-v1",confidence:e.confidence,candidateContexts:Object.freeze([n,Object.freeze({candidateIndex:1,monthBranch:e.branchAfterBoundary,boundarySide:"AFTER_PUBLISHED_MINUTE",activeSince:o})]),atPublishedBoundary:o})}function H(e,r){let n=B(e,r),o=k(e,r),t=Ne(o);if(n.confidence==="DEFINITE"&&o.confidence==="DEFINITE"){if(!n.selected||!o.selected)throw new Error("definite pillar resolution is missing a selected value");return{confidence:"DEFINITE",monthBoundaryTrace:t,candidates:[{year:n.selected,month:y(n.selected.stem,o.selected)}]}}if(n.confidence==="PUBLISHED_MINUTE_AMBIGUOUS"){if(o.confidence!=="PUBLISHED_MINUTE_AMBIGUOUS"||o.boundaryJie?.term!=="LICHUN"||o.boundaryJie.displayedDateTime!==n.lichun.displayedDateTime)throw new Error("Lichun year ambiguity must align with the month-boundary ambiguity");return{confidence:"PUBLISHED_MINUTE_AMBIGUOUS",monthBoundaryTrace:t,candidates:[{year:n.pillarBeforeBoundary,month:y(n.pillarBeforeBoundary.stem,o.branchBeforeBoundary)},{year:n.pillarAfterBoundary,month:y(n.pillarAfterBoundary.stem,o.branchAfterBoundary)}]}}if(!n.selected||o.confidence!=="PUBLISHED_MINUTE_AMBIGUOUS")throw new Error("inconsistent year/month boundary resolution");return{confidence:"PUBLISHED_MINUTE_AMBIGUOUS",monthBoundaryTrace:t,candidates:[{year:n.selected,month:y(n.selected.stem,o.branchBeforeBoundary)},{year:n.selected,month:y(n.selected.stem,o.branchAfterBoundary)}]}}var Re=/^(\d{4})-(\d{2})-(\d{2})$/,Se="2000-01-07",_e=Math.floor(Date.UTC(2e3,0,7)/864e5);function De(e){let r=Re.exec(e);if(!r)throw new TypeError("Date must be YYYY-MM-DD.");let n=Number(r[1]),o=Number(r[2]),t=Number(r[3]);if(n<1583||n>9999)throw new RangeError("Date must use the proleptic Gregorian calendar from 1583 through 9999.");let a=new Date(Date.UTC(n,o-1,t));if(a.getUTCFullYear()!==n||a.getUTCMonth()!==o-1||a.getUTCDate()!==t)throw new RangeError("Date must be a valid Gregorian date.");return Math.floor(a.getTime()/864e5)}function I(e){return T(De(e)-_e)}var ur=Object.freeze({date:Se,pillar:T(0)});var Me=/^(\d{2}):(\d{2})$/;function O(e){let r=Me.exec(e);if(!r)throw new TypeError("Effective clock time must use HH:MM format.");let n=Number(r[1]),o=Number(r[2]);if(n>23||o>59)throw new RangeError("Invalid effective clock time.");let t=n*60+o,a=t>=23*60||t<60?0:Math.floor((t+60)/120);return l[a]}function X(e,r){let n=i.indexOf(e),o=l.indexOf(r);if(n<0)throw new RangeError("Unsupported day stem.");if(o<0)throw new RangeError("Unsupported hour branch.");let t=n%5*2;return{stem:i[(t+o)%10],branch:r}}var Oe=["CIVIL_MIDNIGHT","ZI_START"];function Le(e){I(e);let[r,n,o]=e.split("-").map(Number),t=new Date(Date.UTC(r,n-1,o+1)),a=t.getUTCFullYear();if(a>9999)throw new RangeError("Rollover exceeds supported Gregorian date range.");return`${String(a).padStart(4,"0")}-${String(t.getUTCMonth()+1).padStart(2,"0")}-${String(t.getUTCDate()).padStart(2,"0")}`}function $(e,r,n){if(!Oe.includes(n))throw new RangeError("Unsupported DAY_ROLLOVER policy.");I(e),O(r);let o=n==="ZI_START"&&r>="23:00"?Le(e):e;return{effectiveDate:o,pillar:I(o),policy:n}}var ge=["SELECTED_DAY_PILLAR","CIVIL_DATE_DAY_PILLAR"];function P(e,r,n,o){if(!ge.includes(o))throw new RangeError("Unsupported HOUR_STEM_REFERENCE policy.");let t=$(e,r,n),a=I(e),s=O(r),_=o==="SELECTED_DAY_PILLAR"?t.pillar:a;return{effectiveDate:t.effectiveDate,dayPillar:t.pillar,hourPillar:X(_.stem,s),dayRolloverPolicy:n,hourStemReferencePolicy:o}}var L=["XIAOHAN","DAHAN","LICHUN","YUSHUI","JINGZHE","CHUNFEN","QINGMING","GUYU","LIXIA","XIAOMAN","MANGZHONG","XIAZHI","XIAOSHU","DASHU","LIQIU","CHUSHU","BAILU","QIUFEN","HANLU","SHUANGJIANG","LIDONG","XIAOXUE","DAXUE","DONGZHI"];var Ce={\u7532:"\uAC11",\u4E59:"\uC744",\u4E19:"\uBCD1",\u4E01:"\uC815",\u620A:"\uBB34",\u5DF1:"\uAE30",\u5E9A:"\uACBD",\u8F9B:"\uC2E0",\u58EC:"\uC784",\u7678:"\uACC4"},ve={\u5B50:"\uC790",\u4E11:"\uCD95",\u5BC5:"\uC778",\u536F:"\uBB18",\u8FB0:"\uC9C4",\u5DF3:"\uC0AC",\u5348:"\uC624",\u672A:"\uBBF8",\u7533:"\uC2E0",\u9149:"\uC720",\u620C:"\uC220",\u4EA5:"\uD574"};function Y(e){let r=Ce[e?.stem],n=ve[e?.branch];if(!r||!n||b(e.stem,e.branch)===null)throw new RangeError("Unsupported sexagenary pillar pair.");return{stem:e.stem,branch:e.branch,hanja:e.stem+e.branch,hangul:r+n}}var Q="KR-KASI-CALENDAR-DATA",be=["XIAOHAN","DAHAN","LICHUN","YUSHUI","JINGZHE","CHUNFEN","QINGMING","GUYU","LIXIA","XIAOMAN","MANGZHONG","XIAZHI","XIAOSHU","DASHU","LIQIU","CHUSHU","BAILU","QIUFEN","HANLU","SHUANGJIANG","LIDONG","XIAOXUE","DAXUE","DONGZHI"],Be={2026:["01-05T17:23","01-20T10:45","02-04T05:02","02-19T00:52","03-05T22:59","03-20T23:46","04-05T03:40","04-20T10:39","05-05T20:49","05-21T09:37","06-06T00:48","06-21T17:25","07-07T10:57","07-23T04:13","08-07T20:43","08-23T11:19","09-07T23:41","09-23T09:05","10-08T15:29","10-23T18:38","11-07T18:52","11-22T16:23","12-07T11:53","12-22T05:50"],2027:["01-05T23:10","01-20T16:30","02-04T10:46","02-19T06:33","03-06T04:40","03-21T05:25","04-05T09:17","04-20T16:18","05-06T02:25","05-21T15:18","06-06T06:26","06-21T23:11","07-07T16:37","07-23T10:05","08-08T02:27","08-23T17:14","09-08T05:28","09-23T15:02","10-08T21:17","10-24T00:33","11-08T00:39","11-22T22:16","12-07T17:38","12-22T11:42"]};function W(e){return Be[e].map((r,n)=>Object.freeze({term:be[n],displayedDateTime:`${e}-${r}`,timeBasis:"KST",sourcePrecision:"MINUTE",sourceIds:Object.freeze([Q])}))}var He=Object.freeze({term:"DAXUE",displayedDateTime:"2025-12-07T06:05",timeBasis:"KST",sourcePrecision:"MINUTE",sourceIds:Object.freeze([Q])}),x=Object.freeze([He,...W(2026),...W(2027)]);m(x);var on=Object.freeze(["\u6BD4\u80A9","\u52AB\u8CA1","\u98DF\u795E","\u50B7\u5B98","\u504F\u8CA1","\u6B63\u8CA1","\u4E03\u6BBA","\u6B63\u5B98","\u504F\u5370","\u6B63\u5370"]),q={WOOD:"FIRE",FIRE:"EARTH",EARTH:"METAL",METAL:"WATER",WATER:"WOOD"},ee={WOOD:"EARTH",FIRE:"METAL",EARTH:"WATER",METAL:"WOOD",WATER:"FIRE"};function Pe(e,r){if(e===r)return"SAME";if(q[e]===r)return"DAY_MASTER_GENERATES";if(ee[e]===r)return"DAY_MASTER_CONTROLS";if(ee[r]===e)return"TARGET_CONTROLS_DAY_MASTER";if(q[r]===e)return"TARGET_GENERATES_DAY_MASTER";throw new Error(`Invalid five-element relation: ${e} -> ${r}`)}function h(e,r){if(!i.includes(e)||!i.includes(r))throw new RangeError("Unsupported heavenly stem.");let n=u[e],o=u[r],t=n.polarity===o.polarity;switch(Pe(n.element,o.element)){case"SAME":return t?"\u6BD4\u80A9":"\u52AB\u8CA1";case"DAY_MASTER_GENERATES":return t?"\u98DF\u795E":"\u50B7\u5B98";case"DAY_MASTER_CONTROLS":return t?"\u504F\u8CA1":"\u6B63\u8CA1";case"TARGET_CONTROLS_DAY_MASTER":return t?"\u4E03\u6BBA":"\u6B63\u5B98";case"TARGET_GENERATES_DAY_MASTER":return t?"\u504F\u5370":"\u6B63\u5370"}}var p="M2-HIDDEN-STEMS-CLASSIC-MEMBERS-MAINQI-V1",re=Object.freeze({ruleId:"M2-RULE-HIDDEN-STEMS-001",version:"1.0.0",policyId:p,codeability:"CONDITIONAL",disputeStatus:"SCHOOL_DEPENDENT",evidenceLayer:"CLASSICAL_BASE_TEXT",sourceIds:Object.freeze(["CLASSIC-YUANHAI-ZIPING-DIZHI-CANGDUN-GE","MODERN-BAZIINSIGHT-HIDDEN-STEMS-2026"]),meaning:"BRANCH_MEMBERSHIP_AND_NAMED_MAIN_QI_ONLY"}),Ye=Object.freeze({\u5B50:Object.freeze(["\u7678"]),\u4E11:Object.freeze(["\u5DF1","\u7678","\u8F9B"]),\u5BC5:Object.freeze(["\u7532","\u4E19","\u620A"]),\u536F:Object.freeze(["\u4E59"]),\u8FB0:Object.freeze(["\u620A","\u4E59","\u7678"]),\u5DF3:Object.freeze(["\u4E19","\u5E9A","\u620A"]),\u5348:Object.freeze(["\u4E01","\u5DF1"]),\u672A:Object.freeze(["\u5DF1","\u4E01","\u4E59"]),\u7533:Object.freeze(["\u5E9A","\u58EC","\u620A"]),\u9149:Object.freeze(["\u8F9B"]),\u620C:Object.freeze(["\u620A","\u8F9B","\u4E01"]),\u4EA5:Object.freeze(["\u58EC","\u7532"])}),ne=Object.freeze(Object.fromEntries(l.map(e=>[e,Object.freeze(Ye[e].map((r,n)=>Object.freeze({stem:r,index:n,position:n===0?"MAIN_QI":"OTHER"})))])));function oe(e,r){if(r!==p)throw new RangeError("Explicit supported hidden-stem profile is required.");if(!l.includes(e))throw new RangeError("Unsupported earthly branch.");return ne[e]}for(let e of l){let r=ne[e];if(!r||r.length<1||r.length>3||r[0]?.position!=="MAIN_QI"||new Set(r.map(n=>n.stem)).size!==r.length||r.some((n,o)=>!i.includes(n.stem)||n.index!==o||n.position!==(o===0?"MAIN_QI":"OTHER")))throw new Error(`Corrupt hidden-stem lookup profile for ${e}`)}var xe="M2-RULE-BRANCH-TEN-GODS-001";function te(e,r,n){if(!i.includes(e))throw new RangeError("Unsupported day master.");if(!l.includes(r))throw new RangeError("Unsupported branch.");if(n!==p)throw new RangeError("Explicit hidden-stem policy required.");let o=Object.freeze(oe(r,n).map(t=>Object.freeze({stem:t.stem,index:t.index,position:t.position,tenGod:h(e,t.stem)})));return Object.freeze({ruleId:xe,policyId:n,sourceIds:re.sourceIds,dayMaster:e,branch:r,members:o})}var S="M7-TRADITIONAL-YEAR-STEM-JIE-3D-V01",g="0.1.0";var Sn=3*24*60,G=Object.freeze({direction:"M7-YEAR-STEM-TRADITIONAL-SEX-DIRECTION-V01",sequence:"M7-MONTH-ADJACENT-SEXAGENARY-SEQUENCE-V01",start:"M7-TWELVE-JIE-ADJACENT-START-V01",age:"M7-THREE-DAYS-PER-MODEL-YEAR-V01",precision:"M7-PUBLISHED-MINUTE-CONDITIONAL-V01",display:"M7-MODEL-YEAR-SIX-DECIMAL-HALF-UP-V01",annualLabel:"M7-ANNUAL-YEAR-LABEL-SEXAGENARY-V01",annualTime:"M7-ANNUAL-LICHUN-PUBLISHED-MINUTE-V01",calendarProjection:"M7-CALENDAR-PROJECTION-UNRESOLVED-V01"}),R="CLASSIC-SANMINGTONGHUI-V2-LUN-DAYUN-TRANSCRIPTION",K="CLASSIC-SANMINGTONGHUI-V2-LUN-TAISUI-TRANSCRIPTION",N="CLASSIC-YUANHAI-ZIPING-V1-QI-DAYUN-TRANSCRIPTION",d="IMPL-M7-LUCK-V01",w="IMPL-M1-YEAR-PILLAR-LICHUN",F=Object.freeze({direction:"M7-RULE-DIRECTION-001",sequence:"M7-RULE-ADJACENT-MONTH-SEQUENCE-001",start:"M7-RULE-TWELVE-JIE-START-001",age:"M7-RULE-MODEL-AGE-RATIO-001",precision:"M7-RULE-MINUTE-PRECISION-001",display:"M7-RULE-MODEL-AGE-DISPLAY-001",annualLabel:"M7-RULE-ANNUAL-YEAR-LABEL-001",annualTime:"M7-RULE-ANNUAL-LICHUN-001",calendarProjection:"M7-RULE-CALENDAR-PROJECTION-HELD-001"});function j(e){return e&&typeof e=="object"&&!Object.isFrozen(e)&&(Object.values(e).forEach(j),Object.freeze(e)),e}var A=(e,r,n,o)=>({id:e,url:r,evidenceLayer:n,contribution:o,observedOn:"2026-11-10",revisionUrl:e===R||e===K?"https://zh.wikisource.org/w/index.php?title=\u4E09\u547D\u901A\u6703/\u5377\u4E8C&oldid=2292392":null,criticalEdition:null,scanReview:"NOT_PERFORMED",editionVerification:"UNVERIFIED",rightsReview:"UNVERIFIED"}),ae={direction:[R,N,d],sequence:[N,d],start:[R,N,d],age:[R,N,d],precision:[d],display:[d],annualLabel:[K,w],annualTime:[w,d],calendarProjection:[d]},_n=j({id:S,version:g,milestone:"M7",historicalProposal:"M4-RULE-LUCK-CYCLE-001_NOT_A_RUNTIME_VERSION_OR_MILESTONE",meaning:"TRADITIONAL_TIMELINE_ARITHMETIC_NOT_PREDICTION",codeability:"CONDITIONAL",disputeStatus:"SCHOOL_DEPENDENT",policies:Object.entries(G).map(([e,r])=>({kind:e,id:r,version:g})),rules:Object.keys(F).map(e=>({id:F[e],version:g,policyRefs:[G[e]],sourceRefs:ae[e],meaning:"SELECTED_V01_CONVENTION_NOT_EDITION_CERTIFICATION"})),sources:[A(R,"https://zh.wikisource.org/zh-hant/\u4E09\u547D\u901A\u6703/\u5377\u4E8C#\u8AD6\u5927\u904B","CLASSICAL_TRANSCRIPTION","DIRECTION_FUTURE_PAST_AND_THREE_DAY_RATIO"),A(K,"https://zh.wikisource.org/zh-hant/\u4E09\u547D\u901A\u6703/\u5377\u4E8C#\u8AD6\u592A\u6B72","CLASSICAL_TRANSCRIPTION","ROTATING_ANNUAL_GANZHI_CONCEPT_NOT_LICHUN_BOUNDARY_PROOF"),A(N,"https://www.shidianguji.com/zh/book/SDZJ0626/chapter/1lhnc3bvvh5bo","CLASSICAL_TRANSCRIPTION","JIE_NOT_ZHONGQI_AND_ADJACENT_MONTH_EXAMPLES_WITH_VARIANTS"),A(d,"src/luck/luckV01.ts","MODERN_IMPLEMENTATION_CONVENTION","EXACT_NOMINAL_MINUTE_RATIO_CONDITIONAL_BOUNDARY_AND_HELD_CALENDAR_PROJECTION"),A(w,"src/calendar/yearPillar.ts","EXISTING_IMPLEMENTATION_REFERENCE","EXISTING_1984_ANCHOR_AND_LICHUN_RESOLVER")],open:["CRITICAL_EDITION_AND_SCAN_NOT_AUTHENTICATED","RIGHTS_UNVERIFIED","EXACT_CALENDAR_PROJECTION_UNRESOLVED","NO_PREDICTIVE_VALIDITY_CLAIM"]});function ie(e){throw new RangeError(e)}function Ge(e){e!==S&&ie("EXPLICIT_SUPPORTED_M7_POLICY_REQUIRED")}function we(...e){return{policyId:S,policyVersion:g,policyRefs:e.map(r=>G[r]),ruleRefs:e.map(r=>F[r]),sourceRefs:[...new Set(e.flatMap(r=>ae[r]))]}}function se(e,r){return Ge(r),(!Number.isInteger(e)||e<1||e>9999)&&ie("ANNUAL_LABEL_YEAR_MUST_BE_1_TO_9999"),j({status:"OK",year:e,pillar:f(e),boundaryMeaning:"YEAR_LABEL_NOT_TIMESTAMP",...we("annualLabel")})}var Fe="ZI_START",Ke="SELECTED_DAY_PILLAR";function U(e,r,n){let o=Y(r),t=te(e,r.branch,p).members.find(a=>a.position==="MAIN_QI");return{stem:r.stem,branch:r.branch,hanja:o.hanja,hangul:o.hangul,stemElement:u[r.stem].element,stemPolarity:u[r.stem].polarity,branchElement:z[r.branch].principalElement,stemTenGod:n?null:h(e,r.stem),branchTenGod:t?t.tenGod:null}}function je(e,r,n){let o=H(e,r),t=P(r.slice(0,10),r.slice(11),n?Fe:"CIVIL_MIDNIGHT",Ke),a=o.candidates[o.candidates.length-1],s=t.dayPillar.stem;return{confidence:o.confidence,effectiveDayDate:t.effectiveDate,policies:{dayRollover:t.dayRolloverPolicy,hourStemReference:t.hourStemReferencePolicy},dayMaster:s,year:U(s,a.year,!1),month:U(s,a.month,!1),day:U(s,t.dayPillar,!0),hour:n?U(s,t.hourPillar,!1):null}}function Ve(e,r){let n=se(r,S),o=Y(n.pillar);return{year:r,hanja:o.hanja,hangul:o.hangul,tenGod:h(e,n.pillar.stem)}}var ke=L,ze=x;return Te(Ze);})();
+/*ENGINE_BUNDLE_END*/
+</script>
 <script>
 (() => {
 'use strict';
 const $ = (s, r = document) => r.querySelector(s);
 const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; };
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-/* ═════════ 카드 데이터 (메이저 아르카나 22장) ═════════ */
-const svg = inner => `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+/* ═════════ 타로 카드 데이터 (메이저 아르카나 22장) ═════════ */
 const pt = (cx, cy, r, deg) => { const a = deg * Math.PI / 180; return (cx + r * Math.cos(a)).toFixed(1) + ' ' + (cy + r * Math.sin(a)).toFixed(1); };
 const star = (cx, cy, R, r, n, rot = -90) => { const p = []; for (let i = 0; i < n * 2; i++) p.push(pt(cx, cy, i % 2 ? r : R, rot + i * 180 / n).replace(' ', ',')); return `<polygon points="${p.join(' ')}"/>`; };
 const rays = (cx, cy, r1, r2, n) => { let d = ''; for (let i = 0; i < n; i++) d += `M${pt(cx, cy, r1, i * 360 / n)}L${pt(cx, cy, r2, i * 360 / n)}`; return `<path d="${d}"/>`; };
 const moon = (cx, cy, r) => `<path d="M${cx + .5 * r} ${cy - .87 * r}a${r} ${r} 0 1 0 0 ${1.74 * r}a${r} ${r} 0 0 1 0 ${-1.74 * r}z"/>`;
-
 const CARDS = [
   { n: '바보', icon: `<path d="M30 82L68 36"/><rect x="60" y="22" width="18" height="18" rx="4"/>${star(27, 30, 10, 4, 4)}`,
     up: '짐 하나 달랑 메고 길 나서는 사람이에요. 계산은 덜 됐어도 발은 가벼운, 새로 시작하는 기운이죠.',
@@ -899,16 +328,127 @@ const CARDS = [
 const ROMAN = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
 const HEAVY = new Set([13, 15, 16]);
 const POS = [
-  { cap: '지나온 것', intro: '첫 장, 지나온 자리예요.', frame: '여기까지 오는 동안 이 기운을 한 번 지나왔다는 얘기예요. 그게 지금 질문의 뿌리고.' },
-  { cap: '지금', intro: '가운데 장, 지금 자리.', frame: '지금 자리에 이게 나왔으면, 요즘 하루하루가 딱 이 그림이라는 거예요.' },
-  { cap: '다가올 것', intro: '마지막 장, 다가올 자리예요.', frame: '다가올 자리는 예언이 아니에요. 지금 이대로 걸어가면 닿는 쪽이에요.' },
+  { intro: '첫 장, 지나온 자리예요.', frame: '여기까지 오는 동안 이 기운을 한 번 지나왔다는 얘기예요. 그게 지금 질문의 뿌리고.' },
+  { intro: '가운데 장, 지금 자리.', frame: '지금 자리에 이게 나왔으면, 요즘 하루하루가 딱 이 그림이라는 거예요.' },
+  { intro: '마지막 장, 다가올 자리예요.', frame: '다가올 자리는 예언이 아니에요. 지금 이대로 걸어가면 닿는 쪽이에요.' },
 ];
 
-/* ═════════ 음성 어댑터 ═════════
-   지금은 브라우저 내장 음성. 실제 앱에서는 speak()를 ElevenLabs 스트리밍 호출로 바꾸면 됩니다. */
+/* ═════════ 사주: 절기는 오픈소스 달력(lunar-javascript), 계산은 Manseryeok-engine ═════════ */
+const TERM_NAME = { '小寒': 'XIAOHAN', '大寒': 'DAHAN', '立春': 'LICHUN', '雨水': 'YUSHUI', '惊蛰': 'JINGZHE', '春分': 'CHUNFEN', '清明': 'QINGMING', '谷雨': 'GUYU', '立夏': 'LIXIA', '小满': 'XIAOMAN', '芒种': 'MANGZHONG', '夏至': 'XIAZHI', '小暑': 'XIAOSHU', '大暑': 'DASHU', '立秋': 'LIQIU', '处暑': 'CHUSHU', '白露': 'BAILU', '秋分': 'QIUFEN', '寒露': 'HANLU', '霜降': 'SHUANGJIANG', '立冬': 'LIDONG', '小雪': 'XIAOXUE', '大雪': 'DAXUE', '冬至': 'DONGZHI',
+  DA_XUE: 'DAXUE', DONG_ZHI: 'DONGZHI', XIAO_HAN: 'XIAOHAN', DA_HAN: 'DAHAN', LI_CHUN: 'LICHUN', YU_SHUI: 'YUSHUI', JING_ZHE: 'JINGZHE' };
+const p2 = n => String(n).padStart(2, '0');
+function termEvents(fromYear, toYear) {
+  const map = new Map();
+  for (let y = fromYear - 1; y <= toYear + 1; y++) {
+    const table = Lunar.fromYmd(y, 6, 1).getJieQiTable();
+    for (const k of Object.keys(table)) {
+      const code = TERM_NAME[k]; if (!code) continue;
+      const s = table[k];
+      // 라이브러리 시각은 UTC+8. 한 시간 더해 한국 표준시로, 초는 분으로 반올림.
+      const t = new Date(Date.UTC(s.getYear(), s.getMonth() - 1, s.getDay(), s.getHour() + 1, s.getMinute(), s.getSecond() + 30));
+      map.set(t.getUTCFullYear() + ':' + code, { term: code, displayedDateTime: `${t.getUTCFullYear()}-${p2(t.getUTCMonth() + 1)}-${p2(t.getUTCDate())}T${p2(t.getUTCHours())}:${p2(t.getUTCMinutes())}`, timeBasis: 'KST', sourcePrecision: 'MINUTE', sourceIds: ['OSS-LUNAR-JAVASCRIPT-1.7.7'] });
+    }
+  }
+  return [...map.values()].filter(e => { const y = +e.displayedDateTime.slice(0, 4); return y >= fromYear && y <= toYear; })
+    .sort((a, b) => a.displayedDateTime < b.displayedDateTime ? -1 : 1);
+}
+const TG_KO = { '比肩': '비견', '劫財': '겁재', '食神': '식신', '傷官': '상관', '偏財': '편재', '正財': '정재', '七殺': '편관', '正官': '정관', '偏印': '편인', '正印': '정인' };
+const TG_GROUP = { '比肩': '비겁', '劫財': '비겁', '食神': '식상', '傷官': '식상', '偏財': '재성', '正財': '재성', '七殺': '관성', '正官': '관성', '偏印': '인성', '正印': '인성' };
+const EL_KO = { WOOD: '목', FIRE: '화', EARTH: '토', METAL: '금', WATER: '수' };
+const EL_HANJA = { WOOD: '木', FIRE: '火', EARTH: '土', METAL: '金', WATER: '水' };
+const EL_COLOR = { WOOD: '#2f8f5b', FIRE: '#d9372b', EARTH: '#c9952a', METAL: '#a9b0ba', WATER: '#1d2947' };
+
+/** 입력 → 사주. 달력에 없는 날짜면 null. */
+function computeSaju(b) {
+  if (typeof ManseEngine === 'undefined' || typeof Lunar === 'undefined') throw new Error('engine-missing');
+  let y = b.y, m = b.m, d = b.d;
+  if (b.lunar) {
+    try { const s = Lunar.fromYmd(y, b.leap ? -m : m, d).getSolar(); y = s.getYear(); m = s.getMonth(); d = s.getDay(); }
+    catch (e) { return null; }
+  } else {
+    const t = new Date(Date.UTC(y, m - 1, d));
+    if (t.getUTCFullYear() !== y || t.getUTCMonth() !== m - 1 || t.getUTCDate() !== d) return null;
+  }
+  const minute = `${y}-${p2(m)}-${p2(d)}T${b.known ? p2(b.hh) + ':' + p2(b.mm) : '12:00'}`;
+  const chart = ManseEngine.chart(termEvents(y - 1, y + 1), minute, b.known);
+  const pillars = [['시', chart.hour], ['일', chart.day], ['월', chart.month], ['년', chart.year]];
+  const elc = { WOOD: 0, FIRE: 0, EARTH: 0, METAL: 0, WATER: 0 };
+  const grp = { 비겁: 0, 식상: 0, 재성: 0, 관성: 0, 인성: 0 };
+  for (const [, p] of pillars) {
+    if (!p) continue;
+    elc[p.stemElement]++; elc[p.branchElement]++;
+    if (p.stemTenGod) grp[TG_GROUP[p.stemTenGod]]++;
+    if (p.branchTenGod) grp[TG_GROUP[p.branchTenGod]]++;
+  }
+  const now = new Date();
+  const luckYear = now.getMonth() >= 9 ? now.getFullYear() + 1 : now.getFullYear();
+  return { chart, pillars, el: elc, grp, solar: { y, m, d }, input: b, old: y < 1989,
+    luck: ManseEngine.annual(chart.dayMaster, luckYear), luckIsNext: luckYear !== now.getFullYear() };
+}
+
+const DAY_MASTER = {
+  '甲': '일간이 갑목이야. 큰 나무. 한번 뿌리 내리면 위로만 크는 사람이라 굽히는 걸 제일 못 해.',
+  '乙': '일간이 을목이네. 덩굴이고 화초야. 약해 보여도 담을 타고 넘어가. 살아남는 재주는 제일이지.',
+  '丙': '일간이 병화, 하늘에 뜬 해야. 숨기는 게 안 되고 어디 가나 티가 나. 사람들이 옆에 모여.',
+  '丁': '일간이 정화네. 촛불이고 등불이야. 겉은 조용한데 속에 불씨가 있어서, 한 가지를 오래 밝히는 사람이지.',
+  '戊': '일간이 무토, 큰 산이야. 잘 안 움직여. 대신 한번 믿으면 끝까지 받쳐 주고.',
+  '己': '일간이 기토네. 밭흙이야. 뭘 심어도 키워 내. 남 챙기다 자기 몫 놓치는 게 흠이고.',
+  '庚': '일간이 경금, 무쇠고 바위야. 맺고 끊는 게 분명해. 의리는 있는데 말이 좀 차갑게 나가.',
+  '辛': '일간이 신금이네. 다듬어 놓은 보석이야. 눈이 높고 예민해. 흠 있는 걸 못 보고 넘어가.',
+  '壬': '일간이 임수, 큰 강이고 바다야. 품이 넓고 생각이 깊어. 한 군데 가둬 두면 병나.',
+  '癸': '일간이 계수네. 이슬비고 샘물이야. 조용히 스며들어. 눈치가 빠르고 속으로 생각이 많지.',
+};
+const EL_MANY = {
+  WOOD: '나무 기운이 제일 많아. 벌이는 일이 많고 시작은 잘해.',
+  FIRE: '불이 제일 많아. 성질이 급하고 표현이 화끈해.',
+  EARTH: '흙이 제일 많아. 듬직한데 생각이 많아서 굼떠 보일 때가 있어.',
+  METAL: '쇠가 제일 많아. 원칙 따지고 깔끔한 걸 좋아해.',
+  WATER: '물이 제일 많아. 머리 회전이 빠르고 생각이 깊은데, 걱정도 같이 많아.',
+};
+const EL_NONE = {
+  WOOD: '나무가 하나도 없네. 일을 벌이는 첫발이 무거워.',
+  FIRE: '불이 안 보여. 속에 있는 걸 밖으로 내보이는 게 서툴러.',
+  EARTH: '흙이 없어. 한자리에 붙어 있는 게 답답하지?',
+  METAL: '쇠가 없네. 딱 끊어 내는 걸 못 해서 질질 끌려가.',
+  WATER: '물이 없어. 쉬는 법을 몰라. 마르기 전에 좀 쉬어.',
+};
+const LUCK = {
+  '比肩': '비견운이야. 나랑 같은 기운이 들어와. 동업, 경쟁, 독립 얘기가 나와. 내 몫은 내가 챙겨야 하는 해야.',
+  '劫財': '겁재가 들어와. 돈이 들어와도 나갈 구멍이 같이 생겨. 보증 서는 거, 돈 빌려주는 거는 하지 마.',
+  '食神': '식신운이네. 먹을 복, 재주 쓰는 복이야. 하고 싶던 거 손대 봐. 살은 좀 찌겠다.',
+  '傷官': '상관이 떠. 말이 세지고 윗사람이랑 부딪혀. 대신 재주는 빛나. 입만 조심하면 돼.',
+  '偏財': '편재야. 큰돈이 왔다 갔다 해. 기회는 오는데 한 번에 다 걸지는 마.',
+  '正財': '정재운이네. 꼬박꼬박 들어오는 돈이야. 모으는 해고, 인연 얘기도 붙어.',
+  '七殺': '편관이 들어와. 일이 몰리고 책임이 무거워져. 몸 축나니까 쉬는 날을 먼저 잡아 놔.',
+  '正官': '정관이야. 자리가 생기고 이름이 올라가. 반듯하게만 가면 되는 해야.',
+  '偏印': '편인이네. 공부, 자격증, 엉뚱한 데 관심이 생겨. 생각만 하다 한 해 간다. 하나만 파.',
+  '正印': '정인운이야. 도와주는 윗사람이 생기고 문서운이 좋아. 계약, 합격, 그런 쪽.',
+};
+const SPOUSE = {
+  비겁: '배우자 자리에 나랑 같은 기운이 앉았어. 친구 같은 사람을 만나. 대신 둘 다 고집이 세서 져 주는 연습을 해야 해.',
+  식상: '배우자 자리에 식상이 있네. 내가 챙겨 주고 표현하는 연애를 해. 받는 것보다 주는 게 편한 사람이야.',
+  재성: '배우자 자리에 재성이 앉았어. 현실적인 사람을 만나고, 연애에도 살림 감각이 있어.',
+  관성: '배우자 자리에 관성이 있네. 반듯하고 기댈 만한 사람한테 끌려. 대신 상대 눈치를 좀 많이 봐.',
+  인성: '배우자 자리에 인성이 앉았어. 나를 돌봐 주는 사람을 만나. 편하긴 한데 받는 데만 익숙해지면 안 돼.',
+};
+function sajuAnswer(s, topic) {
+  const g = s.grp;
+  if (topic === 'money') {
+    if (g.재성 === 0) return '사주에 재성이 안 보여. 돈복이 없다는 게 아니고, 돈을 좇으면 안 잡히는 사주야. 재주를 팔아.';
+    if (g.재성 >= 3) return '재성이 많아. 돈 될 일은 많이 보이는데 다 쥐려다 놓쳐. 하나만 잡아.';
+    return '재성이 알맞게 있어. 버는 만큼은 손에 남는 사주야. 욕심만 안 부리면 돼.';
+  }
+  if (topic === 'love') return SPOUSE[TG_GROUP[s.chart.day.branchTenGod]] || '배우자 자리는 오늘 만세력으로는 딱 안 잡히네. 다음에 다시 봐 줄게.';
+  if (g.관성 > g.식상) return '관성이 식상보다 세. 조직 안에서 자리 잡고 올라가는 게 맞아. 혼자 나가서 벌이는 건 좀 더 있다가.';
+  if (g.식상 > g.관성) return '식상이 관성보다 세. 남 밑에서 시키는 대로는 못 해. 자기 재주, 자기 이름으로 먹고사는 사주야.';
+  return '관성하고 식상이 비슷해. 직장 다니면서 자기 일 하나 따로 굴리는 게 제일 잘 맞아.';
+}
+
+/* ═════════ 음성 · 효과음 ═════════
+   지금은 브라우저 내장 음성. 실제 앱에서는 speak()를 ElevenLabs 스트리밍 호출로 바꾸는 자리. */
 const Voice = (() => {
   const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
-  let voice = null, on = true, speaking = false, onChange = () => {};
+  let voice = null, on = true, speaking = false, onChange = () => {}, pitch = 1.08, rate = 1.03;
   try { on = localStorage.getItem('dalmuri-sound') !== 'off'; } catch (e) { /* 저장소 없음 */ }
   const pick = () => {
     if (!synth) return;
@@ -917,17 +457,17 @@ const Voice = (() => {
   };
   if (synth) { pick(); if (synth.addEventListener) synth.addEventListener('voiceschanged', pick); }
   return {
-    get available() { return !!synth; },
-    get on() { return on && !!synth; },
+    get on() { return on; },
     get speaking() { return speaking; },
     watch(fn) { onChange = fn; },
+    tone(p, r) { pitch = p; rate = r; },
     set(v) { on = v; try { localStorage.setItem('dalmuri-sound', v ? 'on' : 'off'); } catch (e) { /* 무시 */ } if (!v) this.stop(); },
     speak(text) {
       if (!synth || !on) return;
       try {
         synth.cancel();
         const u = new SpeechSynthesisUtterance(text.replace(/[「」]/g, ' '));
-        u.lang = 'ko-KR'; if (voice) u.voice = voice; u.rate = 1.03; u.pitch = 1.08;
+        u.lang = 'ko-KR'; if (voice) u.voice = voice; u.rate = rate; u.pitch = pitch;
         u.onstart = () => { speaking = true; onChange(); };
         u.onend = u.onerror = () => { speaking = false; onChange(); };
         synth.speak(u);
@@ -937,81 +477,115 @@ const Voice = (() => {
   };
 })();
 
-/* ═════════ 요소 ═════════ */
-const alley = $('#alley'), room = $('#room'), reader = $('#reader'), spread = $('#spread');
-const lineEl = $('#line'), liveEl = $('#live'), optsEl = $('#opts'), nextBtn = $('#next'), dlg = $('#dlg');
-const soundBtn = $('#sound'), toast = $('#toast');
-const state = { call: '손님', topic: 'flow', q: '' };
+const Sfx = (() => {
+  let ctx = null, master, rainGain, rainLp, noiseBuf;
+  function start() {
+    if (ctx || !Voice.on) return;
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    try {
+      ctx = new AC();
+      master = ctx.createGain(); master.gain.value = .55; master.connect(ctx.destination);
+      const len = ctx.sampleRate * 2; noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = noiseBuf.getChannelData(0); for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      const src = ctx.createBufferSource(); src.buffer = noiseBuf; src.loop = true;
+      const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 450;
+      rainLp = ctx.createBiquadFilter(); rainLp.type = 'lowpass'; rainLp.frequency.value = 6500;
+      rainGain = ctx.createGain(); rainGain.gain.value = .11;
+      src.connect(hp); hp.connect(rainLp); rainLp.connect(rainGain); rainGain.connect(master); src.start();
+    } catch (e) { ctx = null; }
+  }
+  function burst(freq, q, dur, vol, sweepTo) {
+    if (!ctx) return;
+    const t = ctx.currentTime, src = ctx.createBufferSource(); src.buffer = noiseBuf;
+    const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.setValueAtTime(freq, t); f.Q.value = q;
+    if (sweepTo) f.frequency.exponentialRampToValueAtTime(sweepTo, t + dur);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + dur * .25); g.gain.exponentialRampToValueAtTime(.0005, t + dur);
+    src.connect(f); f.connect(g); g.connect(master); src.start(t, Math.random()); src.stop(t + dur + .05);
+  }
+  return {
+    start,
+    inside(v) { if (!ctx) return; const t = ctx.currentTime; rainLp.frequency.setTargetAtTime(v ? 950 : 6500, t, .35); rainGain.gain.setTargetAtTime(v ? .075 : .11, t, .35); },
+    swish() { burst(900, .7, .9, .28, 2600); },   // 비닐 걷는 소리
+    card() { burst(3200, 1.4, .09, .22); },
+    step() { burst(180, .8, .14, .3); },
+    mute(v) { if (master) master.gain.value = v ? 0 : .55; else if (!v) start(); },
+  };
+})();
 
-/* ═════════ 흐름 제어: 중간에 나가면 진행 중인 대기를 끊는다 ═════════ */
+/* ═════════ 요소 · 흐름 제어 ═════════ */
+const stage = $('#stage'), canvas = $('#gl'), alleyUi = $('#alleyUi'), roomUi = $('#roomUi');
+const lineEl = $('#line'), liveEl = $('#live'), optsEl = $('#opts'), nextBtn = $('#next'), dlg = $('#dlg');
+const soundBtn = $('#sound'), chip = $('#chip'), whoEl = $('#who'), plateName = $('#plateName');
+const state = { mode: 'boot', focus: 0, inside: -1, call: '손님', topic: 'flow', q: '', picking: null, shot: null };
+
+// 중간에 나가면 기다리던 것(대사, 카메라 이동, 선택)을 전부 끊는다
 class Stop extends Error {}
-let pending = null;
+const pendings = new Set();
 const ui = { typing: false, finishTyping: null, onAdvance: null };
 function wait(setup) {
   return new Promise((resolve, reject) => {
     let cleanup = null;
     const p = { reject(e) { if (cleanup) cleanup(); reject(e); } };
-    pending = p;
-    cleanup = setup(v => { if (pending === p) pending = null; resolve(v); }) || null;
+    pendings.add(p);
+    cleanup = setup(v => { pendings.delete(p); resolve(v); }) || null;
   });
 }
 function cancelAll() {
-  const p = pending; pending = null;
+  const all = [...pendings]; pendings.clear();
   ui.typing = false; ui.finishTyping = null; ui.onAdvance = null;
-  if (p) p.reject(new Stop());
+  all.forEach(p => p.reject(new Stop()));
 }
 const sleep = ms => wait(done => { const t = setTimeout(done, reduced ? Math.min(ms, 60) : ms); return () => clearTimeout(t); });
 
-const syncTalk = () => reader.classList.toggle('talking', ui.typing || Voice.speaking);
+let activeReader = null;
+const syncTalk = () => { if (activeReader) activeReader.talking = ui.typing || Voice.speaking; };
 Voice.watch(syncTalk);
-const mood = m => { reader.dataset.mood = m; };
+const mood = m => { if (activeReader) activeReader.setMood(m); };
 
-function type(text, m) {
+function type(str, m) {
   if (m) mood(m);
   optsEl.replaceChildren();
   nextBtn.hidden = true;
   return wait(done => {
     let i = 0;
     lineEl.textContent = '';
-    liveEl.textContent = text;
+    liveEl.textContent = str;
     ui.typing = true;
-    Voice.speak(text);
+    Voice.speak(str);
     syncTalk();
     const finish = () => {
       clearInterval(t);
-      lineEl.textContent = text;
+      lineEl.textContent = str;
       ui.typing = false; ui.finishTyping = null;
       syncTalk();
       done();
     };
-    const t = setInterval(() => { i++; lineEl.textContent = text.slice(0, i); if (i >= text.length) finish(); }, reduced ? 1 : 40);
+    const t = setInterval(() => { i++; lineEl.textContent = str.slice(0, i); if (i >= str.length) finish(); }, reduced ? 1 : 40);
     ui.finishTyping = finish;
-    return () => clearInterval(t);
+    return () => { clearInterval(t); syncTalk(); };
   });
 }
 const waitAdvance = () => wait(done => {
   nextBtn.hidden = false;
   ui.onAdvance = () => { nextBtn.hidden = true; done(); };
 });
-async function say(text, m) { await type(text, m); await waitAdvance(); }
+async function say(str, m) { await type(str, m); await waitAdvance(); }
 function advance() {
   if (ui.typing && ui.finishTyping) ui.finishTyping();
   else if (ui.onAdvance) { const f = ui.onAdvance; ui.onAdvance = null; f(); }
 }
-
-async function choose(text, options, m) {
-  await type(text, m);
+async function choose(str, options, m) {
+  await type(str, m);
   return wait(done => {
     options.forEach(([label, value]) => {
       const b = el('button', 'opt'); b.type = 'button'; b.textContent = label;
       b.addEventListener('click', () => { optsEl.replaceChildren(); done(value); });
       optsEl.append(b);
     });
-    const first = optsEl.querySelector('button'); if (first) first.focus({ preventScroll: true });
   });
 }
-async function askText(text, placeholder, skipLabel, m) {
-  await type(text, m);
+async function askText(str, placeholder, skipLabel, m) {
+  await type(str, m);
   return wait(done => {
     const form = el('form', 'ask');
     form.innerHTML = `<input id="answer" type="text" maxlength="40" autocomplete="off" aria-label="${placeholder}" placeholder="${placeholder}"><button class="opt" type="submit">말하기</button><button class="opt" type="button">${skipLabel}</button>`;
@@ -1022,246 +596,918 @@ async function askText(text, placeholder, skipLabel, m) {
     optsEl.append(form);
   });
 }
-
-/* ═════════ 카드 ═════════ */
-const backHTML = '<span class="card-in"><span class="back"></span></span>';
-function shuffleDeck() {
-  const a = CARDS.map((_, i) => i);
-  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
-  return a;
-}
-async function riffle() {
-  const deck = el('div', 'deck');
-  for (let i = 0; i < 4; i++) deck.append(el('span', 'card', backHTML));
-  spread.replaceChildren(deck);
-  await sleep(1750);
-}
-function pickThree() {
+async function askBirth(str, m) {
+  await type(str, m);
   return wait(done => {
-    const order = shuffleDeck(), picks = [];
-    const fan = el('div', 'fan');
-    const count = el('p', 'count', '고른 카드 0 / 3');
-    for (let i = 0; i < 9; i++) {
-      const b = el('button', 'card', backHTML);
-      b.type = 'button';
-      b.setAttribute('aria-label', `뒤집힌 카드 ${i + 1}`);
-      b.style.setProperty('--i', i);
-      b.style.setProperty('--rot', ((i - 4) * 3.2) + 'deg');
-      b.style.setProperty('--dy', ((i - 4) ** 2 * 0.9) + '%');
-      b.addEventListener('click', () => {
-        if (picks.length >= 3 || b.classList.contains('gone')) return;
-        b.classList.add('gone'); b.disabled = true;
-        const num = order[picks.length];
-        picks.push({ num, c: CARDS[num], rev: Math.random() < 0.3 });
-        count.textContent = `고른 카드 ${picks.length} / 3`;
-        if (picks.length === 3) setTimeout(() => { optsEl.replaceChildren(); done(picks); }, 450);
-      });
-      fan.append(b);
+    const form = el('form', 'birth'), thisYear = new Date().getFullYear();
+    const months = Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}">${i + 1}월</option>`).join('');
+    const days = Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}일</option>`).join('');
+    form.innerHTML = `
+      <label>태어난 해<input id="by" type="number" inputmode="numeric" min="1920" max="${thisYear}" placeholder="예: 1994" required></label>
+      <label>월<select id="bm">${months}</select></label>
+      <label>일<select id="bd">${days}</select></label>
+      <label class="wide">태어난 시간<input id="bt" type="time" value="12:00"></label>
+      <label>달력<select id="bc"><option value="solar">양력</option><option value="lunar">음력</option><option value="leap">음력 윤달</option></select></label>
+      <span class="checks"><label><input id="bu" type="checkbox">태어난 시간은 몰라요</label></span>
+      <button class="opt" type="submit">불러 드리기</button>`;
+    const q = id => $('#' + id, form);
+    q('bu').addEventListener('change', () => { q('bt').disabled = q('bu').checked; });
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const y = parseInt(q('by').value, 10);
+      if (!(y >= 1920 && y <= thisYear)) { q('by').focus(); return; }
+      const known = !q('bu').checked && /^\d\d:\d\d/.test(q('bt').value);
+      const [hh, mm] = known ? q('bt').value.split(':').map(Number) : [12, 0];
+      optsEl.replaceChildren();
+      done({ y, m: +q('bm').value, d: +q('bd').value, hh, mm, known, lunar: q('bc').value !== 'solar', leap: q('bc').value === 'leap' });
+    });
+    optsEl.append(form);
+  });
+}
+
+/* ═════════ 3D 세계 ═════════ */
+const T = window.THREE;
+const V = (x, y, z) => new T.Vector3(x, y, z);
+const CX = 0.4, FLOOR = 0.47, TABLE_Y = 1.2;      // 부스 안: 창 가운데 x, 바닥 높이, 탁자 윗면
+const BOOTHS = [
+  { id: 'tarot', name: '달무리 타로', who: '달무리', x: -2.1, glow: 0x9a5cff, voice: [1.1, 1.03] },
+  { id: 'saju', name: '보름달 사주', who: '보름달', x: 2.1, glow: 0xffb040, voice: [0.82, 0.96] },
+];
+let renderer, scene, camera, aspect = 1, clock = 0;
+const fxList = [];
+const fx = (dur, fn) => fxList.push({ t0: clock, dur: reduced ? .01 : dur, fn });
+const updaters = [];
+const W = {};
+
+/* ── 캔버스 텍스처 도구 ── */
+const cv = (w, h, draw) => { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); return c; };
+const tex = (c, rep) => { const t = new T.CanvasTexture(c); t.encoding = T.sRGBEncoding; t.anisotropy = 8; if (rep) { t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; };
+const F_SIGN = '"Black Han Sans", "Malgun Gothic", sans-serif', F_LABEL = '"Jua", "Malgun Gothic", sans-serif', F_BODY = '"Gowun Dodum", "Malgun Gothic", sans-serif', F_HANJA = '"Noto Serif KR", "Batang", serif';
+function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function label(g, s, x, y, o) {
+  let size = o.size; const wt = o.weight ? o.weight + ' ' : '';
+  g.font = `${wt}${size}px ${o.font}`;
+  if (o.maxW) { const m = g.measureText(s).width; if (m > o.maxW) { size = Math.floor(size * o.maxW / m); g.font = `${wt}${size}px ${o.font}`; } }
+  g.textAlign = o.align || 'center'; g.textBaseline = 'middle'; g.lineJoin = 'round';
+  if (o.stroke) { g.strokeStyle = o.stroke; g.lineWidth = o.sw || size * .12; g.strokeText(s, x, y); }
+  g.fillStyle = o.fill; g.fillText(s, x, y);
+}
+const std = (color, rough = .85, metal = 0) => new T.MeshStandardMaterial({ color, roughness: rough, metalness: metal });
+const lit = (map) => new T.MeshBasicMaterial({ map, toneMapped: false });
+function mesh(geo, mat, x = 0, y = 0, z = 0, parent) { const m = new T.Mesh(geo, mat); m.position.set(x, y, z); if (parent) parent.add(m); return m; }
+const box = (w, h, d, mat, x, y, z, parent) => mesh(new T.BoxGeometry(w, h, d), mat, x, y, z, parent);
+const plane = (w, h, mat, x, y, z, parent) => mesh(new T.PlaneGeometry(w, h), mat, x, y, z, parent);
+function glow(w, h, color, opacity, x, y, z, parent) {
+  const m = plane(w, h, new T.MeshBasicMaterial({ map: W.softTex, color, transparent: true, opacity, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false }), x, y, z, parent);
+  m.renderOrder = 2; return m;
+}
+
+/* ── 간판 · 배경 그림 ── */
+function topSign(kind) {
+  return tex(cv(2048, 656, (g, w, h) => {
+    if (kind === 'saju') {
+      const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#3a2fe0'); gr.addColorStop(1, '#2415a8');
+      g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(255,255,255,.2)'; g.lineWidth = 4;
+      for (let x = 60; x < w; x += 150) for (let y = 70; y < h; y += 130) { const ox = x + (y % 260 ? 75 : 0); g.beginPath(); g.ellipse(ox, y, 46, 20, 0, 0, 7); g.stroke(); g.beginPath(); g.arc(ox, y, 8, 0, 7); g.stroke(); }
+      g.fillStyle = '#c04dff'; g.fillRect(0, 0, w, 44); g.fillRect(0, h - 44, w, 44);
+      label(g, '평생사주 · 궁합 · 신수 · 택일', w / 2, 128, { font: F_LABEL, size: 76, fill: '#fff' });
+      label(g, '보름달 사주·궁합 전문', w / 2, 388, { font: F_SIGN, size: 300, maxW: w - 150, fill: '#e6ff3d', stroke: '#140c66', sw: 34 });
+    } else {
+      g.fillStyle = '#cdbcff'; g.fillRect(0, 0, w, h);
+      g.strokeStyle = 'rgba(120,70,220,.35)'; g.lineWidth = 5;
+      for (let x = 40; x < w; x += 190) { g.beginPath(); g.moveTo(x, h); g.bezierCurveTo(x + 90, h - 200, x - 60, h - 380, x + 60, 0); g.stroke(); for (let k = 0; k < 4; k++) { g.beginPath(); g.arc(x + 30 + k * 12, h - 120 - k * 150, 20, 0, 7); g.stroke(); } }
+      g.fillStyle = '#7a4dff'; g.fillRect(0, 0, w, 36); g.fillRect(0, h - 36, w, 36);
+      label(g, '신점 · 연애 · 진로 · 속마음', w / 2, 128, { font: F_LABEL, size: 76, fill: '#3a1fa8' });
+      label(g, '달무리 타로·신점', w / 2, 388, { font: F_SIGN, size: 310, maxW: w - 170, fill: '#3320d0', stroke: '#ffffff', sw: 34 });
     }
-    spread.replaceChildren(fan);
+  }));
+}
+function colSign(bg, lines) {
+  return tex(cv(512, 372, (g, w, h) => {
+    g.clearRect(0, 0, w, h);
+    rr(g, 10, 10, w - 20, h - 20, 54); g.fillStyle = bg; g.fill();
+    g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 8; g.stroke();
+    const step = (h - 60) / lines.length;
+    lines.forEach((l, i) => label(g, l.t, w / 2, 30 + step * (i + .5), { font: l.big ? F_SIGN : F_LABEL, size: l.big ? 150 : 74, maxW: w - 70, fill: l.c }));
+  }));
+}
+const YY = new Date().getFullYear() % 100;
+const COLS = {
+  tarot: [
+    ['#ffee4d', [{ t: '고민 한 장이면', c: '#150e28' }, { t: 'OK!!', c: '#e8322f', big: 1 }]],
+    ['#e8322f', [{ t: '신점 타로', c: '#ffee4d', big: 1 }, { t: '5,000원', c: '#fff' }]],
+    ['#f4f7ff', [{ t: '커플 상담 시', c: '#150e28' }, { t: '손금 무료!!', c: '#e8322f', big: 1 }]],
+    ['#b23cf0', [{ t: '속마음 · 재회', c: '#fff' }, { t: '연애운', c: '#e6ff3d', big: 1 }]],
+  ],
+  saju: [
+    ['#ffee4d', [{ t: '속 시원히 봐 드림', c: '#150e28' }, { t: '사주전문', c: '#150e28', big: 1 }]],
+    ['#f4f7ff', [{ t: '정통', c: '#150e28' }, { t: '사주', c: '#150e28', big: 1 }]],
+    ['#e8322f', [{ t: '커플', c: '#fff' }, { t: '궁합', c: '#ffee4d', big: 1 }]],
+    ['#b23cf0', [{ t: `${p2(YY)}·${p2((YY + 1) % 100)}년 운세`, c: '#fff' }, { t: '신수', c: '#e6ff3d', big: 1 }]],
+  ],
+};
+function backdrop(kind) {
+  return tex(cv(1024, 700, (g, w, h) => {
+    if (kind === 'saju') {      // 금빛 일월오봉도 풍 휘장
+      const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#f9d45a'); gr.addColorStop(1, '#f0931c');
+      g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      g.fillStyle = '#d9372b'; g.beginPath(); g.arc(250, 150, 54, 0, 7); g.fill();
+      g.fillStyle = '#fff8e0'; g.beginPath(); g.arc(774, 150, 54, 0, 7); g.fill();
+      const base = h - 150;
+      const peak = (cx, top, half, c) => {
+        for (let k = 0; k < 5; k++) {
+          const s = 1 - k * .16, ty = top + (base - top) * (1 - s);
+          g.beginPath(); g.moveTo(cx - half * s, base);
+          g.quadraticCurveTo(cx - half * .3 * s, ty + 60 * s, cx, ty);
+          g.quadraticCurveTo(cx + half * .3 * s, ty + 60 * s, cx + half * s, base);
+          g.closePath();
+          if (k === 0) { g.fillStyle = c; g.fill(); }
+          g.strokeStyle = 'rgba(255,236,150,.85)'; g.lineWidth = 5; g.stroke();
+        }
+      };
+      peak(150, 300, 190, '#6f8a2c'); peak(874, 300, 190, '#6f8a2c'); peak(330, 230, 200, '#5d7d2a'); peak(694, 230, 200, '#5d7d2a'); peak(512, 150, 240, '#4f7227');
+      g.fillStyle = '#2f7fb8'; g.fillRect(0, base, w, 150);
+      g.strokeStyle = '#fff3c0'; g.lineWidth = 5;
+      for (let row = 0; row < 3; row++) for (let x = -40 + row * 40; x < w + 80; x += 80) { g.beginPath(); g.arc(x, h - 20 - row * 46, 40, Math.PI, 0); g.stroke(); }
+      const pine = x => { g.fillStyle = '#7a4a22'; g.fillRect(x - 10, 250, 20, 320); g.fillStyle = '#2f6b34'; for (const [dx, dy, r] of [[-50, 250, 58], [40, 220, 64], [0, 180, 54], [-30, 320, 46], [46, 320, 42]]) { g.beginPath(); g.ellipse(x + dx, dy, r, r * .5, 0, 0, 7); g.fill(); } };
+      pine(60); pine(964);
+      g.fillStyle = '#fff'; g.beginPath(); g.arc(512, 92, 70, 0, 7); g.fill();
+      g.lineWidth = 12; g.strokeStyle = '#d9372b'; g.beginPath(); g.arc(512, 92, 64, Math.PI, 0); g.stroke(); g.strokeStyle = '#2c3fb0'; g.beginPath(); g.arc(512, 92, 64, 0, Math.PI); g.stroke();
+      g.fillStyle = '#f3859b'; for (let k = -2; k <= 2; k++) { g.save(); g.translate(512, 112); g.rotate(k * .5); g.beginPath(); g.ellipse(0, -30, 12, 30, 0, 0, 7); g.fill(); g.restore(); }
+    } else {                    // 별자리 고리와 카드가 그려진 남색 걸개
+      g.fillStyle = '#14103c'; g.fillRect(0, 0, w, h);
+      for (let i = 0; i < 160; i++) { const x = (i * 7919) % w, y = (i * 104729) % h; g.fillStyle = i % 5 ? 'rgba(255,244,220,.8)' : '#e2b659'; g.beginPath(); g.arc(x, y, i % 7 ? 1.6 : 3, 0, 7); g.fill(); }
+      g.translate(512, 330); g.strokeStyle = '#e2b659'; g.lineWidth = 6;
+      g.beginPath(); g.arc(0, 0, 290, 0, 7); g.stroke(); g.lineWidth = 3; g.beginPath(); g.arc(0, 0, 196, 0, 7); g.stroke();
+      for (let i = 0; i < 12; i++) {
+        g.save(); g.rotate(i * Math.PI / 6); g.translate(0, -243);
+        rr(g, -27, -40, 54, 80, 6); g.fillStyle = '#fff4dc'; g.fill(); g.strokeStyle = '#e2b659'; g.lineWidth = 3; g.stroke();
+        g.strokeStyle = '#8e1b2e'; g.beginPath(); g.arc(0, 0, 11, 0, 7); g.stroke(); g.restore();
+        g.strokeStyle = '#e2b659'; g.save(); g.rotate(i * Math.PI / 6 + Math.PI / 12); g.beginPath(); g.moveTo(0, -290); g.lineTo(0, -322); g.stroke(); g.restore();
+      }
+    }
+  }));
+}
+function brocade() {
+  return tex(cv(512, 128, (g, w, h) => {
+    g.fillStyle = '#b3202f'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#f0c75a'; g.lineWidth = 4;
+    for (let x = 0; x <= w; x += 64) { g.beginPath(); g.moveTo(x, 20); g.lineTo(x + 32, 64); g.lineTo(x, 108); g.lineTo(x - 32, 64); g.closePath(); g.stroke(); g.beginPath(); g.arc(x + 32, 64, 9, 0, 7); g.stroke(); }
+    g.fillStyle = '#f0c75a'; g.fillRect(0, 0, w, 12); g.fillRect(0, h - 12, w, 12);
+  }), [3, 1]);
+}
+function paperTex(w, h, lines, bg = '#fff4dc') {
+  return tex(cv(w, h, (g) => {
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    const step = h / lines.length;
+    lines.forEach((l, i) => label(g, l.t, w / 2, step * (i + .5), { font: l.big ? F_SIGN : F_LABEL, size: l.big ? step * .7 : step * .5, maxW: w - 30, fill: l.c || '#150e28' }));
+  }));
+}
+function windowsTex(seed) {
+  return tex(cv(256, 512, (g, w, h) => {
+    let s = seed; const r = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    g.fillStyle = '#0e0b22'; g.fillRect(0, 0, w, h);
+    for (let y = 14; y < h - 10; y += 26) for (let x = 12; x < w - 14; x += 22) {
+      const k = r();
+      if (k < .11) { g.fillStyle = k < .07 ? 'rgba(255,214,140,.62)' : 'rgba(160,185,255,.45)'; g.fillRect(x, y, 12, 15); }
+      else { g.fillStyle = 'rgba(255,255,255,.035)'; g.fillRect(x, y, 12, 15); }
+    }
+  }));
+}
+function neonTex(str, bg, fg) {
+  return tex(cv(160, 512, (g, w, h) => {
+    rr(g, 4, 4, w - 8, h - 8, 18); g.fillStyle = bg; g.fill();
+    const chars = [...str], step = (h - 40) / chars.length;
+    chars.forEach((ch, i) => label(g, ch, w / 2, 20 + step * (i + .5), { font: F_SIGN, size: Math.min(110, step * .9), fill: fg }));
+  }));
+}
+
+/* ── 상담사: 기본 도형으로 만든 인형 ── */
+function makeReader(o) {
+  const g = new T.Group();
+  const skin = std(0xf3c6a5, .7), hairM = std(o.hair, .55), topM = o.topMat || std(o.top, .8), vestM = o.vest ? std(o.vest, .75) : topM, dark = std(0x241616, .5);
+  const torso = mesh(new T.CylinderGeometry(.16, .26, .56, 22), vestM, 0, -.47, 0, g); torso.scale.z = .78;
+  const sh = mesh(new T.SphereGeometry(.17, 22, 14), vestM, 0, -.215, 0, g); sh.scale.set(1.38, .58, .9);
+  mesh(new T.CylinderGeometry(.05, .058, .1, 14), skin, 0, -.145, 0, g);
+  const head = new T.Group(); g.add(head);
+  const skull = mesh(new T.SphereGeometry(.14, 30, 22), skin, 0, 0, 0, head); skull.scale.set(1, 1.06, .97);
+  if (o.style === 'bun') {
+    const cap = mesh(new T.SphereGeometry(.147, 28, 18, 0, Math.PI * 2, 0, Math.PI * .52), hairM, 0, .008, -.012, head); cap.rotation.x = -.74;
+    mesh(new T.SphereGeometry(.06, 18, 14), hairM, 0, .15, -.07, head);
+    const pin = mesh(new T.CylinderGeometry(.007, .007, .26, 8), std(0xe2b659, .3, .8), 0, .15, -.07, head); pin.rotation.z = Math.PI / 2 - .15;
+    mesh(new T.SphereGeometry(.016, 10, 8), std(0xe8322f, .4), .13, .17, -.07, head);
+  } else {       // 볼륨 넣은 파마머리
+    const cap = mesh(new T.SphereGeometry(.15, 24, 16, 0, Math.PI * 2, 0, Math.PI * .54), hairM, 0, .01, -.015, head); cap.rotation.x = -.66;
+    const curls = [[0, .15, .02, .06], [-.08, .13, .04, .055], [.08, .13, .04, .055], [-.13, .07, 0, .06], [.13, .07, 0, .06], [-.14, -.01, -.03, .055], [.14, -.01, -.03, .055], [0, .13, -.08, .07], [-.09, .08, -.1, .065], [.09, .08, -.1, .065], [0, .02, -.13, .07], [-.1, -.03, -.1, .06], [.1, -.03, -.1, .06]];
+    for (const [x, y, z, r] of curls) mesh(new T.SphereGeometry(r, 12, 10), hairM, x, y, z, head);
+  }
+  const eyeG = new T.SphereGeometry(.019, 14, 12), shine = new T.MeshBasicMaterial({ color: 0xffffff });
+  const eyes = [-1, 1].map(s => { const e = mesh(eyeG, dark, s * .05, .008, .124, head); e.scale.set(1, 1.3, .45); mesh(new T.SphereGeometry(.0055, 8, 6), shine, .006, .007, .016, e); return e; });
+  const brows = [-1, 1].map(s => { const b = box(.044, .008, .006, dark, s * .05, .05, .13, head); b.rotation.z = -s * .12; return b; });
+  mesh(new T.SphereGeometry(.014, 10, 8), std(0xe0a888, .7), 0, -.02, .138, head);
+  const mouth = mesh(new T.SphereGeometry(.02, 14, 10), std(0xa02f42, .5), 0, -.064, .124, head); mouth.scale.set(1.2, .3, .4);
+  [-1, 1].forEach(s => {
+    const blush = mesh(new T.CircleGeometry(.024, 16), new T.MeshBasicMaterial({ color: 0xf08a8a, transparent: true, opacity: .42 }), s * .083, -.03, .108, head); blush.rotation.y = s * .68;
+    mesh(new T.SphereGeometry(.022, 10, 8), skin, s * .139, -.005, 0, head);
+    mesh(new T.SphereGeometry(.011, 8, 8), std(0xe2b659, .3, .8), s * .143, -.04, .005, head);
+  });
+  mesh(new T.SphereGeometry(.004, 6, 6), dark, .034, -.075, .125, head);
+  if (o.glasses) {
+    const gm = std(0x7a5a1a, .3, .7);
+    [-1, 1].forEach(s => mesh(new T.TorusGeometry(.034, .0035, 8, 22), gm, s * .05, .008, .138, head));
+    box(.034, .004, .004, gm, 0, .014, .14, head);
+  }
+  if (o.collar) {      // 한복 동정과 고름
+    const wm = std(0xffffff, .7), red = std(0xd42b3c, .6);
+    const a = box(.032, .25, .012, wm, -.038, -.3, .135, g); a.rotation.z = -.42; a.rotation.x = .16;
+    const b = box(.032, .27, .012, wm, .034, -.31, .14, g); b.rotation.z = .42; b.rotation.x = .16;
+    const r1 = box(.03, .2, .01, red, -.045, -.5, .19, g); r1.rotation.z = .12; r1.rotation.x = .2;
+    const r2 = box(.03, .17, .01, red, -.005, -.49, .195, g); r2.rotation.z = -.16; r2.rotation.x = .2;
+    box(.05, .04, .02, red, -.028, -.4, .165, g);
+  }
+  if (o.scarf) { const s = mesh(new T.TorusGeometry(.085, .032, 10, 22), std(o.scarf, .7), 0, -.15, .005, g); s.rotation.x = Math.PI / 2; s.scale.set(1.25, 1, 1); }
+  if (o.beads) { const s = mesh(new T.TorusGeometry(.13, .012, 8, 26), std(0x5a3418, .4), 0, -.24, .05, g); s.rotation.x = 1.15; }
+  const arms = [-1, 1].map(s => {
+    const shP = new T.Group(); shP.position.set(s * .225, -.2, 0); g.add(shP);
+    mesh(new T.CylinderGeometry(.058, .05, .27, 12), topM, 0, -.135, 0, shP);
+    const elP = new T.Group(); elP.position.y = -.27; shP.add(elP);
+    mesh(new T.CylinderGeometry(.05, .042, .25, 12), topM, 0, -.125, 0, elP);
+    mesh(new T.SphereGeometry(.043, 12, 10), skin, 0, -.275, 0, elP);
+    return { s, shP, elP };
+  });
+  const M = { neutral: { eye: 1, mw: 1.2, mh: .3, brow: 0, tilt: 0 }, smile: { eye: .5, mw: 1.75, mh: .42, brow: .004, tilt: .05 }, think: { eye: .9, mw: .9, mh: .26, brow: .012, tilt: .16 }, surprise: { eye: 1.25, mw: .8, mh: 1.05, brow: .022, tilt: -.03 } };
+  const cur = { ...M.neutral }; let target = M.neutral;
+  const r = { group: g, talking: false, wave: 0, look: 0, lookNow: 0, seed: Math.random() * 9,
+    setMood(m) { target = M[m] || M.neutral; },
+    update(t, dt) {
+      const k = 1 - Math.exp(-dt * 9);
+      for (const key in cur) cur[key] = lerp(cur[key], target[key], k);
+      r.lookNow = lerp(r.lookNow, r.look, 1 - Math.exp(-dt * 5));
+      const blink = (t + r.seed) % 4.3 < .12 ? .1 : 1;
+      eyes.forEach(e => { e.scale.y = 1.3 * cur.eye * blink; });
+      brows.forEach(b => { b.position.y = .05 + cur.brow; });
+      const talk = r.talking ? .35 + .65 * Math.abs(Math.sin(t * 13 + Math.sin(t * 5) * 2)) : 0;
+      mouth.scale.set(cur.mw * (r.talking ? .85 : 1), Math.max(cur.mh, talk * .95), .4);
+      head.rotation.z = cur.tilt + Math.sin(t * .9 + r.seed) * .025;
+      head.rotation.x = r.lookNow * .42 + (r.talking ? Math.sin(t * 6.5) * .03 : 0) + Math.sin(t * .7 + r.seed) * .015;
+      torso.scale.x = 1 + Math.sin(t * 1.6 + r.seed) * .012;
+      arms.forEach(a => {       // 평소엔 탁자에 손을 얹고, 골목에서는 손님을 부른다
+        const wv = a.s > 0 ? r.wave : 0;
+        a.shP.rotation.x = lerp(-.52, -.2, wv);
+        a.shP.rotation.z = lerp(a.s * .2, a.s * 2.45, wv);
+        a.elP.rotation.x = lerp(-1.25, -.15, wv);
+        a.elP.rotation.z = lerp(-a.s * .5, a.s * (.35 + Math.sin(t * 7.5) * .5), wv);
+      });
+    } };
+  return r;
+}
+
+/* ── 부스 ── */
+function buildBooth(b) {
+  const g = new T.Group(); g.position.x = b.x; scene.add(g);
+  const frame = std(0x1b1826, .6, .3), saju = b.id === 'saju';
+  box(3.4, .22, 2.4, frame, 0, .34, -1.2, g);
+  [-1.15, 1.15].forEach(x => [-.35, -2.05].forEach(z => {
+    mesh(new T.CylinderGeometry(.21, .21, .16, 18), std(0x0c0b12, .7), x, .21, z, g).rotation.z = Math.PI / 2;
+    mesh(new T.CylinderGeometry(.09, .09, .17, 12), std(0x8d8a96, .4, .6), x, .21, z, g).rotation.z = Math.PI / 2;
+  }));
+  box(.95, .22, .36, std(0x3a3644, .5, .5), CX, .11, .22, g);                                   // 발판
+  const floorTex = tex(cv(256, 256, (c, w, h) => {
+    if (saju) { c.fillStyle = '#2d7a3c'; c.fillRect(0, 0, w, h); for (let i = 0; i < 2600; i++) { c.fillStyle = i % 2 ? '#3f9a4d' : '#1f5c2b'; c.fillRect((i * 37) % w, (i * 101) % h, 2, 5); } }
+    else { c.fillStyle = '#8a5a34'; c.fillRect(0, 0, w, h); c.strokeStyle = '#5e3b20'; c.lineWidth = 3; for (let y = 0; y < h; y += 42) { c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); } }
+  }), [4, 3]);
+  box(3.4, .04, 2.4, new T.MeshStandardMaterial({ map: floorTex, roughness: .9 }), 0, FLOOR - .02, -1.2, g);
+  const bd = backdrop(b.id);
+  plane(3.3, 2.26, new T.MeshStandardMaterial({ map: bd, emissiveMap: bd, emissive: 0xffffff, emissiveIntensity: .42, roughness: .9 }), 0, FLOOR + 1.14, -2.36, g);
+  const wallM = std(saju ? 0xa8873f : 0x241a55, .9);
+  box(.06, 2.3, 2.4, wallM, -1.7, FLOOR + 1.15, -1.2, g); box(.06, 2.3, 2.4, wallM, 1.7, FLOOR + 1.15, -1.2, g);
+  box(3.5, .08, 2.5, frame, 0, FLOOR + 2.34, -1.2, g);
+  [-.9, 1.7].forEach(x => box(.07, 2.3, .07, frame, x, FLOOR + 1.15, 0, g));
+
+  // 위 간판
+  box(3.64, 1.2, .16, frame, 0, 3.42, .1, g);
+  plane(3.56, 1.14, lit(topSign(b.id)), 0, 3.42, .185, g);
+  glow(5.6, 2.6, b.glow, .32, 0, 3.42, .2, g);
+  // 왼쪽 세로 간판 기둥
+  box(.82, 2.3, .14, frame, -1.3, FLOOR + 1.15, .02, g);
+  COLS[b.id].forEach(([bg, lines], i) => {
+    const y = FLOOR + 2.0 - i * .565;
+    plane(.74, .54, new T.MeshBasicMaterial({ map: colSign(bg, lines), transparent: true, toneMapped: false }), -1.3, y, .095, g);
+    glow(1.1, .8, new T.Color(bg).getHex(), .13, -1.3, y, .1, g);
+  });
+  // 알전구
+  const bulbM = new T.MeshBasicMaterial({ color: 0xfff3cf, toneMapped: false });
+  for (let i = 0; i < 9; i++) {
+    const x = -.78 + i * .3;
+    mesh(new T.SphereGeometry(.042, 10, 8), bulbM, x, FLOOR + 2.2, -.04, g);
+    glow(.36, .36, 0xffc76a, .5, x, FLOOR + 2.2, 0, g);
+    mesh(new T.SphereGeometry(.036, 10, 8), bulbM, x, FLOOR + 2.22, -2.28, g);
+    glow(.3, .3, 0xffc76a, .4, x, FLOOR + 2.22, -2.27, g);
+  }
+  const inner = new T.PointLight(saju ? 0xffd9a0 : 0xffd0b8, .78, 7.5, 1.6); inner.position.set(CX, FLOOR + 2.0, -1.0); g.add(inner);
+  const spill = new T.PointLight(b.glow, 1.1, 9, 1.8); spill.position.set(0, 2.6, 1.7); g.add(spill);
+  // 젖은 바닥에 번지는 간판 불빛
+  const reflM = (color, opacity) => new T.MeshBasicMaterial({ map: W.reflTex, color, transparent: true, opacity, blending: T.AdditiveBlending, depthWrite: false, toneMapped: false });
+  plane(3.5, 4.2, reflM(b.glow, .5), 0, .012, 2.3, g).rotation.x = -Math.PI / 2;
+  plane(2.4, 3.2, reflM(0xffcf8a, .36), CX, .014, 1.8, g).rotation.x = -Math.PI / 2;
+
+  // 탁자
+  const clothM = new T.MeshStandardMaterial({ roughness: .9, map: tex(cv(256, 256, (c, w, h) => {
+    c.fillStyle = saju ? '#d9a21c' : '#3a1466'; c.fillRect(0, 0, w, h);
+    c.strokeStyle = saju ? 'rgba(150,90,10,.45)' : 'rgba(226,182,89,.5)'; c.lineWidth = 3;
+    for (let y = 32; y < h; y += 64) for (let x = (y % 128 ? 32 : 64); x < w + 32; x += 64) { c.beginPath(); if (saju) c.arc(x, y, 18, 0, 7); else { c.arc(x, y, 12, .6, 5.2); } c.stroke(); c.fillStyle = c.strokeStyle; c.fillRect(x + 28, y + 28, 4, 4); }
+  }), [5, 3]) });
+  box(1.36, .72, .66, clothM, CX, FLOOR + .36, -1.15, g);
+  box(1.4, .03, .7, clothM, CX, TABLE_Y - .016, -1.15, g);
+  const band = plane(1.36, .26, new T.MeshStandardMaterial({ map: brocade(), roughness: .8 }), CX, TABLE_Y - .19, -.815, g);
+  if (!saju) band.material.color.set(0xd9b8ff);
+  // 손님 의자 둘, 상담사 의자
+  const stoolM = std(0x16131c, .6);
+  [0, .64].forEach(dx => { mesh(new T.CylinderGeometry(.17, .2, .44, 8), stoolM, CX + dx, FLOOR + .22, -.42, g); });
+  box(.5, .5, .08, std(0x101014, .5), CX, FLOOR + .78, -2.02, g);
+  // 탁자 위 소품
+  const placard = paperTex(256, 320, saju
+    ? [{ t: '복채 안내', big: 1, c: '#e8322f' }, { t: '사주 10,000원' }, { t: '궁합 20,000원' }, { t: '신수 10,000원' }, { t: '카드 · 이체 가능', c: '#3320d0' }]
+    : [{ t: '복채 안내', big: 1, c: '#e8322f' }, { t: '세 장 5,000원' }, { t: '연애 10,000원' }, { t: '커플 15,000원' }, { t: '카드 · 이체 가능', c: '#3320d0' }]);
+  const pl = plane(.19, .24, new T.MeshStandardMaterial({ map: placard, roughness: .8, emissiveMap: placard, emissive: 0xffffff, emissiveIntensity: .25 }), CX - .5, TABLE_Y + .125, -1.38, g); pl.rotation.y = .3; pl.rotation.x = -.12;
+  mesh(new T.CylinderGeometry(.045, .038, .11, 14), std(0xd9a92f, .3, .8), CX + .56, TABLE_Y + .055, -1.4, g);
+  [0xe8322f, 0xffd23d, 0x2c5fe0, 0xffffff, 0x2f9a4d].forEach((c, i) => { const f = box(.01, .22, .05, std(c, .8), CX + .56 + (i - 2) * .014, TABLE_Y + .19, -1.4 + (i % 2) * .01, g); f.rotation.z = (i - 2) * -.16; f.rotation.y = i * .5; });   // 오방기
+  if (saju) {
+    const book = tex(cv(256, 360, (c, w, h) => { c.fillStyle = '#1d2a5c'; c.fillRect(0, 0, w, h); c.strokeStyle = '#e2b659'; c.lineWidth = 8; c.strokeRect(14, 14, w - 28, h - 28); ['萬', '歲', '曆'].forEach((ch, i) => label(c, ch, w / 2, 90 + i * 90, { font: F_HANJA, weight: 700, size: 84, fill: '#e2b659' })); }));
+    const side = std(0xf5efdc);
+    box(.2, .05, .28, [side, side, new T.MeshStandardMaterial({ map: book, roughness: .7 }), std(0x1d2a5c), side, side], CX - .5, TABLE_Y + .026, -1.0, g).rotation.y = .22;
+  }
+  // 난로
+  box(.26, .5, .2, std(0x2a2832, .5, .4), 1.42, FLOOR + .25, -1.9, g);
+  plane(.2, .3, new T.MeshBasicMaterial({ color: 0xff6a2a, toneMapped: false }), 1.42, FLOOR + .3, -1.795, g);
+  glow(.7, .8, 0xff6a2a, .35, 1.42, FLOOR + .3, -1.78, g);
+
+  // 비닐 천막 세 폭. 가운데 폭이 드나드는 문.
+  const span = 2.6 / 3, pw = span - .02, panels = [];
+  for (let i = 0; i < 3; i++) {
+    const geo = new T.PlaneGeometry(pw, 2.26, 14, 6); geo.translate(pw / 2, 0, 0);
+    const p = mesh(geo, new T.MeshBasicMaterial({ map: W.vinylTex, transparent: true, side: T.DoubleSide, depthWrite: false, toneMapped: false }), -.9 + i * span + .01, FLOOR + 1.15, .012, g);
+    p.renderOrder = 3; p.userData.base = geo.attributes.position.array.slice();
+    panels.push(p);
+  }
+  plane(.34, .2, new T.MeshBasicMaterial({ map: paperTex(340, 200, [{ t: 'English', c: '#2c3fb0' }, { t: 'OK', c: '#e8322f', big: 1 }], '#eef3ff'), toneMapped: false }), -.47, FLOOR + .92, .02, g).renderOrder = 4;
+  plane(.34, .2, new T.MeshBasicMaterial({ map: paperTex(340, 200, saju ? [{ t: '中國語 OK', c: '#e8322f' }, { t: '日本語 OK' }] : [{ t: '신점 타로', c: '#e8322f', big: 1 }, { t: '사업 · 연애' }], '#eef3ff'), toneMapped: false }), 1.27, FLOOR + .92, .02, g).renderOrder = 4;
+
+  // 상담사
+  const reader = makeReader(saju
+    ? { style: 'bun', hair: 0x3a3436, top: 0x1f8f6c, vest: 0xb82333, glasses: true, collar: true, beads: true }
+    : { style: 'perm', hair: 0x3b2217, scarf: 0xd42b3c, topMat: new T.MeshStandardMaterial({ roughness: .8, map: tex(cv(128, 128, (c, w, h) => { c.fillStyle = '#f4c531'; c.fillRect(0, 0, w, h); for (let i = 0; i < 26; i++) { c.fillStyle = i % 3 ? '#e8322f' : '#fff'; c.beginPath(); c.arc((i * 53) % w, (i * 89) % h, 6, 0, 7); c.fill(); c.fillStyle = '#2f9a4d'; c.beginPath(); c.arc((i * 53 + 9) % w, (i * 89 + 6) % h, 3, 0, 7); c.fill(); } }), [3, 2]) }) });
+  reader.group.position.set(CX, FLOOR + 1.2, -1.76); g.add(reader.group);
+  updaters.push((t, dt) => reader.update(t, dt));
+
+  const hit = box(3.5, 4, 2.6, new T.MeshBasicMaterial({ visible: false }), 0, 2, -1.1, g);     // 누를 수 있는 영역
+  Object.assign(b, { group: g, door: panels[1], reader, hit, open: 0, lastOpen: -1 });
+  updaters.push((t) => {      // 문 폭: 열릴수록 한쪽으로 주름 잡히며 몰린다
+    const o = b.open;
+    if (o === 0 && b.lastOpen === 0) return; b.lastOpen = o;
+    const pos = b.door.geometry.attributes.position, base = b.door.userData.base;
+    for (let i = 0; i < pos.count; i++) {
+      const bx = base[i * 3], by = base[i * 3 + 1], u = bx / pw, low = .5 - by / 2.26;
+      pos.setX(i, bx * (1 - o * (.8 + low * .12)));
+      pos.setZ(i, Math.sin(u * 22 + t * 5 * (1 - o)) * (o > 0 ? .012 + o * .07 : 0) * (.3 + low) + o * .05);
+    }
+    pos.needsUpdate = true;
+  });
+}
+
+/* ── 탁자 위: 타로 카드와 사주 종이 ── */
+const Table = { cards: [], paper: null, group: null, backTex: null };
+function cardBack() {
+  return tex(cv(256, 420, (g, w, h) => {
+    g.fillStyle = '#231a70'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = 'rgba(226,182,89,.45)'; g.lineWidth = 2;
+    for (let i = -h; i < w + h; i += 22) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + h, h); g.stroke(); g.beginPath(); g.moveTo(i, h); g.lineTo(i + h, 0); g.stroke(); }
+    g.strokeStyle = '#e2b659'; g.lineWidth = 12; g.strokeRect(10, 10, w - 20, h - 20);
+    g.fillStyle = '#e2b659'; g.beginPath(); g.arc(w / 2, h / 2, 46, 0, 7); g.fill();
+    g.fillStyle = '#231a70'; g.beginPath(); g.arc(w / 2 + 18, h / 2 - 10, 40, 0, 7); g.fill();
+  }));
+}
+function cardFace(num) {
+  const c = CARDS[num];
+  const canvasEl = cv(256, 420, (g, w, h) => {
+    g.fillStyle = '#fff4dc'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#e2b659'; g.lineWidth = 12; g.strokeRect(8, 8, w - 16, h - 16);
+    g.strokeStyle = 'rgba(35,26,112,.5)'; g.lineWidth = 3; g.strokeRect(24, 24, w - 48, h - 48);
+    label(g, ROMAN[num], w / 2, 66, { font: F_LABEL, size: 44, fill: '#e8322f' });
+    const words = c.n.split(' ');
+    words.forEach((wd, i) => label(g, wd, w / 2, h - 70 - (words.length - 1 - i) * 46 + (words.length - 1) * 12, { font: F_LABEL, size: words.length > 1 ? 40 : 50, maxW: w - 60, fill: '#231a70' }));
+  });
+  const t = tex(canvasEl);
+  const img = new Image();
+  img.onload = () => { canvasEl.getContext('2d').drawImage(img, 48, 100, 160, 160); t.needsUpdate = true; };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 100 100" fill="none" stroke="#231a70" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">${c.icon}</svg>`);
+  return t;
+}
+const CARD_W = .092, CARD_H = .15, TZ = -1.02;     // TZ: 탁자에서 카드가 놓이는 줄
+function makeCard() {
+  const g = new T.Group();
+  const backGeo = new T.PlaneGeometry(CARD_W, CARD_H); backGeo.rotateX(-Math.PI / 2);
+  const faceGeo = new T.PlaneGeometry(CARD_W, CARD_H); faceGeo.rotateZ(Math.PI); faceGeo.rotateX(Math.PI / 2);
+  const back = new T.Mesh(backGeo, new T.MeshStandardMaterial({ map: Table.backTex, roughness: .6 })); back.position.y = .0012;
+  const face = new T.Mesh(faceGeo, new T.MeshStandardMaterial({ color: 0xffffff, roughness: .6 })); face.position.y = -.0012;
+  g.add(back, face);
+  const c = { group: g, face, back, hover: 0, baseY: TABLE_Y + .004, picked: false, rotY: 0 };
+  Table.group.add(g); Table.cards.push(c);
+  return c;
+}
+function clearTable() {
+  for (const c of Table.cards) { Table.group.remove(c.group); if (c.face.material.map) c.face.material.map.dispose(); }
+  Table.cards.length = 0;
+  if (Table.paper) { Table.group.remove(Table.paper); Table.paper.material.map.dispose(); Table.paper = null; }
+  state.picking = null; hovered = null;
+}
+function riffle3d() {
+  for (let i = 0; i < 6; i++) {
+    const c = makeCard(); c.group.position.set(0, c.baseY + i * .003, TZ);
+    const dir = i % 2 ? 1 : -1;
+    fx(1.7, e => { const k = Math.abs(Math.sin(e * Math.PI * 4)); c.group.position.x = dir * .06 * k; c.group.rotation.y = dir * .12 * k; });
+  }
+  [0, 420, 840, 1260].forEach(d => setTimeout(() => Sfx.card(), d));
+}
+function fan3d() {
+  Table.cards.splice(0).forEach(c => Table.group.remove(c.group));
+  for (let i = 0; i < 9; i++) {
+    const c = makeCard(), k = i - 4;
+    c.slot = V(k * .056, c.baseY + i * .0015, TZ + k * k * .0035);
+    c.rotY = -k * .075;
+    c.group.position.set(0, c.slot.y, TZ);
+    const from = c.group.position.clone();
+    fx(.5 + i * .04, e => { c.group.position.lerpVectors(from, c.slot, ease(e)); c.group.rotation.y = c.rotY * ease(e); });
+  }
+}
+function pickThree3d() {
+  return wait(done => {
+    const order = CARDS.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    const picks = [];
+    const count = el('p', 'count', '<span>고른 카드 0 / 3</span><button type="button">대신 골라 주세요</button>');
+    const pick = c => {
+      if (c.picked || picks.length >= 3) return;
+      c.picked = true; Sfx.card();
+      const i = picks.length, num = order[i], rev = Math.random() < .3;
+      c.face.material.map = cardFace(num); c.face.material.needsUpdate = true;
+      const from = c.group.position.clone(), to = V((i - 1) * .135, c.baseY, TZ + .005), r0 = c.group.rotation.y;
+      fx(.55, e => { const k = ease(e); c.group.position.lerpVectors(from, to, k); c.group.position.y += Math.sin(e * Math.PI) * .06; c.group.rotation.y = lerp(r0, rev ? Math.PI : 0, k); });
+      picks.push({ num, c: CARDS[num], rev, card: c });
+      count.firstChild.textContent = `고른 카드 ${picks.length} / 3`;
+      if (picks.length === 3) {
+        state.picking = null; hovered = null;
+        Table.cards.filter(k => !k.picked).forEach((k, n) => { const f = k.group.position.clone(), to2 = V(.5, k.baseY + n * .002, TZ - .22); fx(.5, e => { k.group.position.lerpVectors(f, to2, ease(e)); k.group.rotation.y = lerp(k.rotY, .5, ease(e)); }); });
+        setTimeout(() => { optsEl.replaceChildren(); done(picks); }, 650);
+      }
+    };
+    count.lastChild.addEventListener('click', () => { const rest = Table.cards.filter(c => !c.picked); if (rest.length) pick(rest[Math.floor(Math.random() * rest.length)]); });
     optsEl.replaceChildren(count);
+    state.picking = pick;
+    return () => { state.picking = null; };
   });
 }
-function layOut(picks) {
-  const row = el('div', 'slots');
-  picks.forEach((p, i) => {
-    const slot = el('div', 'slot');
-    const card = el('div', 'card', `<span class="card-in"><span class="back"></span><span class="face${p.rev ? ' rev' : ''}"><span class="face-in"><i class="num">${ROMAN[p.num]}</i>${svg(p.c.icon)}<b class="nm">${p.c.n}</b></span></span></span>`);
-    const cap = el('span', 'cap', POS[i].cap);
-    slot.append(card, cap);
-    row.append(slot);
-    p.slot = slot; p.card = card; p.cap = cap;
-  });
-  spread.replaceChildren(row);
+function flip3d(p) {
+  Sfx.card();
+  const g = p.card.group, y0 = g.position.y;
+  fx(.75, e => { g.rotation.z = Math.PI * ease(e); g.position.y = y0 + Math.sin(e * Math.PI) * .07; });
 }
-const spotlight = (picks, i) => picks.forEach((p, k) => p.slot.classList.toggle('active', k === i));
+
+function sajuPaper(s) {
+  const t = tex(cv(1024, 720, (g, w, h) => {
+    g.fillStyle = '#fbf3dc'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#b3202f'; g.lineWidth = 6; g.strokeRect(18, 18, w - 36, h - 36);
+    const i = s.input, when = `${i.lunar ? '음력' : '양력'} ${i.y}. ${i.m}. ${i.d}.${i.leap ? ' (윤달)' : ''} ${i.known ? p2(i.hh) + ':' + p2(i.mm) : '시간 모름'}`;
+    label(g, '四柱八字', 70, 78, { font: F_HANJA, weight: 700, size: 50, fill: '#b3202f', align: 'left' });
+    label(g, when, w - 70, 80, { font: F_LABEL, size: 36, fill: '#150e28', align: 'right', maxW: 560 });
+    const colW = 220, x0 = (w - colW * 4) / 2;
+    s.pillars.forEach(([name, p], k) => {
+      const cx = x0 + colW * (k + .5);
+      label(g, name + '주', cx, 138, { font: F_LABEL, size: 34, fill: '#6b5b3a' });
+      if (!p) { g.setLineDash([10, 10]); g.strokeStyle = '#b9ab88'; g.lineWidth = 4; rr(g, cx - 82, 208, 164, 164, 22); g.stroke(); rr(g, cx - 82, 392, 164, 164, 22); g.stroke(); g.setLineDash([]); label(g, '모름', cx, 382, { font: F_LABEL, size: 34, fill: '#8a7c5c' }); return; }
+      label(g, k === 1 ? '일간 (나)' : TG_KO[p.stemTenGod], cx, 182, { font: F_LABEL, size: 30, fill: k === 1 ? '#b3202f' : '#150e28' });
+      [[p.stem, p.stemElement, 290], [p.branch, p.branchElement, 474]].forEach(([ch, elem, cy]) => {
+        rr(g, cx - 82, cy - 82, 164, 164, 22); g.fillStyle = EL_COLOR[elem]; g.fill();
+        if (k === 1 && cy === 290) { g.strokeStyle = '#b3202f'; g.lineWidth = 8; g.stroke(); }
+        label(g, ch, cx, cy + 4, { font: F_HANJA, weight: 700, size: 118, fill: elem === 'METAL' || elem === 'EARTH' ? '#150e28' : '#fff' });
+      });
+      label(g, `${p.hangul} · ${TG_KO[p.branchTenGod] || ''}`, cx, 586, { font: F_LABEL, size: 32, fill: '#150e28' });
+    });
+    Object.keys(EL_KO).forEach((e, k) => {
+      const cx = 130 + k * 150;
+      g.fillStyle = EL_COLOR[e]; g.beginPath(); g.arc(cx - 34, 650, 20, 0, 7); g.fill();
+      label(g, `${EL_HANJA[e]} ${s.el[e]}`, cx + 22, 652, { font: F_HANJA, weight: 700, size: 38, fill: '#150e28' });
+    });
+    label(g, '계산 Manseryeok-engine · 절기 lunar-javascript', w - 40, 694, { font: F_BODY, size: 19, fill: '#8a7c5c', align: 'right' });
+  }));
+  const geo = new T.PlaneGeometry(.5, .352); geo.rotateX(-Math.PI / 2);
+  const m = new T.Mesh(geo, new T.MeshStandardMaterial({ map: t, roughness: .85, emissiveMap: t, emissive: 0xffffff, emissiveIntensity: .22 }));
+  const from = V(0, TABLE_Y + .004, TZ - .22), to = V(0, TABLE_Y + .004, TZ + .01);
+  m.position.copy(from); Table.group.add(m); Table.paper = m;
+  fx(.8, e => { m.position.lerpVectors(from, to, ease(e)); m.rotation.y = (1 - ease(e)) * .25; });
+  Sfx.card();
+}
+
+/* ── 카메라: 큰 판형 느낌의 느린 달리와 크레인 ── */
+const rig = { pos: V(0, 2, 10), look: V(0, 2, 0), fov: 45, tw: null, bob: 0, px: 0, py: 0, tpx: 0, tpy: 0 };
+const hfov = v => 2 * Math.atan(Math.tan(v * Math.PI / 360) * aspect);
+const fit = (width, v) => (width / 2) / Math.tan(hfov(v) / 2);
+function shotAlley() {
+  const v = aspect < 1 ? 52 : 40, both = aspect >= 1.25, b = BOOTHS[state.focus];
+  const x = both ? b.x * .16 : b.x;
+  const d = Math.max(fit(both ? 9.3 : 4.5, v), 6.4);
+  return { pos: V(x, 1.25, d), look: V(x, 2.25, 0), fov: v };
+}
+function shotSeat(b) {
+  const ex = b.x + CX;
+  return { pos: V(ex, 1.6, -.2), look: V(ex, aspect < 1 ? 1.34 : 1.43, -1.72), fov: aspect < 1 ? 62 : 50 };
+}
+function shotTable(b, width, dx = 0, depth = .16) {
+  const v = shotSeat(b).fov, ex = b.x + CX + dx;
+  const d = clamp(Math.max(fit(width, v), depth * 1.5 / (2 * Math.tan(v * Math.PI / 360))), .42, 1.25);
+  const target = V(ex, TABLE_Y, TZ + d * (aspect < 1 ? .3 : .16));
+  return { pos: target.clone().addScaledVector(V(0, .96, .28).normalize(), d), look: target, fov: v };
+}
+/** keys: 지나갈 샷들. 하나면 직선, 그 이상이면 부드러운 곡선으로 지난다. */
+function move(keys, dur, opt = {}) {
+  if (rig.tw) rig.tw.done();
+  const all = [{ pos: rig.pos.clone(), look: rig.look.clone(), fov: rig.fov }, ...keys];
+  return wait(done => {
+    const curve = pts => pts.length > 2 ? new T.CatmullRomCurve3(pts, false, 'centripetal') : null;
+    const tw = { all, posC: curve(all.map(k => k.pos)), lookC: curve(all.map(k => k.look)), t0: clock, dur: reduced ? .01 : dur, bob: opt.bob || 0, on: opt.on, done };
+    rig.tw = tw;
+    return () => { if (rig.tw === tw) rig.tw = null; };
+  });
+}
+function updateCamera(t, dt) {
+  const tw = rig.tw;
+  if (tw) {
+    const u = clamp((t - tw.t0) / tw.dur, 0, 1), e = ease(u), a = tw.all[0], z = tw.all[tw.all.length - 1];
+    if (tw.posC) { rig.pos.copy(tw.posC.getPoint(e)); rig.look.copy(tw.lookC.getPoint(e)); }
+    else { rig.pos.lerpVectors(a.pos, z.pos, e); rig.look.lerpVectors(a.look, z.look, e); }
+    rig.fov = lerp(a.fov, z.fov, e);
+    rig.bob = tw.bob * Math.sin(u * Math.PI);
+    if (tw.on) tw.on(e);
+    if (u >= 1) { rig.tw = null; rig.bob = 0; tw.done(); }
+  }
+  const k = 1 - Math.exp(-dt * 3);
+  rig.px = lerp(rig.px, rig.tpx, k); rig.py = lerp(rig.py, rig.tpy, k);
+  const amp = state.mode === 'room' ? .035 : .16, drift = reduced ? 0 : 1;
+  // 거의 수직으로 내려다볼 때는 '위'를 탁자 안쪽(-z)으로 잡아야 화면이 돌지 않는다
+  const down = smooth(.45, .85, (rig.pos.y - rig.look.y) / Math.max(.001, rig.pos.distanceTo(rig.look)));
+  camera.position.copy(rig.pos); camera.up.set(0, 1 - down, -down).normalize(); camera.lookAt(rig.look);
+  camera.translateX(rig.px * amp + drift * Math.sin(t * .31) * .012);
+  camera.translateY(rig.py * amp * .5 + drift * Math.sin(t * .23) * .008 + Math.abs(Math.sin(t * 5.7)) * rig.bob);   // 걸음마다 들썩임
+  camera.lookAt(rig.look);
+  camera.rotation.z += Math.sin(t * 5.7) * rig.bob * .3;
+  if (Math.abs(camera.fov - rig.fov) > .01) { camera.fov = rig.fov; camera.updateProjectionMatrix(); }
+}
+
+/* ── 세계 만들기 ── */
+function buildWorld() {
+  renderer = new T.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.outputEncoding = T.sRGBEncoding; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.02;
+  scene = new T.Scene(); scene.background = new T.Color(0x0a0818); scene.fog = new T.FogExp2(0x150f30, .02);
+  camera = new T.PerspectiveCamera(45, 1, .04, 140);
+  scene.add(new T.HemisphereLight(0x5a55b0, 0x130f22, .55));
+  const moonL = new T.DirectionalLight(0x8f9cff, .25); moonL.position.set(-6, 12, 8); scene.add(moonL);
+
+  W.softTex = tex(cv(128, 128, (g, w) => { const r = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2); r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(.35, 'rgba(255,255,255,.42)'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(0, 0, w, w); }));
+  W.reflTex = tex(cv(128, 256, (g, w, h) => { const r = g.createLinearGradient(0, 0, 0, h); r.addColorStop(0, 'rgba(255,255,255,.95)'); r.addColorStop(.5, 'rgba(255,255,255,.3)'); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(0, 0, w, h); const e = g.createLinearGradient(0, 0, w, 0); e.addColorStop(0, 'rgba(0,0,0,1)'); e.addColorStop(.22, 'rgba(0,0,0,0)'); e.addColorStop(.78, 'rgba(0,0,0,0)'); e.addColorStop(1, 'rgba(0,0,0,1)'); g.globalCompositeOperation = 'destination-out'; g.fillStyle = e; g.fillRect(0, 0, w, h); }));
+  W.vinylTex = tex(cv(256, 512, (g, w, h) => {
+    g.clearRect(0, 0, w, h); g.fillStyle = 'rgba(235,240,255,.1)'; g.fillRect(0, 0, w, h);
+    for (const [x, ww, a] of [[30, 26, .36], [96, 10, .22], [150, 40, .3], [222, 12, .38]]) { const r = g.createLinearGradient(x, 0, x + ww, 0); r.addColorStop(0, 'rgba(255,255,255,0)'); r.addColorStop(.5, `rgba(255,255,255,${a})`); r.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = r; g.fillRect(x, 0, ww, h); }
+    g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(0, 0, 4, h); g.fillRect(w - 4, 0, 4, h);
+    g.fillStyle = 'rgba(20,16,40,.55)'; g.fillRect(0, h - 10, w, 10);
+    g.strokeStyle = 'rgba(255,255,255,.14)'; g.lineWidth = 3; for (let y = 60; y < h; y += 95) { g.beginPath(); g.moveTo(0, y); g.bezierCurveTo(80, y + 14, 170, y - 12, w, y + 6); g.stroke(); }
+  }));
+  Table.backTex = cardBack();
+
+  // 젖은 보도
+  const tile = tex(cv(256, 256, (g, w, h) => { g.fillStyle = '#1c1930'; g.fillRect(0, 0, w, h); g.strokeStyle = 'rgba(255,255,255,.07)'; g.lineWidth = 3; g.strokeRect(0, 0, w, h); g.strokeRect(0, 0, w / 2, h / 2); g.strokeRect(w / 2, h / 2, w / 2, h / 2); for (let i = 0; i < 500; i++) { g.fillStyle = `rgba(255,255,255,${.015 + (i % 5) * .008})`; g.fillRect((i * 67) % w, (i * 131) % h, 3, 3); } }), [44, 34]);
+  plane(90, 70, new T.MeshStandardMaterial({ map: tile, roughness: .32, metalness: .62 }), 0, 0, 6, scene).rotation.x = -Math.PI / 2;
+
+  // 뒤편 건물과 세로 간판
+  [[-9.5, -8, 6, 15, 6, 3], [-3.2, -10, 6.4, 21, 6, 11], [3.6, -11, 7, 26, 6, 23], [10, -8.5, 6, 13, 6, 37], [-16, -1, 6, 11, 9, 5], [16, -1, 6, 12, 9, 17], [-17, 9, 5, 14, 12, 29], [17, 9, 5, 13, 12, 41]].forEach(([x, z, w, h, d, seed]) => {
+    const wt = windowsTex(seed + 1); wt.wrapS = wt.wrapT = T.RepeatWrapping; wt.repeat.set(w / 2.6, h / 5.2);
+    box(w, h, d, new T.MeshBasicMaterial({ map: wt, color: 0x9a9ac0 }), x, h / 2, z, scene);
+  });
+  [[-6.7, 6.4, -4.95, '노래방', '#ff3d9a', '#fff'], [6.9, 7.2, -5.45, '호프소주', '#1fd6c9', '#0b0919'], [.2, 9.6, -6.95, '24시포차', '#ff8a1f', '#fff'], [-11.2, 5, -4.9, '약', '#27c24c', '#fff']].forEach(([x, y, z, s, bg, fg]) => {
+    plane(.8, 2.6, lit(neonTex(s, bg, fg)), x, y, z, scene);
+    glow(2.4, 4.4, new T.Color(bg).getHex(), .3, x, y, z + .02, scene);
+  });
+  // 배전함, 가로등
+  box(.9, 1.25, .5, std(0x2f6b4f, .6, .2), -4.7, .62, .9, scene);
+  box(.09, 5.2, .09, std(0x2a2834, .5, .6), 4.7, 2.6, .6, scene);
+  mesh(new T.SphereGeometry(.14, 12, 10), new T.MeshBasicMaterial({ color: 0xfff0c8, toneMapped: false }), 4.7, 5.2, .9, scene);
+  glow(2.6, 2.6, 0xffd9a0, .5, 4.7, 5.2, .95, scene);
+
+  BOOTHS.forEach(buildBooth);
+  Table.group = new T.Group(); scene.add(Table.group);
+
+  // 비
+  const N = 900, rp = new Float32Array(N * 6), drops = [];
+  for (let i = 0; i < N; i++) drops.push({ x: (Math.random() - .5) * 30, y: Math.random() * 12, z: -8 + Math.random() * 28, v: 12 + Math.random() * 6, l: .22 + Math.random() * .25 });
+  const rg = new T.BufferGeometry(); rg.setAttribute('position', new T.BufferAttribute(rp, 3));
+  const rain = new T.LineSegments(rg, new T.LineBasicMaterial({ color: 0xb9c2ff, transparent: true, opacity: .3, depthWrite: false })); rain.frustumCulled = false; scene.add(rain);
+  updaters.push((t, dt) => {
+    for (let i = 0; i < N; i++) {
+      const d = drops[i]; d.y -= d.v * dt; d.x -= d.v * dt * .08;
+      if (d.y < 0) { d.y = 11 + Math.random() * 2; d.x = (Math.random() - .5) * 30; }
+      rp[i * 6] = d.x; rp[i * 6 + 1] = d.y; rp[i * 6 + 2] = d.z; rp[i * 6 + 3] = d.x + d.l * .08; rp[i * 6 + 4] = d.y + d.l; rp[i * 6 + 5] = d.z;
+    }
+    rg.attributes.position.needsUpdate = true;
+  });
+
+  // 우산 쓰고 지나가는 행인 그림자
+  const sil = tex(cv(256, 512, (g, w, h) => {
+    g.clearRect(0, 0, w, h); g.fillStyle = '#05040c';
+    g.beginPath(); g.moveTo(14, 138); g.quadraticCurveTo(128, 6, 242, 138);
+    for (let x = 242; x > 14; x -= 57) g.quadraticCurveTo(x - 28, 118, x - 57, 138);
+    g.closePath(); g.fill();
+    g.fillRect(150, 120, 6, 150);
+    g.beginPath(); g.arc(118, 196, 25, 0, 7); g.fill();
+    g.beginPath(); g.moveTo(84, 232); g.quadraticCurveTo(118, 214, 152, 232); g.lineTo(166, 400); g.lineTo(72, 400); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(150, 240); g.lineTo(164, 268); g.lineTo(150, 300); g.lineTo(138, 262); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(84, 396); g.lineTo(112, 396); g.lineTo(104, 512); g.lineTo(80, 512); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(124, 396); g.lineTo(154, 396); g.lineTo(166, 512); g.lineTo(140, 512); g.closePath(); g.fill();
+  }));
+  const walker = plane(.95, 1.9, new T.MeshBasicMaterial({ map: sil, transparent: true, fog: false }), -14, .95, 3.4, scene);
+  updaters.push((t) => { const u = ((t + 30) * 1.15) % 48; walker.position.x = -9 + u; walker.position.y = .95 + Math.abs(Math.sin(t * 5.2)) * .025; walker.visible = !reduced && state.mode !== 'room' && state.mode !== 'moving' && u < 18; });
+
+  updaters.push(() => {        // 골목에서 눈길이 간 부스의 상담사가 손짓한다
+    BOOTHS.forEach((b, i) => { b.reader.wave = lerp(b.reader.wave, (state.mode === 'alley' || state.mode === 'intro') && state.focus === i ? 1 : 0, .06); });
+  });
+}
+
+function resize() {
+  const r = stage.getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  aspect = r.width / r.height;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = aspect; camera.updateProjectionMatrix();
+  if (!rig.tw) {             // 서 있는 샷은 화면 비율에 맞춰 다시 잡는다
+    const s = state.mode === 'alley' ? shotAlley() : state.mode === 'room' && state.shot ? state.shot() : null;
+    if (s) { rig.pos.copy(s.pos); rig.look.copy(s.look); rig.fov = s.fov; }
+  }
+}
+let last = 0, hovered = null, downAt = null;
+function frame(ms) {
+  const t = ms / 1000, dt = Math.min(.05, t - last || .016); last = t; clock = t;
+  for (let i = fxList.length - 1; i >= 0; i--) {
+    const f = fxList[i], e = clamp((t - f.t0) / f.dur, 0, 1);
+    f.fn(e); if (e >= 1) fxList.splice(i, 1);
+  }
+  for (const u of updaters) u(t, dt);
+  for (const c of Table.cards) { c.hover = lerp(c.hover, c === hovered && !c.picked ? 1 : 0, .2); c.back.position.y = .0012 + c.hover * .014; }
+  updateCamera(t, dt);
+  renderer.render(scene, camera);
+}
+
+/* ── 포인터: 부스 고르기, 카드 집기 ── */
+const ray = T ? new T.Raycaster() : null, ndc = T ? new T.Vector2() : null;
+function cast(e, objects) {
+  const r = canvas.getBoundingClientRect();
+  ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  return ray.intersectObjects(objects, true)[0] || null;
+}
+function cardAt(e) {
+  const hit = cast(e, Table.cards.filter(c => !c.picked).map(c => c.back));
+  return hit ? Table.cards.find(c => c.back === hit.object) : null;
+}
+const boothAt = e => { const hit = cast(e, BOOTHS.map(b => b.hit)); return hit ? BOOTHS.findIndex(b => b.hit === hit.object) : -1; };
+canvas.addEventListener('pointermove', e => {
+  if (!camera) return;
+  const r = canvas.getBoundingClientRect();
+  if (e.pointerType === 'mouse') { rig.tpx = ((e.clientX - r.left) / r.width - .5) * 2; rig.tpy = -((e.clientY - r.top) / r.height - .5) * 2; }
+  if (state.picking) { hovered = cardAt(e); canvas.style.cursor = hovered ? 'pointer' : ''; }
+  else if (state.mode === 'alley') { const i = boothAt(e); canvas.style.cursor = i >= 0 ? 'pointer' : ''; if (i >= 0 && e.pointerType === 'mouse') setFocus(i, true); }
+  else canvas.style.cursor = '';
+});
+canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; Sfx.start(); });
+canvas.addEventListener('pointerup', e => {
+  if (!camera || !downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 12) return;
+  if (state.picking) { const c = cardAt(e); if (c) state.picking(c); return; }
+  if (state.mode === 'alley') { const i = boothAt(e); if (i >= 0) enter(i); }
+});
 
 /* ═════════ 대본 ═════════
-   지금은 고정 대본. 실제 앱에서는 reading()이 뽑힌 카드와 질문을 LLM에 넘기고,
-   say()가 받을 문장을 스트리밍으로 받아오게 됩니다. */
+   지금은 고정 대본. 실제 앱에서는 뽑힌 카드나 사주 결과를 LLM에 넘기고 say()가 그 문장을 받는 자리. */
 const ACK = {
   love: '사람 일이구나. 표정 보니까 대충 알겠다. 누구 얘긴지는 말 안 해도 돼요. 카드가 알아서 짚어 주니까.',
   work: '먹고사는 문제구나. 그게 제일 무겁지. 자, 어깨 힘부터 좀 빼요.',
   flow: '딱 꼬집어 하나는 아니고 그냥 답답한 거구나. 그런 날이 카드 보기 제일 좋아요.',
 };
-const TOPIC = {
-  love: '사람 일로 물었잖아요.',
-  work: '일이랑 돈 문제로 물었죠.',
-  flow: '딱 하나를 묻진 않았지만 흐름은 보여요.',
-  custom: '아까 그 고민 있잖아요.',
-};
+const TOPIC = { love: '사람 일로 물었잖아요.', work: '일이랑 돈 문제로 물었죠.', flow: '딱 하나를 묻진 않았지만 흐름은 보여요.', custom: '아까 그 고민 있잖아요.' };
 const REVS = [
   '세 장이 다 바로 섰어요. 흐름이 막힌 데 없이 이어져 있다는 거예요.',
   '한 장이 거꾸로 섰죠. 전체는 괜찮은데 거기 한 군데가 걸려 있는 거예요.',
   '거꾸로 선 카드가 많아요. 나쁜 게 아니고, 기운이 밖으로 못 나가고 안에서 맴돈다는 뜻이에요.',
 ];
+const cut = (shotFn, dur = 1.1) => { state.shot = shotFn; return move([shotFn()], dur); };   // 샷 바꾸기: 얼굴 ↔ 탁자
 
-async function reading() {
+async function tarotReading(b) {
+  const seat = () => shotSeat(b);
   const t = await choose(`${state.call}, 오늘은 뭐가 제일 마음에 걸려서 왔어요?`,
     [['연애 · 사람', 'love'], ['일 · 돈', 'work'], ['요즘 흐름 전반', 'flow'], ['직접 말할게요', 'custom']], 'neutral');
   state.topic = t;
   if (t === 'custom') {
     state.q = await askText('그래요, 편하게 말해 봐요. 한 줄이면 돼요.', '예: 이직해도 될까요', '말로는 못 하겠어요', 'smile');
     await say(state.q ? `「${state.q}」. 그게 마음에 걸렸구나. 그 생각 그대로 붙들고 있어요.` : '말로 안 나오는 고민도 있죠. 속으로만 떠올리고 있어요.', 'think');
-  } else {
-    await say(ACK[t], 'think');
-  }
+  } else await say(ACK[t], 'think');
 
-  await type('카드 섞을게요. 섞는 동안 그 질문만 속으로 한 번 더 되뇌어 봐요.', 'neutral');
-  await riffle();
+  b.reader.look = 1;
+  type('카드 섞을게요. 섞는 동안 그 질문만 속으로 한 번 더 되뇌어 봐요.', 'neutral').catch(() => {});
+  await cut(() => shotTable(b, .5), 1.2);
+  riffle3d(); await sleep(1850);
+  fan3d();
+  await cut(() => shotTable(b, .62), .8);
   await type('자, 펼쳤어요. 손 가는 대로 세 장만 골라요. 오래 고민하면 안 맞아요.', 'smile');
-  const picks = await pickThree();
-  layOut(picks);
+  const picks = await pickThree3d();
+  await cut(() => shotTable(b, .5), .8);
   await say('이 세 장이구나. 왼쪽부터 지나온 것, 지금, 다가올 것이에요. 하나씩 뒤집어 볼게요.', 'neutral');
 
   for (let i = 0; i < 3; i++) {
     const p = picks[i];
-    spotlight(picks, i);
-    p.card.classList.add('flipped');
-    p.cap.innerHTML = `${POS[i].cap}<br>${p.c.n}${p.rev ? ' (역)' : ''}`;
-    await sleep(700);
+    b.reader.look = 1;
+    await cut(() => shotTable(b, .3, (i - 1) * .135), .9);
+    flip3d(p); await sleep(850);
     await say(`${POS[i].intro} ${p.c.n} 카드${p.rev ? ', 거꾸로 섰네요' : '네요'}.`, HEAVY.has(p.num) && !p.rev ? 'surprise' : 'neutral');
+    b.reader.look = 0;
+    await cut(seat, 1.0);
     await say(p.rev ? p.c.rev : p.c.up, 'neutral');
     await say(POS[i].frame, 'think');
   }
-  spotlight(picks, -1);
-
   const nRev = picks.filter(p => p.rev).length;
+  await cut(() => shotTable(b, .5), 1.0);
   await say(REVS[Math.min(nRev, 2)], 'think');
   await say(`${TOPIC[t]} 지나온 자리에 ${picks[0].c.n}, 지금은 ${picks[1].c.n}, 앞에는 ${picks[2].c.n}. 이 순서로 이야기가 흘러가고 있어요.`, 'neutral');
+  await cut(seat, 1.0);
   await say(`마지막 카드가 하는 말은 이거예요. ${picks[2].c.tip}`, 'smile');
   await say('카드는 정해진 걸 통보하는 게 아니에요. 지금 서 있는 자리를 비춰 주는 거지. 마음에 걸리는 말 하나만 들고 가요.', 'neutral');
   await say('복채는 오천 원인데, 아직 개업 전이라 오늘은 그냥 가요.', 'smile');
 }
-
-async function session() {
-  try {
-    await sleep(650);
-    await say('어서 와요. 비 오는데 용케 찾아왔네. 거기 편하게 앉아요.', 'smile');
-    await say('나는 달무리예요. 이 골목에서 카드만 스무 해 넘게 폈어요.', 'neutral');
-    const name = await askText('이름이 뭐예요? 부르고 싶은 대로 알려 줘요.', '이름 또는 별명', '그냥 손님으로', 'smile');
-    state.call = name ? `${name} 씨` : '손님';
-    await say(name ? `${state.call}. 이름 좋네, 입에 잘 붙어요.` : '말 안 해도 돼요. 그럼 그냥 손님이라고 부를게요.', 'smile');
-    for (;;) {
-      await reading();
-      const more = await choose('더 볼 거 있어요?', [['한 번 더 볼래요', 'again'], ['골목으로 나갈게요', 'leave']], 'neutral');
-      if (more === 'leave') {
-        await say('그래요. 우산 챙기고, 비 그치면 또 와요.', 'smile');
-        leave();
-        return;
-      }
-      spread.replaceChildren();
-      await say('좋아요. 다른 걸 물어도 되고, 같은 걸 다시 물어도 돼요.', 'smile');
-    }
-  } catch (e) {
-    if (!(e instanceof Stop)) throw e;
+async function tarotSession(b) {
+  await say('어서 와요. 비 오는데 용케 찾아왔네. 거기 편하게 앉아요.', 'smile');
+  await say('나는 달무리예요. 이 골목에서 카드만 스무 해 넘게 폈어요.', 'neutral');
+  const name = await askText('이름이 뭐예요? 부르고 싶은 대로 알려 줘요.', '이름 또는 별명', '그냥 손님으로', 'smile');
+  state.call = name ? `${name} 씨` : '손님';
+  await say(name ? `${state.call}. 이름 좋네, 입에 잘 붙어요.` : '말 안 해도 돼요. 그럼 그냥 손님이라고 부를게요.', 'smile');
+  for (;;) {
+    await tarotReading(b);
+    const more = await choose('더 볼 거 있어요?', [['한 번 더 볼래요', 'again'], ['골목으로 나갈게요', 'leave']], 'neutral');
+    if (more === 'leave') { await say('그래요. 우산 챙기고, 비 그치면 또 와요.', 'smile'); return; }
+    clearTable();
+    await say('좋아요. 다른 걸 물어도 되고, 같은 걸 다시 물어도 돼요.', 'smile');
   }
+}
+
+async function sajuSession(b) {
+  const seat = () => shotSeat(b);
+  await say('아이고, 어서 와요. 비 맞았네. 거기 앉아요, 거기.', 'smile');
+  await say('나는 보름달이에요. 이 자리에서 사주만 서른 해를 봤어.', 'neutral');
+  let s = null, tries = 0;
+  for (;;) {
+    const birth = await askBirth(tries++ ? '다시 불러 봐요.' : '생년월일하고 태어난 시간 불러 봐요. 양력인지 음력인지도.', 'neutral');
+    b.reader.look = 1;
+    type('가만있어 봐. 만세력 좀 펴 보고…', 'think').catch(() => {});
+    let err = null;
+    try { s = computeSaju(birth); } catch (e) { err = e; s = null; console.warn('사주 계산 실패', e); }
+    await sleep(1500);
+    if (s) break;
+    b.reader.look = 0;
+    if (err) { await say('어머, 오늘은 만세력이 안 펴지네. 책이 젖었나 봐. (계산 엔진을 불러오지 못했어요.)', 'surprise'); return; }
+    await say('그 날짜는 달력에 없는데? 날짜를 다시 한번 봐요.', 'surprise');
+  }
+  const c = s.chart, names = s.pillars.filter(([, p]) => p).reverse().map(([n, p]) => `${n}주 ${p.hangul}`).join(', ');
+  chip.textContent = s.pillars.map(([, p]) => p ? p.hanja : '〇〇').join(' '); chip.hidden = false;
+  sajuPaper(s);
+  await cut(() => shotTable(b, .6, 0, .37), 1.3);
+  await say(`자, 사주가 이렇게 나와요. ${names}.`, 'neutral');
+  if (!s.input.known) await say('태어난 시간을 모르니까 시주는 비워 놨어요. 여섯 글자로만 볼게.', 'think');
+  if (s.old) await say('옛날 생이라 서머타임이니 옛 표준시니 따질 게 있는데, 오늘은 시계 시간 그대로 놓고 봤어요.', 'think');
+  if (c.confidence !== 'DEFINITE') await say('딱 절기가 바뀌는 분에 태어났네. 이런 사주는 앞뒤 달을 둘 다 봐야 하는데, 오늘은 바뀐 뒤로 볼게요.', 'surprise');
+  b.reader.look = 0;
+  await cut(seat, 1.1);
+  await say(DAY_MASTER[c.dayMaster], 'smile');
+  const els = Object.keys(s.el), top = els.reduce((a, k) => s.el[k] > s.el[a] ? k : a, els[0]), none = els.filter(k => s.el[k] === 0);
+  await say(EL_MANY[top], 'neutral');
+  await say(none.length ? EL_NONE[none[0]] + (none.length > 1 ? ` ${EL_KO[none[1]]} 기운도 안 보이고.` : '') : '다섯 가지가 다 있네. 고르게 타고났어. 이런 사주는 크게 모난 데가 없어.', 'think');
+  await say(`${s.luckIsNext ? '내년' : '올해'}가 ${s.luck.hangul}년이잖아. 손님한테는 ${LUCK[s.luck.tenGod]}`, 'neutral');
+  for (let asked = 0; ; asked++) {
+    const opts = [['재물', 'money'], ['연애 · 결혼', 'love'], ['일 · 직장', 'work']];
+    if (asked) opts.push(['이제 됐어요', 'done']);
+    const q = await choose(asked ? '또 궁금한 거 있어요?' : '뭐가 제일 궁금해서 왔어요?', opts, 'neutral');
+    if (q === 'done') break;
+    await say(sajuAnswer(s, q), q === 'love' ? 'smile' : 'think');
+  }
+  await say('사주는 타고난 그릇이고, 거기 뭘 담을지는 손님 몫이에요. 너무 매이지는 말고.', 'smile');
+  await say('복채는 만 원인데, 아직 개업 전이라 오늘은 그냥 가요. 우산 챙기고.', 'smile');
 }
 
 /* ═════════ 장면 전환 ═════════ */
-function show(scene, on) { scene.setAttribute('aria-hidden', on ? 'false' : 'true'); scene.inert = !on; }
-function enter() {
-  cancelAll();
-  spread.replaceChildren(); optsEl.replaceChildren(); lineEl.textContent = ''; nextBtn.hidden = true; mood('neutral');
-  show(alley, false); show(room, true);
-  session();
+const show = (node, on) => { node.hidden = !on; node.inert = !on; };
+function setFocus(i, quiet) {
+  i = clamp(i, 0, BOOTHS.length - 1);
+  if (state.mode !== 'alley' || i === state.focus) return;
+  state.focus = i; plateName.textContent = BOOTHS[i].name;
+  if (!quiet) Sfx.step();
+  move([shotAlley()], aspect >= 1.25 ? .9 : 1.6).catch(() => {});     // 옆 부스로 트래킹
 }
-function leave() {
-  cancelAll(); Voice.stop();
-  show(room, false); show(alley, true);
-  $('#booth-tarot').focus({ preventScroll: true });
+async function intro() {
+  state.mode = 'intro';
+  const end = shotAlley();
+  rig.pos.set(end.pos.x + 3.5, 8.5, end.pos.z + 9); rig.look.set(end.look.x, 3.2, 0); rig.fov = end.fov + 6;
+  $('#loading').classList.add('done');
+  try {      // 지붕 위에서 크레인으로 내려와 골목 정면에 선다
+    await move([{ pos: V(end.pos.x + 1.2, 3.4, end.pos.z + 3), look: V(end.look.x, 2.6, 0), fov: end.fov + 3 }, end], 5.2);
+    state.mode = 'alley'; show(alleyUi, true);
+  } catch (e) { if (!(e instanceof Stop)) throw e; }
+}
+async function enter(i) {
+  if (state.mode !== 'alley') return;
+  cancelAll(); fxList.length = 0;
+  const b = BOOTHS[i], ex = b.x + CX, seat = shotSeat(b);
+  state.mode = 'moving'; state.focus = i; state.inside = i; state.shot = () => shotSeat(b);
+  plateName.textContent = b.name;
+  show(alleyUi, false); canvas.style.cursor = '';
+  Sfx.start(); Voice.tone(b.voice[0], b.voice[1]);
+  activeReader = b.reader; whoEl.textContent = b.who; chip.hidden = true;
+  lineEl.textContent = ''; optsEl.replaceChildren(); nextBtn.hidden = true; clearTable();
+  Table.group.position.set(ex, 0, 0);
+  let swished = false, inside = false;
+  try {
+    // 걸어가서, 비닐을 걷고, 발판을 딛고 올라, 의자에 앉는다
+    await move([
+      { pos: V(ex, 1.6, 3.4), look: V(ex, 1.62, -1.7), fov: seat.fov - 6 },
+      { pos: V(ex, 1.7, .9), look: V(ex, 1.6, -1.7), fov: seat.fov - 2 },
+      { pos: V(ex, 1.93, .08), look: V(ex, 1.5, -1.72), fov: seat.fov },
+      seat,
+    ], 5.6, { bob: .02, on: (e) => {
+      b.open = smooth(.42, .74, e);
+      if (e > .42 && !swished) { swished = true; Sfx.swish(); }
+      if (e > .74 && !inside) { inside = true; Sfx.inside(true); Sfx.step(); }
+    } });
+    state.mode = 'room'; show(roomUi, true);
+    await sleep(350);
+    await (b.id === 'tarot' ? tarotSession(b) : sajuSession(b));
+    leave();
+  } catch (e) { if (!(e instanceof Stop)) throw e; }
+}
+async function leave() {
+  if (state.mode !== 'room') return;
+  cancelAll(); Voice.stop(); fxList.length = 0;
+  const b = BOOTHS[state.inside], ex = b.x + CX;
+  state.mode = 'moving'; show(roomUi, false);
+  b.reader.look = 0; b.reader.setMood('smile'); b.reader.talking = false; activeReader = null;
+  Sfx.swish(); Sfx.inside(false);
+  try {
+    await move([{ pos: V(ex, 1.8, .7), look: V(ex, 1.55, -1.7), fov: 50 }, shotAlley()], 3.2, { bob: .012, on: e => { b.open = 1 - smooth(.5, .85, e); } });
+    b.open = 0; clearTable(); state.inside = -1; state.mode = 'alley'; show(alleyUi, true);
+    $('#go').focus({ preventScroll: true });
+  } catch (e) { if (!(e instanceof Stop)) throw e; }
 }
 
-$('#booth-tarot').addEventListener('click', enter);
-let toastTimer = 0;
-$('#booth-saju').addEventListener('click', () => {
-  toast.textContent = '보름달 사주는 아직 준비중이에요. 오늘은 달무리 타로만 불이 켜져 있어요.';
-  toast.hidden = false;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { toast.hidden = true; }, 3200);
-});
+$('#go').addEventListener('click', () => enter(state.focus));
+$('#prev').addEventListener('click', () => setFocus(state.focus - 1));
+$('#nextBooth').addEventListener('click', () => setFocus(state.focus + 1));
 $('#exit').addEventListener('click', leave);
 nextBtn.addEventListener('click', e => { e.stopPropagation(); advance(); });
-dlg.addEventListener('click', e => { if (!e.target.closest('button, input, form')) advance(); });
+dlg.addEventListener('click', e => { if (!e.target.closest('button, input, select, label, form')) advance(); });
 document.addEventListener('keydown', e => {
-  if (room.inert || (e.key !== 'Enter' && e.key !== ' ')) return;
-  if (e.target.closest('button, input, form')) return;
-  e.preventDefault(); advance();
+  if (e.target.closest('button, input, select, form')) return;
+  if (state.mode === 'alley') {
+    if (e.key === 'ArrowLeft') setFocus(state.focus - 1); else if (e.key === 'ArrowRight') setFocus(state.focus + 1); else if (e.key === 'Enter') enter(state.focus);
+  } else if (state.mode === 'room' && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); advance(); }
 });
-
-function paintSound() {
-  if (!Voice.available) { soundBtn.textContent = '음성 없음'; soundBtn.disabled = true; return; }
-  soundBtn.textContent = Voice.on ? '소리 켬' : '소리 끔';
-  soundBtn.setAttribute('aria-pressed', String(Voice.on));
-}
-soundBtn.addEventListener('click', () => { Voice.set(!Voice.on); paintSound(); });
+function paintSound() { soundBtn.textContent = Voice.on ? '소리 켬' : '소리 끔'; soundBtn.setAttribute('aria-pressed', String(Voice.on)); }
+soundBtn.addEventListener('click', () => { Voice.set(!Voice.on); Sfx.mute(!Voice.on); paintSound(); });
 paintSound();
-show(room, false);
+show(alleyUi, false); show(roomUi, false);
 
-/* ═════════ 상담사 뒤 별자리 고리 ═════════ */
-(() => {
-  let s = '<circle r="150" fill="none" stroke="currentColor" stroke-width="2.5"/><circle r="104" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".7"/>';
-  for (let i = 0; i < 12; i++) {
-    const a = i * 30;
-    s += `<g transform="rotate(${a}) translate(0 -127)"><rect x="-13" y="-19" width="26" height="38" rx="3" fill="#fff4dc" stroke="currentColor" stroke-width="2"/><circle r="5" fill="none" stroke="#8e1b2e" stroke-width="2"/></g>`;
-    s += `<path d="M0 -150V-166" transform="rotate(${a + 15})" stroke="currentColor" stroke-width="2.5"/>`;
-  }
-  $('#halo').innerHTML = s;
-})();
-
-/* ═════════ 골목 하늘: 건물 불빛 + 비 ═════════ */
-(() => {
-  const c = $('#sky'), ctx = c.getContext('2d');
-  let W = 0, H = 0, d = 1, bg = null, drops = [], raf = 0;
-  const rng = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  function paintBg() {
-    bg = document.createElement('canvas'); bg.width = W; bg.height = H;
-    const g = bg.getContext('2d'), r = rng(7);
-    const sky = g.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, '#07061a'); sky.addColorStop(.6, '#1b1242'); sky.addColorStop(1, '#0c0a1d');
-    g.fillStyle = sky; g.fillRect(0, 0, W, H);
-    const base = H * .9;
-    for (let x = -20 * d; x < W;) {
-      const w = (56 + r() * 96) * d, h = H * (.3 + r() * .42);
-      g.fillStyle = r() > .5 ? '#100d27' : '#141033';
-      g.fillRect(x, base - h, w, h);
-      for (let wy = base - h + 12 * d; wy < base - 40 * d; wy += 15 * d) {
-        for (let wx = x + 8 * d; wx < x + w - 10 * d; wx += 13 * d) {
-          const k = r();
-          if (k < .2) { g.fillStyle = k < .13 ? 'rgba(255,217,138,.55)' : 'rgba(170,190,255,.4)'; g.fillRect(wx, wy, 6 * d, 8 * d); }
-        }
-      }
-      x += w + (2 + r() * 10) * d;
-    }
-    const glow = g.createRadialGradient(W / 2, H * .82, 0, W / 2, H * .82, Math.max(W, H) * .6);
-    glow.addColorStop(0, 'rgba(180,85,255,.3)'); glow.addColorStop(1, 'rgba(180,85,255,0)');
-    g.fillStyle = glow; g.fillRect(0, 0, W, H);
-  }
-  function frame() {
-    ctx.drawImage(bg, 0, 0);
-    ctx.strokeStyle = 'rgba(200,210,255,.3)'; ctx.lineWidth = d;
-    ctx.beginPath();
-    for (const p of drops) {
-      ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.l * .18, p.y + p.l);
-      p.y += p.v; p.x -= p.v * .18;
-      if (p.y > H) { p.y = -p.l; p.x = Math.random() * (W + 60 * d); }
-    }
-    ctx.stroke();
-    raf = alley.inert ? 0 : requestAnimationFrame(frame);
-  }
-  function resize() {
-    const b = c.getBoundingClientRect();
-    if (!b.width || !b.height) return;
-    d = Math.min(window.devicePixelRatio || 1, 2);
-    W = c.width = Math.round(b.width * d); H = c.height = Math.round(b.height * d);
-    paintBg();
-    drops = Array.from({ length: Math.round(b.width / 8) }, () => ({ x: Math.random() * W, y: Math.random() * H, l: (9 + Math.random() * 15) * d, v: (8 + Math.random() * 7) * d }));
-    cancelAnimationFrame(raf);
-    if (reduced) { ctx.drawImage(bg, 0, 0); raf = 0; } else raf = requestAnimationFrame(frame);
-  }
-  new ResizeObserver(resize).observe(c);
-  // 부스에서 골목으로 돌아오면 비를 다시 돌린다
-  new MutationObserver(() => { if (!alley.inert && !raf && !reduced && bg) raf = requestAnimationFrame(frame); }).observe(alley, { attributes: true, attributeFilter: ['aria-hidden'] });
-})();
+/* ═════════ 시작 ═════════ */
+async function boot() {
+  const loading = $('#loading');
+  if (!T) { loading.textContent = '3D 엔진(three.js)을 불러오지 못했어요. 네트워크를 확인하고 다시 열어 주세요.'; return; }
+  // 간판과 종이는 캔버스에 글자를 그리므로 글꼴이 먼저 와 있어야 한다
+  const sample = '달무리보름타로사주궁합전문신점연애진로속마음평생수택일고민한장이면커플상담시손금무료재회운정통봐드림년세복채안내원카드이체가능노래방호프소포차약월일간나모름양력음윤달시지비견겁재식상편정관인계산절기바보마법여제황교연전차힘은둔자의레퀴매린람죽절악탑별태심판계OK!!·0123456789';
+  try {
+    await Promise.race([
+      Promise.all(['48px "Black Han Sans"', '48px "Jua"', '24px "Gowun Dodum"'].map(f => document.fonts.load(f, sample))
+        .concat(document.fonts.load('700 48px "Noto Serif KR"', '四柱八字萬歲曆甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥木火土金水中國語日本'))),
+      new Promise(r => setTimeout(r, 4000)),
+    ]);
+  } catch (e) { /* 글꼴 없이도 기본 글꼴로 그린다 */ }
+  try { buildWorld(); }
+  catch (e) { console.warn(e); loading.textContent = '이 브라우저에서는 3D 화면을 열 수 없어요. (WebGL 필요)'; return; }
+  new ResizeObserver(resize).observe(stage);
+  resize();
+  renderer.setAnimationLoop(frame);
+  intro();
+}
+boot();
 })();
 </script>
