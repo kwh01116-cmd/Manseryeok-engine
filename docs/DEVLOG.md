@@ -817,3 +817,15 @@ ssaju의격국은월간십성과score극단값宗格,용신은일간별고정3�
 **[문서 후 확인]** 보존 하니스의 첫 git-status 파서는 trim으로 선행 공백을 없애 검사 전 실패했다. 원runner를 남기고 NUL원출력으로 수정한 뒤423추적파일·121생성물·수락트리·인수인계 원byte·일지누적·상대링크46개를 확인했다. 제품/기대pin변경이나 공개검사 재시도는 아니다.
 
 **[제품/다음]**19행은지원범위기술READY12/PARTIAL4/EXPERIMENTAL1/미구현2이고용신/조후는동일한M5한기능이다. M5 LIMITED PURPOSE/GONGMANG/MONTHLY TIME AXIS/USER REPORT/OFFLINE ARTIFACT는GO(명시범위·내부자료),상용기능동등/PUBLIC RELEASE는NO-GO다.1950–1988·역사시/DST·2027이후·자료상업/재배포권은출시차단이다. 다음은권리/연대병행관리와M5동일목적의한유한범위/선택신살·콘텐츠계약중우선순위를정한다. 모든학파/최종용신/주제별예측을자동구현하지않는다. [가이드](SPRINT3_PRODUCT_ANALYSIS_GUIDE.md) · [실제검증/실패/증거](engineering/SPRINT3_PRODUCT_ANALYSIS_EXECUTION_20261114.md) · [기능행렬](research/SPRINT3_PRODUCT_FEATURE_MATRIX_20261114.md).
+
+## 2026-11-15 — Sprint 3 동일 요청의 완료본 재검증
+
+사용자가 Sprint2 기준선34b4f22로 같은 Sprint3 작업을 다시 요청했다. 실제 로컬/직접 원격은 이미1196e27d55b3b8d064029bed9d4c4986e9bc3507로 일치했고 승인 브랜치 clean이었다. 기존 완료본을 중복 구현하거나 정책을 확대하지 않았다. 실행 코드는 최종검증10196ab0acb8ed60774e2d98051ae670548725bf와 같고 그 이후에는 문서만 변경됐다.
+
+오늘 기존 v2 artifact를 새 저장소 밖 소유TEMP에 다시 복원했다. 고정 Node22.23.3에서 product72+기존mode8=80성공, 입력8/경로3거절, UTC/Seoul36출력쌍 동일·양음력 의미 일치를 확인했다.80개 성공 stdout은 이전 최종 영수증 지문과 모두 같았다. 실패·재시도·제품코드 변경은 없다. 기존 가드의 네트워크/키/원본소스import/파일쓰기 차단·빈PATH로 실행했고 새 독립 호출/credential counter를 재계측했다고 하지는 않는다.16개 저장소 reference 비교는 패키징 일치 검사이며 M5의 독립 정답 검증이 아니다.
+
+이전 전체858/858·M2감사·Lab/KASI Chromium을 오늘 다시 실행한 것으로 세지 않는다. 해당 영수증/로그 지문 및423추적파일·121생성물이 현재와 같음을 대조했고 원본2086/후보a,b각8/보강5·base/export 고정pin도 다시 확인했다. 새 연결/예측 검증·49,799전수를 수행한 것이 아니다. 별도 AI가 새 요약6개 전문과 JSON을 읽어 이전값·입춘2원국/B1원국2계절·후보/보류 구분·조사를 확인했다. 인간전문가 검증은 아니다.
+
+직전 채팅 최종 답변의 음력 명령은 잘못된 --date/--leap-month 예를 사용했다. 실제 CLI와 이미 올바른 가이드의 --lunar-year/--lunar-month/--lunar-day/--leap 조합으로 안내를 정정한다. 제품 CLI 오류가 아니므로 코드나 가드/기대값을 바꾸지 않았다.
+
+새 증거는 .private/sprint3-20261115/recheck-existing-1196e27/receipt.json 및 reverification.json이다. 공개에는 이 재검증 요약만 추가하고 private자료/실제출력은 추적하지 않는다. 기능 상태와19행12/4/1/2, 다섯 제한기능GO/상용동등·공개출시NO-GO,1950–1988·2027·자료권리 차단은 그대로다. [가이드](SPRINT3_PRODUCT_ANALYSIS_GUIDE.md) · [실행 기록](engineering/SPRINT3_PRODUCT_ANALYSIS_EXECUTION_20261114.md).

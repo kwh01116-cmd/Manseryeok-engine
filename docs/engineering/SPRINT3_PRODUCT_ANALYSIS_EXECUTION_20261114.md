@@ -76,3 +76,15 @@ base content `8ffadb04c8460969085610162d3d5e8855af9272a8a4be1dbe10123c15f90edf`,
 증거는 `.private/sprint3-20261114/qa-10196ab-final-r2-final.json`, `product-range-final-10196ab-r1-receipt.json`, `declaration-order-audit.json`, `final-10196ab/evidence/receipt.json`, `final-10196ab/instrumentation-receipt.json` 및실제stdout/요약/상세다. 공개에는 코드·합성기대·짧은정책·검증요약만 반영한다. workflow는foundation브랜치push만 대상으로 승인브랜치와 불일치하며, 최종diff·원격을확인해일반Push만한다.
 
 판정: **M5 LIMITED PURPOSE POLICY GO / GONGMANG GO / MONTHLY FORTUNE TIME AXIS GO / USER-FACING REPORT GO / OFFLINE INTEGRATED ARTIFACT GO / COMMERCIAL FEATURE PARITY NO-GO / PUBLIC RELEASE NO-GO**. 자료 상업/재배포권 미해결과 출생연대 차단을 유지하며, 기능19행의12/4/1/2는 완성률이 아니다. 겨울목 한 기능이 용신/조후 두 행에 겹친다는 점도 분리한다.
+
+## 2026-11-15 — 같은 Sprint 요청의 재확인
+
+새 시작 로컬/직접 원격1196e27d55b3b8d064029bed9d4c4986e9bc3507 clean에서 기존 완료본을 보존했다. 실행 코드는10196ab0acb8ed60774e2d98051ae670548725bf와 동일하며 새 기능/정책은 추가하지 않았다.
+
+기존 artifact를 새 저장소 밖 소유TEMP에 다시 복원한 첫 실행에서80성공/입력8·경로3거절,36시간대 출력쌍 동일, 양음력 의미 일치였다. 성공80stdout은 기존 최종 영수증과 모두 같은 지문이다. 네트워크·키·Git/npm·원본소스import 없이 실행했고 기존 가드를 사용했다. 이번 재실행에서 독립 M1/credential 읽기 counter를 새로 계측한 것으로 표시하지 않는다. source-reference16계산은 패키징 비교로 분리한다.
+
+오늘 전체858개/M2감사/Chromium을 재실행하지 않았다. 이전 완료 영수증과 로그,423추적파일·121생성물·수락 원본2086/후보a,b각8/보강5·base/export pin의 현재 일치를 재검증했다. 별도AI가 새 요약6개 전문을 읽고 JSON/기존 출력과 대조했다. 지표/전통정책·예측 타당성의 새 외부 검증은 아니다. 새 실패/재시도0, 공개 제품코드 변경0이다.
+
+직전 채팅에 안내한 음력 --date/--leap-month 옵션은 오안내였다. 가이드와 실제 parser가 사용하는 --lunar-year/--lunar-month/--lunar-day/--leap이 맞고 이번 응답에서 정정한다. 저장소 가이드는 처음부터 올바른 옵션이었으므로 생산 코드·가드를 변경하지 않았다.
+
+새 증거 경로: .private/sprint3-20261115/recheck-existing-1196e27/receipt.json, .private/sprint3-20261115/reverification.json. 기존 검증 SHA·원본 지문·출시 차단은 그대로이고 이번 후속 커밋은 재확인 문서만 담는다.

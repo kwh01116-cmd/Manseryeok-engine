@@ -10,6 +10,8 @@
 - **실패/보존**: 공개검사 전 preflight하니스 실패와 수정 후 전체 실행, 경로/의미 비교/선언 검사 보조 실패를 일지에 보존했다. 기존320대상은314원byte+과거property순서3+새status union순서3(서로 다른 집합), JavaScript191은 원byte 동일. 새9곳의 고유 문자열 union 순서 외 타입/byte 동일을 별도 증명했고 원pin을 바꾸지 않았다. 새 생성121파일은 최종 전후 동일하다.
 - 원본2086/후보a,b각8/보강5 및 base/export/supplement 수락pin 불변. KASI요청/키/재수집/private추적/Actions/배포/UI/LLM0. M3의 과거 grid신약0·추가8한날짜 한계와 `finalStrength=NOT_IMPLEMENTED`, G0/G1-P2·최종 출시 게이트를 유지한다.
 
+- **2026-11-15 재확인**: 같은 요청의 기존 완료본을 새 저장소 밖에 다시 복원해80성공/입력8·경로3거절·36TZ출력쌍 동일을 확인했다.423추적파일/121생성물·원본pin 불변. 전체858/M2/Chromium은 동일코드의 이전 최종 실행 기록이며 오늘 재실행으로 세지 않는다. 새 기능은 추가하지 않았고 문서만 누적했다. 음력CLI는 --lunar-year/--lunar-month/--lunar-day/--leap을 사용한다.
+
 판정: **M5 LIMITED PURPOSE POLICY GO / GONGMANG GO / MONTHLY FORTUNE TIME AXIS GO / USER-FACING REPORT GO / OFFLINE INTEGRATED ARTIFACT GO(내부) / COMMERCIAL FEATURE PARITY NO-GO / PUBLIC RELEASE NO-GO**. 기술 지원 출생범위는 양력 환산1989–2026이다.1950–1988·역사시/DST·2027이후와 자료 상업/재배포권, 전체 조후·신강약·격국 성패·최종 용신·주제별 예측은 미완료다.
 
 다음은 권리/연대 차단을 병행 관리하면서 M5 **동일 목적의 한 유한 범위**와 선택 신살/콘텐츠 계약 중 우선순위를 정한다. 사용자 검토·새 반례·새 버전 없이 기존 후보 guard를 확대하지 않는다. 스토리/UI/LLM·추가 기능은 이번에 자동 착수하지 않았다.
