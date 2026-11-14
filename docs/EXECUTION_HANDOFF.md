@@ -1,18 +1,18 @@
 # Manseryeok-engine — current execution handoff
 
-**2026-11-14: 제품 전략 D — 자체 계산/검증 유지 + 검토한 OSS 명리 규칙의 선택적 포팅.** 승인 브랜치 agent/kasi-local-1950-2026-20261109만 사용한다. 기존 S1의 엄격한 상대 강약 NO-GO와 새 LEVEL2 휴리스틱 후보는 다른 계약이다. 과거 연구를 성공으로 소급 변경하지 않는다.
+**2026-11-14 Sprint 1 완료: 현대 로컬 오프라인 실행 GO, 공개 자료 배포 NO-GO.** 승인 브랜치 agent/kasi-local-1950-2026-20261109를 유지한다. 최종 실행 코드 SHA **131a0c551a5093e22ea22d6a66b37c31dae058df**. 이후 문서 커밋/원격 full SHA는 delivery receipt와 최종 응답에서 분리한다.
 
-- 다섯 실제 저장소를 full SHA로 고정해 코드·수식·테스트·LICENSE·자료 출처를 감사하고100가상 입력을 실행했다. ssaju의 월초 음력 역변환 결함8건, 절입 근사7건 차이, 자시·한중 달력 정책 차이를 분리했다. 역사시10은 우리 기준 미지원/미검증이며 오류가 아니다. 우리90지원입력의97상관후보 집합으로 비교했다.
-- 고급 기능폭은 korean_saju가 넓지만 가중강약/용신용억부가100건 중17건 다르고 자동합화·고정수치 성격/외격 판단을 포함한다. 통째로 정답 엔진으로 들여오지 않는다. code MIT와 내장 KASI/6tail 자료의 재배포 근거는 별도이며 후자는 이번에 승인하지 않았다.
-- 실제 구현한 PoC: EXPERIMENTAL-WEIGHTED-SUPPORT-LOCAL-NO-TRANSFORMATION-V01/0.1.0. 기존M2장간·위치배점·무근절반·월지충-0.8, 자동합화/亥戊/시각미상보정 제외. 소스산술 참고+MIT고지. 기본진입점·기존CLI는 불변, 명시 옵션의 별도 scripts/experimental/weighted-support.mjs만 실행한다.
-- PoC요청당 M1/M2를1회 재사용하고 기존 M3/M4 전체 결과와 새 분류를 병렬 보존한다. 계절B는1원국 아래대안2/점수1, 입춘은2부모/2점수다. 정책id/version/sourceRefs/assumptions/inputFacts/decisionTrace/alternatives/limitations를 출력한다. 점수와 극강/강/중화/약/극약은 선택규칙의 분류이며 실제힘·확률·예측·격국/용신을 확정하지 않는다.
+- 데이터 없는 엔진 artifact59payload파일과 별도 내부 attachment7파일을 만들었다. 실제 경로 `.private/sprint1-20261114/final-131a0c5/{engine,data}`. 엔진 manifest SHA ba70f6a6d549cc7f80f899b912ff9586be18eba588a7882a633a110d00bc82bf. Node22만 있으면 실행/검사/복원에 npm·Git·API키·외부 패키지가 필요 없다.
+- runtime은 chart/explain/evidence/experimental 네 mode와 명시 정책만 허용한다. 기존 성공 DTO를 data에 보존하고, 오류는 INPUT/ARTIFACT/DATA/CALCULATION 및 기존 미지원3상태로 구분한다. M1은 요청당1회다. M7은 기존 경로와 회귀를 유지하며 패키지 mode로 추가하지 않았다.
+- 출생은 양력 환산 `[1989-01-01,2027-01-01)`와 분 시각 필수, 양력/한국음력·윤달/기존 네 일주·시주 정책이다. 1950–1988 날짜 자료 보유는 시각 지원이 아니며, 2027 두 경계 자료는 출생/조회 범위를 넓히지 않는다. 기본2026–2027·G0/G1-P2 NO-GO·기존 해석/출시 게이트는 유지한다.
+- 가중 정책0.1.0의 배점/임계/기존 장간은 변경하지 않았다. 고정 합성 원국47·scalar14·합성 달력12요청/13후보, 새 민감도103검사로 근 공유와 임계 민감도를 확인했다. 같은 지지가 대표 배점과 여러 천간 근 조건에 재사용되는 정책 중첩을 독립 강도 증거로 표시하지 않는다. 실험 GO, 기본값 승격 NO-GO.
+- 최종 Node22.23.3·전체784/784(fail/cancel/skip/todo0), M2감사·Lab/KASI Chromium 자연0. 첫 cc237b4의776/781 실패5는 검증 TEMP가 원본 안에 있어 독립 가드에 걸린 기록으로 보존했다. 소스 밖 소유 TEMP로 수정했고 검사/guard/기존668 기대를 약화하지 않았다.
+- 최종 artifact를 새 소스 밖 임시 디렉터리에 복원해 **성공96(JSON48/TEXT48)+CLI거절8+위험경로거절4**, 별도 원본참조24를 수행했다. UTC48→Seoul48 순차·양음력 의미/시간대bytes 일치, 입춘2부모·B1부모/계절대안2·23:30 네 정책을 확인했다. actual stdout/stderr는 명시적 private 검증 파일이다.
+- 고정 Node/TS의 독립 빌드6회/컴파일12회로 같은 입력의 출력을 재현했다. 현재3회113파일 동일, 이전2회111동일, experimental 제외111은 이전과 동일. 이전 d.ts3개의 속성 순서만 달라지는 결정적 입력 의존이며 비결정성/타입 의미 변경을 관측하지 않았다. 최종113출력도 동일하다.
+- 원본2086/후보a,b각8/보강5와 base/export/supplement 지문, 기존 실행 파일은 불변이다. 이전320대상의317원byte+3이전선언순서차이도 그대로다. API·키·재수집·private추적0. M3 과거 grid약0/추가약8이 한 날짜라는 한계와 좁은 정책도 보존한다.
 
-**최종 실행 코드 SHA f17647ac731ded334c778495736aabc85e7e2c07**: Node22.23.3·전체668/668(fail/cancel/skip/todo0), 기존M2감사·Lab/KASI Chromium 첫시도자연0, 실제후보CLI12회/텍스트6전문 검토. 기존650의미유지+새18개. 외부시험은 별도: ssaju21/21,6tail47 selected assert-bridge, pytest/Vitest 전체미실행. 처음컴파일·잘못된합성甲亥·조사기오류와 얕은spread 동결결함의 수정/검증을 기록했다. ec913fb의668성공 후 설명조사를 고친 f176에서 전체를 재실행했다.
+판정: **LOCAL OFFLINE ENGINE GO / PUBLIC DISTRIBUTION NO-GO / M3 EXPERIMENTAL POLICY GO / M3 DEFAULT PROMOTION NO-GO**. 내부 계산 가능과 상업 자료 권리/공개 서비스 출시 승인을 구분한다.
 
-두시간대순차 PoC 각90제품=M1/97후보, 기존90C1/M3의미동일. 상류와87점수동일/10정책차이 전부 합화점수삭제 제외로 설명됐으며 정확도비율이 아니다. 의미SHA539b5bd3a18a0593d8134ddbbd537e4ff9b2d11ef1da6936dbeeac00d922cc5c와 summary bytes 동일. native100/직접97 참조계산은 제품호출수와 별도다. 공개100행 요약에는분류만 담고 원DTO·raw해석은 private다.
+다음 Sprint 2는 기존 P2의 선택형 M4 내격8 구조 묶음을 권고한다. 새 강약 충분조건 연구나 점수 기본값 승격으로 되돌아가지 않는다. 공개 자료 권리와 넓은 출생 범위는 별도 출시 장애물로 관리한다. 후속 M4/M5/UI/스토리/LLM/배포는 이번에 구현하지 않았다.
 
-원본완료2086파일·후보a,b각8·보강5의 고정트리는 불변이다. 기존320source/build 중317개는 byte 동일하고 생성 `.d.ts` 3개는 참조 속성 선언 순서가 달랐다. 이전 소스를 같은 TS로 재빌드해 원 pin을 재현했고 제한적 AST 검사로 속성순서만 의미 동등함을 확인했다. 원 기대 지문과 최초 실패 기록은 변경하지 않았다. 기존 실행 소스/JavaScript는 불변이다. API·키·재수집0/private추적0. 기본2026–2027/G0/G1-P2 NO-GO·API출생1989–2026·역사시/2027조회·기존 M3/M4/M7·전체출시 게이트는 유지한다. M3과거grid약0/추가약8은한날짜라는 한계도 보존한다. source/lock/workflow를 교체하지 않았다. 마지막문서커밋/Push fullHEAD는 delivery receipt와 최종응답에서 구별한다.
-
-다음은 제품로드맵 P1: **현재 LEVEL2 PoC의 제품 정책 채택/기각과 민감도 설명을3–5인일 묶음으로 닫는 것**이다. 이후 M4내격8 구조·M5한목적 후보·공망/한정신살/월운·구조화 리포트의 현대범위엔진22–35인일을 제안한다. 넓은출생범위 역사시확대는 추가5–8인일 기술추정이며 권리/기관대기·UI/LLM/배포는 별도다. 이번에 후속기능이나 공개기본값을 자동구현하지 않았다.
-
-[실제코드감사](research/OSS_ENGINE_AUDIT_20261114.md) · [고정100분류](research/fixtures/OSS_AUDIT_100_RESULT_SUMMARY_20261114.json) · [PoC명령/계약](EXPERIMENTAL_WEIGHTED_SUPPORT_GUIDE.md) · [검증/실패](engineering/OSS_ENGINE_COMPARISON_EXECUTION_20261114.md) · [제품로드맵](ROADMAP.md) · [개발일지](DEVLOG.md) · [직전인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_OSS_PRODUCT_20261114.md)
+[실행 가이드](SPRINT1_OFFLINE_GUIDE.md) · [실행/실패/증거](engineering/SPRINT1_OFFLINE_M3_EXECUTION_20261114.md) · [지원 행렬](contracts/offline-support-v1.json) · [JSON 계약](contracts/OFFLINE_ANALYSIS_V1.md) · [로드맵](ROADMAP.md) · [일지](DEVLOG.md) · [직전인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_SPRINT1_20261114.md)
