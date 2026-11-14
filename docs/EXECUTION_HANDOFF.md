@@ -1,17 +1,18 @@
 # Manseryeok-engine — current execution handoff
 
-**2026-11-13 KST: M3-S1 전제 감사 완료, 새 상대 강약 판단은 NO-GO.** 기존 정보로 일간/관의 실제 우열·官輕重·재인 전달을 새로 판정할 충분조건을 수락하지 못했다. 새 runtime/profile/상수 보류 모듈은 추가하지 않았다. 승인 브랜치 agent/kasi-local-1950-2026-20261109만 사용한다.
+**2026-11-14: 제품 전략 D — 자체 계산/검증 유지 + 검토한 OSS 명리 규칙의 선택적 포팅.** 승인 브랜치 agent/kasi-local-1950-2026-20261109만 사용한다. 기존 S1의 엄격한 상대 강약 NO-GO와 새 LEVEL2 휴리스틱 후보는 다른 계약이다. 과거 연구를 성공으로 소급 변경하지 않는다.
 
-- 기존 M3의 계절·구성상 근·인성 합 채택 제한·좁은 약과 M4 월령 후보/C1 위치 기능은 보존한다. 과거 M3 전체 grid 약0, 추가약8경로는 한 날짜의 반복이라는 한계도 유지한다. 현재 좁은 약은 일반 강약이나 官重이 아니다.
-- 표면 정관의 근은 월령 官 때문에 자동 참, 일간 무근이면 표면 비겁 무근도 같은 정의의 결과다. 월령 官의 제어 존재도 별도 강도 정보가 아니다. MAIN_QI 문서/OTHER 포함 코드의 서술 범위 차이는 기록했으며 기존 약 결론을 소급 변경하지 않았다.
-- 확인한 NCC/대조 전사에서 沈본문·徐주석·프로젝트 선택을 구분했다. 조건부 재생관/인화관 지침에서 그 전제인 상대 강약을 역산하지 않는다. 스캔·비평판본·권리·전문가·예측 인증은 없다.
+- 다섯 실제 저장소를 full SHA로 고정해 코드·수식·테스트·LICENSE·자료 출처를 감사하고100가상 입력을 실행했다. ssaju의 월초 음력 역변환 결함8건, 절입 근사7건 차이, 자시·한중 달력 정책 차이를 분리했다. 역사시10은 우리 기준 미지원/미검증이며 오류가 아니다. 우리90지원입력의97상관후보 집합으로 비교했다.
+- 고급 기능폭은 korean_saju가 넓지만 가중강약/용신용억부가100건 중17건 다르고 자동합화·고정수치 성격/외격 판단을 포함한다. 통째로 정답 엔진으로 들여오지 않는다. code MIT와 내장 KASI/6tail 자료의 재배포 근거는 별도이며 후자는 이번에 승인하지 않았다.
+- 실제 구현한 PoC: EXPERIMENTAL-WEIGHTED-SUPPORT-LOCAL-NO-TRANSFORMATION-V01/0.1.0. 기존M2장간·위치배점·무근절반·월지충-0.8, 자동합화/亥戊/시각미상보정 제외. 소스산술 참고+MIT고지. 기본진입점·기존CLI는 불변, 명시 옵션의 별도 scripts/experimental/weighted-support.mjs만 실행한다.
+- PoC요청당 M1/M2를1회 재사용하고 기존 M3/M4 전체 결과와 새 분류를 병렬 보존한다. 계절B는1원국 아래대안2/점수1, 입춘은2부모/2점수다. 정책id/version/sourceRefs/assumptions/inputFacts/decisionTrace/alternatives/limitations를 출력한다. 점수와 극강/강/중화/약/극약은 선택규칙의 분류이며 실제힘·확률·예측·격국/용신을 확정하지 않는다.
 
-실제 실행 SHA **bb6cb48d95713eb3764cd6f90319200c4dddc05e**: 고정 Node22.23.3의 기존 전체650/650(fail/cancel/skip/todo0), M2감사·Lab/KASI 실제 Chromium 첫 시도, 기존 CLI18회가 자연0이었다. TEXT9개 전문을 root가 읽었다. 사전24계약은 기존필드17/17·API연결6/6·입력거절계약1개의5변조이며 새 독립 강약 정답24개가 아니다. 첫 CLI의 00:30/12:00 시각 혼동과 첫 사례조사기의 투영/검증층 오류를 성공과 구별해 남겼다. bare root는 identity검사이고 mutable M2의 snapshot 재검사는 별도 계층임을 명시했다. 기대값·제품코드는 바꾸지 않았다.
+**최종 실행 코드 SHA f17647ac731ded334c778495736aabc85e7e2c07**: Node22.23.3·전체668/668(fail/cancel/skip/todo0), 기존M2감사·Lab/KASI Chromium 첫시도자연0, 실제후보CLI12회/텍스트6전문 검토. 기존650의미유지+새18개. 외부시험은 별도: ssaju21/21,6tail47 selected assert-bridge, pytest/Vitest 전체미실행. 처음컴파일·잘못된합성甲亥·조사기오류와 얕은spread 동결결함의 수정/검증을 기록했다. ec913fb의668성공 후 설명조사를 고친 f176에서 전체를 재실행했다.
 
-UTC→Seoul 순차 감사 각3,956양음력쌍/7,912제품=M1/9,040부모: 후보1,194/비후보7,742/호환미정104. 표면官528부모의572대상 모두 월령EXACT근, 숨은官전용666부모에는 官 root target0. 일간근P1032/A162, 표면印810대상 P714/A96, 기존약0/효력보류1052/범위밖138/혼재12의1,202계절경로였다. C1분포976/46/100/34/16/22는 유지하며 새 비교효력을 주지 않는다. 양음력/TZ 의미SHA e220d0dee3425b7b34a1389be763ba911fb23b0b6c8b984e30925c1cdf990558, 두summary bytesSHA832a3c9c723a411faac633d22b6a245c35fc8e05fcdf9c5bd3b072dfadcb7822가 같았다. 전체49,799쌍·모든출생 전수·강약정답률 검사가 아니다.
+두시간대순차 PoC 각90제품=M1/97후보, 기존90C1/M3의미동일. 상류와87점수동일/10정책차이 전부 합화점수삭제 제외로 설명됐으며 정확도비율이 아니다. 의미SHA539b5bd3a18a0593d8134ddbbd537e4ff9b2d11ef1da6936dbeeac00d922cc5c와 summary bytes 동일. native100/직접97 참조계산은 제품호출수와 별도다. 공개100행 요약에는분류만 담고 원DTO·raw해석은 private다.
 
-완료본2,086파일/후보a,b각8/보강5와 고정base/export/supplement 지문, source/build 합집합320파일은 불변이다. API·키·재수집0, private추적0. 기본2026–2027/G0/G1-P2 NO-GO·API출생1989–2026·역사시/2027조회·계절/root/support/M7와 전체해석/출시 게이트는 유지한다. 실행 이후 문서·데이터 전용 사례만 변경하며 최종 원격 full HEAD는 일반Push 전달 receipt/최종 응답에서 확인한다. workflow는 foundation push만 대상으로 승인 브랜치에서 Actions가 발생하지 않는지 다시 확인한다.
+원본완료2086파일·후보a,b각8·보강5의 고정트리는 불변이다. 기존320source/build 중317개는 byte 동일하고 생성 `.d.ts` 3개는 참조 속성 선언 순서가 달랐다. 이전 소스를 같은 TS로 재빌드해 원 pin을 재현했고 제한적 AST 검사로 속성순서만 의미 동등함을 확인했다. 원 기대 지문과 최초 실패 기록은 변경하지 않았다. 기존 실행 소스/JavaScript는 불변이다. API·키·재수집0/private추적0. 기본2026–2027/G0/G1-P2 NO-GO·API출생1989–2026·역사시/2027조회·기존 M3/M4/M7·전체출시 게이트는 유지한다. M3과거grid약0/추가약8은한날짜라는 한계도 보존한다. source/lock/workflow를 교체하지 않았다. 마지막문서커밋/Push fullHEAD는 delivery receipt와 최종응답에서 구별한다.
 
-다음 권고는 **4: 현재 자료의 새 상대 강약·전달 효력 연구를 보류하고 감사 결과를 고정**하는 것이다. 모든 연구의 영구 중단이 아니다. 1의 제한적 근력/생조 규칙은 새 출처와 독립 반례에서 충분조건을 실제 수락할 때만 재검토한다. C2 연결·전면재설계·다른격국을 이번에 자동 구현하지 않았다.
+다음은 제품로드맵 P1: **현재 LEVEL2 PoC의 제품 정책 채택/기각과 민감도 설명을3–5인일 묶음으로 닫는 것**이다. 이후 M4내격8 구조·M5한목적 후보·공망/한정신살/월운·구조화 리포트의 현대범위엔진22–35인일을 제안한다. 넓은출생범위 역사시확대는 추가5–8인일 기술추정이며 권리/기관대기·UI/LLM/배포는 별도다. 이번에 후속기능이나 공개기본값을 자동구현하지 않았다.
 
-[연구/사례/실행/실패](research/M3_S1_RELATIVE_STRENGTH_PREREQUISITE_AUDIT_20261113.md) · [사전24사례](research/fixtures/M3_S1_STRENGTH_PREREQUISITE_CASES_V01.json) · [기존실행가이드](KASI_LOCAL_M4_ZHENGGUAN_GUIDE.md) · [개발일지](DEVLOG.md) · [직전인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_M3_S1_20261113.md)
+[실제코드감사](research/OSS_ENGINE_AUDIT_20261114.md) · [고정100분류](research/fixtures/OSS_AUDIT_100_RESULT_SUMMARY_20261114.json) · [PoC명령/계약](EXPERIMENTAL_WEIGHTED_SUPPORT_GUIDE.md) · [검증/실패](engineering/OSS_ENGINE_COMPARISON_EXECUTION_20261114.md) · [제품로드맵](ROADMAP.md) · [개발일지](DEVLOG.md) · [직전인수인계 원문](archive/EXECUTION_HANDOFF_BEFORE_OSS_PRODUCT_20261114.md)
