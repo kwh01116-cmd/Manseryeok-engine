@@ -23,10 +23,13 @@ test('offline artifact is reproducible, detached, read-only and restores without
     const engine=join(directory,'engine with spaces'),second=join(directory,'same engine'),restored=join(directory,'restored elsewhere');
     const manifest=await buildArtifact({outDir:engine});await buildArtifact({outDir:second});
     const candidate=join(directory,'synthetic data'),fixture=syntheticLocalChartCandidate();await writeSyntheticLocalChartCandidate(candidate,fixture);
+    const wrapperBase=common(candidate,fixture.expectedManifestSha256).filter((v,i,a)=>![a.indexOf('--candidate'),a.indexOf('--candidate')+1,a.indexOf('--manifest-sha'),a.indexOf('--manifest-sha')+1].includes(i));
+    wrapperBase[wrapperBase.indexOf('--profile')+1]='kasi-api-1989-2026-local-v1';
+    const wrapperArgs=['--mode','chart','--attachment',candidate,'--output','json',...wrapperBase];
     const {preload}=await writeOfflineGuards(directory,{forbiddenRoot:repo});
     const run=(entry,args=[],tz='UTC')=>spawnSync(process.execPath,['--import',pathToFileURL(preload).href,entry,...args],{cwd:directory,env:cleanOfflineEnvironment(tz),encoding:'utf8',timeout:30000,maxBuffer:5_000_000});
     const success=result=>{assert.equal(result.status,0,result.stderr);assert.equal(result.stderr,'');return result.stdout;};
-    const rejected=result=>{assert.equal(result.status,1,result.stderr||result.stdout);for(const value of [repo,candidate,'2026-02-05','01:20'])assert.ok(!(result.stdout+result.stderr).includes(value));};
+    const rejected=result=>{assert.equal(result.status,1,result.stderr||result.stdout);assert.equal(result.stdout,'');for(const value of [repo,candidate,'2026-02-05','01:20'])assert.ok(!(result.stdout+result.stderr).includes(value));return JSON.parse(result.stderr);};
     await t.test('content manifest reproduces byte for byte and selected schema exports are exact',async()=>{
       assert.equal(await readFile(join(engine,'artifact-manifest.json'),'utf8'),await readFile(join(second,'artifact-manifest.json'),'utf8'));
       assert.equal((await verifyArtifact(engine)).runtime.externalDependencies,0);
@@ -50,6 +53,8 @@ test('offline artifact is reproducible, detached, read-only and restores without
       await assert.rejects(restoreArtifact({artifactDirectory:engine,outDir:join(directory,'other'),attachmentDirectory:candidate,privateDataOut:join(directory,'other','.private','data')}),/RESTORE_TARGET_OVERLAP/);
       await writeFile(join(second,'unexpected.txt'),'unexpected');await assert.rejects(verifyArtifact(second),/FILE_SET_CHANGED/);
       await rm(join(second,'unexpected.txt'));const path=join(second,'run.mjs'),bytes=await readFile(path);await writeFile(path,'changed');await assert.rejects(verifyArtifact(second),/CONTENT_CHANGED/);await writeFile(path,bytes);
+      const metadataPath=join(second,'OFFLINE.txt'),metadata=await readFile(metadataPath);await writeFile(metadataPath,'changed');
+      assert.deepEqual(rejected(run(join(second,'run.mjs'),wrapperArgs)),{status:'REJECTED',phase:'ARTIFACT',code:'OFFLINE_ARTIFACT_REJECTED'});await writeFile(metadataPath,metadata);
     });
     await t.test('guard instrumentation demonstrably blocks network, keys, writes, source-tree fallback and child processes',async()=>{
       const probe=join(directory,'guard-probe.mjs');
@@ -77,10 +82,9 @@ test('offline artifact is reproducible, detached, read-only and restores without
       await assert.rejects(verifyAttachment(candidate));
       await writeFile(join(candidate,'attachment.json'),JSON.stringify({schemaVersion:'manseryeok-private-offline-data-v1',expectedManifestSha256:BASELINE_PIN,profileId:'kasi-api-1989-2026-local-v1',rightsStatus:'RIGHTS_BLOCKED',distribution:'PRIVATE_NO_REDISTRIBUTION',optInRequired:true,files:await hashFiles(candidate,DATA_FILES)}));
       await assert.rejects(verifyAttachment(candidate),/MANIFEST_DIGEST_CHANGED/);
-      const args=['--mode','chart','--attachment',candidate,'--output','json',...common(candidate,fixture.expectedManifestSha256).filter((v,i,a)=>![a.indexOf('--candidate'),a.indexOf('--candidate')+1,a.indexOf('--manifest-sha'),a.indexOf('--manifest-sha')+1].includes(i))];
-      rejected(run(join(engine,'run.mjs'),args));
-      rejected(run(join(engine,'run.mjs'),[...args,'--manifest-sha',fixture.expectedManifestSha256]));
-      rejected(run(join(engine,'run.mjs'),args.filter((v,i)=>i!==1&&i!==0)));
+      assert.deepEqual(rejected(run(join(engine,'run.mjs'),wrapperArgs)),{status:'REJECTED',phase:'DATA',code:'OFFLINE_DATA_REJECTED'});
+      assert.deepEqual(rejected(run(join(engine,'run.mjs'),[...wrapperArgs,'--manifest-sha',fixture.expectedManifestSha256])),{status:'REJECTED',phase:'INPUT',code:'OFFLINE_INPUT_REJECTED'});
+      assert.deepEqual(rejected(run(join(engine,'run.mjs'),wrapperArgs.filter((v,i)=>i!==1&&i!==0))),{status:'REJECTED',phase:'INPUT',code:'OFFLINE_INPUT_REJECTED'});
       const bad=[...common(candidate,fixture.expectedManifestSha256)];bad[bad.indexOf('--date')+1]='2026-02-30';
       const failed=run(join(engine,'scripts/kasi/local-chart.mjs'),bad);assert.equal(failed.status,1);assert.equal(JSON.parse(failed.stdout).status,'REJECTED');
       bad[bad.indexOf('--date')+1]='2027-01-01';const out=run(join(engine,'scripts/kasi/local-chart.mjs'),bad);assert.equal(out.status,2);assert.equal(JSON.parse(out.stdout).status,'OUT_OF_PROFILE_COVERAGE');

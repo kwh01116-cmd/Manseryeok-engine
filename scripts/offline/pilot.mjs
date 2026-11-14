@@ -67,11 +67,11 @@ export async function runInternalPilot({artifactDirectory,attachmentDirectory,ou
     const changed=(name,value)=>{const args=[...valid];args[args.indexOf(name)+1]=value;return args;};
     const without=name=>{const args=[...valid];args.splice(args.indexOf(name),2);return args;};
     const badCases=[
-      ['INVALID_GREGORIAN_DATE',changed('--date','2026-02-30')],['BEFORE_SUPPORTED_RANGE',changed('--date','1988-12-31')],['AFTER_SUPPORTED_RANGE',changed('--date','2027-01-01')],
-      ['MISSING_TIME',without('--time')],['UNAPPROVED_CLOCK',changed('--clock-policy','UNAPPROVED')],['DATA_PIN_OVERRIDE',[...valid,'--manifest-sha',BASELINE_PIN]],
-      ['EXPERIMENT_WITHOUT_POLICY',changed('--mode','experimental')],['UNKNOWN_ARGUMENT',[...valid,'--unknown','x']],
+      ['INVALID_GREGORIAN_DATE',changed('--date','2026-02-30'),'CALCULATION','OFFLINE_CALCULATION_REJECTED'],['BEFORE_SUPPORTED_RANGE',changed('--date','1988-12-31'),'CALCULATION','OUT_OF_PROFILE_COVERAGE'],['AFTER_SUPPORTED_RANGE',changed('--date','2027-01-01'),'CALCULATION','OUT_OF_PROFILE_COVERAGE'],
+      ['MISSING_TIME',without('--time'),'INPUT','OFFLINE_INPUT_REJECTED'],['UNAPPROVED_CLOCK',changed('--clock-policy','UNAPPROVED'),'CALCULATION','OFFLINE_CALCULATION_REJECTED'],['DATA_PIN_OVERRIDE',[...valid,'--manifest-sha',BASELINE_PIN],'INPUT','OFFLINE_INPUT_REJECTED'],
+      ['EXPERIMENT_WITHOUT_POLICY',changed('--mode','experimental'),'INPUT','OFFLINE_INPUT_REJECTED'],['UNKNOWN_ARGUMENT',[...valid,'--unknown','x'],'INPUT','OFFLINE_INPUT_REJECTED'],
     ];
-    for(const [id,args]of badCases){const result=await spawn(args);await writeNew(target,`rejected/${id}.stdout.txt`,result.stdout);await writeNew(target,`rejected/${id}.stderr.txt`,result.stderr);check(result.status===1&&result.stdout===''&&result.stderr==='{"status":"REJECTED","code":"OFFLINE_REQUEST_DATA_OR_POLICY_REJECTED"}\n','PILOT_REJECTION_CHANGED');receipts.push({caseId:id,status:'REJECTED_AS_REQUIRED',stderrPath:`rejected/${id}.stderr.txt`,stderrSha256:digest(result.stderr)});}
+    for(const [id,args,phase,code]of badCases){const result=await spawn(args);await writeNew(target,`rejected/${id}.stdout.txt`,result.stdout);await writeNew(target,`rejected/${id}.stderr.txt`,result.stderr);check(result.status===1&&result.stdout===''&&result.stderr===JSON.stringify({status:'REJECTED',phase,code})+'\n','PILOT_REJECTION_CHANGED');receipts.push({caseId:id,status:'REJECTED_AS_REQUIRED',phase,code,stderrPath:`rejected/${id}.stderr.txt`,stderrSha256:digest(result.stderr)});}
     const pathRejections=[
       ['RESTORE_INSIDE_BACKUP',()=>restoreArtifact({artifactDirectory:engine,outDir:join(engine,'child')})],
       ['RESTORE_DATA_INSIDE_ENGINE_TARGET',()=>restoreArtifact({artifactDirectory:engine,outDir:join(directory,'negative-engine'),attachmentDirectory:data,privateDataOut:join(directory,'negative-engine','.private','data')})],
