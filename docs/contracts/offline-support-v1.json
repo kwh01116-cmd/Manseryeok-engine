@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "manseryeok-offline-support-matrix-v1",
+  "assessmentDate": "2026-11-14",
+  "scope": "SELECTED_LOCAL_API_PROFILE_NOT_DEFAULT_ENGINE_OR_PUBLIC_RELEASE",
+  "profileId": "kasi-api-1989-2026-local-v1",
+  "birthGregorianRange": {"from": "1989-01-01", "untilExclusive": "2027-01-01"},
+  "verificationMeaning": "Existing policy/data coverage and executable regression; not independent full-range astronomical certification, legal clearance, or predictive validity",
+  "features": [
+    {"id": "BIRTH_1950_1988", "status": "UNSUPPORTED", "reason": "Observed date data exists but historical civil time, DST and published event interpretation are not enabled by this birth profile", "sourceRefs": ["scripts/kasi/local-chart.mjs", "docs/research/KASI_MODERN_API_CLOCK_POLICY_20261110.md"]},
+    {"id": "OBSERVED_DATE_INDEX_1950_1988", "status": "SUPPORTED_LIMITED", "reason": "Research date lookup only; does not supply a supported timed birth chart and has partial endpoint lunar months", "sourceRefs": ["scripts/kasi/candidate.mjs", "docs/KASI_RESEARCH_ADAPTER.md"]},
+    {"id": "BIRTH_1989_2026", "status": "SUPPORTED_VERIFIED", "reason": "Explicit modern clock, recorded minute, calendar and day/hour policies plus pinned accepted dataset required", "sourceRefs": ["scripts/kasi/local-chart.mjs", "docs/engineering/KASI_API_LOCAL_CHART_EXECUTION_20261110.md"]},
+    {"id": "BIRTH_2027", "status": "UNSUPPORTED", "reason": "Modern API birth profile ends at 2027-01-01; two boundary supplement events do not provide annual coverage or lunar conversion", "sourceRefs": ["scripts/kasi/local-chart.mjs", "scripts/kasi/boundary-supplement.mjs"]},
+    {"id": "DEFAULT_ENGINE_2026_2027", "status": "SUPPORTED_LIMITED", "reason": "Existing separate default fixture/G0/Lab scope is preserved; not selected by this offline API package", "sourceRefs": ["docs/KASI_LOCAL_CHART_GUIDE.md"]},
+    {"id": "KOREAN_LUNAR_AND_LEAP_INPUT", "status": "SUPPORTED_LIMITED", "reason": "Exact observed index lookup and explicit leap boolean, then Gregorian birth range check; no lunar-year-only authorization or terminal 2027 extrapolation", "sourceRefs": ["scripts/kasi/candidate.mjs", "scripts/kasi/local-chart.mjs"]},
+    {"id": "JIE_PUBLISHED_MINUTE", "status": "SUPPORTED_VERIFIED", "reason": "Preserves correlated before/after chart candidates at published minute; no exact second or rounding interval claim", "sourceRefs": ["scripts/kasi/local-chart.mjs"]},
+    {"id": "HISTORICAL_KOREAN_OFFSET_DST_BIRTH", "status": "UNSUPPORTED", "reason": "Historical offset/DST modules or data presence do not enable this profile; no gap/fold or true-solar-time option is added", "sourceRefs": ["docs/research/KASI_MODERN_API_CLOCK_POLICY_20261110.md"]},
+    {"id": "DAY_HOUR_REFERENCE_FOUR_COMBINATIONS", "status": "SUPPORTED_VERIFIED", "reason": "CIVIL_MIDNIGHT or ZI_START crossed with SELECTED_DAY_PILLAR or CIVIL_DATE_DAY_PILLAR; both explicit, no default selection", "sourceRefs": ["scripts/kasi/local-chart.mjs"]},
+    {"id": "2027_BOUNDARY_SUPPLEMENT", "status": "SUPPORTED_LIMITED", "reason": "Accepted optional Xiaohan/Lichun evidence for existing M7 boundary use; not required or bundled for M1/M3 offline execution, no 2027 timed query expansion", "sourceRefs": ["scripts/kasi/boundary-supplement.mjs", "scripts/kasi/local-luck.mjs"]},
+    {"id": "PUBLIC_DATA_DISTRIBUTION", "status": "RIGHTS_BLOCKED", "reason": "Commercial/public redistribution review for existing KASI corpus is not accepted; data-free code artifact and internal private attachment are separate", "sourceRefs": ["docs/KASI_LOCAL_CHART_GUIDE.md", "docs/research/OSS_ENGINE_AUDIT_20261114.md"]},
+    {"id": "COMMERCIAL_DATA_CLEARANCE", "status": "UNKNOWN", "reason": "No new rights determination or legal certification is made by this sprint", "sourceRefs": ["docs/research/OSS_ENGINE_AUDIT_20261114.md"]}
+  ],
+  "unchangedGates": ["G1_P2_NO_GO", "NO_DEFAULT_ENGINE_REPLACEMENT", "NO_PUBLIC_RELEASE_APPROVAL", "NO_HISTORICAL_RANGE_EXPANSION", "NO_2027_QUERY_EXPANSION"]
+}
