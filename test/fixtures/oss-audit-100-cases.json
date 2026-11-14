@@ -1,0 +1,1926 @@
+{
+  "schemaVersion": "oss-audit-fixed-inputs-v1",
+  "createdOn": "2026-11-14",
+  "status": "INPUTS_FROZEN_BEFORE_DIFFERENTIAL_OUTPUTS_NOT_100_STRENGTH_GROUND_TRUTHS",
+  "categories": {
+    "ordinary": 40,
+    "jie": 20,
+    "zi": 10,
+    "historical": 10,
+    "lunar": 10,
+    "analysis": 10
+  },
+  "comparisonPolicy": {
+    "source": "KASI_OFFLINE_VERIFIED_BASE_FOR_SUPPORTED_BIRTH_RANGE",
+    "matching": "CANDIDATE_SET_MEMBERSHIP_NOT_FIRST_CANDIDATE",
+    "classification": [
+      "CALCULATION_ERROR",
+      "POLICY_DIFFERENCE",
+      "IMPLEMENTATION_DIFFERENCE",
+      "UNVERIFIED"
+    ],
+    "support": "UNSUPPORTED_IS_SEPARATE_FROM_ERROR",
+    "historical": "NO_OUR_PROFILE_EXPANSION",
+    "nativeLunar": "PRECONVERTED_INPUT_MUST_BE_DISCLOSED_NOT_NATIVE_CONVERSION_PASS"
+  },
+  "cases": [
+    {
+      "id": "ordinary-01",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1989-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-02",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1990-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-03",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1991-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-04",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1992-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-05",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1993-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-06",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1994-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-07",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1995-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-08",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1996-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-09",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1997-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-10",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1998-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-11",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "1999-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-12",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2000-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-13",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2001-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-14",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2002-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-15",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2003-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-16",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2004-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-17",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2005-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-18",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2006-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-19",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2007-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-20",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2008-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-21",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2009-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-22",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2010-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-23",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2011-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-24",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2012-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-25",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2013-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-26",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2014-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-27",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2015-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-28",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2016-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-29",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2017-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-30",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2018-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-31",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2019-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-32",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2020-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-33",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2021-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-34",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2022-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-35",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2023-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-36",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2024-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-37",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2025-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-38",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2026-06-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-39",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2000-02-29",
+      "time": "15:20",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "ordinary-40",
+      "category": "ordinary",
+      "calendar": "GREGORIAN",
+      "date": "2024-02-29",
+      "time": "08:10",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-01",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-02-04",
+      "time": "05:01",
+      "boundary": {
+        "term": "LICHUN",
+        "displayedDate": "2026-02-04",
+        "displayedTime": "05:02",
+        "deltaMinutes": -1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-02",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-02-04",
+      "time": "05:02",
+      "boundary": {
+        "term": "LICHUN",
+        "displayedDate": "2026-02-04",
+        "displayedTime": "05:02",
+        "deltaMinutes": 0,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-03",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-02-04",
+      "time": "05:03",
+      "boundary": {
+        "term": "LICHUN",
+        "displayedDate": "2026-02-04",
+        "displayedTime": "05:02",
+        "deltaMinutes": 1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-04",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-03-05",
+      "time": "22:58",
+      "boundary": {
+        "term": "JINGZHE",
+        "displayedDate": "2026-03-05",
+        "displayedTime": "22:59",
+        "deltaMinutes": -1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-05",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-03-05",
+      "time": "22:59",
+      "boundary": {
+        "term": "JINGZHE",
+        "displayedDate": "2026-03-05",
+        "displayedTime": "22:59",
+        "deltaMinutes": 0,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-06",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-03-05",
+      "time": "23:00",
+      "boundary": {
+        "term": "JINGZHE",
+        "displayedDate": "2026-03-05",
+        "displayedTime": "22:59",
+        "deltaMinutes": 1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-07",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-04-05",
+      "time": "03:39",
+      "boundary": {
+        "term": "QINGMING",
+        "displayedDate": "2026-04-05",
+        "displayedTime": "03:40",
+        "deltaMinutes": -1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-08",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-04-05",
+      "time": "03:40",
+      "boundary": {
+        "term": "QINGMING",
+        "displayedDate": "2026-04-05",
+        "displayedTime": "03:40",
+        "deltaMinutes": 0,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-09",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-04-05",
+      "time": "03:41",
+      "boundary": {
+        "term": "QINGMING",
+        "displayedDate": "2026-04-05",
+        "displayedTime": "03:40",
+        "deltaMinutes": 1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-10",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-05-05",
+      "time": "20:48",
+      "boundary": {
+        "term": "LIXIA",
+        "displayedDate": "2026-05-05",
+        "displayedTime": "20:49",
+        "deltaMinutes": -1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-11",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-05-05",
+      "time": "20:49",
+      "boundary": {
+        "term": "LIXIA",
+        "displayedDate": "2026-05-05",
+        "displayedTime": "20:49",
+        "deltaMinutes": 0,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-12",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-05-05",
+      "time": "20:50",
+      "boundary": {
+        "term": "LIXIA",
+        "displayedDate": "2026-05-05",
+        "displayedTime": "20:49",
+        "deltaMinutes": 1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-13",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-08-07",
+      "time": "20:42",
+      "boundary": {
+        "term": "LIQIU",
+        "displayedDate": "2026-08-07",
+        "displayedTime": "20:43",
+        "deltaMinutes": -1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-14",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-08-07",
+      "time": "20:43",
+      "boundary": {
+        "term": "LIQIU",
+        "displayedDate": "2026-08-07",
+        "displayedTime": "20:43",
+        "deltaMinutes": 0,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-15",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-08-07",
+      "time": "20:44",
+      "boundary": {
+        "term": "LIQIU",
+        "displayedDate": "2026-08-07",
+        "displayedTime": "20:43",
+        "deltaMinutes": 1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-16",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-12-07",
+      "time": "11:52",
+      "boundary": {
+        "term": "DAXUE",
+        "displayedDate": "2026-12-07",
+        "displayedTime": "11:53",
+        "deltaMinutes": -1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-17",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-12-07",
+      "time": "11:53",
+      "boundary": {
+        "term": "DAXUE",
+        "displayedDate": "2026-12-07",
+        "displayedTime": "11:53",
+        "deltaMinutes": 0,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-18",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-12-07",
+      "time": "11:54",
+      "boundary": {
+        "term": "DAXUE",
+        "displayedDate": "2026-12-07",
+        "displayedTime": "11:53",
+        "deltaMinutes": 1,
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-19",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-05",
+      "time": "17:22",
+      "boundary": {
+        "term": "XIAOHAN",
+        "displayedDate": "2026-01-05",
+        "displayedTime": "17:23",
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "jie-20",
+      "category": "jie",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-05",
+      "time": "17:23",
+      "boundary": {
+        "term": "XIAOHAN",
+        "displayedDate": "2026-01-05",
+        "displayedTime": "17:23",
+        "meaning": "PUBLISHED_MINUTE_REFERENCE_NOT_EXACT_SECOND"
+      },
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-01",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2000-01-01",
+      "time": "22:59",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-02",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2000-01-01",
+      "time": "23:00",
+      "policy": {
+        "dayBoundary": "splitJasi",
+        "dayRollover": "ZI_START_23",
+        "hourStemReference": "CIVIL_DATE_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-03",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2000-01-01",
+      "time": "23:30",
+      "policy": {
+        "dayBoundary": "jasi",
+        "dayRollover": "ZI_START_23",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-04",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2000-01-01",
+      "time": "00:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-05",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2000-01-01",
+      "time": "00:30",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-06",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-01",
+      "time": "22:59",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-07",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-01",
+      "time": "23:00",
+      "policy": {
+        "dayBoundary": "splitJasi",
+        "dayRollover": "ZI_START_23",
+        "hourStemReference": "CIVIL_DATE_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-08",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-01",
+      "time": "23:30",
+      "policy": {
+        "dayBoundary": "jasi",
+        "dayRollover": "ZI_START_23",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-09",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-01",
+      "time": "00:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "zi-10",
+      "category": "zi",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-01",
+      "time": "00:30",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-01",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1908-04-01",
+      "time": "00:05",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-02",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1912-01-01",
+      "time": "00:05",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-03",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1954-03-21",
+      "time": "00:05",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-04",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1961-08-10",
+      "time": "00:05",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-05",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1948-06-01",
+      "time": "00:30",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-06",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1960-05-01",
+      "time": "23:30",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-07",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1987-05-10",
+      "time": "01:59",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-08",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1987-05-10",
+      "time": "03:00",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-09",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1988-10-09",
+      "time": "01:30",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "historical-10",
+      "category": "historical",
+      "calendar": "GREGORIAN",
+      "date": "1988-10-09",
+      "time": "02:30",
+      "scope": "OUR_CURRENT_BIRTH_PROFILE_UNSUPPORTED_HISTORICAL_EXPECTATIONS_UNVERIFIED",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-01",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2025,
+        "month": 6,
+        "day": 1,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-02",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2025,
+        "month": 6,
+        "day": 15,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-03",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2025,
+        "month": 6,
+        "day": 29,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-04",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2025,
+        "month": 6,
+        "day": 1,
+        "leap": false
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-05",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2023,
+        "month": 2,
+        "day": 1,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-06",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2023,
+        "month": 2,
+        "day": 15,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-07",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2020,
+        "month": 4,
+        "day": 1,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-08",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2017,
+        "month": 5,
+        "day": 1,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-09",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 2012,
+        "month": 3,
+        "day": 1,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "lunar-10",
+      "category": "lunar",
+      "calendar": "KOREAN_LUNAR",
+      "lunar": {
+        "year": 1995,
+        "month": 8,
+        "day": 1,
+        "leap": true
+      },
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-01",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-08",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-02",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "1989-10-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-03",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "1994-07-15",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-04",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "1991-02-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-05",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "2003-01-03",
+      "time": "00:30",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-06",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "2026-06-07",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-07",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "2026-04-17",
+      "time": "20:49",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-08",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "1996-12-29",
+      "time": "00:30",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-09",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "2026-02-06",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    },
+    {
+      "id": "analysis-10",
+      "category": "analysis",
+      "calendar": "GREGORIAN",
+      "date": "2026-01-01",
+      "time": "12:00",
+      "policy": {
+        "dayBoundary": "midnight",
+        "dayRollover": "CIVIL_MIDNIGHT",
+        "hourStemReference": "SELECTED_DAY_PILLAR",
+        "trueSolarTime": false,
+        "timezone": "Asia/Seoul"
+      },
+      "sex": "MALE",
+      "asOf": "2026-11-01T12:00",
+      "privacy": "FICTIONAL_TEST_INPUT_NOT_PERSONAL_BIRTH_RECORD"
+    }
+  ]
+}
