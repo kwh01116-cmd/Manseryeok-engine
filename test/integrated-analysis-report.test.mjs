@@ -45,6 +45,9 @@ test('all six Korean sections expose eight surface slots separately from hidden 
   assert.equal(r.innerPatterns.candidates[0].patterns.length,8);
   assert.equal(section(r,'ELEMENTS_AND_TEN_GODS').items.filter(i=>i.text.includes('천간')&&i.text.includes('분류는')).length,3);
   assert.equal(section(r,'ELEMENTS_AND_TEN_GODS').items.filter(i=>i.text.includes('장간은 다음')).length,4);
+  const nature=section(r,'ELEMENTS_AND_TEN_GODS').items.filter(i=>i.text.includes('대표 오행'));
+  assert.equal(nature.length,5,'four pillar nature statements plus the unweighted count explanation');
+  for(const literal of ['연주의 천간은 丙(양·화(火)), 지지는 午(양·대표 오행 화(火))','월주의 천간은 癸(음·수(水)), 지지는 巳(음·대표 오행 화(火))','일주의 천간은 丙(양·화(火)), 지지는 午(양·대표 오행 화(火))','시주의 천간은 甲(양·목(木)), 지지는 午(양·대표 오행 화(火))'])assert.ok(nature.some(i=>i.text.includes(literal)),literal);
   const text=renderLocalAnalysisReportText(r);
   for(const label of ['丙午(병오)','癸巳(계사)','일간은 丙','양·화(火)','무가중 표면 개수','실제 힘','장간','경쟁 후보','요청하지 않았습니다','계속 보류','상세 판단'])assert.ok(text.includes(label),label);
   assert.doesNotMatch(text,/^  근거:|MAIN_QI_|PEER_MAIN_/m,'readable text keeps detailed references and raw statuses in JSON');

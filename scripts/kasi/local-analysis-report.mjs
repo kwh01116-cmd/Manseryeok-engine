@@ -105,7 +105,7 @@ function buildReport(value){
     const view=basicExplanation.candidates[i];check(view.candidateRef===owner,'REPORT_CANDIDATE_CONTEXT');
     for(const item of view.items){
       if(['KO_BASIC_SUMMARY','KO_BASIC_DAY_MASTER'].includes(item.templateId))add(0,item.id,owner,item.text,item.factRefs.map(factRef));
-      else if(['KO_BASIC_VISIBLE_TEN_GOD','KO_BASIC_HIDDEN_STEMS'].includes(item.templateId))add(1,item.id,owner,item.text,item.factRefs.map(factRef));
+      else if(['KO_BASIC_PILLAR_NATURE','KO_BASIC_VISIBLE_TEN_GOD','KO_BASIC_HIDDEN_STEMS'].includes(item.templateId))add(1,item.id,owner,item.text,item.factRefs.map(factRef));
     }
     const counts=Object.fromEntries(Object.keys(elements).map(k=>[k,0]));
     for(const p of c.pillars){counts[p.nature.stem.element]++;counts[p.nature.branch.principalElement]++;}
