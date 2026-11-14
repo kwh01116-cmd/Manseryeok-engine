@@ -62,19 +62,19 @@ const elements={WOOD:'목(木)',FIRE:'화(火)',EARTH:'토(土)',METAL:'금(金)
 const weightedLabels={VERY_STRONG:'극신강',STRONG:'신강',BALANCED:'중화',WEAK:'신약',VERY_WEAK:'극신약'};
 const godLabels={正官:'정관',七殺:'칠살',正財:'정재',偏財:'편재',正印:'정인',偏印:'편인',食神:'식신',傷官:'상관',比肩:'비견',劫財:'겁재'};
 const godLabel=type=>godLabels[type]?`${godLabels[type]}(${type})`:type;
-const selectionLabels={MAIN_QI_STRUCTURAL_ANCHOR:'월령 본기를 표시 기준으로 유지',MAIN_QI_WITH_COMPETING_EXPOSURES:'본기와 다른 투출 후보가 함께 있어 단일 선택 보류',PEER_MAIN_OUT_OF_SCOPE:'비겁 본기여서 내격8 선택 범위 밖',PEER_MAIN_WITH_EXPOSED_OTHER_UNRESOLVED:'비겁 본기에 다른 투출 후보가 있어 선택 미정'};
+const selectionLabels={MAIN_QI_STRUCTURAL_ANCHOR:'다른 월령 장간의 경쟁 투출은 없습니다',MAIN_QI_WITH_COMPETING_EXPOSURES:'다른 월령 장간의 투출이 함께 있어 단일 선택을 보류합니다',PEER_MAIN_OUT_OF_SCOPE:'비겁 본기는 내격8 선택 범위 밖입니다',PEER_MAIN_WITH_EXPOSED_OTHER_UNRESOLVED:'비겁 본기와 다른 투출 후보 사이의 선택은 미정입니다'};
 const seasonalLabels={SPRING:'봄',SUMMER:'여름',AUTUMN:'가을',WINTER:'겨울',EARTH_DOMINANT:'토왕'};
 const stateLabels={WANG:'왕(旺)',XIANG:'상(相)',XIU:'휴(休)',QIU:'수(囚)',SI:'사(死)'};
-const synthesisLabels={RESOLVED_UNDER_POLICY:'선택한 제한 정책에서 신약',OUTSIDE_POLICY_SCOPE:'좁은 신약 충분조건 범위 밖',DEFERRED_MIXED_EVIDENCE:'지원·반대 구조가 함께 있어 종합 보류',DEFERRED_EFFECT_POLICY_REQUIRED:'관계의 실제 효력 판단이 필요해 종합 보류',NEEDS_DATA:'경계 자료가 부족해 종합 보류'};
+const synthesisLabels={RESOLVED_UNDER_POLICY:'선택한 제한 정책에서 신약으로 분류합니다',OUTSIDE_POLICY_SCOPE:'좁은 신약 충분조건의 범위 밖입니다',DEFERRED_MIXED_EVIDENCE:'지원·반대 구조가 함께 있어 종합을 보류합니다',DEFERRED_EFFECT_POLICY_REQUIRED:'관계의 실제 효력 판단이 필요해 종합을 보류합니다',NEEDS_DATA:'경계 자료가 부족해 종합을 보류합니다'};
 const luckStatusLabels={OK:'모형 기산나이 계산',PARTIAL:'일부 조건 미정',AMBIGUOUS:'같은 표시 분이어서 기산 미정',NEEDS_DATA:'절입 자료 부족',INVALID_INPUT:'방향 규칙 입력 미정',POLICY_UNRESOLVED:'검증한 조회 정책 범위 밖',BEFORE_BIRTH:'출생 전',BEFORE_FIRST_DA_YUN:'첫 명목 교운일 전',OUTSIDE_GENERATED_RANGE:'생성한 대운 기간 밖',RESOLVED_UNDER_POLICY:'명시한 정책에서 선택'};
 const glyph=p=>p.stem+p.branch;
 function summarySentences(value){
   const {existing,innerPatterns,weighted,m7,projection,luckSelection:selected}=value,count=existing.facts.candidates.length;
   const prefix=i=>count>1?`후보 ${i+1}: `:'';
   const subjects=existing.facts.candidates.map((c,i)=>{const n=c.pillars[2].nature.stem;return `${prefix(i)}${c.dayMaster} 일간(${n.polarity==='YANG'?'양':'음'}·${elements[n.element]})과 ${c.pillars[1].branch}월`;});
-  const selections=innerPatterns.candidates.map((c,i)=>{const s=c.selection,competing=s.candidateTypes.filter(t=>t!==s.primaryPattern);return `${prefix(i)}${s.primaryPattern?godLabel(s.primaryPattern)+'이 표시 기준':'주 후보 미정'}${competing.length?', 다른 후보 '+competing.map(godLabel).join('·'):''}이며 ${selectionLabels[s.status]}`;});
+  const selections=innerPatterns.candidates.map((c,i)=>{const s=c.selection,competing=s.candidateTypes.filter(t=>t!==s.primaryPattern);return `${prefix(i)}표시 기준 후보는 ${s.primaryPattern?godLabel(s.primaryPattern):'미정'}${competing.length?', 다른 내격8 후보는 '+competing.map(godLabel).join('·'):''}이며, ${selectionLabels[s.status]}`;});
   const seasons=existing.seasonal.candidates.map((c,i)=>{const j=c.judgment,root=existing.root.candidates[i],target=root.targets.find(t=>t.id===root.dayMasterTargetRef);const alternatives=unique(j.alternatives.map(a=>`${seasonalLabels[a.season]} ${stateLabels[a.seasonalState]}`));return `${prefix(i)}${alternatives.length?'계절 분류는 '+alternatives.join(' / ')+(alternatives.length>1?'의 조건부 대안':''):'경계 자료가 부족해 계절 분류는 미정'}이고 일간의 구성상 직접 근은 ${target.chartRootPresence==='PRESENT_UNDER_POLICY'?'있습니다':'없습니다'}`;});
-  const synthesis=existing.researchSynthesis.candidates.map((c,i)=>`${prefix(i)}${unique(c.paths.map(p=>synthesisLabels[p.status])).join(' / ')}${weighted?`, 실험 가중 점수는 ${weighted[i].score.value}/10(${weightedLabels[weighted[i].policyClassification]})`:''}`);
+  const synthesis=existing.researchSynthesis.candidates.map((c,i)=>`${prefix(i)}${unique(c.paths.map(p=>synthesisLabels[p.status])).join(' / ')}${weighted?`; 실험 가중 점수는 ${weighted[i].score.value}/10(${weightedLabels[weighted[i].policyClassification]})입니다`:''}`);
   let time='대운·세운 시간축은 요청하지 않았습니다';
   if(!m7&&selected.status==='INVALID_INPUT')time='대운 방향 규칙의 입력이 미확정이어서 시간축 결과를 보류했습니다';
   if(m7){
@@ -82,7 +82,7 @@ function summarySentences(value){
     const seyun=m7.luck.seyun,annual=[];if(seyun.yearLabel)annual.push(`${seyun.yearLabel.year}년 독립 세운 라벨 ${glyph(seyun.yearLabel.pillar)}`);if(seyun.atMinute)annual.push(`${seyun.atMinute.queryMinute} 독립 세운 조회 ${seyun.atMinute.entries.length?seyun.atMinute.entries.map(e=>e.yearLabel+'년 '+glyph(e.pillar)).join(' / ')+(seyun.atMinute.entries.length>1?'의 조건부 대안':''):luckStatusLabels[seyun.atMinute.status]}`);
     time=[...dayun,...annual].join('; ');
   }
-  return [`${subjects.join(' / ')}을 기준으로 원국 ${count}개를 보존합니다.`,`${selections.join('; ')}입니다.`,`${seasons.join('; ')}.`,`${synthesis.join('; ')}입니다.`,`${time}.`,'표면 개수는 무가중 8자리 집계이며 실제 힘·격국 성패·용신·길흉·사건 예측을 확정하지 않습니다.'];
+  return [`${subjects.join(' / ')}을 기준으로 원국 ${count}개를 보존합니다.`,`${selections.join('; ')}.`,`${seasons.join('; ')}.`,`${synthesis.join('; ')}.`,`${time}.`,'표면 개수는 무가중 8자리 집계이며 실제 힘·격국 성패·용신·길흉·사건 예측을 확정하지 않습니다.'];
 }
 const referenceKey=(layer,id)=>layer+':'+id;
 
@@ -114,7 +114,7 @@ function buildReport(value){
     check(inner.candidateRef===owner&&innerView.candidateRef===owner,'REPORT_INNER_PARENT_CONTEXT');
     const innerRef=ref('M4_INNER',owner,owner,`innerPatterns.candidates[${i}]`);allInner.push(innerRef);
     const competing=inner.selection.candidateTypes.filter(type=>type!==inner.selection.primaryPattern);
-    add(2,owner+'#inner-selection',owner,`월령 내격8은 월령 장간과 정확한 투출 위치로 구분하는 구조 후보입니다. 주 후보는 ${inner.selection.primaryPattern?godLabel(inner.selection.primaryPattern):'미정'}, 다른 경쟁 후보는 ${competing.map(godLabel).join(' · ')||'없음'}이며 ${selectionLabels[inner.selection.status]}입니다. 격국의 성패·합화·실제 작용은 확정하지 않습니다.`,[innerRef],{...inner.selection,competingTypes:competing});
+    add(2,owner+'#inner-selection',owner,`월령 내격8은 월령 장간과 정확한 투출 위치로 구분하는 구조 후보입니다. 표시 기준 후보는 ${inner.selection.primaryPattern?godLabel(inner.selection.primaryPattern):'미정'}입니다. 다른 내격8 후보는 ${competing.map(godLabel).join(' · ')||'없음'}입니다. ${selectionLabels[inner.selection.status]}. 격국의 성패·합화·실제 작용은 확정하지 않습니다.`,[innerRef],{...inner.selection,competingTypes:competing});
     innerView.items.forEach((item,j)=>add(2,owner+'#inner-item['+j+']',owner,item.text,[ref('M4_INNER_TEXT',owner+'['+j+']',owner,`innerExplanation.candidates[${i}].items[${j}]`)]));
     const season=existing.seasonal.candidates[i],seasonRef=ref('M3_SEASONAL',season.judgment.id,owner,`existing.seasonal.candidates[${i}].judgment`);allM3.push(seasonRef);
     check(season.candidateRef===owner,'REPORT_SEASONAL_PARENT_CONTEXT');

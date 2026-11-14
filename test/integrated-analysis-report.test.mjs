@@ -49,10 +49,17 @@ test('all six Korean sections expose eight surface slots separately from hidden 
   assert.equal(nature.length,5,'four pillar nature statements plus the unweighted count explanation');
   for(const literal of ['연주의 천간은 丙(양·화(火)), 지지는 午(양·대표 오행 화(火))','월주의 천간은 癸(음·수(水)), 지지는 巳(음·대표 오행 화(火))','일주의 천간은 丙(양·화(火)), 지지는 午(양·대표 오행 화(火))','시주의 천간은 甲(양·목(木)), 지지는 午(양·대표 오행 화(火))'])assert.ok(nature.some(i=>i.text.includes(literal)),literal);
   const text=renderLocalAnalysisReportText(r);
-  for(const label of ['丙午(병오)','癸巳(계사)','일간은 丙','양·화(火)','무가중 표면 개수','실제 힘','장간','경쟁 후보','요청하지 않았습니다','계속 보류','상세 판단'])assert.ok(text.includes(label),label);
+  for(const label of ['丙午(병오)','癸巳(계사)','일간은 丙','양·화(火)','무가중 표면 개수','실제 힘','장간','다른 내격8 후보','요청하지 않았습니다','계속 보류','상세 판단'])assert.ok(text.includes(label),label);
   assert.doesNotMatch(text,/^  근거:|MAIN_QI_|PEER_MAIN_/m,'readable text keeps detailed references and raw statuses in JSON');
   const summary=section(r,'OVERALL_SUMMARY').items[0];assert.equal((summary.text.match(/\.(?:\s|$)/g)??[]).length,6);assert.ok(summary.refs.length>=4);
-  for(const literal of ['丙 일간(양·화(火))과 巳월','주 후보 미정','여름 왕(旺)','직접 근은 있습니다','좁은 신약 충분조건 범위 밖'])assert.ok(summary.text.includes(literal),literal);
+  for(const literal of ['丙 일간(양·화(火))과 巳월','표시 기준 후보는 미정','여름 왕(旺)','직접 근은 있습니다','좁은 신약 충분조건의 범위 밖'])assert.ok(summary.text.includes(literal),literal);
+  // Existing section/summary quality check: wealth labels must use a complete predicate.
+  for(const [request,expected]of [[chartRequest('2026-01-04'),'정재(正財)'],[chartRequest('2026-01-05','00:00'),'편재(偏財)']]){
+    const r=valid(pipeline().calculate(request)),summary=section(r,'OVERALL_SUMMARY').items[0].text,text=renderLocalAnalysisReportText(r);
+    assert.ok(summary.includes('표시 기준 후보는 '+expected));
+    assert.doesNotMatch(text,/(?:정재\(正財\)|편재\(偏財\))이\s|유지입니다|종합 보류입니다/);
+    assert.equal((summary.match(/\.(?:\s|$)/g)??[]).length,6);
+  }
 });
 
 test('M7 and projection consume the same issued M1 once and preserve the legacy M3 and M7 results',()=>{
