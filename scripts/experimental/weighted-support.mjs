@@ -34,13 +34,15 @@ export function validateExperimentalWeightedResult(value){
 export function renderExperimentalWeightedText(value){
   validateExperimentalWeightedResult(value);
   const labels={VERY_STRONG:'극신강',STRONG:'신강',BALANCED:'중화',WEAK:'신약',VERY_WEAK:'극신약'};
+  const roles={year:'연',month:'월',day:'일',hour:'시'};
+  const describe=t=>t.ruleId==='WEIGHTED-PRINCIPAL-BRANCH'?`${roles[t.role]}지 ${t.contributionTenths/10}`:t.ruleId==='WEIGHTED-SURFACE-SUPPORT-ROOT-FACTOR'?`${roles[t.role]}간 ${t.contributionTenths/10}`:`월지 충 보정 ${t.contributionTenths/10}`;
   const lines=['선택형 가중 생조 점수 PoC — LEVEL 2 실험 정책',`정책: ${value.policy.policyId} / ${value.policy.policyVersion}`,
     '점수는 선택한 개발자 규칙의 산출값이며 실제 힘·확률·예측 정확도가 아닙니다.'];
   value.experimental.forEach((r,i)=>{
     const c=value.existing.facts.candidates[i],old=value.existing.researchSynthesis.candidates[i];
     lines.push('',`후보 ${i+1}: ${c.pillars.map(p=>p.stem+p.branch).join('·')}`,
-      `이 점수 정책에서는 ${r.score.value}/10, ${labels[r.policyClassification]}로 분류합니다.`,
-      `계산: ${r.decisionTrace.map(t=>`${t.role}/${t.ruleId} ${t.contributionTenths/10}`).join(' + ')}.`,
+      `선택한 점수 정책의 결과는 ‘${labels[r.policyClassification]}’입니다. 점수는 ${r.score.value}/10입니다.`,
+      `계산: ${r.decisionTrace.map(describe).join(' + ')}.`,
       `기존 M3 경로: ${old.paths.map(p=>p.conclusion??p.status).join(' / ')}. 기존 결과를 이 점수로 덮어쓰지 않습니다.`);
   });
   lines.push('','기존 M2 장간표를 사용하고 자동 합화·종격·용신은 적용하지 않습니다. 기존 계절 경계 대안과 원국 후보는 그대로 남깁니다.');return lines.join('\n')+'\n';
