@@ -863,6 +863,90 @@ function makeReader(o) {
   return r;
 }
 
+/* ── 상담사: 그림 스프라이트 ──
+   몸통 그림 한 장 위에 표정별 얼굴 조각을 겹친다. 숨쉬기와 고개 움직임은 그림을 격자로 휘어서 만든다.
+   그림은 make_sprites.py가 img/ 폴더에 만들어 둔 것. 못 불러오면 위의 도형 인형으로 대신한다. */
+const SPRITES = {
+  saju: { key: 'boreum', w: 1217, h: 1293, rect: [.31717, .52668, .36483, .37123], neck: [.4996, .5269], height: .86,
+    states: ['neutral', 'neutral_open', 'smile', 'smile_open', 'think', 'think_open', 'surprise'], alias: {} },
+  tarot: { key: 'dalmuri', w: 1209, h: 1301, rect: [.32754, .49962, .35732, .35511], neck: [.5062, .5007], height: .86,
+    states: ['neutral', 'smile_open', 'think', 'surprise'], alias: { neutral_open: 'smile_open', smile: 'neutral', think_open: 'think' } },
+};
+function loadSprites() {
+  const loader = new T.TextureLoader(), out = {};
+  const one = url => new Promise((res, rej) => loader.load(url, t => { t.anisotropy = 4; res(t); }, undefined, rej));
+  const jobs = Object.keys(SPRITES).map(async id => {
+    const c = SPRITES[id], names = ['body', 'blink', ...c.states];
+    try { const ts = await Promise.all(names.map(n => one(`img/${c.key}_${n}.webp`))); out[id] = {}; names.forEach((n, i) => { out[id][n] = ts[i]; }); }
+    catch (e) { console.warn('인물 그림을 불러오지 못해 도형 인형으로 대신합니다:', c.key); }
+  });
+  return Promise.race([Promise.all(jobs), new Promise(r => setTimeout(r, 9000))]).then(() => out);
+}
+const SPRITE_VS = `
+uniform float uAng, uNod, uBreath; uniform vec2 uPivot, uSize; varying vec2 vUv;
+void main() {
+  vUv = uv; vec3 p = position;
+  float w = smoothstep(uPivot.y - .07, uPivot.y + .1, uv.y);          // 목 위쪽만 고개로 움직인다
+  vec2 piv = (uPivot - .5) * uSize, d = p.xy - piv;
+  float a = uAng * w, c = cos(a), s = sin(a);
+  p.xy = piv + vec2(c * d.x - s * d.y, s * d.x + c * d.y);
+  p.y += uNod * w * uSize.y + uBreath * uSize.y * smoothstep(.05, .55, uv.y);
+  p.x *= 1. + uBreath * .7 * (1. - uv.y);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.);
+}`;
+const SPRITE_FS = `
+uniform sampler2D tBody, tFaceA, tFaceB, tBlink; uniform float uMix, uBlink; uniform vec4 uRect; varying vec2 vUv;
+void main() {
+  vec4 c = texture2D(tBody, vUv);
+  vec2 f = (vUv - uRect.xy) / uRect.zw;
+  if (f.x > 0. && f.x < 1. && f.y > 0. && f.y < 1.) {
+    vec4 face = mix(texture2D(tFaceA, f), texture2D(tFaceB, f), uMix);
+    c.rgb = mix(c.rgb, face.rgb, face.a);
+    vec4 bl = texture2D(tBlink, f);
+    c.rgb = mix(c.rgb, bl.rgb, bl.a * uBlink);
+  }
+  if (c.a < .03) discard;
+  gl_FragColor = c;
+}`;
+function makeSpriteReader(cfg, tx) {
+  const H = cfg.height, Wd = H * cfg.w / cfg.h;
+  const u = { tBody: { value: tx.body }, tFaceA: { value: tx.neutral }, tFaceB: { value: tx.neutral }, tBlink: { value: tx.blink },
+    uMix: { value: 0 }, uBlink: { value: 0 }, uRect: { value: new T.Vector4(...cfg.rect) }, uPivot: { value: new T.Vector2(...cfg.neck) },
+    uSize: { value: new T.Vector2(Wd, H) }, uAng: { value: 0 }, uNod: { value: 0 }, uBreath: { value: 0 } };
+  const m = new T.Mesh(new T.PlaneGeometry(Wd, H, 16, 20), new T.ShaderMaterial({ uniforms: u, vertexShader: SPRITE_VS, fragmentShader: SPRITE_FS, transparent: true }));
+  m.position.y = H / 2; m.renderOrder = 1;
+  const g = new T.Group(); g.add(m);
+  const TILT = { neutral: 0, smile: -.012, think: .03, surprise: -.006 };
+  let moodName = 'neutral', open = false, flipAt = 0, fade = .2, shown = 'neutral', blinkAt = 2, tilt = 0, nod = 0;
+  const pick = (mood, mouthOpen) => { let k = mouthOpen && mood !== 'surprise' ? mood + '_open' : mood; k = cfg.alias[k] || k; return tx[k] ? k : 'neutral'; };
+  const r = { group: g, sprite: true, talking: false, wave: 0, look: 0, seed: Math.random() * 9,
+    setMood(mm) { moodName = TILT[mm] === undefined ? 'neutral' : mm; },
+    update(t, dt) {
+      // 말하는 동안 입을 열었다 닫았다 한다
+      if (!r.talking) open = false;
+      else if (t > flipAt) { open = !open; flipAt = t + (open ? .09 + Math.random() * .1 : .06 + Math.random() * .09); }
+      const want = pick(moodName, open);
+      if (want !== shown) {
+        if (u.uMix.value > .5) u.tFaceA.value = u.tFaceB.value;
+        fade = want.split('_')[0] === shown.split('_')[0] ? .05 : .2;         // 입만 바뀌면 빠르게, 표정이 바뀌면 부드럽게
+        u.tFaceB.value = tx[want]; u.uMix.value = 0; shown = want;
+      }
+      u.uMix.value = Math.min(1, u.uMix.value + dt / fade);
+      // 눈 깜빡임
+      if (t > blinkAt + .17) blinkAt = t + 2.6 + Math.random() * 3.2;
+      u.uBlink.value = t > blinkAt ? Math.sin(Math.min(1, (t - blinkAt) / .17) * Math.PI) : 0;
+      if (reduced) u.uBlink.value = 0;
+      // 고개와 숨
+      const k = 1 - Math.exp(-dt * 5);
+      tilt = lerp(tilt, TILT[moodName], k); nod = lerp(nod, r.look, k);
+      const live = reduced ? 0 : 1;
+      u.uAng.value = tilt + live * (Math.sin(t * .7 + r.seed) * .012 + (r.talking ? Math.sin(t * 5.3) * .006 : 0));
+      u.uNod.value = -nod * .012 + live * (r.talking ? -Math.abs(Math.sin(t * 6.1)) * .004 : 0);
+      u.uBreath.value = live * Math.sin(t * 1.5 + r.seed) * .004;
+    } };
+  return r;
+}
+
 /* ── 부스 ── */
 function buildBooth(b) {
   const g = new T.Group(); g.position.x = b.x; scene.add(g);
@@ -955,10 +1039,12 @@ function buildBooth(b) {
   plane(.34, .2, new T.MeshBasicMaterial({ map: paperTex(340, 200, saju ? [{ t: '中國語 OK', c: '#e8322f' }, { t: '日本語 OK' }] : [{ t: '신점 타로', c: '#e8322f', big: 1 }, { t: '사업 · 연애' }], '#eef3ff'), toneMapped: false }), 1.27, FLOOR + .92, .02, g).renderOrder = 4;
 
   // 상담사
-  const reader = makeReader(saju
+  const sprite = W.sprites && W.sprites[b.id];
+  const reader = sprite ? makeSpriteReader(SPRITES[b.id], sprite) : makeReader(saju
     ? { style: 'bun', hair: 0x3a3436, top: 0x1f8f6c, vest: 0xb82333, glasses: true, collar: true, beads: true }
     : { style: 'perm', hair: 0x3b2217, scarf: 0xd42b3c, topMat: new T.MeshStandardMaterial({ roughness: .8, map: tex(cv(128, 128, (c, w, h) => { c.fillStyle = '#f4c531'; c.fillRect(0, 0, w, h); for (let i = 0; i < 26; i++) { c.fillStyle = i % 3 ? '#e8322f' : '#fff'; c.beginPath(); c.arc((i * 53) % w, (i * 89) % h, 6, 0, 7); c.fill(); c.fillStyle = '#2f9a4d'; c.beginPath(); c.arc((i * 53 + 9) % w, (i * 89 + 6) % h, 3, 0, 7); c.fill(); } }), [3, 2]) }) });
-  reader.group.position.set(CX, FLOOR + 1.2, -1.76); g.add(reader.group);
+  if (sprite) reader.group.position.set(CX, TABLE_Y - .08, -1.62); else reader.group.position.set(CX, FLOOR + 1.2, -1.76);
+  g.add(reader.group);
   updaters.push((t, dt) => reader.update(t, dt));
 
   const hit = box(3.5, 4, 2.6, new T.MeshBasicMaterial({ visible: false }), 0, 2, -1.1, g);     // 누를 수 있는 영역
@@ -1121,7 +1207,8 @@ function shotAlley() {
 }
 function shotSeat(b) {
   const ex = b.x + CX;
-  return { pos: V(ex, 1.6, -.2), look: V(ex, aspect < 1 ? 1.34 : 1.43, -1.72), fov: aspect < 1 ? 62 : 50 };
+  const up = b.reader && b.reader.sprite ? .08 : 0;      // 그림 인물은 머리가 조금 더 높다
+  return { pos: V(ex, 1.6, up ? -.4 : -.2), look: V(ex, (aspect < 1 ? 1.34 : 1.43) + up, -1.72), fov: aspect < 1 ? 62 : 50 };
 }
 function shotTable(b, width, dx = 0, depth = .16) {
   const v = shotSeat(b).fov, ex = b.x + CX + dx;
@@ -1501,6 +1588,8 @@ async function boot() {
       new Promise(r => setTimeout(r, 4000)),
     ]);
   } catch (e) { /* 글꼴 없이도 기본 글꼴로 그린다 */ }
+  loading.textContent = '상담사 모시는 중…';
+  W.sprites = await loadSprites();
   try { buildWorld(); }
   catch (e) { console.warn(e); loading.textContent = '이 브라우저에서는 3D 화면을 열 수 없어요. (WebGL 필요)'; return; }
   new ResizeObserver(resize).observe(stage);

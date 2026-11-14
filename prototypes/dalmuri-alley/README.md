@@ -5,8 +5,10 @@
 
 ## 구성
 
-- `index.html`: 페이지 전체. three.js(r128)로 그린 골목과 부스 두 곳(타로, 사주).
+- `index.html`: 페이지 전체. three.js(r128)로 그린 골목과 부스 두 곳(타로, 사주). 상담사는 2D 그림.
   Claude Artifact 게시용 조각이라 `<html>`/`<body>` 태그가 없다.
+- `img/`: 상담사 그림 스프라이트. 몸통 한 장과 표정별 얼굴 조각.
+- `make_sprites.py`: GPT 이미지로 뽑은 원본 PNG를 `img/`의 스프라이트로 가공한다. 원본은 용량이 커서 저장소에 넣지 않았다.
 - `engine-glue.ts`: Manseryeok-engine을 브라우저에서 부르는 얇은 접착층.
 - `build.mjs`: 엔진 소스와 접착층을 묶어 `index.html`의 `ENGINE_BUNDLE` 구간에 넣는다.
 
