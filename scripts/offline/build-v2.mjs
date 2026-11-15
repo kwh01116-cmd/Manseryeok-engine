@@ -41,7 +41,7 @@ export function verifySelfContainedVendor(source,ts){
   const forbidden=new Set(['fetch','XMLHttpRequest','eval','Function']);
   function visit(node){if((ts.isCallExpression(node)||ts.isNewExpression(node))&&ts.isIdentifier(node.expression))check(!forbidden.has(node.expression.text),'XML_VENDOR_DYNAMIC_OR_NETWORK_CALL');ts.forEachChild(node,visit);}visit(ast);return true;
 }
-async function addVendor(root,outputs,ts){
+export async function addVendor(root,outputs,ts){
   const lock=JSON.parse(await readFile(join(root,'package-lock.json'),'utf8')),packages=[],sourceInputs=[];
   for(const [name,version]of Object.entries(VENDOR_VERSIONS)){
     const path='node_modules/'+name,bytes=await readFile(join(root,path,'package.json')),installed=JSON.parse(bytes),locked=lock.packages[path];
