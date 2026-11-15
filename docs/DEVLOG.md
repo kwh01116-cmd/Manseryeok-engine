@@ -855,3 +855,19 @@ ssaju의격국은월간십성과score극단값宗格,용신은일간별고정3�
 **[독립/권리]** clean최종v3 96payload/870574bytes+12별도자료파일을저장소밖새TEMP에서Node22만으로실행했다. 메인94성공/12보류/3입력·2경로거절/변조거절/42TZ출력쌍동일이며,별도M7투영JSON/TEXT2회는첫壬午·1992-01-10T08:00·제4乙酉를기존리터럴로검증했다. 엔진84145cf304099585b59f023fffb64a1d978d1863a3239e8d28a7fd1bd4db604f/첨부9d2703eeef4d437ebf707ff7f12656fe8543eae1a56ff96a56fd15cc0f5aded5. sourceInputs96와원본4트리/고정pin이전후같다. 새독립M1/credential counter를계측한것은아니며기존차단guard를재사용했다. API-only내부상업계산조건부허용과현재혼합첨부고객배포UNRESOLVED를구별하고기관질의3개는미발송이다.
 
 **[마감/다음]** 기존121생성물원byte·최종127전후동일,원본2086/후보a,b각8/보강5불변,private추적/KASI API·키·재수집/Actions/배포/UI/LLM0이다. 공개웹조사와localbrowser HTTP까지네트워크0이라고주장하지않는다. 기존M3좁은grid0/추가8한날짜·출시/G1-P2게이트유지다. 모든Sprint4최소목표완료가아닌**검증된한정범위완료/2027전체는PARTIAL**로기록한다. 다음은API-only배포팩/승인된2027일별+2028경계intake/1987·88 DST연결이며M5미세규칙자동추가는아니다. 검증SHA이후에는문서만바꾸고실행파일·생성물·패키지입력과원본을다시대조해승인브랜치일반Push한다. [실행/실패/단위](engineering/SPRINT4_EXECUTION_20261115.md) · [실행명령](SPRINT4_EXTENDED_OFFLINE_GUIDE.md) · [권리](research/KASI_DATA_RIGHTS_DISTRIBUTION_AUDIT_V01.md).
+
+## 2026-11-15 — Sprint 5 구현과 사전 검증: 서버 자료·DST·계약
+
+**[시작/선택]** 실제 로컬·직접 원격은 승인 브랜치의9aa28925a2726b5fc121a319591b801d08b7b5a2였고 clean이었다. 기준선460추적/127생성파일과 기존4자료군의 pin을 보존했다. 이번에는 고객 설치용 배포팩 대신 우리 Node22 서버에서만 읽는 API-only 팩을 우선했다. 원래907개 성공을 새 코드의 검사 결과로 사용하지 않는다.
+
+**[P0 수행]** 기존 혼합 attachment에서 비교·예외·운영 wrapper를 복사하지 않았다. 두 허용 API의 성공 원문1,002개를 다시 정규화하고 날짜28,124/기본절기1,848/2027절기24와 원문SHA·rowRefs29,996개를 연결했다. 두 별도 제작의5파일 byte가 같았고 독립 검토 후 a2bfbf35aff7bb8b11aef277a7be8d5ea5204c786a9142649bec23d27dfd289a를 고정 수락했다. 별도 AI는 production helper를 쓰지 않는 XML scalar 추출로 전 행을 대조했다. 이것은 발행기관 서명·천문 정답·법률가 인증이 아니다. 서버 내부 조건부 이용과 고객 재배포 UNRESOLVED를 구분했다.
+
+**[P2 수행]** 당대 도쿄천문대 중앙표준시 표와 실제1987/1988 API48행을 대조해 DST기간에도 API는 +09 표준 참조라는 근거를 확보했다.47행은 표시분이 같고1988한로는 API10:44/비교표10:45였다. 차이를 교정하지 않고 판본 반례로 남겼다. 새 명시 정책은 KR/Asia-Seoul/표준KST 일시 참조를 요구하며 gap은 원국0, fold는 offset 미선택 시 두 시간 대응과 보류다. 선택 뒤에도 원래 반복 시각을 보존한다. 기존 안정역사·현대 프로필의 의미를 넓히지 않았다. 순수12/연결11 집중과 실제 소파일럿을 통과했고,731일 전체 두TZ 수락은 최종 코드에서 별도로 수행한다.
+
+**[서버/실패/수정]** 기존 발급 M1/M2/M3·내격·M5·공망·M7을 재사용하는 버전형 DTO와 v4를 구현했다. 시각 미상은 M1=0이며 원국을 만들지 않는다. dummy frozen객체를 공개 binder로 발급할 수 있던 위험은 고정 manifest/projection/identity/annual 지문을 bind/verify 양쪽에서 다시 확인하도록 고쳤다. luck 하위 getter·비열거/symbol 입력을 막고, 잘못된 대운을 미요청으로 표현하던 상태를 새 서버 입력에서 거절했다. query-only 월운의 PARTIAL/정책보류·분 경계 대안도 상위 상태에 드러냈다. DST limits가 잘못됐다는 AI 지적1건은 실제 override/JSON 확인 결과 오탐이어서 철회·정정 영수증을 남겼다.
+
+소파일럿 계측기의 자기 모듈 접근 차단·동기throw/assert.rejects 오용, canonical이 필요한 sourceRef 속성 순서를 byte로 비교한 하니스 오류도 각각 보존했다. 최초 v4 dirty-a는 동시 편집에 따른 source/출력 차이로 중단됐고, source-input 전후 gate를 보강한 새 dirty-b가36성공/8보류/5입력거절·경로2/변조2·16TZ쌍·원본 접근 차단을 통과했다. 기대 결론·기존 가드를 완화하거나 skip하지 않았다. 원래 v1/v2/v3 집중24개도 통과했다.
+
+**[P1 승인 대기]** 보유 자료에2027 일별 음양력·2028 API 원문은 없었다.13 HTTP시도 이내/재시도0/추가페이지·인증·쿼터 즉시 중단의 dry-run과7집중 검사를 마치고 구체 계획 승인 질문을 사용자에게 제시했다. 이 기록 시점에는 답을 받지 않아 API·키 사용0이며2027음력/월운 끝2를 완성했다고 표시하지 않는다. 공개 웹 문서는 조사했지만 기관 연락·새 수집·클라우드 배포는 하지 않았다.
+
+최종 code SHA/전체 회귀·49,799쌍·새DST 전수·독립 v4·원격 HEAD는 후속 누적 기록으로 구분한다. [실행 기록](engineering/SPRINT5_EXECUTION_20261115.md) · [서버 계약](contracts/SERVER_INTEGRATION_DTO_V01.md) · [실행 방법](SPRINT5_SERVER_ENGINE_GUIDE.md) · [수집 승인 계획](research/SPRINT5_MISSING_DATA_COLLECTION_PLAN.md).
