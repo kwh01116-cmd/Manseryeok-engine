@@ -829,3 +829,19 @@ ssaju의격국은월간십성과score극단값宗格,용신은일간별고정3�
 직전 채팅 최종 답변의 음력 명령은 잘못된 --date/--leap-month 예를 사용했다. 실제 CLI와 이미 올바른 가이드의 --lunar-year/--lunar-month/--lunar-day/--leap 조합으로 안내를 정정한다. 제품 CLI 오류가 아니므로 코드나 가드/기대값을 바꾸지 않았다.
 
 새 증거는 .private/sprint3-20261115/recheck-existing-1196e27/receipt.json 및 reverification.json이다. 공개에는 이 재검증 요약만 추가하고 private자료/실제출력은 추적하지 않는다. 기능 상태와19행12/4/1/2, 다섯 제한기능GO/상용동등·공개출시NO-GO,1950–1988·2027·자료권리 차단은 그대로다. [가이드](SPRINT3_PRODUCT_ANALYSIS_GUIDE.md) · [실행 기록](engineering/SPRINT3_PRODUCT_ANALYSIS_EXECUTION_20261114.md).
+
+## 2026-11-15 — Sprint 4 구현: 권리·연도·시계 범위
+
+사용자가 우선순위를 M5 소규모 확장 대신 자료 이용권·2027·역사시·독립 실행으로 바꿨다. 실제 시작은 승인 브랜치701bd90f1b6e8e25358fbb84f4c15c5ba1d8e662 clean/직접 원격일치였다. 고정 base/export/supplement와 원본2086·후보a,b각8·보강5의 트리를 확인한 뒤 기존430추적파일/121생성물을 baseline으로 남겼다.
+
+두API의 공식 제한없음 표시와 실제source1001개/API-only계보를 직접 대조해 상업계산·캐시·가공·서버내부를 조건부 허용 근거로 분리했다. 기존 혼합attachment 전체 고객배포는 여전히 미확정이며 KASA2유형공고/1유형보도자료/OSS코드와내장표를 합치지 않았다. 기관 연락·KASI API 재요청·키 사용0이다.
+
+1962–1986의25년은 법정시와발표KST가같은+09/noDST 연속구간으로 새정책/프로필을 구현했다.1950/51연구PDF와IANA의실제경계차이를 발견해 예전EXACT기록을 이번수락에 사용하지 않았다.1954/1961전환과1987/88전체는채택하지않고 gap/fold진단만 보존했다. 별도연간사전guard인1961대설은출생지원이아니다.
+
+이미보관된2027연간API raw24행을별도고정핀77da197d…로연결했다. 현대확장ID/clock버전을별도로 만들고2027양력만기존Gregorian/60갑자/네자시정책으로계산한다. 음력관측행이없으면PROJECT양력근거/NEEDS_DATA를표시한다.2026월운끝2구간은완비,2027표끝2는2028수락자료없음으로남겼다. NAOJ공식표24/24와같은+9표시분을대조하되초/반올림/미래법령/권리인증으로확대하지않았다.
+
+새요약/상세는M2·구조M3·계절v1·근/인성제한·내격8·공망을재사용한다. 기존사립v2/M5의clock의존을소급넓히지않아새범위에서보류하고 원정책version/의존clock을남긴다. 기존Sprint3 product/M7/기본결과는그대로다. v3는엔진과base7/boundary5의별도private attachment를복원하며네트워크/키/원본import없이실행한다.
+
+개발중 집중은시계11·연간/월운13·역사프로필12·패키지11·새음력2 통과다. 최초history11/12는index함수를structuredClone한하니스실패로데이터만복제해고쳤다. 기존v1 schema4선언과충돌하는연간parser 정적import접근은별도loader로분리했다. 새future에2026소월30일이NEEDS_DATA가되는실제반례를보존하고 known-invalid를우선거절하도록수정했다. v3 import fallback의전체options전달실패를재현하고선택2필드만투영/양성회귀로고쳤다. 생산기대/기존가드를완화하지않았다.
+
+실제7명식·양음력/월운·gap/fold 개발파일럿, old/new100쌍, dirtyv3의94성공/12보류/3입력거절/2경로거절·42TZ비교는완료했다. 아직최종clean SHA의전체회귀/전수/독립artifact검사는수행전이며 같은일지후속기록과실행보고서에실제결과를추가한다. [실행기록](engineering/SPRINT4_EXECUTION_20261115.md) · [가이드](SPRINT4_EXTENDED_OFFLINE_GUIDE.md) · [권리감사](research/KASI_DATA_RIGHTS_DISTRIBUTION_AUDIT_V01.md).
