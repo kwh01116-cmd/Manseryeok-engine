@@ -63,7 +63,7 @@ export async function buildArtifact({root=repo,outDir,sourceRevision}={}){
   const outputs=new Map(),queue=[...ENTRIES],schemaSource=compiled.emitted.get('.kasi-build/schema.js')?.text;check(schemaSource,'FRESH_SCHEMA_EMIT_REQUIRED');
   while(queue.length){
     const path=queue.shift();if(outputs.has(path))continue;
-    check(path==='.kasi-build/schema.js'||path.startsWith('dist/')||ENTRIES.includes(path)||['scripts/kasi/candidate.mjs','scripts/kasi/local-chart-facts.mjs','docs/research/m2-policy-catalog.json'].includes(path),'UNAPPROVED_MODULE_PATH');
+    check(path==='.kasi-build/schema.js'||path.startsWith('dist/')||ENTRIES.includes(path)||['scripts/kasi/candidate.mjs','scripts/kasi/local-chart-facts.mjs','scripts/server-data/binding.mjs','scripts/server-data/constants.mjs','docs/research/m2-policy-catalog.json'].includes(path),'UNAPPROVED_MODULE_PATH');
     check(!/(?:Fixtures|collector|research|network|client|web)\.(?:m?js)$/.test(path),'ACQUISITION_OR_FIXTURE_MODULE_REJECTED');
     const source=path==='.kasi-build/schema.js'?extractSchema(schemaSource,ts):path.startsWith('dist/')?compiled.emitted.get(path)?.text:await readFile(join(root,path),'utf8');check(typeof source==='string','FRESH_MODULE_EMIT_REQUIRED');outputs.set(path,source);
     for(const specifier of path.endsWith('.json')?[]:importsIn(source,path,ts)){

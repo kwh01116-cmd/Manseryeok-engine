@@ -56,7 +56,7 @@ export async function addVendor(root,outputs,ts){
   const vendor={bundle:{name:'fast-xml-parser',version:'5.11.2',path:'vendor/fast-xml-parser.cjs',sha256:digest(bundle),sourcePath,sourceHashExpectation:'FIXED_BASELINE_CONSTANT_NOT_READ_FROM_TARGET_MANIFEST',format:'UPSTREAM_SELF_CONTAINED_COMMONJS_BUNDLE',externalRequireOrImportCount:0,embeddedComponentVersions:'NOT_INDEPENDENTLY_VERIFIED'},packages,packageInventoryMeaning:'LOCKED_INSTALLED_DECLARED_DEPENDENCY_NOTICES_NOT_EMBEDDED_BUNDLE_VERSION_ATTESTATION',scope:'EXISTING_LOCKED_MIT_RUNTIME_PARSER_BUNDLE_ONLY_NO_NPM_INSTALL_OR_NETWORK',rightsReview:'LICENSE_NOTICES_PRESERVED_NOT_LEGAL_CERTIFICATION'};
   outputs.set('vendor/VENDORED_DEPENDENCIES.json',JSON.stringify(vendor,null,2)+'\n');return {vendor,sourceInputs};
 }
-const allowedScript=path=>INTEGRATED_ENTRIES.includes(path)||['scripts/kasi/candidate.mjs','scripts/kasi/local-chart-facts.mjs','scripts/kasi/boundary-supplement.mjs','scripts/kasi/local-monthly-luck.mjs'].includes(path);
+const allowedScript=path=>INTEGRATED_ENTRIES.includes(path)||['scripts/kasi/candidate.mjs','scripts/kasi/local-chart-facts.mjs','scripts/kasi/boundary-supplement.mjs','scripts/kasi/local-monthly-luck.mjs','scripts/server-data/binding.mjs','scripts/server-data/constants.mjs'].includes(path);
 export async function buildIntegratedArtifact({root=repo,outDir,sourceRevision}={}){
   assertNode22();check(typeof outDir==='string'&&outDir.length>0,'OUTPUT_REQUIRED');
   const ts=createRequire(join(root,'package.json'))('typescript');check(ts.version==='5.8.3','PINNED_TYPESCRIPT_REQUIRED');

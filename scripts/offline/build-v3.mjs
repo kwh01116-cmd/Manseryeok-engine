@@ -11,7 +11,7 @@ import {EXTENDED_ARTIFACT_SCHEMA,EXTENDED_ARTIFACT_VERSION,ACCEPTED_BOUNDARY_PIN
 const repo=resolve(import.meta.dirname,'../..');
 export const EXTENDED_ENTRIES=Object.freeze([...INTEGRATED_ENTRIES,'scripts/kasi/local-extended-report.mjs']);
 const packaging=['integrity.mjs','integrity-v2.mjs','integrity-v3.mjs','run.mjs','run-v2.mjs','run-v3.mjs','verify-v3.mjs','restore-v3.mjs','attach-v3.mjs'];
-const allowed=new Set([...EXTENDED_ENTRIES,'scripts/kasi/candidate.mjs','scripts/kasi/local-chart-facts.mjs','scripts/kasi/boundary-supplement.mjs','scripts/kasi/local-monthly-luck.mjs','scripts/kasi/annual-solar-extension.mjs','scripts/kasi/local-extended-chart.mjs']);
+const allowed=new Set([...EXTENDED_ENTRIES,'scripts/kasi/candidate.mjs','scripts/kasi/local-chart-facts.mjs','scripts/kasi/boundary-supplement.mjs','scripts/kasi/local-monthly-luck.mjs','scripts/kasi/annual-solar-extension.mjs','scripts/kasi/local-extended-chart.mjs','scripts/server-data/binding.mjs','scripts/server-data/constants.mjs']);
 export async function buildExtendedArtifact({root=repo,outDir,sourceRevision}={}){
  assertNode22();check(typeof outDir==='string'&&outDir.length>0,'OUTPUT_REQUIRED');
  const ts=createRequire(join(root,'package.json'))('typescript');check(ts.version==='5.8.3','PINNED_TYPESCRIPT_REQUIRED');

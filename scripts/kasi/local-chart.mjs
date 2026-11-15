@@ -12,11 +12,15 @@ import { SOLAR_TERM_CODES, SOLAR_TERM_DEFINITIONS } from '../../dist/calendar/so
 import { gregorianDayNumber, monthKey } from '../../dist/calendar/koreanLunisolarValidation.js';
 import {resolveHistoricalStandardFourPillars} from '../../dist/calendar/historicalFourPillarsV1.js';
 import {HISTORICAL_KOREAN_CLOCK_POLICY_ID,HISTORICAL_KOREAN_CLOCK_METADATA,resolveHistoricalApiEventMinute,resolveHistoricalKoreanClockMinute} from '../../dist/time/historicalKoreanClockV1.js';
+import {KOREAN_DST_CLOCK_1987_1988_POLICY_ID,KOREAN_DST_CLOCK_1987_1988_METADATA,resolveKoreanDstClockMinute1987To1988,resolveKoreanDstApiEventMinute1987To1988} from '../../dist/time/koreanDstClock1987V1.js';
+import {resolveKoreanDstFourPillars1987To1988} from '../../dist/calendar/koreanDstFourPillars1987V1.js';
+import {verifyServerApiOnlyLoaded} from '../server-data/binding.mjs';
 
 export const STAGE_A_PROFILE_ID='kasi-api-2026-local-v1';
 export const MODERN_PROFILE_ID='kasi-api-1989-2026-local-v1';
 export const MODERN_CLOCK_POLICY_ID='KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1';
 export const HISTORICAL_PROFILE_ID='kasi-api-1962-1986-standard-local-v1';
+export const DST_PROFILE_ID='kasi-api-1987-1988-dst-local-v1';
 export const EXTENDED_SOLAR_PROFILE_ID='kasi-api-1989-2027-solar-local-v1';
 export const EXTENDED_MODERN_CLOCK_POLICY_ID='KR_API_PUBLISHED_KST_MODERN_1989_2027_NO_DST_V2';
 export const ANNUAL_SOLAR_ACCEPTED_SHA256='77da197d925e5a8907990960530a85454cf87a829745ee9b012c6c328c891a0b';
@@ -28,6 +32,7 @@ export class LocalChartError extends Error {
 const requireValue=(condition,code)=>{if(!condition)throw new LocalChartError(code);};
 const profiles=new Map([[STAGE_A_PROFILE_ID,{from:2026,to:2026,phase:'A'}],[MODERN_PROFILE_ID,{from:1989,to:2026,phase:'B'}]]);
 profiles.set(HISTORICAL_PROFILE_ID,{from:1962,to:1986,phase:'SPRINT4_HISTORICAL_STABLE',historical:true});
+profiles.set(DST_PROFILE_ID,{from:1987,to:1988,phase:'SPRINT5_DST_STANDARD_REFERENCE',dst:true});
 profiles.set(EXTENDED_SOLAR_PROFILE_ID,{from:1989,to:2027,phase:'SPRINT4_EXISTING_SOLAR_EXTENSION',solarExtension:true});
 const frozen=value=>{if(value&&typeof value==='object'&&!Object.isFrozen(value)){Object.values(value).forEach(frozen);Object.freeze(value);}return value;};
 export const EXTENDED_MODERN_CLOCK_METADATA=frozen({id:EXTENDED_MODERN_CLOCK_POLICY_ID,version:'2',birthFromInclusive:'1989-01-01T00:00',birthUntilExclusive:'2028-01-01T00:00',utcOffsetMinutes:540,daylightSavingMinutes:0,utcInstant:null,
@@ -70,12 +75,15 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
   requireValue(specification,'EXPLICIT_SUPPORTED_PROFILE_REQUIRED');
   requireValue(/^[a-f0-9]{64}$/.test(expectedManifestSha256??''),'MANIFEST_PIN_REQUIRED');
   requireValue(loaded?.manifest && fingerprint(loaded.manifest)===expectedManifestSha256,'MANIFEST_PIN_MISMATCH');
+  const apiOnly=loaded.apiOnlyIdentity===undefined?null:verifyServerApiOnlyLoaded(loaded);
+  if(apiOnly)requireValue(apiOnly.manifestContentSha256===expectedManifestSha256,'API_ONLY_BINDING_PIN_MISMATCH');
   const candidate=structuredClone(loaded.candidate), sources=structuredClone(loaded.sources);
-  requireValue(fingerprint(candidate)===loaded.manifest.derived?.find(f=>f.path==='candidate.json')?.contentSha256,'CANDIDATE_CONTENT_CHANGED');
-  requireValue(fingerprint(sources)===loaded.manifest.derived?.find(f=>f.path==='source-references.json')?.contentSha256,'SOURCE_CONTENT_CHANGED');
-  const clockId=specification.historical?HISTORICAL_KOREAN_CLOCK_POLICY_ID:specification.solarExtension?EXTENDED_MODERN_CLOCK_POLICY_ID:MODERN_CLOCK_POLICY_ID;
+  requireValue(fingerprint(candidate)===(apiOnly?loaded.manifest.projections.candidateContentSha256:loaded.manifest.derived?.find(f=>f.path==='candidate.json')?.contentSha256),'CANDIDATE_CONTENT_CHANGED');
+  requireValue(fingerprint(sources)===(apiOnly?loaded.manifest.projections.sourceContentSha256:loaded.manifest.derived?.find(f=>f.path==='source-references.json')?.contentSha256),'SOURCE_CONTENT_CHANGED');
+  const clockId=specification.historical?HISTORICAL_KOREAN_CLOCK_POLICY_ID:specification.dst?KOREAN_DST_CLOCK_1987_1988_POLICY_ID:specification.solarExtension?EXTENDED_MODERN_CLOCK_POLICY_ID:MODERN_CLOCK_POLICY_ID;
+  const upstreamBasePin=apiOnly?apiOnly.upstreamBaseManifestSha256:expectedManifestSha256;
   if(specification.solarExtension){
-    requireValue(annualSolarExtension?.baseManifestSha256===expectedManifestSha256&&annualSolarExtension.content?.baseManifestSha256===expectedManifestSha256&&annualSolarExtension.boundarySupplementSha256===ACCEPTED_BOUNDARY_SUPPLEMENT_SHA256&&annualSolarExtension.policy?.id===annualSolarExtension.content.policy.id&&annualSolarExtension.version===annualSolarExtension.content.version&&annualSolarExtension.contentSha256===ANNUAL_SOLAR_ACCEPTED_SHA256&&fingerprint(annualSolarExtension.content)===ANNUAL_SOLAR_ACCEPTED_SHA256,'ACCEPTED_ANNUAL_SOLAR_PIN_REQUIRED');
+    requireValue(annualSolarExtension?.baseManifestSha256===upstreamBasePin&&annualSolarExtension.content?.baseManifestSha256===upstreamBasePin&&annualSolarExtension.boundarySupplementSha256===ACCEPTED_BOUNDARY_SUPPLEMENT_SHA256&&annualSolarExtension.policy?.id===annualSolarExtension.content.policy.id&&annualSolarExtension.version===annualSolarExtension.content.version&&annualSolarExtension.contentSha256===ANNUAL_SOLAR_ACCEPTED_SHA256&&fingerprint(annualSolarExtension.content)===ANNUAL_SOLAR_ACCEPTED_SHA256,'ACCEPTED_ANNUAL_SOLAR_PIN_REQUIRED');
     for(const source of annualSolarExtension.content.sources){const existing=sources.find(s=>s.id===source.id);requireValue(!existing||fingerprint(existing)===fingerprint(source),'ANNUAL_SOLAR_SOURCE_CONFLICT');if(!existing)sources.push(structuredClone(source));}
     for(const row of annualSolarExtension.content.rows){requireValue(!candidate.events.some(e=>e.date===row.date&&e.termCode===row.termCode),'ANNUAL_SOLAR_EVENT_CONFLICT');candidate.events.push({...structuredClone(row),timeStatus:'PUBLISHED_WALL_MINUTE_ONLY',computationalCivilDateTime:row.displayedDateTime,utcInstant:null});}
   }else requireValue(annualSolarExtension===undefined,'UNSELECTED_ANNUAL_SOLAR_EXTENSION');
@@ -98,7 +106,7 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     if(query.day!==undefined)requireValue(query.day===Number(date.slice(8,10)),'ROW_SOURCE_DAY');
     return receipt;
   };
-  const adapt=row=>{
+  const adapt=(row,priorGuard=false)=>{
     getSource(row,'solar');
     requireValue(row.timeBasis==='API_KST_AS_PUBLISHED' && row.historicalCivilTime==='NOT_RESOLVED','ORIGINAL_TIME_CONTRACT');
     requireValue(row.timeStatus==='PUBLISHED_WALL_MINUTE_ONLY' && row.precision==='MINUTE' && row.utcInstant===null && !row.timeNotation && SOLAR_TERM_CODES.includes(row.termCode),'POLICY_UNRESOLVED_SOLAR_EVENT');
@@ -107,6 +115,7 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     requireValue(isGregorianMinute(minute) && minute===row.computationalCivilDateTime,'SOLAR_MINUTE_CONTRACT');
     // The 1988 guard is after DST ended. No interpretation of earlier historical rows.
     if(specification.historical)resolveHistoricalApiEventMinute(minute,{policyId:clockId,termCode:row.termCode,role:minute<'1962-01-01T00:00'?'PRIOR_DAXUE_GUARD':'ANNUAL_EVENT'});
+    else if(specification.dst)resolveKoreanDstApiEventMinute1987To1988(minute,{policyId:clockId,termCode:row.termCode,role:priorGuard===true?'PRIOR_DAXUE_GUARD':'ANNUAL_EVENT'});
     else requireValue(minute>='1988-10-09T03:00' && minute<(specification.solarExtension?'2028-01-01T00:00':'2027-01-01T00:00'),'CLOCK_POLICY_EVENT_RANGE');
     const id=sourceId(row);
     evidenceById.set(id,frozen({sourceRef:row.sourceRef,source:getSource(row,'solar'),original:structuredClone(row),interpreted:{displayedDateTime:minute,timeBasis:'KST',sourcePrecision:'MINUTE',clockPolicyId:clockId,clockPolicyVersion:specification.solarExtension?'2':'1',utcOffsetMinutes:540,utcInstant:null}}));
@@ -117,7 +126,7 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     const annual=candidate.events.filter(r=>r.date.startsWith(year+'-'));
     requireValue(guard.length===1,'REQUIRED_API_DAXUE_GUARD_MISSING_OR_DUPLICATE');
     requireValue(guard[0].date.startsWith((year-1)+'-12-'),'DAXUE_GUARD_MUST_BE_DECEMBER');
-    const events=[...guard,...annual].map(adapt).sort((a,b)=>a.displayedDateTime.localeCompare(b.displayedDateTime));
+    const events=(specification.dst?[adapt(guard[0],true),...annual.map(row=>adapt(row,false))]:[...guard,...annual].map(adapt)).sort((a,b)=>a.displayedDateTime.localeCompare(b.displayedDateTime));
     const coverage=frozen({schemaVersion:'m1-solar-term-coverage-v1',requirementProfile:'FULL_24_TERM_YEAR',timeBasis:'KST',sourcePrecision:'MINUTE',supportedFromInclusive:year+'-01-01T00:00',supportedUntilExclusive:(year+1)+'-01-01T00:00',requiredYears:[year],requiredPriorBoundary:{year:year-1,term:'DAXUE'}});
     validateFullYearSolarTermCoverage(events,coverage,year+'-01-01T00:00');
     eventsByYear.set(year,frozen({events,coverage}));
@@ -125,9 +134,11 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
   const months=new Map(candidate.months.map(r=>[lunarKey(r),r]));
   const metadataValue={id:profileId,version:'1',phase:specification.phase,birthRange:{fromInclusive:from,untilExclusive:until},auxiliaryEvents:{purpose:'PRIOR_DAXUE_GUARD_ONLY_NOT_BIRTH_SUPPORT',fromYear:specification.from-1,term:'DAXUE',nextYearEventsRequired:false},timeInterpretation:{id:MODERN_CLOCK_POLICY_ID,version:'1',birthCivilTime:'KOREAN_STANDARD_TIME_UTC_PLUS_09_NO_DST',auxiliaryGuard:'1988_DAXUE_AFTER_DST_END_OR_LATER',comparison:'PUBLISHED_KST_WALL_MINUTE_ONLY',originalHistoricalStatus:'PRESERVED_NOT_RESOLVED',noHostTimezoneParsing:true},guarantee:'LOCAL_PINNED_API_AND_STRUCTURAL_COVERAGE_NOT_G0',validationLevel:'PINNED_CONTENT_AND_STRUCTURAL_COVERAGE',comparisonEvidence:'SEPARATE_EXECUTION_REPORT_NOT_RUNTIME_CERTIFICATION',g0Receipt:null,g1P2Promotion:false};
   if(specification.historical)metadataValue.timeInterpretation={id:clockId,version:'1',birthCivilTime:'KOREAN_STANDARD_TIME_UTC_PLUS_09_NO_DST',auxiliaryGuard:'1961_DAXUE_AFTER_UTC_PLUS_09_REFORM',comparison:'PUBLISHED_KST_WALL_MINUTE_ONLY',originalHistoricalStatus:'PRESERVED_SOURCE_ROWS_BOUNDED_INTERPRETATION_SELECTED',noHostTimezoneParsing:true,sources:HISTORICAL_KOREAN_CLOCK_METADATA.sources};
+  if(specification.dst)metadataValue.timeInterpretation={id:clockId,version:'1',birthCivilTime:'EXPLICIT_KR_ASIA_SEOUL_RECORDED_CIVIL_MINUTE_WITH_DST',dayHourReference:'EXPLICIT_STANDARD_KST_NOT_TRUE_SOLAR_TIME',auxiliaryGuard:'1986_DAXUE_STANDARD_KST',comparison:'API_PUBLISHED_STANDARD_KST_UTC_PLUS_09',originalHistoricalStatus:'PRESERVED_SOURCE_ROWS_BOUNDED_DST_INTERPRETATION_SELECTED',noHostTimezoneParsing:true,sources:KOREAN_DST_CLOCK_1987_1988_METADATA.sources};
   if(specification.solarExtension){metadataValue.timeInterpretation={...metadataValue.timeInterpretation,id:clockId,version:'2',futureCivilClock:EXTENDED_MODERN_CLOCK_METADATA.assumption,sources:EXTENDED_MODERN_CLOCK_METADATA.sources};metadataValue.calendarSupport={GREGORIAN:{fromInclusive:from,untilExclusive:until},KOREAN_LUNAR:{convertedUntilExclusive:'2027-01-01',missing2027:'NEEDS_DATA_NO_API_DATE_MAPPING'}};}
+  if(apiOnly){metadataValue.guarantee='SERVER_API_ONLY_PINNED_RESPONSE_LINEAGE_NOT_G0';metadataValue.validationLevel=apiOnly.validationLevel;metadataValue.serverDataPack={id:apiOnly.id,version:apiOnly.version,manifestContentSha256:expectedManifestSha256,upstreamBaseManifestContentSha256:upstreamBasePin};}
   const metadata=frozen(metadataValue);
-  const dataset=frozen({id:'kasi-openapi-local-'+expectedManifestSha256.slice(0,16),version:'1',sourceKind:'KASI_OPENAPI_RESPONSE',candidateManifestContentSha256:expectedManifestSha256,normalizerVersion:candidate.normalizerVersion,originalObservedRange:structuredClone(candidate.support),rightsReview:'UNVERIFIED',annualTxtAuthentication:'NOT_CLAIMED',...(specification.solarExtension?{annualSolarExtension:{policyId:annualSolarExtension.policy.id,version:annualSolarExtension.version,contentSha256:ANNUAL_SOLAR_ACCEPTED_SHA256,boundarySupplementSha256:ACCEPTED_BOUNDARY_SUPPLEMENT_SHA256,scope:'SOLAR_ONLY_NOT_LUNAR_MAPPING'}}:{})});
+  const dataset=frozen({id:apiOnly?apiOnly.id:'kasi-openapi-local-'+expectedManifestSha256.slice(0,16),version:apiOnly?apiOnly.version:'1',sourceKind:apiOnly?'KASI_OPENAPI_API_ONLY_SERVER_PACK':'KASI_OPENAPI_RESPONSE',candidateManifestContentSha256:expectedManifestSha256,normalizerVersion:candidate.normalizerVersion,originalObservedRange:structuredClone(candidate.support),rightsReview:apiOnly?apiOnly.rightsReview:'UNVERIFIED',annualTxtAuthentication:'NOT_CLAIMED',...(apiOnly?{apiOnlyServerPack:{manifestContentSha256:expectedManifestSha256,upstreamBaseManifestContentSha256:upstreamBasePin,validationLevel:apiOnly.validationLevel,customerDistribution:'NOT_APPROVED'}}:{}),...(specification.solarExtension?{annualSolarExtension:{policyId:annualSolarExtension.policy.id,version:annualSolarExtension.version,contentSha256:ANNUAL_SOLAR_ACCEPTED_SHA256,boundarySupplementSha256:ACCEPTED_BOUNDARY_SUPPLEMENT_SHA256,scope:'SOLAR_ONLY_NOT_LUNAR_MAPPING'}}:{})});
   const inputRow=date=>{
     const found=index.fromGregorianDate(date);
     requireValue(found.status==='OK','API_DATE_EVIDENCE_MISSING');
@@ -138,6 +149,7 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     requireValue(typeof request.time==='string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(request.time),'EXPLICIT_BIRTH_TIME_REQUIRED');
     const policy=request.policies;
     requireValue(policy?.clockPolicyId===clockId,'EXPLICIT_CLOCK_POLICY_REQUIRED');
+    if(specification.dst)requireValue(policy&&typeof policy==='object'&&!Array.isArray(policy)&&Object.keys(policy).every(key=>['clockPolicyId','dayRollover','hourStemReference','jurisdiction','timeZone','dayHourReference','foldOffsetMinutes'].includes(key)),'DST_POLICY_ARGUMENTS');
     requireValue(DAY_ROLLOVER_POLICIES.includes(policy.dayRollover),'EXPLICIT_DAY_ROLLOVER_REQUIRED');
     requireValue(HOUR_STEM_REFERENCE_POLICIES.includes(policy.hourStemReference),'EXPLICIT_HOUR_STEM_REFERENCE_REQUIRED');
     let date;
@@ -162,14 +174,20 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
       if(clock.status!=='OUTSIDE_POLICY_SCOPE')return {status:clock.status,reason:clock.reason,clock,profile:structuredClone(metadata),dataset:structuredClone(dataset)};
     }
     if(date<from || date>=until)return {status:'OUT_OF_PROFILE_COVERAGE',profile:structuredClone(metadata),dataset:structuredClone(dataset)};
+    let dstClock;
+    if(specification.dst){
+      dstClock=resolveKoreanDstClockMinute1987To1988(date+'T'+request.time,{policyId:clockId,jurisdiction:policy.jurisdiction,timeZone:policy.timeZone,dayHourReference:policy.dayHourReference,...(Object.hasOwn(policy,'foldOffsetMinutes')?{foldOffsetMinutes:policy.foldOffsetMinutes}:{})});
+      if(dstClock.status!=='RESOLVED_UNDER_POLICY')return {status:dstClock.status,reason:dstClock.originalCivilStatus,clock:dstClock,profile:structuredClone(metadata),dataset:structuredClone(dataset)};
+    }
     const arithmeticDate=specification.solarExtension&&date>='2027-01-01';
     const row=arithmeticDate?null:inputRow(date), year=Number(date.slice(0,4)), context=eventsByYear.get(year);
-    const chart=specification.historical?resolveHistoricalStandardFourPillars(context.events,date+'T'+request.time,policy,context.coverage):resolveCoverageCheckedModernKoreanCivilFourPillars(context.events,date+'T'+request.time,{timeBasis:'KOREAN_CIVIL_TIME',dayRollover:policy.dayRollover,hourStemReference:policy.hourStemReference},context.coverage);
+    const chart=specification.historical?resolveHistoricalStandardFourPillars(context.events,date+'T'+request.time,policy,context.coverage):specification.dst?resolveKoreanDstFourPillars1987To1988(context.events,date+'T'+request.time,policy,context.coverage):resolveCoverageCheckedModernKoreanCivilFourPillars(context.events,date+'T'+request.time,{timeBasis:'KOREAN_CIVIL_TIME',dayRollover:policy.dayRollover,hourStemReference:policy.hourStemReference},context.coverage);
     const actualIds=[...new Set(chart.monthBoundaryTrace.candidateContexts.flatMap(c=>c.activeSince.sourceIds).concat(chart.monthBoundaryTrace.atPublishedBoundary?.sourceIds??[]))];
     const lichun=context.events.find(e=>e.term==='LICHUN');
     const dateConversion=arithmeticDate?{method:'GREGORIAN_ARITHMETIC_WITHOUT_LUNAR_MAPPING',sourceRef:'PROJECT-GREGORIAN-DAY-ARITHMETIC-V1',source:{id:'PROJECT-GREGORIAN-DAY-ARITHMETIC-V1',kind:'PROJECT_CALENDAR_IMPLEMENTATION',implementationRef:'src/calendar/dayPillar.ts'},computed:{solarDate:date},lunarMapping:{status:'NEEDS_DATA',reason:'NO_2027_API_DATE_INDEX'},calendarGanjiUsedAsPillars:false}:{method:request.calendar==='KOREAN_LUNAR'?'API_OBSERVED_DATE_INDEX':'GREGORIAN_WITH_API_OBSERVED_DATE_EVIDENCE',sourceRef:row.sourceRef,source:getSource(row,'lunar'),observed:{solarDate:row.solarDate,lunarYear:row.lunarYear,lunarMonth:row.lunarMonth,lunarDay:row.lunarDay,leap:row.leap},calendarGanjiUsedAsPillars:false};
-    const evidence={appliedJie:actualIds.map(id=>evidenceById.get(id)),yearBoundary:evidenceById.get(lichun.sourceIds[0]),dateConversion};
+    const evidence={appliedJie:actualIds.map(id=>evidenceById.get(id)),yearBoundary:evidenceById.get(lichun.sourceIds[0]),dateConversion,...(specification.dst?{birthClockResolution:dstClock}:{})};
     const result={status:'OK',profile:structuredClone(metadata),dataset:structuredClone(dataset),input:{calendar:request.calendar,...(request.calendar==='KOREAN_LUNAR'?{lunarDate:structuredClone(request.lunarDate)}:{}),gregorianDate:date,time:request.time},policies:{clock:{id:clockId,version:specification.solarExtension?'2':'1'},dayRollover:{id:policy.dayRollover,version:'EXISTING_ENGINE_V1'},hourStemReference:{id:policy.hourStemReference,version:'EXISTING_ENGINE_V1'},boundary:{id:'PUBLISHED_MINUTE_COMPARISON_ONLY',version:'EXISTING_ENGINE_V1'}},chart,evidence:structuredClone(evidence),limits:specification.historical?['PUBLISHED_MINUTE_AMBIGUITY_PRESERVED','HISTORICAL_1962_1986_ONLY_NO_DST_REFORM_FOLD_OR_GAP_PROMOTION','NO_INDEPENDENT_FULL_RANGE_CERTIFICATION','NO_G0_RECEIPT','REDISTRIBUTION_REVIEW_OPEN']:['PUBLISHED_MINUTE_AMBIGUITY_PRESERVED','NO_HISTORICAL_BIRTH_TIME_SUPPORT','NO_INDEPENDENT_FULL_RANGE_CERTIFICATION','NO_G0_RECEIPT','REDISTRIBUTION_REVIEW_OPEN',...(specification.solarExtension?['NO_2027_LUNAR_MAPPING','NO_2028_BIRTH_OR_BOUNDARY_EXTRAPOLATION']:[])]};
+    if(specification.dst){result.policies.clock={id:clockId,version:'1',jurisdiction:policy.jurisdiction,timeZone:policy.timeZone,dayHourReference:policy.dayHourReference,...(Object.hasOwn(policy,'foldOffsetMinutes')?{foldOffsetMinutes:policy.foldOffsetMinutes}:{})};result.limits=['PUBLISHED_MINUTE_AMBIGUITY_PRESERVED','DST_1987_1988_ONLY_EXPLICIT_STANDARD_KST_DAY_HOUR_REFERENCE','CIVIL_FOLD_HISTORY_PRESERVED_AFTER_EXPLICIT_SELECTION','NO_G0_RECEIPT','REDISTRIBUTION_REVIEW_OPEN'];}
     issuedResults.set(result,{contentSha256:fingerprint(result),requestSha256:fingerprint(request)});
     return result;
   };
@@ -179,7 +197,7 @@ export function createLocalChartProfile(loaded,{profileId,expectedManifestSha256
     return frozen({schemaVersion:'kasi-local-issued-event-context-v1',profile:metadata,dataset,
       events:[...events.values()].sort((a,b)=>a.displayedDateTime.localeCompare(b.displayedDateTime)),
       evidence:[...evidenceById.entries()].map(([id,value])=>({id,...value})),
-      scope:specification.historical||specification.solarExtension?'EXPLICIT_BOUNDED_STANDARD_CLOCK_PROFILE_AND_PINNED_SOLAR_CONTEXT':'EXISTING_MODERN_PROFILE_EVENTS_AND_PRIOR_DAXUE_ONLY_NOT_NEW_BIRTH_SUPPORT'});
+      scope:specification.historical||specification.solarExtension||specification.dst?'EXPLICIT_BOUNDED_STANDARD_CLOCK_PROFILE_AND_PINNED_SOLAR_CONTEXT':'EXISTING_MODERN_PROFILE_EVENTS_AND_PRIOR_DAXUE_ONLY_NOT_NEW_BIRTH_SUPPORT'});
   }});
   return profile;
 }
