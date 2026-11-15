@@ -15,7 +15,8 @@ $s5Pack = Join-Path $s5Repo '.private\sprint5-20261115\api-only-pack-review-a'
 & $s5Node scripts/offline/build-v4.mjs --out $s5Engine
 & $s5Node "$s5Engine\verify.mjs" --artifact $s5Engine --data-pack $s5Pack
 
-$s5Outside = Join-Path ([IO.Path]::GetTempPath()) ('manseryeok-s5-' + [Guid]::NewGuid().ToString('N'))
+$s5OsTemp = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Temp'
+$s5Outside = Join-Path $s5OsTemp ('manseryeok-s5-' + [Guid]::NewGuid().ToString('N'))
 $s5Restored = Join-Path $s5Outside 'engine'
 $s5RestoredPack = Join-Path $s5Outside '.private\api-only-data'
 & $s5Node "$s5Engine\restore.mjs" --artifact $s5Engine --out $s5Restored --data-pack $s5Pack --data-out $s5RestoredPack
@@ -64,4 +65,6 @@ Set-Location -LiteralPath $s5Repo
 
 이 명령은 stdout만 출력하고 키/HTTP에 접근하지 않는다. 실제 수집은 [13시도 계획](research/SPRINT5_MISSING_DATA_COLLECTION_PLAN.md)의 별도 승인이 필요하다. 승인/자료 수락 전에는2027음력과2027월운 끝2구간을 완료로 표시하지 않는다. `--mode execute`는 현재 거절한다.
 
-실행 결과와 최종 source SHA·artifact/data 지문은 검사가 끝난 뒤 [실행 기록](engineering/SPRINT5_EXECUTION_20261115.md)에 기록한다. 계약 문서만으로 최종 GO를 주장하지 않는다.
+## 실제 수락본
+
+최종 실행 코드 `a0bb716e4a496135c205f7f360179b8735dd219c`에서 965/965·M2·Lab/KASI·두 시간대 실제 자료·저장소 밖 v4를 검사했다. 실제 엔진은 `.private/sprint5-20261115/final-a0bb716/engine`, 자료는 `.private/sprint5-20261115/api-only-pack-review-a`다. 엔진 manifest SHA는 `c63ce817fd85c6711d72e4b04b2fa700802c2f489187b1cc42ad97859e4383b3`, 자료 content pin은 `a2bfbf35aff7bb8b11aef277a7be8d5ea5204c786a9142649bec23d27dfd289a`이다. 상세 성공/보류/거절 수와 단위는 [실행 기록](engineering/SPRINT5_EXECUTION_20261115.md)에 있다. 이 자료는 서버 내 조건부 사용용이며 고객 파일 배포/공개 서비스는 승인하지 않았다. 2027 음력·월운 마지막 2개 구간은 여전히 자료 미확보 상태다.

@@ -1,5 +1,21 @@
 # 확장 연도 지원·자료 공백 행렬
 
+## Sprint5 현재 상태 — 2026-11-15
+
+아래 Sprint4 기록은 당시 상태로 보존한다. 현재 코드 `a0bb716e4a496135c205f7f360179b8735dd219c`에서 API-only 서버 팩/새 DST 정책을 별도로 수락했다. 자료의 날짜 범위와 시각 명식·전체 분석 지원은 동일하지 않다.
+
+| 출생 구간 | 현재 시각 명식 | 자료/정책 및 제약 |
+| --- | --- | --- |
+| 1950–1961 | UNSUPPORTED | API 날짜 보유만으로 시계/절입 충돌이 해결되지 않음. 현대 KST fallback 없음 |
+| 1962–1986 | SUPPORTED_VERIFIED_UNDER_POLICY | 기존 안정 역사 V1/양음력·윤달·분 시각·네 자시 유지. 이번 팩 대표 25 양음력 쌍/TZ, 기존 S4 전수는 과거 실행으로 구분 |
+| 1987–1988 | SUPPORTED_VERIFIED_UNDER_POLICY | 새 DST 표준 참조 V1/양음력·윤달·731일 대표 시각/전환 경계 검사. 없는 시각 거절·중복 시각 미선택 보류·추가 선택 후 모호성 유지. 한로 1분 비교 차이는 기록 |
+| 1989–2026 | SUPPORTED_VERIFIED_UNDER_POLICY | 기존 현대 V1/네 자시/분 경계·49,799 G/L쌍/TZ byte 보존, API-only 계산 의미 동일 |
+| 2027 | SUPPORTED_LIMITED | 별도 확장 현대 V2의 양력 365일·12절 경계 검증. 음력 NEEDS_DATA, 월운 10개 정상+마지막 2개 부족 |
+| 2028이후 | UNSUPPORTED | 출생/음양력/시계 corpus 미수락. 2028 소한·입춘은 2027 월운 guard용 수집 계획뿐 |
+
+1962–2026은 명시적 프로필 3종을 선택해 연속 계산할 수 있다. 새 역사/DST 경로의 M5/대운·세운 등 미채택 시계 정책은 구체적인 HOLD이며 원국 계산 실패가 아니다. API-only 자료 팩은 서버 내 조건부 사용/고객 파일 배포 미확정 상태이며, 이 표만으로 전체 상용 출시를 승인하지 않는다. [현재 실행](../engineering/SPRINT5_EXECUTION_20261115.md), [서버 DTO](../contracts/SERVER_INTEGRATION_DTO_V01.md), [DST](KOREAN_DST_1987_1988_POLICY_V01.md), [미확보 자료 계획](SPRINT5_MISSING_DATA_COLLECTION_PLAN.md)을 참조한다.
+
+
 2026-11-15 Sprint 4. 기존 출생 정책 `kasi-api-1989-2026-local-v1`과 `KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1`은 그대로 둔다. 자료 보유·시계 적용·실제 제품 지원·재배포 권리를 각각 구분한다. [역사시 감사](HISTORICAL_CLOCK_1950_1988_COVERAGE_AUDIT.md), [이용권 감사](KASI_DATA_RIGHTS_DISTRIBUTION_AUDIT_V01.md), [실행 기록](../engineering/SPRINT4_EXECUTION_20261115.md)과 함께 읽는다.
 
 ## 공백의 원인
