@@ -64,3 +64,16 @@ $s4Common = @('--mode','extended-product','--attachment',$s4Data,
 API-only 계산·캐싱·가공·서버 내부 상업적 사용은 권리 감사의 조건부 허용 근거가 있다. **이 내부 attachment 전체의 고객 파일 배포는 UNRESOLVED**다. 비공개 자료를 Git/공개 artifact에 넣거나 코드 MIT 고지를 자료 전체 허락으로 바꾸지 않는다. 별도 공고/연간TXT/OSS내장표는 개별 권리다. 공개 출시·배포는 이번 실행 기능 GO와 별개다.
 
 최종 실행 SHA·실제 새범위 사례·기존49,799쌍 재검사 여부·Chromium·실패 및 재검사는 [실행 기록](engineering/SPRINT4_EXECUTION_20261115.md)에서 확인한다.
+
+## 최종 제작본과 실행 근거
+
+최종 실행 SHA `f1ce4ffb24984c1098f593031de44d36fd643260`, 내부 제작본은 `.private/sprint4-20261115/final-f1ce4ff/engine`과 `data`다.96payload/870574bytes, engine manifest `84145cf304099585b59f023fffb64a1d978d1863a3239e8d28a7fd1bd4db604f`, attachment `9d2703eeef4d437ebf707ff7f12656fe8543eae1a56ff96a56fd15cc0f5aded5`를 확인한다.94성공+별도M7투영2·12보류/3입력·2경로거절·42TZ출력쌍동일을 저장소 밖에서실행했다. 전체907/907·M2·Chromium·현대49,799쌍/TZ·새범위 검사는 [실행 기록](engineering/SPRINT4_EXECUTION_20261115.md)에 단위와실패를분리했다.
+
+위 제작 예 대신 이미 만든 내부 제작본을 복원하려면 다음처럼 위치만 지정하고 **위의 restore/verify 블록부터** 실행한다. 이 후 실행에는Git/npm/원본소스가필요없다. 달력자료를공개파일로공유하지않는다.
+
+```powershell
+$s4Engine = 'C:\Users\Home\Desktop\만세력 엔진\source\.private\sprint4-20261115\final-f1ce4ff\engine'
+$s4Data = 'C:\Users\Home\Desktop\만세력 엔진\source\.private\sprint4-20261115\final-f1ce4ff\data'
+```
+
+현대기본모드의M5/대운·세운·명목교운일은그대로이고확장report가해당효력범위를대신승인하지않는다.2027음력과2027월운끝2는완료로표시하지않으며자료수집은별도승인이필요하다.

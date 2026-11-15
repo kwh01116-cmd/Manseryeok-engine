@@ -1,5 +1,25 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-15 current checkpoint — Sprint 4 범위 확장·권리·독립 v3
+
+**실제로 새로 계산하는 범위:** 명시 역사 프로필의1962–1986(25년) 양력/음력·윤달 시각 원국과 기존M2/구조M3·계절v1/근/인성제한·내격8/공망·요약/상세, 별도2027양력 원국이다. 기존1989–2026 기본 프로필·M1~M7/M5·네자시/표시분 의미는 그대로다.2026월운은 별도V2에서12구간,2027은10구간+끝2 NEEDS_DATA다. **2027음력/2028출생·입춘guard/1950–61·1987–88 전체 시각 지원은 미완료**다. 새 리포트는 원래 사립v2/M5의 clock 의존을 넓히지 않아 해당 분석을 보류한다.
+
+**최종 실행 SHA `f1ce4ffb24984c1098f593031de44d36fd643260`:907/907·M2감사·Lab/KASI Chromium PASS.** 기존49,799쌍/TZ 전수의 baseline/current M1 전체JSON이 같고, 새범위의 역사9,131날짜·12절/자시·2027전날짜를 두TZ에서 순차 검증했다. 내부 v3는96payload+별도12자료파일이며 외부 새경로/Node22만으로94성공+별도M7투영2성공/정상보류12/입력3·경로2거절/42TZ출력쌍 일치를 확인했다. 수정전561성공 뒤 발견한 한국어 조사오류와 한문장 수정·최종 재실행도 기록했다. 원본2086/후보a,b각8/보강5·기존121생성물 원byte 유지, API/키/재수집·private추적·Actions·배포0이다.
+
+**권리 상태를 세분화했다:** 실제 계산행은 API-only 계보로 연결되고 두 공식 API의 제한없음을 확인했다. API-only 상업계산·캐시·가공·서버 내부는 VERIFIED_ALLOWED_WITH_CONDITIONS. 현재 비교자료가 섞인 attachment 전체/새 API-only 고객 배포팩의 실제 수락은 UNRESOLVED이며 금지확정과 다르다. 별도 KASA공고/TXT/OSS내장표 권리와 전체 공개 출시를 자동 승인하지 않는다.
+
+### 다음 제품 Sprint 우선순위 — 제안이며 별도 승인 후 실행
+
+| 순위 | 유한 묶음·대략 작업량 | 종료 기준 |
+| --- | --- | --- |
+| P0 | API-only 최소 배포자료 분리/고지·기관질의1–3인일(외부회신 제외) |현재혼합비교자료 제외·file목록/원천허락/고지/보안별 수락. 서버 내부와 고객동봉을 따로 판정 |
+| P1 |2027일별음양력+2028소한/입춘 intake·검증2–4인일 |새 수집/편입은 승인받고 기존원본 불변.2027음력/윤달·12월운·2026→28guard를 독립패키지에서 완비 |
+| P2 |1987/1988 DST·발표시계·일시주 연결3–5인일 |없는시간/중복시간/절입/네자시·양음력·리포트·독립artifact의 정책/후보 계약을 닫고 수락.1950/51·1954원명령 충돌은 다른 묶음 |
+
+작업량은 기존저장소를 아는 개발자의 구현/검토/회귀 대략치(약±50%)이며 법률회신·자료기관 일정은 제외한다. 소규모M5/신살보다 사용자가 계산을 받을 수 없는 범위와 배포팩을 닫는 것이 우선이다. M3전체강약/근력·실제생조, 격국성패, M5최종용신·주제예측·출시운영은 미완료다. 과거M3 grid신약0/추가8한날짜 반복과 G0/G1-P2 NO-GO를 유지한다.
+
+[실행/실패/정확SHA](engineering/SPRINT4_EXECUTION_20261115.md) · [오프라인사용법](SPRINT4_EXTENDED_OFFLINE_GUIDE.md) · [권리감사](research/KASI_DATA_RIGHTS_DISTRIBUTION_AUDIT_V01.md) · [연도행렬](research/EXTENDED_YEAR_SUPPORT_MATRIX.md) · [39연도시계감사](research/HISTORICAL_CLOCK_1950_1988_COVERAGE_AUDIT.md). 아래 체크포인트는 당시 상태로 보존한다.
+
 ## 2026-11-14 current checkpoint — Sprint 3 목적별 후보·공망·월운·사용자 요약
 
 **완료:** 별도 선택형 `M5-WINTER-WOOD-WARMING-CANDIDATE-V01`/0.1.0, 일주 순공 `M2-DAY-XUN-VOID-BRANCHES-V01`, 12절 월운 `M7-MONTHLY-TWELVE-JIE-PUBLISHED-MINUTE-V01`, 사용자/상세 두 view의 `KASI-LOCAL-PRODUCT-ANALYSIS-V01`, 이 경로와 기존 M1/M2/M3/M4/M7을 묶은 내부 오프라인 v2. 기존 Sprint2 리포트·기본 API/CLI·계절/통근/정관/C1/내격/M7 정책은 유지했다. M4는 새 구현 대신12월지·10일간의 고정21사례로 보강했다.

@@ -845,3 +845,13 @@ ssaju의격국은월간십성과score극단값宗格,용신은일간별고정3�
 개발중 집중은시계11·연간/월운13·역사프로필12·패키지11·새음력2 통과다. 최초history11/12는index함수를structuredClone한하니스실패로데이터만복제해고쳤다. 기존v1 schema4선언과충돌하는연간parser 정적import접근은별도loader로분리했다. 새future에2026소월30일이NEEDS_DATA가되는실제반례를보존하고 known-invalid를우선거절하도록수정했다. v3 import fallback의전체options전달실패를재현하고선택2필드만투영/양성회귀로고쳤다. 생산기대/기존가드를완화하지않았다.
 
 실제7명식·양음력/월운·gap/fold 개발파일럿, old/new100쌍, dirtyv3의94성공/12보류/3입력거절/2경로거절·42TZ비교는완료했다. 아직최종clean SHA의전체회귀/전수/독립artifact검사는수행전이며 같은일지후속기록과실행보고서에실제결과를추가한다. [실행기록](engineering/SPRINT4_EXECUTION_20261115.md) · [가이드](SPRINT4_EXTENDED_OFFLINE_GUIDE.md) · [권리감사](research/KASI_DATA_RIGHTS_DISTRIBUTION_AUDIT_V01.md).
+
+## 2026-11-15 — Sprint 4 최종 검증·독립 실행·남은 최소 공백
+
+**[실행/수정]** 구현/집중 단계의 기록 뒤 clean561b9d6에서907/907·M2·Lab/KASI·현대전수·새범위·독립94+2가성공했다. 후속 실제입춘TEXT를읽어 왕(旺)로라는조사오류를발견했다. AI의앞선6전문검토에는왕/상문장이없어잡지못한범위를남긴다. 새요약한문장/기존testassert만고쳐f1ce4ff를커밋했고,계산/기대결론/정책/기존가드의미를바꾸지않았다. 집중11/11후 **`f1ce4ffb24984c1098f593031de44d36fd643260`에서전체907/907·M2감사·Lab/KASI Chromium모두자연0**을다시확인했다. 이전성공·원오류·수정과모든영수증을별도고유경로에보존했다. timeout확대·skip·자동재시도·사용자프로세스일괄종료0이다.
+
+**[실제범위/보존]** 1962–1986의25년양음력시각원국/네자시·2027양력/2026월운12구간이새로실행된다.2027음력·월운끝2는자료부족,2028출생·미채택14역사연도는여전히미지원/정책보류다. 역사gap/fold는원국없이진단한다. 기존49,799양음력쌍/TZ의baseline/current전체M1JSON이902063b0…a213으로같다. 새범위는9131날짜+윤달probe/3600절입쌍/1200자시쌍/2027전365일을두TZ에서순차검사,제품314부모/M1진입28700(성공28690+보류10)/TZ를분리했다. 연결검사를원전·예측정답률로바꾸지않는다.
+
+**[독립/권리]** clean최종v3 96payload/870574bytes+12별도자료파일을저장소밖새TEMP에서Node22만으로실행했다. 메인94성공/12보류/3입력·2경로거절/변조거절/42TZ출력쌍동일이며,별도M7투영JSON/TEXT2회는첫壬午·1992-01-10T08:00·제4乙酉를기존리터럴로검증했다. 엔진84145cf304099585b59f023fffb64a1d978d1863a3239e8d28a7fd1bd4db604f/첨부9d2703eeef4d437ebf707ff7f12656fe8543eae1a56ff96a56fd15cc0f5aded5. sourceInputs96와원본4트리/고정pin이전후같다. 새독립M1/credential counter를계측한것은아니며기존차단guard를재사용했다. API-only내부상업계산조건부허용과현재혼합첨부고객배포UNRESOLVED를구별하고기관질의3개는미발송이다.
+
+**[마감/다음]** 기존121생성물원byte·최종127전후동일,원본2086/후보a,b각8/보강5불변,private추적/KASI API·키·재수집/Actions/배포/UI/LLM0이다. 공개웹조사와localbrowser HTTP까지네트워크0이라고주장하지않는다. 기존M3좁은grid0/추가8한날짜·출시/G1-P2게이트유지다. 모든Sprint4최소목표완료가아닌**검증된한정범위완료/2027전체는PARTIAL**로기록한다. 다음은API-only배포팩/승인된2027일별+2028경계intake/1987·88 DST연결이며M5미세규칙자동추가는아니다. 검증SHA이후에는문서만바꾸고실행파일·생성물·패키지입력과원본을다시대조해승인브랜치일반Push한다. [실행/실패/단위](engineering/SPRINT4_EXECUTION_20261115.md) · [실행명령](SPRINT4_EXTENDED_OFFLINE_GUIDE.md) · [권리](research/KASI_DATA_RIGHTS_DISTRIBUTION_AUDIT_V01.md).
