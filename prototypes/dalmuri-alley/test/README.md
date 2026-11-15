@@ -9,6 +9,7 @@ node wrap.js                     # ../index.html → page.html
 (cd .. && python3 -m http.server 8765 --bind 127.0.0.1 &)
 node playthrough.js tarot desk,phone
 node playthrough.js saju desk,phone
+node playthrough.js star desk,phone
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.

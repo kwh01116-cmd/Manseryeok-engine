@@ -20,7 +20,7 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
     await page.waitForSelector('.loading.done', {timeout: 30000});
     await page.waitForTimeout(1500); await shot('0-intro');
     await page.waitForSelector('#alleyUi:not([hidden])', {timeout: 60000}); await page.waitForTimeout(800); await shot('1-alley');
-    if (which === 'saju') { await page.click('#nextBooth'); await page.waitForTimeout(3000); await shot('1b-focus'); }
+    if (which !== 'tarot') { await page.click(which === 'saju' ? '#prev' : '#nextBooth'); await page.waitForTimeout(3000); await shot('1b-focus'); }
     await page.click('#go');
     await page.waitForTimeout(2600); await shot('2-walk'); await page.waitForTimeout(1000); await shot('2b-curtain'); await page.waitForTimeout(800); await shot('2c-through');
     await page.waitForSelector('#roomUi:not([hidden])', {timeout: 60000});
@@ -42,6 +42,14 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
       for (let k = 0; k < 3; k++) { await line(k === 0 ? '7-flip' : null); await line(k === 0 ? '7b-meaning' : null); await line(); }
       await line('8-wrap'); await line(); await line(); await line(); await line();
       await page.waitForSelector('.opt'); await shot('9-end'); await page.click('.opt:nth-child(2)'); await line();
+    } else if (which === 'star') {
+      await line('3-seat'); await line();
+      await page.waitForSelector('#sm'); await page.selectOption('#sm', '5'); await page.selectOption('#sd', '15'); await shot('4-form');
+      await page.click('.birth button[type=submit]');
+      await line('5-paper'); await line('6-element'); await line();
+      await page.waitForSelector('.opt'); await shot('7-ask'); await page.click('.opt:nth-child(1)'); await line();
+      await page.waitForSelector('.opt'); await page.click('.opt:nth-child(4)');
+      await line(); await line();
     } else {
       await line('3-seat'); await line();
       await page.waitForSelector('#by'); await page.fill('#by', '1990'); await page.selectOption('#bm', '5'); await page.selectOption('#bd', '15'); await page.fill('#bt', '14:30'); await shot('4-form');
