@@ -1,5 +1,5 @@
 /** Local API -> existing finite M2 lookups. No calendar calculation or network. */
-import { verifyLocalChartResult } from './local-chart.mjs';
+import { verifyLocalChartResult,localCalendarDateEvidenceId } from './local-chart.mjs';
 import { labelKoreanGanZhi } from '../../dist/calendar/koreanBirthPreview.js';
 import { deriveM2ChartFactsV3, M2_CHART_FACTS_V3_RULE_ID } from '../../dist/chartFacts/chartFactsV3.js';
 import { M2_CHART_FACTS_RULE_ID } from '../../dist/chartFacts/chartFactsV1.js';
@@ -103,8 +103,8 @@ function calendarSources(calculation){
     records.set(id,{id,kind:'CALENDAR_API',evidence:clone(evidence),rightsReview:'UNVERIFIED',meaning:'CALENDAR_DATA_NOT_M2_RULE_SOURCE'});
   }
   const evidence=calculation.evidence.dateConversion;
-  const id='KASI_OPENAPI_RESPONSE_DATE:'+evidence.sourceRef+':'+evidence.observed.solarDate;
-  records.set(id,{id,kind:'CALENDAR_API',evidence:clone(evidence),rightsReview:'UNVERIFIED',meaning:'OBSERVED_DATE_MAPPING_NOT_M2_RULE_SOURCE'});
+  const id=localCalendarDateEvidenceId(calculation),computed=evidence.method==='GREGORIAN_ARITHMETIC_WITHOUT_LUNAR_MAPPING';
+  records.set(id,{id,kind:computed?'CALENDAR_ARITHMETIC':'CALENDAR_API',evidence:clone(evidence),rightsReview:'UNVERIFIED',meaning:computed?'PROJECT_GREGORIAN_ARITHMETIC_NOT_API_LUNAR_MAPPING':'OBSERVED_DATE_MAPPING_NOT_M2_RULE_SOURCE'});
   return [...records.values()];
 }
 
@@ -118,7 +118,7 @@ export function deriveLocalChartFacts(calculation,{m2ProfileId,request}={}){
   const rules=cachedRules??=deepFreeze(ruleRecords(bundle)), ruleMap=new Map(rules.map(r=>[r.id,r]));
   const ruleSources=cachedRuleSources??=deepFreeze(sourceCatalog.map(source=>({id:source.sourceId,kind:'M2_RULE_SOURCE_RECORD',...source})));
   const sources=[...ruleSources,...calendarSources(calculation)];
-  const dateSourceId=sources.find(s=>s.kind==='CALENDAR_API' && s.id.startsWith('KASI_OPENAPI_RESPONSE_DATE:')).id;
+  const dateSourceId=localCalendarDateEvidenceId(calculation);
   const yearSourceId='KASI_OPENAPI_RESPONSE:'+calculation.evidence.yearBoundary.sourceRef+':'+calculation.evidence.yearBoundary.original.date+':'+calculation.evidence.yearBoundary.original.termCode;
   const candidates=genericM2.candidates.map((candidate,index)=>{
     const id=`chart.candidates[${index}]`, context=calculation.chart.monthBoundaryTrace.candidateContexts[index];
@@ -192,7 +192,7 @@ function validateReferences(envelope){
       check(fact.ruleRefs.length>0 && fact.ruleRefs.every(ref=>rules.has(ref)),'RULE_REFERENCE');
       check(fact.policyRefs.every(ref=>policies.has(ref)),'POLICY_REFERENCE');
       check(fact.sourceRefs.every(ref=>sources.get(ref)?.kind==='M2_RULE_SOURCE_RECORD'),'RULE_SOURCE_REFERENCE');
-      check(fact.calculationSourceRefs.length>0 && fact.calculationSourceRefs.every(ref=>sources.get(ref)?.kind==='CALENDAR_API'),'CALCULATION_SOURCE_REFERENCE');
+      check(fact.calculationSourceRefs.length>0 && fact.calculationSourceRefs.every(ref=>{const s=sources.get(ref);return s?.kind==='CALENDAR_API'||(s?.kind==='CALENDAR_ARITHMETIC'&&s.evidence?.method==='GREGORIAN_ARITHMETIC_WITHOUT_LUNAR_MAPPING'&&s.id==='PROJECT_GREGORIAN_DATE:PROJECT-GREGORIAN-DAY-ARITHMETIC-V1:'+s.evidence.computed?.solarDate);}), 'CALCULATION_SOURCE_REFERENCE');
       for(const member of fact.kind==='HIDDEN_STEMS'?fact.value.members:[]){
         check(member.id===fact.id+`#member[${member.index}]` && member.candidateRef===candidate.id && !allIds.has(member.id),'HIDDEN_MEMBER_REFERENCE');allIds.add(member.id);
         const role=fact.value.role, position=ROLES.indexOf(role);
