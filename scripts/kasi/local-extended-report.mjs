@@ -51,7 +51,7 @@ function summaryFor(value){
   const g=value.gongmang[i];add(2,ref+'#void',prefix+`선택 일주의 공망 지지는 ${g.voidBranches.join('·')}입니다. 원국 대응은 ${g.observedMatches.length}위치이며 길흉은 판단하지 않습니다.`,[`gongmang[${i}]`],ref);
   const season=value.seasonal.candidates[i].judgment;
   const root=value.root.candidates[i].targets.find(t=>t.target.pillarRole==='day');
-  add(3,ref+'#season-root',prefix+(season.status==='RESOLVED_UNDER_POLICY'?`선택한 월지 계절 표에서 ${stateNames[season.seasonalState??season.dayMaster?.seasonalState]}로 분류합니다.`:'선택한 계절 v0.1은 계절말 토월을 보류합니다.')+(root?` 일간의 구성상 근은 ${root.chartRootPresence==='PRESENT_UNDER_POLICY'?'확인됩니다':'이 정책에서 확인되지 않습니다'}.`:'')+' 전체 강약과 실제 근력은 확정하지 않습니다.',[`seasonal.candidates[${i}]`,`root.candidates[${i}]`],ref);
+  add(3,ref+'#season-root',prefix+(season.status==='RESOLVED_UNDER_POLICY'?`선택한 월지 계절 표에서 ${stateNames[season.seasonalState??season.dayMaster?.seasonalState]} 분류에 해당합니다.`:'선택한 계절 v0.1은 계절말 토월을 보류합니다.')+(root?` 일간의 구성상 근은 ${root.chartRootPresence==='PRESENT_UNDER_POLICY'?'확인됩니다':'이 정책에서 확인되지 않습니다'}.`:'')+' 전체 강약과 실제 근력은 확정하지 않습니다.',[`seasonal.candidates[${i}]`,`root.candidates[${i}]`],ref);
   add(4,ref+'#m5',prefix+'기존 M5는 현대 사립 계절 정책에 의존합니다. 이번 확장 프로필은 그 의존 범위를 소급 변경하지 않아 목적별 후보를 보류합니다. 도움 요소가 없다는 뜻은 아닙니다.',[`m5.candidates[${i}]`],ref);
  });
  add(5,'m7-scope','대운·세운의 기존 경로와 정책은 유지합니다. 이 확장 리포트에서는 추가 효력 판단이나 현재 시각 추정을 하지 않습니다.',['featureScope.m7']);

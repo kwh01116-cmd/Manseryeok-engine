@@ -54,6 +54,7 @@ test('import API fallback consumes one issued historical M1 with only its explic
  assert.equal(m1Calls,1);assert.equal(value.schemaVersion,'manseryeok-offline-extended-result-v3');assert.equal(value.data.status,'EXTENDED_CALENDAR_ANALYSIS_ONLY');
  assert.equal(value.data.m1.profile.id,EXTENDED_PROFILES[0]);assert.deepEqual(value.data.facts.candidates[0].pillars.map(p=>p.stem+p.branch),HISTORICAL_FIRST_NOON_EXPECTATION);
  assert.equal(value.data.detailed.summary,value.data.summary);assert.equal(value.data.m5.status,'HOLD');assert.equal(value.data.monthly.status,'NOT_REQUESTED');
+ assert.ok(value.data.summary.sections[3].items[0].text.startsWith('선택한 월지 계절 표에서 수(囚) 분류에 해당합니다.'));
 });
 
 test('extended wrapper preserves bounded missing-data states without treating them as successful issued reports',()=>{
