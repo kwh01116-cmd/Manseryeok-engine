@@ -38,7 +38,7 @@ function selectedProfile(options){
   for(const key of ['patternProfileId','positionProfileId'])check(options[key]===undefined,'REPORT_DEPENDENCY_POLICY_CONFLICT');
   if(options.experimentalPolicyId!==undefined)check(options.experimentalPolicyId===WEIGHTED_SUPPORT_POLICY_ID,'EXPLICIT_EXPERIMENTAL_POLICY_REQUIRED');
 }
-function luckSelection(value={}){
+export function luckSelection(value={}){
   check(value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).every(k=>['luckPolicyId','features','calendarProjectionPolicyId','asOfMinute'].includes(k)),'REPORT_LUCK_ARGUMENTS');
   if(value.features===undefined){check(value.luckPolicyId===undefined&&value.calendarProjectionPolicyId===undefined&&value.asOfMinute===undefined,'EXPLICIT_LUCK_FEATURES_REQUIRED');return {status:'NOT_REQUESTED',options:{}};}
   check(value.luckPolicyId===M7_LUCK_POLICY_V01,'EXPLICIT_SUPPORTED_LUCK_PROFILE_REQUIRED');
