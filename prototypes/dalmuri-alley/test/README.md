@@ -12,6 +12,9 @@ node playthrough.js saju desk,phone
 node playthrough.js star desk,phone
 node playthrough.js tarot-llm desk,phone    # 가짜 sample로 LLM 대화 → 되묻기 → 레포트
 node playthrough.js tarot-deny phone        # 첫 호출이 not_granted로 거절 → 고정 대본, 호출 1번
+node playthrough.js saju-llm desk,phone     # 가짜 sample로 사주 대화 → 꼭지 풀이 → 되묻기 → 편지 (금지어 섞인 항목이 걸러지는지)
+node playthrough.js star-llm desk,phone     # 별자리 같은 경로
+node playthrough.js lips-tarot phone        # 말하는 구간 연속 캡처 → lips-tarot-phone-burst.png (lips-saju, lips-star)
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.
@@ -22,3 +25,5 @@ node playthrough.js tarot-deny phone        # 첫 호출이 not_granted로 거�
 - 두 개를 동시에 돌리면 소프트웨어 렌더링이 느려져 데스크톱 캡처가 30초 제한에 걸린다. 하나씩 돌린다.
 - `tarot-llm`/`tarot-deny`는 `page.addInitScript`로 가짜 `window.claude.use("sample")`를 넣는다 (지연 후 단계에 맞는 JSON). 레포트 글자 수, 인용, 호출 수를 출력한다.
 - 대사 한 줄을 넘길 때는 `#next`가 보일 때까지 기다린 뒤 누른다. 타이핑 중에 누르면 줄이 밀린다.
+- 모든 모드는 봉투 → 복채(데모) → 편지 → 골목 → 받은 편지함에서 다시 열기까지 간다. 출력의 `kept`는 저장된 편지 수, `banned`는 편지에 "대운/상승궁"이 들어갔는지 (고정 별자리 편지는 없음).
+- `lips-*`는 페이지의 rAF와 setTimeout을 40배 느리게 돌려 캡처 한 장이 페이지 시간 약 75ms가 되게 한다. 붙인 그림에서 입 부분만 잘라 크게 봐야 보인다.

@@ -35,6 +35,16 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
       }
       throw new Error('never saw ' + sel);
     };
+    // 봉투 → 복채(데모) → 편지. 글자 수, 인용, 호출 수를 찍는다
+    const letter = async () => {
+      await until('#envOpen'); await page.waitForTimeout(900); await shot('8b-env'); await page.click('#envOpen');
+      await page.waitForSelector('#payOk', { state: 'visible' }); await shot('8a-pay'); await page.click('#payOk');
+      await page.waitForSelector('#report:not([hidden]) #view-letter:not([hidden])'); await page.waitForTimeout(300); await shot('8c-report');
+      const rep = await page.evaluate(() => { const s = document.querySelector('#sheet'); s.scrollTop = 99999; return { text: document.querySelector('#report').dataset.plain, sw: s.scrollWidth, cw: s.clientWidth, calls: window.__calls, kept: (() => { try { return JSON.parse(localStorage.getItem('dalmuri-letters') || '[]').length; } catch (e) { return -1; } })() }; });
+      await page.waitForTimeout(200); await shot('8d-report-end');
+      console.log(which, name, 'report', JSON.stringify({ chars: rep.text.length, quote: (rep.text.match(/「[^」]*」/) || [''])[0], fun: rep.text.includes('재미로 보는'), ai: rep.text.includes('AI(Claude)가'), banned: /대운|상승궁/.test(rep.text), sheetScroll: rep.sw - rep.cw, calls: rep.calls, kept: rep.kept }));
+      await page.click('#repClose');
+    };
     const line = async (snap) => { await page.waitForSelector('#next:not([hidden])', {timeout:40000}); if (snap) await shot(snap); await page.click('#next', {force:true}); await page.waitForTimeout(60); };
     try {
     await page.goto('http://127.0.0.1:8765/test/page.html');
@@ -59,6 +69,18 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
       console.log(which, name, 'burst page-ms+last char', seen.join(' '));
       require('child_process').execFileSync('python3', ['sheet.py', `${which}-${name}-burst.png`, '300', ...files]);
       await line(); await page.click('#exit');
+    } else if (which === 'saju-llm' || which === 'star-llm') {
+      await line('3-seat'); await line();
+      await page.waitForSelector('#answer'); await page.fill('#answer', '민지'); await page.click('.ask button[type=submit]'); await line();
+      await page.waitForSelector('.ask #answer'); await page.fill('#answer', '이직을 해야 할지 고민이에요. 지금 회사가 너무 버거워요'); await shot('4-free');
+      await page.click('.ask button[type=submit]'); await page.waitForTimeout(150); await shot('4b-think');
+      await until('.sugs'); await shot('4c-chips'); await page.click('.sugs .opt:nth-child(1)');
+      await until('.ask #answer'); await page.fill('#answer', '팀장님이 매일 야근을 시켜서 지쳤어요'); await page.click('.ask button[type=submit]');
+      if (booth === 'saju') { await until('#by'); await page.fill('#by', '1990'); await page.selectOption('#bm', '5'); await page.selectOption('#bd', '15'); await page.fill('#bt', '14:30'); await shot('5-form'); await page.click('.birth button[type=submit]'); }
+      else { await until('#sm'); await page.selectOption('#sm', '5'); await page.selectOption('#sd', '15'); await shot('5-form'); await page.click('.birth button[type=submit]'); }
+      await until('.ask #answer'); await shot('7-followup'); await page.fill('#answer', '그럼 언제 옮기는 게 좋을까요?'); await page.click('.ask button[type=submit]');
+      await until('.ask #answer'); await page.click('.ask button[type=button]');
+      await letter(); await line();
     } else if (which !== booth) {
       await line('3-seat'); await line();
       await page.waitForSelector('#answer'); await page.fill('#answer', '민지'); await page.click('.ask button[type=submit]');
@@ -75,12 +97,7 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
         await until('.ask #answer'); await shot('7-followup'); await page.fill('#answer', '그럼 언제 옮기는 게 좋을까요?'); await page.click('.ask button[type=submit]');
         await until('.ask #answer'); await page.click('.ask button[type=button]');
       }
-      await until('#envOpen'); await page.waitForTimeout(900); await shot('8b-env'); await page.click('#envOpen');
-      await page.waitForSelector('#report:not([hidden])'); await page.waitForTimeout(300); await shot('8c-report');
-      const rep = await page.evaluate(() => { const s = document.querySelector('#sheet'); s.scrollTop = 99999; return { text: document.querySelector('#report').dataset.plain, sw: s.scrollWidth, cw: s.clientWidth, calls: window.__calls }; });
-      await page.waitForTimeout(200); await shot('8d-report-end');
-      console.log(which, name, 'report', JSON.stringify({ chars: rep.text.length, quote: (rep.text.match(/「[^」]*」/) || [''])[0], fun: rep.text.includes('재미로 보는'), sheetScroll: rep.sw - rep.cw, calls: rep.calls }));
-      await page.click('#repClose');
+      await letter();
       await until('#opts .opt:nth-child(2)'); await page.click('#opts .opt:nth-child(2)'); await line();
     } else if (which === 'tarot') {
       await line('3-seat'); await line();
@@ -95,28 +112,30 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
       await line('6-three');
       for (let k = 0; k < 3; k++) { await line(k === 0 ? '7-flip' : null); await line(k === 0 ? '7b-meaning' : null); await line(); }
       await line('8-wrap'); await line(); await line(); await line(); await line(); await line();
-      await page.waitForSelector('#envOpen'); await page.waitForTimeout(900); await shot('8b-env'); await page.click('#envOpen');
-      await page.waitForSelector('#report:not([hidden])'); await page.waitForTimeout(300); await shot('8c-report'); await page.click('#repClose');
+      await letter();
       await page.waitForSelector('.opt'); await shot('9-end'); await page.click('.opt:nth-child(2)'); await line();
     } else if (which === 'star') {
       await line('3-seat'); await line();
+      await page.waitForSelector('#answer'); await page.click('.ask button[type=button]'); await line();
       await page.waitForSelector('#sm'); await page.selectOption('#sm', '5'); await page.selectOption('#sd', '15'); await shot('4-form');
       await page.click('.birth button[type=submit]');
       await line('5-paper'); await line('6-element'); await line();
       await page.waitForSelector('.opt'); await shot('7-ask'); await page.click('.opt:nth-child(1)'); await line();
       await page.waitForSelector('.opt'); await page.click('.opt:nth-child(4)');
-      await line(); await line();
+      await line(); await line(); await letter(); await line();
     } else {
       await line('3-seat'); await line();
+      await page.waitForSelector('#answer'); await page.click('.ask button[type=button]'); await line();
       await page.waitForSelector('#by'); await page.fill('#by', '1990'); await page.selectOption('#bm', '5'); await page.selectOption('#bd', '15'); await page.fill('#bt', '14:30'); await shot('4-form');
       await page.click('.birth button[type=submit]');
       await line('5-paper');
       await line('6-daymaster'); await line(); await line(); await line();
       await page.waitForSelector('.opt'); await shot('7-ask'); await page.click('.opt:nth-child(1)'); await line();
       await page.waitForSelector('.opt'); await page.click('.opt:nth-child(4)');
-      await line(); await line();
+      await line(); await line(); await letter(); await line();
     }
     await page.waitForSelector('#alleyUi:not([hidden])', {timeout: 60000}); await page.waitForTimeout(500); await shot('10-back');
+    if (await page.$('#lettersBtn:not([hidden])')) { await page.click('#lettersBtn'); await page.waitForSelector('#view-list:not([hidden]) .letter-item'); await shot('11-letters'); await page.click('.letter-item'); await page.waitForSelector('#view-letter:not([hidden])'); await shot('12-reopen'); await page.click('#repClose'); await page.waitForTimeout(300); if (await page.$('#listClose:visible')) await page.click('#listClose'); }
     } catch (e) { await shot('FAIL'); errs.push('TEST STOPPED: ' + e.message.split('\n')[0]); }
     const info = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, chip: document.querySelector('#chip').textContent, line: document.querySelector('#line').textContent.slice(0,40) }));
     console.log(which, name, JSON.stringify(info), errs.length ? errs : 'no errors');
@@ -136,11 +155,15 @@ function fakeSample(mode) {
       const turn = +(p.match(/\[지금 단계\] 문진 (\d)/) || [])[1];
       return { lines: L(`버겁다는 말이 먼저 나오네요. 그만큼 오래 참았다는 거죠. (문진 ${turn})`), mood: 'think', question: turn < 3 ? (turn === 1 ? '버거운 게 일 자체예요, 사람이에요?' : '옮긴다면 뭐가 제일 겁나요?') : '', chips: ['일이 너무 많아요', '사람이 힘들어요', '둘 다요'], crisis: false };
     }
+    const sign = (p.match(/태양 별자리: (\S+)/) || [])[1];
+    const tag = /사주 부스/.test(p) ? 'saju' : /별자리 부스/.test(p) ? 'star' : 'tarot';
+    const bas = tag === 'saju' ? ['일주 · 일간', '오행 개수', '세운 · 십성'] : tag === 'star' ? [`태양 ${sign} · 원소`, `태양 ${sign}`, '지금 해 · 원소'] : cards;
+    if (stage === '풀이' && tag !== 'tarot') { const n = /세 꼭지/.test(p) ? 3 : 2; return { parts: Array.from({ length: n }, (_, i) => ({ lines: L(`가짜 ${tag} 풀이 ${i + 1}: 버거운 마음이 여기서도 보여요.`), mood: i ? 'think' : 'neutral' })), summary: { lines: L('이어 보면 숨 고르고 고르는 때예요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?'], crisis: false }; }
     if (stage === '풀이') return { cards: [0, 1, 2].map(i => ({ lines: L(`가짜 풀이 ${i + 1}: 버거운 마음이 이 자리에서 보여요. 무리하지 말라는 얘기죠.`, '자리 뜻과 엮으면 지금은 숨 고를 때예요.'), mood: i === 1 ? 'think' : 'neutral' })), summary: { lines: L('세 장을 이으면, 참는 데서 고르는 쪽으로 넘어가는 흐름이에요.', '서두르지 말고 하나씩 정리해요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?', '버티면 나아져요?'], crisis: false };
     if (stage === '되묻기') return { lines: L('날짜를 딱 집어 줄 순 없어요. 다만 다가올 자리 카드는 정리하고 움직이라고 해요.'), mood: 'neutral', question: '', chips: ['정리부터 할게요'], crisis: false };
     if (stage === '레포트') {
-      if (/레포트 앞부분/.test(p)) return { headline: '참던 자리에서 고르는 자리로 넘어가는 중이에요.', answer: cards.map(c => ({ text: '버거운 마음은 이 카드가 보여 주는 흐름과 맞닿아 있어요. 무리해서 버틸 일은 아니에요.', basis: c })), timing: [{ text: '올해 남은 동안은 정리하는 때예요.', basis: cards[1] }, { text: '내년에는 움직여 볼 만해요.', basis: cards[2] }] };
-      return { cautions: cards.map(c => ({ text: '밤에 든 생각으로 결정하지 마요.', basis: c })), quote: { said: '지금 회사가 너무 버거워요', note: '버겁다는 말에 오늘 고민이 다 들어 있었어요.', basis: cards[1] }, next: ['옮길 곳을 고르는 기준', '지금 팀에서 버티는 법'] };
+      if (/레포트 앞부분/.test(p)) return { headline: '참던 자리에서 고르는 자리로 넘어가는 중이에요.', answer: [...bas.map(c => ({ text: '버거운 마음은 이 흐름과 맞닿아 있어요. 무리해서 버틸 일은 아니에요.', basis: c })), ...(tag === 'saju' ? [{ text: '대운이 바뀌는 해라 크게 움직여요.', basis: bas[0] }] : [])], timing: [{ text: '올해 남은 동안은 정리하는 때예요.', basis: bas[1] }, { text: '내년에는 움직여 볼 만해요.', basis: bas[2] }] };
+      return { cautions: bas.map(c => ({ text: '밤에 든 생각으로 결정하지 마요.', basis: c })), quote: { said: '지금 회사가 너무 버거워요', note: '버겁다는 말에 오늘 고민이 다 들어 있었어요.', basis: bas[1] }, next: ['옮길 곳을 고르는 기준', '지금 팀에서 버티는 법'] };
     }
     return {};
   };
