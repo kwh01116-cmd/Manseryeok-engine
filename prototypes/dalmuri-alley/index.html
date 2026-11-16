@@ -1586,12 +1586,14 @@ function updateCamera(t, dt) {
   }
   const k = 1 - Math.exp(-dt * 3);
   rig.px = lerp(rig.px, rig.tpx, k); rig.py = lerp(rig.py, rig.tpy, k);
-  const amp = state.mode === 'room' ? .035 : .16, drift = reduced ? 0 : 1;
+  const room = state.mode === 'room', amp = room ? .1 : .16, drift = reduced ? 0 : 1;
   // 거의 수직으로 내려다볼 때는 '위'를 탁자 안쪽(-z)으로 잡아야 화면이 돌지 않는다
   const down = smooth(.45, .85, (rig.pos.y - rig.look.y) / Math.max(.001, rig.pos.distanceTo(rig.look)));
   camera.position.copy(rig.pos); camera.up.set(0, 1 - down, -down).normalize(); camera.lookAt(rig.look);
-  camera.translateX(rig.px * amp + drift * Math.sin(t * .31) * .012);
-  camera.translateY(rig.py * amp * .5 + drift * Math.sin(t * .23) * .008 + Math.abs(Math.sin(t * 5.7)) * rig.bob);   // 걸음마다 들썩임
+  // 앉은 자리에서 시점이 조금씩 움직여야 인물·탁자·뒷벽이 따로 밀려 깊이가 보인다. 탁자를 내려다볼 때는 줄인다.
+  const par = room ? 1 - down * .7 : 1, idle = room ? 2.6 : 1;
+  camera.translateX((rig.px * amp + drift * idle * Math.sin(t * .31) * .012) * par);
+  camera.translateY((rig.py * amp * .45 + drift * idle * Math.sin(t * .23) * .006) * par + Math.abs(Math.sin(t * 5.7)) * rig.bob);   // 걸음마다 들썩임
   camera.lookAt(rig.look);
   camera.rotation.z += Math.sin(t * 5.7) * rig.bob * .3;
   if (Math.abs(camera.fov - rig.fov) > .01) { camera.fov = rig.fov; camera.updateProjectionMatrix(); }
@@ -1716,13 +1718,27 @@ canvas.addEventListener('pointermove', e => {
   if (!camera) return;
   const r = canvas.getBoundingClientRect();
   if (e.pointerType === 'mouse') { rig.tpx = ((e.clientX - r.left) / r.width - .5) * 2; rig.tpy = -((e.clientY - r.top) / r.height - .5) * 2; }
+  else if (downAt && state.mode === 'room' && !state.picking) {      // 손가락으로 끌면 화면이 손가락을 따라온다 (시점은 반대로)
+    rig.tpx = clamp(-(e.clientX - downAt[0]) / (r.width * .4), -1, 1); rig.tpy = clamp((e.clientY - downAt[1]) / (r.height * .4), -1, 1);
+  }
   if (state.picking) { hovered = cardAt(e); canvas.style.cursor = hovered ? 'pointer' : ''; }
   else if (state.mode === 'alley') { const i = boothAt(e); canvas.style.cursor = i >= 0 ? 'pointer' : ''; if (i >= 0 && e.pointerType === 'mouse') setFocus(i, true); }
   else canvas.style.cursor = '';
 });
 canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; Sfx.start(); });
+const letGo = e => { if (e.pointerType !== 'mouse') { rig.tpx = 0; rig.tpy = 0; downAt = null; } };
+canvas.addEventListener('pointercancel', letGo); canvas.addEventListener('pointerleave', letGo);
+// 폰 기울기: 허락 없이 값이 오는 기기에서만 쓴다 (iOS는 허락 창이 필요해서 프로토타입에서는 묻지 않는다)
+let tilt0 = null;
+addEventListener('deviceorientation', e => {
+  if (e.gamma == null || downAt || state.mode !== 'room') { if (state.mode !== 'room') tilt0 = null; return; }
+  if (!tilt0) tilt0 = [e.gamma, e.beta];
+  rig.tpx = clamp((e.gamma - tilt0[0]) / 18, -1, 1); rig.tpy = clamp(-(e.beta - tilt0[1]) / 24, -1, 1);
+});
 canvas.addEventListener('pointerup', e => {
-  if (!camera || !downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 12) return;
+  if (e.pointerType !== 'mouse') { rig.tpx = 0; rig.tpy = 0; }
+  const d0 = downAt; downAt = null;
+  if (!camera || !d0 || Math.hypot(e.clientX - d0[0], e.clientY - d0[1]) > 12) return;
   if (state.picking) { const c = cardAt(e); if (c) state.picking(c); return; }
   if (state.envelope && Table.env && cast(e, [Table.env])) { state.envelope(); return; }
   if (state.mode === 'alley') { const i = boothAt(e); if (i >= 0) enter(i); }
