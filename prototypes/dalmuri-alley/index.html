@@ -78,7 +78,7 @@ button { cursor: pointer; }
   font-size: 18px; line-height: 1;
 }
 .go {
-  min-height: 44px; padding: 9px 20px 7px; border-radius: 999px; border: 0;
+  min-width: 190px; min-height: 46px; padding: 9px 20px 7px; border-radius: 999px; border: 0;
   background: var(--lime); color: var(--ink);
   font-family: var(--f-label); font-size: 18px;
   box-shadow: 0 0 18px rgba(230, 255, 61, .65);
@@ -135,17 +135,20 @@ button { cursor: pointer; }
 .opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
 .opts:empty { display: none; }
 .opt {
-  min-height: 44px; padding: 8px 10px 7px;
-  border-radius: 11px; border: 2px solid var(--ink);
-  font-family: var(--f-label); font-size: 16px; line-height: 1.15; color: var(--ink);
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .5), 0 0 12px rgba(255, 255, 255, .18);
-  transition: transform .15s ease;
+  min-height: 44px; padding: 9px 12px 8px;
+  border-radius: 12px; border: 0;
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-label); font-size: 16px; line-height: 1.2;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .4);
+  transition: transform .12s ease, background-color .12s ease;
 }
-.opt:hover { transform: translateY(-2px); }
-.opt:nth-child(4n+1) { background: #ffee4d; }
-.opt:nth-child(4n+2) { background: var(--red); color: #fff; }
-.opt:nth-child(4n+3) { background: #f4f7ff; }
-.opt:nth-child(4n+4) { background: #b23cf0; color: #fff; }
+.opt:hover { background: #fff; }
+.opt:active { transform: translateY(2px); box-shadow: none; }
+/* 한 화면에 강조 버튼은 하나 (보내기, 불러 드리기, 봉투·편지 열기). 물러나는 버튼은 테두리만. */
+.ask .opt, .birth .opt, .rep-act .opt:first-child, #envOpen { background: #ffe24d; }
+.ask .opt:hover, .birth .opt:hover, .rep-act .opt:first-child:hover, #envOpen:hover { background: #fff08a; }
+.opts .solo:not(#envOpen), .rep-act .opt:not(:first-child) { background: transparent; color: inherit; box-shadow: inset 0 0 0 1.5px currentColor; opacity: .82; }
+.opts .solo:not(#envOpen):hover, .rep-act .opt:not(:first-child):hover { background: transparent; opacity: 1; }
 .ask { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .ask input {
   flex: 1 1 180px; min-width: 0; min-height: 44px; padding: 8px 10px;
@@ -183,7 +186,8 @@ button { cursor: pointer; }
   color: var(--ink); box-shadow: 0 18px 50px rgba(0, 0, 0, .6);
   font-size: 15.5px; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere;
 }
-.sheet h2 { margin: 2px 0 4px; font-family: var(--f-sign); font-weight: 400; font-size: 26px; line-height: 1.25; color: #3a1466; }
+.sheet h2 { margin: 4px 0 6px; font-family: var(--f-label); font-weight: 400; font-size: 23px; line-height: 1.4; color: #3a1466; }
+.paper-saju h2 { font-family: "Noto Serif KR", serif; font-weight: 700; font-size: 21px; }
 .sheet h3 { margin: 22px 0 6px; font-family: var(--f-label); font-weight: 400; font-size: 18px; color: #b3202f; }
 .sheet p { margin: 0 0 8px; }
 .rep-k, .rep-meta { font-family: var(--f-label); font-size: 13px; color: #7a6845; }
@@ -267,7 +271,7 @@ button { cursor: pointer; }
       <button class="round" id="nextBooth" type="button" aria-label="오른쪽 부스">▶</button>
       <button class="go" id="go" type="button">들어가기</button>
     </div>
-    <p class="proto gutter">프로토타입 · 상담은 Claude(안 되면 고정 대본) · 복채는 데모, 결제 없음 · 사주 계산 Manseryeok-engine</p>
+    <p class="proto gutter">프로토타입 · 재미로 보는 풀이 · 결제 없음</p>
   </div>
 
   <div class="room-ui" id="roomUi" hidden>
@@ -315,7 +319,7 @@ button { cursor: pointer; }
           <li id="payAi"></li>
         </ul>
         <div class="rep-act">
-          <button class="opt" id="payOk" type="button">복채 놓고 열기 (데모라 결제 없이 열려요)</button>
+          <button class="opt" id="payOk" type="button">복채 놓고 편지 열기</button>
           <button class="opt" id="payNo" type="button">다음에 할게요</button>
         </div>
       </div>
@@ -879,8 +883,8 @@ function topSign(kind) {
       g.strokeStyle = 'rgba(120,70,220,.35)'; g.lineWidth = 5;
       for (let x = 40; x < w; x += 190) { g.beginPath(); g.moveTo(x, h); g.bezierCurveTo(x + 90, h - 200, x - 60, h - 380, x + 60, 0); g.stroke(); for (let k = 0; k < 4; k++) { g.beginPath(); g.arc(x + 30 + k * 12, h - 120 - k * 150, 20, 0, 7); g.stroke(); } }
       g.fillStyle = '#7a4dff'; g.fillRect(0, 0, w, 36); g.fillRect(0, h - 36, w, 36);
-      label(g, '신점 · 연애 · 진로 · 속마음', w / 2, 128, { font: F_LABEL, size: 76, fill: '#3a1fa8' });
-      label(g, '달무리 타로·신점', w / 2, 388, { font: F_SIGN, size: 310, maxW: w - 170, fill: '#3320d0', stroke: '#ffffff', sw: 34 });
+      label(g, '타로 · 연애 · 진로 · 속마음', w / 2, 128, { font: F_LABEL, size: 76, fill: '#3a1fa8' });
+      label(g, '달무리 타로', w / 2, 388, { font: F_SIGN, size: 310, maxW: w - 170, fill: '#3320d0', stroke: '#ffffff', sw: 34 });
     }
   }));
 }
@@ -903,8 +907,8 @@ const COLS = {
   ],
   tarot: [
     ['#ffee4d', [{ t: '고민 한 장이면', c: '#150e28' }, { t: 'OK!!', c: '#e8322f', big: 1 }]],
-    ['#e8322f', [{ t: '신점 타로', c: '#ffee4d', big: 1 }, { t: '5,000원', c: '#fff' }]],
-    ['#f4f7ff', [{ t: '커플 상담 시', c: '#150e28' }, { t: '손금 무료!!', c: '#e8322f', big: 1 }]],
+    ['#e8322f', [{ t: '세 장 타로', c: '#ffee4d', big: 1 }, { t: '상담 무료', c: '#fff' }]],
+    ['#f4f7ff', [{ t: '커플 궁합', c: '#150e28' }, { t: '곧 열어요', c: '#e8322f', big: 1 }]],
     ['#b23cf0', [{ t: '속마음 · 재회', c: '#fff' }, { t: '연애운', c: '#e6ff3d', big: 1 }]],
   ],
   saju: [
@@ -1080,9 +1084,12 @@ const SPRITES = {
   star: { key: 'saetbyeol', w: 1209, h: 1301, rect: [.34491, .52959, .32754, .3259], neck: [.5087, .5324], height: .86, side: 'tarot', mouth: [.5, .307, .202, .104] },
 };
 const FACES = ['neutral', 'neutral_open', 'smile', 'smile_open', 'think', 'think_open', 'surprise'];
-function loadSprites() {
+function loadSprites(onProgress) {
   const loader = new T.TextureLoader(), out = {};
-  const one = url => new Promise((res, rej) => loader.load(url, t => { t.anisotropy = 4; res(t); }, undefined, rej));
+  // 한 장이라도 빠지면 그 인물이 도형 인형으로 바뀌므로, 실패하면 두 번 더 받아 본다
+  let got = 0;
+  const one = (url, tries = 3) => new Promise((res, rej) => loader.load(url, t => { t.anisotropy = 4; got++; if (onProgress) onProgress(got); res(t); }, undefined,
+    e => (tries > 1 ? setTimeout(() => one(url, tries - 1).then(res, rej), 700) : rej(e))));
   const srgb = t => { t.encoding = T.sRGBEncoding; return t; };
   const jobs = Object.keys(SPRITES).map(async id => {
     const c = SPRITES[id], names = ['body', 'blink', ...FACES];
@@ -1095,7 +1102,7 @@ function loadSprites() {
     catch (e) { console.warn('인물 그림을 불러오지 못해 도형 인형으로 대신합니다:', c.key); }
     await walls;
   });
-  return Promise.race([Promise.all(jobs), new Promise(r => setTimeout(r, 9000))]).then(() => out);
+  return Promise.race([Promise.all(jobs), new Promise(r => setTimeout(r, 40000))]).then(() => out);
 }
 
 /* 입 모양: 한글 음절의 모음으로 고른다. open은 벌린 정도(0 다묾 ~ 1.15 크게), round는 둥근 입(ㅗㅜ류).
@@ -1129,7 +1136,7 @@ void main() {
 }`;
 // 입: 같은 표정의 벌린 입 그림을 입 둘레만 덮는다. 세로로 눌러 조금 벌린 입을, 늘려 크게 벌린 입을 만든다.
 const SPRITE_FS = `
-uniform sampler2D tBody, tFaceA, tFaceB, tBlink, tMouth, tRound; uniform float uMix, uBlink, uOpen, uMA, uRound; uniform vec4 uRect, uMouth; varying vec2 vUv;
+uniform sampler2D tBody, tFaceA, tFaceB, tBlink, tMouth; uniform float uMix, uBlink, uOpen, uMA; uniform vec4 uRect, uMouth; varying vec2 vUv;
 void main() {
   vec4 c = texture2D(tBody, vUv);
   vec2 f = (vUv - uRect.xy) / uRect.zw;
@@ -1139,7 +1146,7 @@ void main() {
     if (uMA > .001) {
       float mm = 1. - smoothstep(.5, .9, length((f - uMouth.xy) / uMouth.zw));
       vec2 fo = vec2(f.x, uMouth.y + (f.y - uMouth.y) / max(uOpen, .72));
-      vec3 mo = mix(texture2D(tMouth, fo).rgb, texture2D(tRound, f).rgb, uRound);
+      vec3 mo = texture2D(tMouth, fo).rgb;
       c.rgb = mix(c.rgb, mo, mm * uMA * face.a);
     }
     vec4 bl = texture2D(tBlink, f);
@@ -1155,8 +1162,8 @@ const drift = (t, seed, f) => (Math.sin(t * f + seed) * .5 + Math.sin(t * f * 2.
 function makeSpriteReader(cfg, tx) {
   const H = cfg.height, Wd = H * cfg.w / cfg.h;
   const u = { tBody: { value: tx.body }, tFaceA: { value: tx.neutral }, tFaceB: { value: tx.neutral }, tBlink: { value: tx.blink },
-    tMouth: { value: tx.neutral_open }, tRound: { value: tx.surprise },
-    uMix: { value: 0 }, uBlink: { value: 0 }, uOpen: { value: 1 }, uMA: { value: 0 }, uRound: { value: 0 },
+    tMouth: { value: tx.neutral_open },
+    uMix: { value: 0 }, uBlink: { value: 0 }, uOpen: { value: 1 }, uMA: { value: 0 },
     uRect: { value: new T.Vector4(...cfg.rect) }, uMouth: { value: new T.Vector4(...cfg.mouth) }, uPivot: { value: new T.Vector2(...cfg.neck) },
     uSize: { value: new T.Vector2(Wd, H) }, uAng: { value: 0 }, uNod: { value: 0 }, uBreath: { value: 0 } };
   const m = new T.Mesh(new T.PlaneGeometry(Wd, H, 16, 20), new T.ShaderMaterial({ uniforms: u, vertexShader: SPRITE_VS, fragmentShader: SPRITE_FS, transparent: true }));
@@ -1167,14 +1174,21 @@ function makeSpriteReader(cfg, tx) {
   let blinkAt = 1.5, blinks = [];               // 깜빡임 시작 시각들 (두 번 깜빡임은 둘)
   const tiltS = { x: 0, v: 0 }, nodS = { x: 0, v: 0 };
   // 입: 지금 음절의 목표와 시작 시각. open·round는 짧게 보간한다.
-  let syl = null, sylAt = -9, sylDur = .06, mOpen = 0, mRound = 0;
+  let sylAt = -9, pauseUntil = 0, amp = .7, ampNext = .7, ph = 0, rate = 4.2, mA = 0, mOpen = 0;
   const r = { group: g, sprite: true, talking: false, wave: 0, look: 0, seed: Math.random() * 9,
     setMood(mm) {
       const next = TILT[mm] === undefined ? 'neutral' : mm;
       if (next !== moodName && Math.random() < .5) blinkAt = Math.min(blinkAt, now + .08);   // 표정이 바뀔 때 가끔 깜빡인다
       moodName = next;
     },
-    syllable(ch, ms) { syl = viseme(ch); sylAt = now; sylDur = Math.max(.04, ms / 1000); },
+    // 글자가 찍힐 때마다 불린다. 입은 글자마다 여닫지 않고(1초에 17번이라 떨림으로 보인다) 말소리 빠르기로 따로 움직이고,
+    // 여기서는 쉴 곳(문장부호, 가끔 띄어쓰기)과 다음 박자의 크기(모음)만 정한다.
+    syllable(ch, ms) {
+      const v = viseme(ch);
+      if (v) { sylAt = now; ampNext = .35 + .65 * Math.min(1, v.open / 1.1); }
+      else if (ch !== ' ') pauseUntil = now + Math.max(.16, ms / 1000);
+      else if (Math.random() < .22) pauseUntil = now + .13;
+    },
     update(t, dt) {
       now = t; dt = Math.min(dt, .05);
       // 표정 (얼굴 조각). 입은 아래 입 층이 맡는다.
@@ -1184,24 +1198,18 @@ function makeSpriteReader(cfg, tx) {
       }
       const e = Math.min(1, u.uMix.value + dt / fade); u.uMix.value = e;
       u.tMouth.value = tx[moodName + '_open'] || tx.neutral_open;
-      // 입 모양 목표: 음절이 들어온 직후 열고, 음절 끝으로 갈수록 조금 닫는다 (같은 모음이 이어져도 움직임이 보이게)
-      let tOpen = 0, tRound = 0;
-      const age = t - sylAt;
-      if (r.talking && syl && age < sylDur + .05) {
-        const k = age / sylDur;
-        tOpen = syl.open * (k < .55 ? 1 : syl.lips ? Math.max(0, 1 - (k - .55) * 3) : .75);
-        tRound = syl.round;
-      } else if (r.talking && age > .25) {
-        // 글자 타이핑이 끝났는데 음성이 아직 나오는 중: 느슨한 리듬으로 움직인다
-        const ph = (t * 6.5 + r.seed) % 1;
-        tOpen = ph < .6 ? .55 + .4 * Math.abs(Math.sin(t * 2.3 + r.seed)) : 0;
-      }
-      if (moodName === 'smile') tRound = 0;          // 웃는 얼굴에 둥근 입을 붙이면 윗입술이 겹쳐 보인다
-      if (moodName === 'surprise') { tOpen = 0; tRound = 0; }   // 놀란 얼굴은 입이 이미 벌어져 있다
-      const kO = 1 - Math.exp(-dt / .035), kR = 1 - Math.exp(-dt / .03);
-      mOpen += (tOpen - mOpen) * kO; mRound += (tRound - mRound) * kR;
-      u.uOpen.value = Math.max(.72, mOpen); u.uMA.value = smooth(.04, .38, mOpen) * (1 - mRound) + mRound * smooth(.02, .3, mOpen + mRound * .4);
-      u.uRound.value = mRound;
+      // 입: 말하는 동안 벌린 입 그림 하나를 덮어 두고 세로로만 천천히 늘였다 줄인다 (1초에 4번쯤).
+      // 다문 입과 벌린 입을 번갈아 겹치면 반투명한 입이 보이므로, 다무는 것은 쉴 곳에서만 한다.
+      const typing = t - sylAt < .22;
+      const speaking = r.talking && (typing || t - sylAt > .4) && t > pauseUntil && moodName !== 'surprise';   // 놀란 얼굴은 입이 이미 벌어져 있다
+      if (speaking) {
+        ph += dt * rate;
+        if (ph >= 1) { ph -= 1; amp = typing ? ampNext * (.8 + Math.random() * .2) : .45 + Math.random() * .5; rate = 3.6 + Math.random() * 1.3; }
+      } else ph = 0;
+      const tOpen = speaking ? (.5 - .5 * Math.cos(ph * 6.2832)) * amp : 0;
+      mA += ((speaking ? 1 : 0) - mA) * (1 - Math.exp(-dt / (speaking ? .05 : .09)));
+      mOpen += (tOpen - mOpen) * (1 - Math.exp(-dt / .045));
+      u.uOpen.value = .72 + .4 * mOpen; u.uMA.value = mA;
       if (reduced) { u.uMA.value = 0; }
       // 눈 깜빡임: 2.2~6초 간격, 다섯 번에 한 번쯤 두 번 연달아
       if (t > blinkAt) { blinks = [blinkAt]; if (Math.random() < .2) blinks.push(blinkAt + .26); blinkAt = t + 2.2 + Math.random() * 3.8; }
@@ -2578,7 +2586,7 @@ async function boot() {
   const loading = $('#loading');
   if (!T) { loading.textContent = '3D 엔진(three.js)을 불러오지 못했어요. 네트워크를 확인하고 다시 열어 주세요.'; return; }
   // 간판과 종이는 캔버스에 글자를 그리므로 글꼴이 먼저 와 있어야 한다
-  const sample = '달무리보름타로사주궁합전문신점연애진로속마음평생수택일고민한장이면커플상담시손금무료재회운정통봐드림년세복채안내원카드이체가능노래방호프소포차약월일간나모름양력음윤달시지비견겁재식상편정관인계산절기바보마법여제황교연전차힘은둔자의레퀴매린람죽절악탑별태심판계샛별출생차트점성내이번흐름양황소쌍둥게처녀천칭갈염물병고기불흙바람태지금해부터시작하키꾸간이OK!!·0123456789';
+  const sample = '세장곧열어요달무리보름타로사주궁합전문신점연애진로속마음평생수택일고민한장이면커플상담시손금무료재회운정통봐드림년세복채안내원카드이체가능노래방호프소포차약월일간나모름양력음윤달시지비견겁재식상편정관인계산절기바보마법여제황교연전차힘은둔자의레퀴매린람죽절악탑별태심판계샛별출생차트점성내이번흐름양황소쌍둥게처녀천칭갈염물병고기불흙바람태지금해부터시작하키꾸간이OK!!·0123456789';
   try {
     await Promise.race([
       Promise.all(['48px "Black Han Sans"', '48px "Jua"', '24px "Gowun Dodum"'].map(f => document.fonts.load(f, sample))
@@ -2587,7 +2595,7 @@ async function boot() {
     ]);
   } catch (e) { /* 글꼴 없이도 기본 글꼴로 그린다 */ }
   loading.textContent = '상담사 모시는 중…';
-  W.sprites = await loadSprites();
+  W.sprites = await loadSprites(n => { loading.textContent = `상담사 모시는 중… ${n}/33`; });
   try { buildWorld(); }
   catch (e) { console.warn(e); loading.textContent = '이 브라우저에서는 3D 화면을 열 수 없어요. (WebGL 필요)'; return; }
   new ResizeObserver(resize).observe(stage);
