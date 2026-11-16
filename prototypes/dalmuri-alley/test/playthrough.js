@@ -1,7 +1,8 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 // tarot-llm: 가짜 sample로 LLM 대화 경로. tarot-deny: 첫 호출이 not_granted로 거절되면 고정 대본으로 넘어가는지
-const which = process.argv[2] || 'tarot', booth = which.startsWith('tarot') ? 'tarot' : which, sizes = (process.argv[3] || 'phone,desk').split(',');
+// lips-<부스>: 말하는 구간을 연속 캡처해 입과 몸의 움직임을 본다
+const which = process.argv[2] || 'tarot', booth = which.startsWith('lips') ? (which.split('-')[1] || 'tarot') : which.startsWith('tarot') ? 'tarot' : which.split('-')[0], sizes = (process.argv[3] || 'phone,desk').split(',');
 const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
 (async () => {
   const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY, bypass: '127.0.0.1,localhost' } : undefined;
@@ -9,8 +10,9 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
   for (const name of sizes) {
     const ctx = await browser.newContext({ viewport: SZ[name], deviceScaleFactor: 1, ignoreHTTPSErrors: true });
     const page = await ctx.newPage();
-    if (which !== booth) await page.addInitScript(fakeSample, which);
+    if (which !== booth && !which.startsWith('lips')) await page.addInitScript(fakeSample, which);
     const errs = [];
+    if (which.startsWith('lips')) await page.addInitScript(slowMotion);   // 연속 캡처 때 페이지 시간을 느리게 돌린다
     page.on('pageerror', e => errs.push('pageerror: ' + e.message));
     page.on('console', m => { if (m.type()==='error' || m.type()==='warning') errs.push(m.type() + ': ' + m.text().slice(0,200)); });
     await page.route('**/three.min.js', r => r.fulfill({ body: fs.readFileSync('node_modules/three/build/three.min.js'), contentType: 'application/javascript' }));
@@ -39,11 +41,25 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
     await page.waitForSelector('.loading.done', {timeout: 30000});
     await page.waitForTimeout(1500); await shot('0-intro');
     await page.waitForSelector('#alleyUi:not([hidden])', {timeout: 60000}); await page.waitForTimeout(800); await shot('1-alley');
-    if (booth !== 'tarot') { await page.click(which === 'saju' ? '#prev' : '#nextBooth'); await page.waitForTimeout(3000); await shot('1b-focus'); }
+    if (booth !== 'tarot') { await page.click(booth === 'saju' ? '#prev' : '#nextBooth'); await page.waitForTimeout(3000); await shot('1b-focus'); }
     await page.click('#go');
     await page.waitForTimeout(2600); await shot('2-walk'); await page.waitForTimeout(1000); await shot('2b-curtain'); await page.waitForTimeout(800); await shot('2c-through');
     await page.waitForSelector('#roomUi:not([hidden])', {timeout: 60000});
-    if (which !== booth) {
+    if (which.startsWith('lips')) {
+      await page.waitForSelector('#next:not([hidden])', { timeout: 40000 });
+      const vp = SZ[name], clip = { x: vp.width * .2, y: vp.height * (name === 'phone' ? .08 : .05), width: vp.width * .6, height: vp.height * (name === 'phone' ? .42 : .6) };
+      // 캡처 한 장이 소프트웨어 렌더링으로 수 초 걸리므로 페이지 시간을 40배 느리게 하고, 장마다 페이지 시각을 적는다
+      await page.evaluate(() => window.__setSlow(40)); await page.click('#next', { force: true });
+      const files = [], seen = [];
+      for (let k = 0; k < 12; k++) {
+        const f = `${which}-${name}-burst${String(k).padStart(2, '0')}.png`; files.push(f);
+        await page.screenshot({ path: f, clip }); seen.push(await page.evaluate(() => Math.round(window.__vt()) + document.querySelector('#line').textContent.slice(-1)));
+      }
+      await page.evaluate(() => window.__setSlow(1));
+      console.log(which, name, 'burst page-ms+last char', seen.join(' '));
+      require('child_process').execFileSync('python3', ['sheet.py', `${which}-${name}-burst.png`, '300', ...files]);
+      await line(); await page.click('#exit');
+    } else if (which !== booth) {
       await line('3-seat'); await line();
       await page.waitForSelector('#answer'); await page.fill('#answer', '민지'); await page.click('.ask button[type=submit]');
       await line();
@@ -136,4 +152,14 @@ function fakeSample(mode) {
     opts.signal?.addEventListener('abort', () => { clearTimeout(t); rej({ code: 'cancelled', message: 'aborted' }); });
   });
   window.claude = { use: name => Promise.resolve(name === 'sample' ? sample : null) };
+}
+
+// lips 모드: rAF 시각과 setTimeout 간격을 같은 배율로 늘려 페이지 시간을 느리게 돌린다
+function slowMotion() {
+  let slow = 1, vt = null, lastReal = null;
+  const raf = window.requestAnimationFrame.bind(window), st = window.setTimeout.bind(window);
+  window.requestAnimationFrame = cb => raf(real => { if (lastReal === null) { lastReal = real; vt = real; } vt += (real - lastReal) / slow; lastReal = real; cb(vt); });
+  window.setTimeout = (f, ms, ...a) => st(f, (ms || 0) * slow, ...a);
+  window.__setSlow = v => { slow = v; };
+  window.__vt = () => vt;
 }

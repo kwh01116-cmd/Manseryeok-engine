@@ -645,22 +645,30 @@ function type(str, m) {
   optsEl.replaceChildren();
   nextBtn.hidden = true;
   return wait(done => {
-    let i = 0;
+    let i = 0, t = 0;
     lineEl.textContent = '';
     liveEl.textContent = str;
     ui.typing = true;
     Voice.speak(str);
     syncTalk();
     const finish = () => {
-      clearInterval(t);
+      clearTimeout(t);
       lineEl.textContent = str;
       ui.typing = false; ui.finishTyping = null;
       syncTalk();
       done();
     };
-    const t = setInterval(() => { i++; lineEl.textContent = str.slice(0, i); if (i >= str.length) finish(); }, reduced ? 1 : 40);
+    // 한 글자씩. 글자마다 간격이 다르고(음절, 공백, 쉼표, 마침표), 인물의 입이 그 글자에 맞춰 움직인다.
+    const step = () => {
+      if (i >= str.length) { finish(); return; }
+      const ch = str[i++], ms = reduced ? 1 : TYPE_MS(ch);
+      lineEl.textContent = str.slice(0, i);
+      if (activeReader && activeReader.syllable) activeReader.syllable(ch, ms);
+      t = setTimeout(step, ms);
+    };
+    t = setTimeout(step, reduced ? 1 : 120);
     ui.finishTyping = finish;
-    return () => { clearInterval(t); syncTalk(); };
+    return () => { clearTimeout(t); syncTalk(); };
   });
 }
 const waitAdvance = () => wait(done => {
@@ -995,10 +1003,11 @@ function makeReader(o) {
 /* ── 상담사: 그림 스프라이트 ──
    몸통 그림 한 장 위에 표정별 얼굴 조각을 겹친다. 숨쉬기와 고개 움직임은 그림을 격자로 휘어서 만든다.
    그림은 make_sprites.py가 img/ 폴더에 만들어 둔 것. 못 불러오면 위의 도형 인형으로 대신한다. */
+// mouth: 얼굴 조각 안에서 입의 중심과 반지름 (uv, 아래가 0). make_sprites.py의 face·mouth 값에서 계산
 const SPRITES = {
-  saju: { key: 'boreum', w: 1217, h: 1293, rect: [.31717, .52668, .36483, .37123], neck: [.4996, .5269], height: .86, side: 'saju' },
-  tarot: { key: 'dalmuri', w: 1209, h: 1301, rect: [.32754, .49962, .35732, .35511], neck: [.5062, .5007], height: .86, side: 'tarot' },
-  star: { key: 'saetbyeol', w: 1209, h: 1301, rect: [.34491, .52959, .32754, .3259], neck: [.5087, .5324], height: .86, side: 'tarot' },
+  saju: { key: 'boreum', w: 1217, h: 1293, rect: [.31717, .52668, .36483, .37123], neck: [.4996, .5269], height: .86, side: 'saju', mouth: [.509, .3125, .189, .096] },
+  tarot: { key: 'dalmuri', w: 1209, h: 1301, rect: [.32754, .49962, .35732, .35511], neck: [.5062, .5007], height: .86, side: 'tarot', mouth: [.5, .327, .199, .108] },
+  star: { key: 'saetbyeol', w: 1209, h: 1301, rect: [.34491, .52959, .32754, .3259], neck: [.5087, .5324], height: .86, side: 'tarot', mouth: [.5, .307, .202, .104] },
 };
 const FACES = ['neutral', 'neutral_open', 'smile', 'smile_open', 'think', 'think_open', 'surprise'];
 function loadSprites() {
@@ -1018,6 +1027,24 @@ function loadSprites() {
   });
   return Promise.race([Promise.all(jobs), new Promise(r => setTimeout(r, 9000))]).then(() => out);
 }
+
+/* 입 모양: 한글 음절의 모음으로 고른다. open은 벌린 정도(0 다묾 ~ 1.15 크게), round는 둥근 입(ㅗㅜ류).
+   받침 ㅁ·ㅂ은 음절 끝에서 입술을 닫는다. 문장부호와 공백은 다문다. */
+const VOWEL_OPEN = [1.1, .85, 1.1, .85, .8, .75, .8, .75, 0, 1.05, .85, 0, 0, 0, .8, .8, 0, 0, .6, .6, .6];
+//                  ㅏ   ㅐ   ㅑ   ㅒ   ㅓ  ㅔ   ㅕ  ㅖ  ㅗ  ㅘ    ㅙ  ㅚ ㅛ ㅜ ㅝ  ㅞ  ㅟ ㅠ ㅡ  ㅢ  ㅣ
+const ROUND_V = new Set([8, 11, 12, 13, 16, 17]);
+function viseme(ch) {
+  const c = ch.charCodeAt(0) - 0xac00;
+  if (c >= 0 && c < 11172) {
+    const v = Math.floor(c / 28) % 21, f = c % 28;
+    return { open: ROUND_V.has(v) ? .9 : VOWEL_OPEN[v], round: ROUND_V.has(v) ? 1 : 0, lips: f >= 16 && f <= 18 };
+  }
+  if (/[A-Za-z0-9]/.test(ch)) return { open: .6, round: 0, lips: false };
+  return null;       // 공백, 문장부호: 다문다
+}
+// 타이핑 간격 (ms): 음절, 공백, 쉼표류, 마침표류
+const TYPE_MS = ch => (/[.!?…~]/.test(ch) ? 210 : /[,]/.test(ch) ? 130 : ch === ' ' ? 30 : 58);
+
 const SPRITE_VS = `
 uniform float uAng, uNod, uBreath; uniform vec2 uPivot, uSize; varying vec2 vUv;
 void main() {
@@ -1030,55 +1057,99 @@ void main() {
   p.x *= 1. + uBreath * .7 * (1. - uv.y);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.);
 }`;
+// 입: 같은 표정의 벌린 입 그림을 입 둘레만 덮는다. 세로로 눌러 조금 벌린 입을, 늘려 크게 벌린 입을 만든다.
 const SPRITE_FS = `
-uniform sampler2D tBody, tFaceA, tFaceB, tBlink; uniform float uMix, uBlink; uniform vec4 uRect; varying vec2 vUv;
+uniform sampler2D tBody, tFaceA, tFaceB, tBlink, tMouth, tRound; uniform float uMix, uBlink, uOpen, uMA, uRound; uniform vec4 uRect, uMouth; varying vec2 vUv;
 void main() {
   vec4 c = texture2D(tBody, vUv);
   vec2 f = (vUv - uRect.xy) / uRect.zw;
   if (f.x > 0. && f.x < 1. && f.y > 0. && f.y < 1.) {
     vec4 face = mix(texture2D(tFaceA, f), texture2D(tFaceB, f), uMix);
     c.rgb = mix(c.rgb, face.rgb, face.a);
+    if (uMA > .001) {
+      float mm = 1. - smoothstep(.5, .9, length((f - uMouth.xy) / uMouth.zw));
+      vec2 fo = vec2(f.x, uMouth.y + (f.y - uMouth.y) / max(uOpen, .72));
+      vec3 mo = mix(texture2D(tMouth, fo).rgb, texture2D(tRound, f).rgb, uRound);
+      c.rgb = mix(c.rgb, mo, mm * uMA * face.a);
+    }
     vec4 bl = texture2D(tBlink, f);
     c.rgb = mix(c.rgb, bl.rgb, bl.a * uBlink);
   }
   if (c.a < .03) discard;
   gl_FragColor = c;
 }`;
+// 임계 감쇠 스프링: 목표로 부드럽게 따라가고, 너무 늦거나 튀지 않는다
+const spring = (s, target, dt, w) => { const x = s.x - target, a = -w * w * x - 2 * w * s.v; s.v += a * dt; s.x += s.v * dt; return s.x; };
+// 겹친 느린 흔들림 (주기가 서로 맞지 않는 사인 셋). -1..1 근처
+const drift = (t, seed, f) => (Math.sin(t * f + seed) * .5 + Math.sin(t * f * 2.31 + seed * 1.7) * .3 + Math.sin(t * f * .43 + seed * 3.1) * .2);
 function makeSpriteReader(cfg, tx) {
   const H = cfg.height, Wd = H * cfg.w / cfg.h;
   const u = { tBody: { value: tx.body }, tFaceA: { value: tx.neutral }, tFaceB: { value: tx.neutral }, tBlink: { value: tx.blink },
-    uMix: { value: 0 }, uBlink: { value: 0 }, uRect: { value: new T.Vector4(...cfg.rect) }, uPivot: { value: new T.Vector2(...cfg.neck) },
+    tMouth: { value: tx.neutral_open }, tRound: { value: tx.surprise },
+    uMix: { value: 0 }, uBlink: { value: 0 }, uOpen: { value: 1 }, uMA: { value: 0 }, uRound: { value: 0 },
+    uRect: { value: new T.Vector4(...cfg.rect) }, uMouth: { value: new T.Vector4(...cfg.mouth) }, uPivot: { value: new T.Vector2(...cfg.neck) },
     uSize: { value: new T.Vector2(Wd, H) }, uAng: { value: 0 }, uNod: { value: 0 }, uBreath: { value: 0 } };
   const m = new T.Mesh(new T.PlaneGeometry(Wd, H, 16, 20), new T.ShaderMaterial({ uniforms: u, vertexShader: SPRITE_VS, fragmentShader: SPRITE_FS, transparent: true }));
   m.position.y = H / 2; m.renderOrder = 1;
   const g = new T.Group(); g.add(m);
   const TILT = { neutral: 0, smile: -.012, think: .03, surprise: -.006 };
-  let moodName = 'neutral', open = false, flipAt = 0, fade = .2, shown = 'neutral', blinkAt = 2, tilt = 0, nod = 0;
-  const pick = (mood, mouthOpen) => { let k = mouthOpen && mood !== 'surprise' ? mood + '_open' : mood; return tx[k] ? k : 'neutral'; };
+  let moodName = 'neutral', shown = 'neutral', fade = .25, wasTalking = false, nodKick = 0, now = 0;
+  let blinkAt = 1.5, blinks = [];               // 깜빡임 시작 시각들 (두 번 깜빡임은 둘)
+  const tiltS = { x: 0, v: 0 }, nodS = { x: 0, v: 0 };
+  // 입: 지금 음절의 목표와 시작 시각. open·round는 짧게 보간한다.
+  let syl = null, sylAt = -9, sylDur = .06, mOpen = 0, mRound = 0;
   const r = { group: g, sprite: true, talking: false, wave: 0, look: 0, seed: Math.random() * 9,
-    setMood(mm) { moodName = TILT[mm] === undefined ? 'neutral' : mm; },
+    setMood(mm) {
+      const next = TILT[mm] === undefined ? 'neutral' : mm;
+      if (next !== moodName && Math.random() < .5) blinkAt = Math.min(blinkAt, now + .08);   // 표정이 바뀔 때 가끔 깜빡인다
+      moodName = next;
+    },
+    syllable(ch, ms) { syl = viseme(ch); sylAt = now; sylDur = Math.max(.04, ms / 1000); },
     update(t, dt) {
-      // 말하는 동안 입을 열었다 닫았다 한다
-      if (!r.talking) open = false;
-      else if (t > flipAt) { open = !open; flipAt = t + (open ? .09 + Math.random() * .1 : .06 + Math.random() * .09); }
-      const want = pick(moodName, open);
-      if (want !== shown) {
+      now = t; dt = Math.min(dt, .05);
+      // 표정 (얼굴 조각). 입은 아래 입 층이 맡는다.
+      if (moodName !== shown) {
         if (u.uMix.value > .5) u.tFaceA.value = u.tFaceB.value;
-        fade = want.split('_')[0] === shown.split('_')[0] ? .05 : .2;         // 입만 바뀌면 빠르게, 표정이 바뀌면 부드럽게
-        u.tFaceB.value = tx[want]; u.uMix.value = 0; shown = want;
+        u.tFaceB.value = tx[moodName] || tx.neutral; u.uMix.value = 0; shown = moodName; fade = .16;   // 길면 두 입이 겹쳐 보인다
       }
-      u.uMix.value = Math.min(1, u.uMix.value + dt / fade);
-      // 눈 깜빡임
-      if (t > blinkAt + .17) blinkAt = t + 2.6 + Math.random() * 3.2;
-      u.uBlink.value = t > blinkAt ? Math.sin(Math.min(1, (t - blinkAt) / .17) * Math.PI) : 0;
-      if (reduced) u.uBlink.value = 0;
-      // 고개와 숨
-      const k = 1 - Math.exp(-dt * 5);
-      tilt = lerp(tilt, TILT[moodName], k); nod = lerp(nod, r.look, k);
+      const e = Math.min(1, u.uMix.value + dt / fade); u.uMix.value = e;
+      u.tMouth.value = tx[moodName + '_open'] || tx.neutral_open;
+      // 입 모양 목표: 음절이 들어온 직후 열고, 음절 끝으로 갈수록 조금 닫는다 (같은 모음이 이어져도 움직임이 보이게)
+      let tOpen = 0, tRound = 0;
+      const age = t - sylAt;
+      if (r.talking && syl && age < sylDur + .05) {
+        const k = age / sylDur;
+        tOpen = syl.open * (k < .55 ? 1 : syl.lips ? Math.max(0, 1 - (k - .55) * 3) : .75);
+        tRound = syl.round;
+      } else if (r.talking && age > .25) {
+        // 글자 타이핑이 끝났는데 음성이 아직 나오는 중: 느슨한 리듬으로 움직인다
+        const ph = (t * 6.5 + r.seed) % 1;
+        tOpen = ph < .6 ? .55 + .4 * Math.abs(Math.sin(t * 2.3 + r.seed)) : 0;
+      }
+      if (moodName === 'smile') tRound = 0;          // 웃는 얼굴에 둥근 입을 붙이면 윗입술이 겹쳐 보인다
+      if (moodName === 'surprise') { tOpen = 0; tRound = 0; }   // 놀란 얼굴은 입이 이미 벌어져 있다
+      const kO = 1 - Math.exp(-dt / .035), kR = 1 - Math.exp(-dt / .03);
+      mOpen += (tOpen - mOpen) * kO; mRound += (tRound - mRound) * kR;
+      u.uOpen.value = Math.max(.72, mOpen); u.uMA.value = smooth(.04, .38, mOpen) * (1 - mRound) + mRound * smooth(.02, .3, mOpen + mRound * .4);
+      u.uRound.value = mRound;
+      if (reduced) { u.uMA.value = 0; }
+      // 눈 깜빡임: 2.2~6초 간격, 다섯 번에 한 번쯤 두 번 연달아
+      if (t > blinkAt) { blinks = [blinkAt]; if (Math.random() < .2) blinks.push(blinkAt + .26); blinkAt = t + 2.2 + Math.random() * 3.8; }
+      let b = 0;
+      for (const s0 of blinks) { const x = (t - s0) / .16; if (x > 0 && x < 1) b = Math.max(b, x < .4 ? x / .4 : 1 - (x - .4) / .6); }
+      u.uBlink.value = reduced ? 0 : b;
+      // 말을 시작할 때 작게 한 번 끄덕인다
+      if (r.talking && !wasTalking) nodKick = 1;
+      wasTalking = r.talking;
+      nodKick = Math.max(0, nodKick - dt * 2.4);
+      const kick = Math.sin((1 - nodKick) * Math.PI) * (nodKick > 0 ? 1 : 0);
+      // 고개와 숨: 표정·내려다보기는 스프링으로, 평소에는 겹친 느린 흔들림
       const live = reduced ? 0 : 1;
-      u.uAng.value = tilt + live * (Math.sin(t * .7 + r.seed) * .012 + (r.talking ? Math.sin(t * 5.3) * .006 : 0));
-      u.uNod.value = -nod * .012 + live * (r.talking ? -Math.abs(Math.sin(t * 6.1)) * .004 : 0);
-      u.uBreath.value = live * Math.sin(t * 1.5 + r.seed) * .004;
+      const tilt = spring(tiltS, TILT[moodName], dt, 4.5), nod = spring(nodS, r.look, dt, 3.2);
+      const talkSway = r.talking ? drift(t, r.seed + 2, 1.9) * .005 : 0;
+      u.uAng.value = tilt + live * (drift(t, r.seed, .45) * .011 + talkSway);
+      u.uNod.value = -nod * .012 + live * (drift(t, r.seed + 5, .37) * .0018 - kick * .006 + (r.talking ? drift(t, r.seed + 7, 2.6) * .0015 : 0));
+      u.uBreath.value = live * (Math.sin(t * 1.35 + r.seed) * .8 + Math.sin(t * .53 + r.seed * 2) * .2) * .004;
     } };
   return r;
 }
