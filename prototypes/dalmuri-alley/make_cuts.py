@@ -6,6 +6,9 @@
 쓰는 법:  python3 make_cuts.py 이름=원본경로 [이름=원본경로 ...]
 예:       python3 make_cuts.py alley=~/Downloads/alley.png muk_calm=~/Downloads/muk1.png
 
+원본의 일부만 쓰려면 경로 뒤에 @x,y,너비,높이 (원본 픽셀)를 붙인다. 그 부분을 먼저 잘라 낸다.
+예:       python3 make_cuts.py dan_back=뒷모습.png@0,108,1024,1428   (하늘의 보름달을 잘라 낸다)
+
 이름과 크기는 아래 SLOTS. 그림을 바꾼 뒤에는 index.html의 SPOT(눈, 방울, 책, 촛불, 빈 종이, 밀랍, 현판 자리)과
 OHAENG(오행 그림에서 다섯 색이 도는 자리)을 새 그림에 맞춰 고친다.
 """
@@ -40,7 +43,7 @@ SLOTS = {
     'duo': LAND,        # 천막 상 뒤에 나란히 앉은 단과 청
     # 콘티의 새 컷 (art/geumeum-storyboard.html). 넣은 뒤 index.html 대본에 컷을 잇는다
     'dan_soft': SQ, 'cheong_quiet': SQ, 'cheong_writing': SQ,
-    'threads': LAND, 'pair_envelope': SQ, 'guest_feet': LAND, 'bell': SQ, 'dan_back': TALL,
+    'threads': LAND, 'pair_envelope': SQ, 'guest_feet': SQ, 'bell': SQ, 'dan_back': TALL,
     'muk_grind': LAND, 'muk_pause': TALL, 'dan_peek': LAND, 'cheong_night': TALL, 'cheong_asleep': TALL,
 }
 
@@ -60,10 +63,17 @@ def main():
     out = Path(__file__).resolve().parent / 'img'
     for arg in args:
         name, _, path = arg.partition('=')
+        box = None
+        if '@' in path:          # 경로@x,y,너비,높이: 원본의 그 부분만 쓴다
+            path, _, b = path.rpartition('@')
+            x, y, w, h = (int(v) for v in b.split(','))
+            box = (x, y, x + w, y + h)
         if name not in SLOTS or not path:
             sys.exit(f'모르는 이름이거나 경로가 없다: {arg}\n이름: {", ".join(SLOTS)}')
         size, alpha = SLOTS[name], name == 'sign'
         im = Image.open(Path(path).expanduser()).convert('RGBA' if alpha else 'RGB')
+        if box:
+            im = im.crop(box)
         if alpha:          # 투명 배경 가장자리에 남은 옅은 번짐을 지운다
             im.putalpha(im.getchannel('A').point(lambda v: 0 if v < 16 else v))
         ratio = (im.width / im.height) / (size[0] / size[1])

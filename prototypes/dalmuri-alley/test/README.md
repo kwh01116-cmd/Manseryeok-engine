@@ -21,6 +21,8 @@ node toon.js geumeum-crisis phone           # 위급한 말 → 역할을 벗은
 node toon.js hub phone                      # 오늘의 한 장 뒤집기, 골목 고르기 ↔ 포차 골목 오가기
 node toon.js gunghap phone,desk             # 커플 궁합(단·청), LLM 없이. 두 번째 사람은 태어난 시를 모르는 걸로
 node toon.js gunghap-llm phone,desk         # 커플 궁합, 가짜 sample로 (꼭지마다 단과 청이 번갈아)
+COOKIE=3 node toon.js gunghap phone         # 쿠키 컷 2, 3을 보려면 지난 그믐의 기록을 미리 넣는다
+CUTS=guest_feet,pair_envelope node toon.js gunghap phone   # 그 컷만 따로 찍는다 (<모드>-<크기>-cut-<이름>.png)
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.

@@ -22,6 +22,8 @@ const ph = name => {
     const ctx = await browser.newContext({ viewport: SZ[name], deviceScaleFactor: 1, ignoreHTTPSErrors: true });
     const page = await ctx.newPage();
     if (/-llm$|-crisis$/.test(which)) await page.addInitScript(fakeSample, which);
+    // COOKIE=2 또는 3: 그 쿠키 컷이 나오게 지난 그믐의 기록을 미리 넣는다
+    if (process.env.COOKIE) await page.addInitScript(n => { try { localStorage.setItem('geumeum-cookie', JSON.stringify({ idx: 0, n: n - 1 })); } catch (e) { /* 없으면 첫 토막 */ } }, +process.env.COOKIE);
     const errs = [], fake = new Set();
     page.on('pageerror', e => errs.push('pageerror: ' + e.message));
     page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') errs.push(m.type() + ': ' + m.text().slice(0, 200)); });
@@ -100,6 +102,12 @@ const ph = name => {
       console.log(which, name, 'letter', JSON.stringify({ chars: rep.text.length, cls: rep.cls, calls: rep.calls, haoche: /하오|이오|소\.|구려|시오/.test(rep.text), banned: /대운|용신/.test(rep.text), head: rep.text.split('\n').slice(0, 5) }));
       await page.click('#repClose');
       await page.waitForSelector('#toonLeave', { timeout: 20000 }); await readDown();
+      // 컷에 쓰인 그림 순서. CUTS=이름,이름 이면 그 컷만 따로 찍는다
+      console.log(which, name, 'cuts', (await page.$$eval('#strip .cut > img', a => a.map(i => i.src.split('/').pop().replace(/^gm_|\.webp$/g, '')))).join(' '));
+      for (const n of (process.env.CUTS || '').split(',').filter(Boolean)) {
+        const e = await page.$(`#strip .cut:has(> img[src$="gm_${n}.webp"])`);
+        if (e) { await e.scrollIntoViewIfNeeded(); await page.waitForTimeout(1500); await e.screenshot({ path: `${which}-${name}-cut-${n}.png` }); }
+      }
       await page.click('#toonLeave');
       await page.waitForSelector('#hub:not([hidden])'); await page.waitForTimeout(600); await shot('back');
       if (await has('#hubLetters:not([hidden])')) { await page.click('#hubLetters'); await page.waitForSelector('#view-list:not([hidden]) .letter-item'); await shot('letters'); await page.click('#listClose'); }

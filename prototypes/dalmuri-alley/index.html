@@ -2055,7 +2055,7 @@ async function pondering(p, text, skipLabel) {
 const convo = { log: [], picks: null, saju: null, star: null };
 const hear = s => { if (s) convo.log.push({ who: '손님', said: String(s).slice(0, 200) }); };
 async function speak(s, m) { convo.log.push({ who: P().name, said: s }); await say(s, m); }
-const MOODS = ['neutral', 'smile', 'think', 'surprise', 'stern', 'sly', 'tease', 'fluster'];
+const MOODS = ['neutral', 'smile', 'think', 'surprise', 'stern', 'sly', 'tease', 'fluster', 'soft', 'pout'];
 const txt = (v, max) => (typeof v === 'string' && v.trim() && v.trim().length <= max ? v.trim() : null);
 const linesOf = (v, n, max = 260) => { if (!Array.isArray(v) || !v.length || v.length > n) return null; const out = v.map(x => txt(x, max)); return out.every(Boolean) ? out : null; };
 const moodOf = v => (MOODS.includes(v) ? v : 'neutral');
@@ -2119,7 +2119,7 @@ PERSONA.dan = {
   who: '너는 "그믐 골목"의 문지기 "단"이다. 달 없는 밤에만 열리는 한옥 골목 끝 천막에서, 손님이 들고 온 고민을 듣는 사람이다. 붉은 옷에 긴 머리를 붉은 끈으로 묶었고, 붉은 끈에 단 놋쇠 방울을 들고 있다. 장난스럽고 말이 빠르지만 말 속에 숨은 진짜 고민을 잘 짚는다. 사주 풀이는 네 일이 아니다. 생년월일은 옆자리의 청이 받고, 풀이는 대문 안의 묵 선생이 한다.',
   talk: '말투: 처음 본 손님에게도 오래 안 사이처럼 반말을 쓴다("~야", "~지?", "~해 봐", "~거든"). 놀리듯 가볍게 받아 주되 고민을 가볍게 여기지는 않는다. 문장이 짧다. 귀신, 저주, 살, 굿, 부적, 신점 이야기는 꺼내지 않는다.',
   facts: '- 지금은 고민을 듣고 되묻기만 한다. 사주, 운세, 앞날에 대해서는 말하지 않는다.',
-  moods: 'neutral(보통), smile(웃음), tease(놀림), surprise(놀람), think(갸웃)',
+  moods: 'neutral(보통), smile(웃음), tease(놀림), surprise(놀람), think(진지하게 들음), soft(위로: 무겁거나 아픈 얘기를 받을 때), pout(장난스럽게 토라짐)',
   call: n => n, hold: '알았어. 그 말, 대문 안으로 그대로 가져갈게.',
   ponder: '단이 방울을 만지작거렸다.',
   scene: '달이 없는 그믐밤이다. 한옥 골목 끝 천막 아래, 촛불 두 자루가 켜져 있다.',
@@ -2146,7 +2146,7 @@ PERSONA.pair = {
   who: '너희는 "그믐 골목" 천막에서 함께 궁합을 보는 두 사람 "단"과 "청"이다. 단은 붉은 옷에 방울을 든 골목의 문지기로 손님의 고민을 듣는다. 청은 쪽빛 옷에 만세력을 든 그믐당 묵 선생의 제자로 사주를 찾고 적는다. 둘을 합쳐 단청(丹靑)이라 부르고, 궁합을 볼 때는 홍실과 청실처럼 단이 손님을, 청이 상대를 맡는다. 단은 청을 자주 놀리고 청은 반듯하게 받아친다.',
   talk: '말투: 단은 반말("~야", "~지?", "~해 봐"), 청은 하십시오체("~습니다", "~십시오"). 대사마다 누가 하는지(who: dan 또는 cheong)를 정하고 그 사람 말투로만 쓴다. 형식에 who가 없는 대답(문진, 되묻기)은 단이 반말로 한다. 문장이 짧다. 귀신, 저주, 살, 굿, 부적, 신점 이야기는 꺼내지 않는다. 궁합을 점수로 매기거나 "헤어진다", "결혼한다"처럼 단정하지 않는다. 상대의 마음을 대신 말하지 않는다.',
   facts: '- 궁합은 [사실]에 적힌 두 사람의 네 기둥, 오행 개수, 일간 관계(오행 생극, 천간합, 서로의 십성), 일지 관계, 띠 관계, 오행 보완, 세운만 쓴다. 관계를 지어내지 않는다. 생년월일을 아직 받지 않았으면 궁합 얘기를 하지 않는다.\n- [사실]에 없는 명리 개념(대운, 신강·신약, 격국, 용신, 신살, 12운성, 공망, 원진, 형·파·해)은 계산하지 않았으니 말하지 않는다.',
-  moods: 'neutral(보통), smile(웃음), think(생각), surprise(놀람), tease(단: 놀림), fluster(청: 당황)',
+  moods: 'neutral(보통), smile(웃음), think(생각), surprise(놀람), tease(단: 놀림), fluster(청: 당황), soft(위로: 헤어진 사이나 아픈 얘기)',
   to: n => `${n} 님께`, toNone: '손님께', call: n => `${n} 님`, letterVoice: '청의 하십시오체',
   bye: '추신. 둘이 같이 들어오면 방울이 두 번 울려. 다음 그믐에 또 와. — 단',
   fun: '재미로 보는 궁합입니다. 두 사람의 사주는 서로를 비춰 볼 뿐, 인연을 정하지 않습니다.',
@@ -3012,21 +3012,32 @@ const GM = {
   cheong_neutral: [1, '만세력을 든 청'], cheong_read: [1, '고개를 숙이고 만세력을 보는 청'], cheong_guide: [1, '손바닥으로 안쪽을 가리키는 청'],
   muk_calm: [1, '묵 선생'], muk_knowing: [1, '다 안다는 얼굴의 묵 선생'], muk_smile: [1, '옅게 웃는 묵 선생'], muk_think: [1, '눈을 감고 손가락을 짚어 보는 묵 선생'],
   muk_surprise: [1, '눈을 크게 뜬 묵 선생'], muk_stern: [1, '엄한 얼굴의 묵 선생'], muk_sly: [1, '곁눈질하는 묵 선생'], muk_pierce: [1, '꿰뚫어 보는 눈의 묵 선생'],
-  // 선택: 받으면 GM_EXTRA에 이름을 더한다. 없으면 있는 그림에 만화 기호를 얹어 대신한다
-  dan_tease: [1, '놀리듯 웃는 단'], dan_surprise: [1, '놀란 단'], dan_serious: [1, '진지하게 듣는 단'], dan_pout: [1, '토라진 단'],
-  cheong_smile: [1, '작게 웃는 청'], cheong_surprise: [1, '놀란 청'], cheong_fluster: [1, '얼굴이 붉어진 청'], cheong_explain: [1, '진지하게 설명하는 청'],
-  duo: [2 / 3, '천막 상 뒤에 나란히 앉은 단과 청'],
+  // 콘티(art/geumeum-storyboard.html)의 새 컷. GM_EXTRA에 있는 것만 받고 쓴다. 없으면 있는 그림을 잘라 쓰거나 만화 기호를 얹어 대신한다
+  dan_tease: [1, '윙크하며 방울을 흔드는 단'], dan_surprise: [1, '입을 가리고 놀란 단'], dan_serious: [1, '진지하게 듣는 단'], dan_pout: [1, '팔짱을 끼고 토라진 단'], dan_soft: [1, '위로하듯 옅게 웃는 단'],
+  cheong_smile: [1, '작게 웃는 청'], cheong_surprise: [1, '책을 끌어안고 놀란 청'], cheong_fluster: [1, '얼굴이 붉어진 청'], cheong_explain: [1, '손을 내밀며 설명하는 청'], cheong_quiet: [1, '눈을 내리깐 청'],
+  cheong_writing: [1, '천막의 상에서 붓으로 편지를 쓰는 청'], duo: [2 / 3, '천막 상 뒤에 나란히 앉은 단과 청. 단이 청을 놀린다'],
+  threads: [2 / 3, '홍실과 청실을 꼬는 손'], pair_envelope: [1, '홍실과 청실로 묶고 밀랍으로 봉한 봉투'], guest_feet: [1, '금줄 아래 젖은 돌길을 딛는 발'],
+  bell: [1, '붉은 끈에 매달린 놋 방울'], dan_back: [1.5, '빈 골목 한가운데에서 방울을 든 단의 뒷모습'],
+  muk_grind: [2 / 3, '먹을 가는 손'], muk_pause: [1.5, '빈 한지 위에 붓을 든 채 멈춘 묵 선생. 뒤 병풍에 달이 떠 있다'],
+  dan_peek: [2 / 3, '문틈으로 들여다보는 단의 한쪽 눈'], cheong_night: [1.5, '촛불 아래 만세력을 넘기는 청'], cheong_asleep: [1.5, '새벽, 책 위에 엎드려 잠든 청. 곁에 식은 찻잔'],
 };
-const GM_OPT = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'cheong_smile', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'duo']);
-const GM_EXTRA = new Set([]);      // 선택 그림 가운데 실제로 넣은 것
-const GM_FIRST = ['alley', 'booth', 'dan_neutral', 'dan_speak', 'dan_smile'];     // 이것만 받고 시작한다. 나머지는 읽는 동안 받는다
+const GM_OPT = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'dan_soft', 'cheong_smile', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'cheong_quiet',
+  'cheong_writing', 'duo', 'threads', 'pair_envelope', 'guest_feet', 'bell', 'dan_back', 'muk_grind', 'muk_pause', 'dan_peek', 'cheong_night', 'cheong_asleep']);
+// 콘티의 새 컷 가운데 받은 것 (22장 중 20장. 웃는 청, 먹 가는 손은 아직이라 대신하거나 건너뛴다)
+const GM_EXTRA = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'dan_soft', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'cheong_quiet',
+  'cheong_writing', 'duo', 'threads', 'pair_envelope', 'guest_feet', 'bell', 'dan_back', 'muk_pause', 'dan_peek', 'cheong_night', 'cheong_asleep']);
+const gmHas = n => GM_EXTRA.has(n);
+const GM_FIRST = ['alley', 'guest_feet', 'booth', 'dan_neutral', 'dan_tease', 'dan_speak'];     // 이것만 받고 시작한다. 나머지는 읽는 동안 받는다
 // 그림 안의 자리 (그림 너비·높이에 대한 비). 그림을 바꾸면 여기와 OHAENG, RING만 다시 맞춘다
 const SPOT = {
-  eyes: { dan_neutral: [.5, .265], dan_speak: [.5, .265], dan_smile: [.47, .27], cheong_neutral: [.52, .3], cheong_read: [.48, .3], cheong_guide: [.5, .29], muk: [.5, .36], dan: [.5, .27], cheong: [.5, .3] },
+  eyes: { dan_neutral: [.5, .265], dan_speak: [.5, .265], dan_smile: [.47, .27], cheong_neutral: [.52, .3], cheong_read: [.48, .3], cheong_guide: [.5, .29], muk: [.5, .36], dan: [.5, .27], cheong: [.5, .3],
+    dan_tease: [.55, .3], dan_surprise: [.53, .3], dan_serious: [.53, .3], dan_pout: [.52, .3], dan_soft: [.52, .31],
+    cheong_surprise: [.53, .3], cheong_fluster: [.55, .3], cheong_explain: [.53, .3], cheong_quiet: [.53, .3], cheong_writing: [.5, .26] },
   bell: [.645, .68], book: [.63, .8], candle: [.06, .4],
   ink: [.07, .58, .59, .32],          // brush: 손과 소매가 가리지 않는 종이 아래쪽 (왼쪽, 위, 너비, 높이)
   paper2: [[.07, .3, .86, .2], [.07, .56, .86, .2]],     // paper: 위는 손님, 아래는 상대
   seal: [.493, .553],                 // envelope: 밀랍 가운데
+  seal2: [.522, .537],                // pair_envelope: 밀랍 가운데
   hang: [.28, .125, .44],             // gate: 현판을 거는 자리 (왼쪽, 위, 너비)
   board: [.5, .232, .17, .058],       // booth: 그림 속 빈 현판 (가운데, 위, 너비, 높이)
 };
@@ -3037,17 +3048,19 @@ const RING = [['WOOD', '木', 35, 15], ['FIRE', '火', 76, 22], ['EARTH', '土',
 // { img, fx, tone }: 있는 그림에 만화 기호나 색조를 얹는다. want: 그 표정 그림을 받으면(GM_EXTRA) 그것을 쓴다
 const SPEAKERS = {
   dan: { name: '단', faces: {
-    neutral: ['dan_neutral'], smile: ['dan_smile', { img: 'dan_speak', fx: 'spark' }],
-    tease: [{ want: 'dan_tease', img: 'dan_smile', fx: 'note' }, { want: 'dan_tease', img: 'dan_neutral', fx: 'spark' }],
+    neutral: ['dan_neutral', { want: 'dan_serious', img: 'dan_neutral' }], smile: ['dan_smile', { img: 'dan_speak', fx: 'spark' }],
+    tease: [{ want: 'dan_tease', img: 'dan_smile', fx: 'note' }, { img: 'dan_speak', fx: 'note' }],
     surprise: [{ want: 'dan_surprise', img: 'dan_speak', fx: 'ex' }], think: [{ want: 'dan_serious', img: 'dan_neutral', fx: 'q' }],
-    stern: [{ want: 'dan_serious', img: 'dan_neutral', tone: 'cold' }], sly: [{ img: 'dan_neutral', fx: 'spark' }],
-    fluster: [{ want: 'dan_pout', img: 'dan_smile', fx: 'sweat' }],
+    stern: [{ want: 'dan_serious', img: 'dan_neutral', tone: 'cold' }], sly: [{ want: 'dan_tease', img: 'dan_neutral', fx: 'spark' }],
+    fluster: [{ want: 'dan_pout', img: 'dan_smile', fx: 'sweat' }], pout: [{ want: 'dan_pout', img: 'dan_smile', fx: 'sweat' }],
+    soft: [{ want: 'dan_soft', img: 'dan_smile' }],
   } },
   cheong: { name: '청', faces: {
-    neutral: ['cheong_neutral'], smile: [{ want: 'cheong_smile', img: 'cheong_guide' }],
+    neutral: ['cheong_neutral', { want: 'cheong_explain', img: 'cheong_neutral' }], smile: [{ want: 'cheong_smile', img: 'cheong_guide' }],
     think: [{ img: 'cheong_read', fx: 'focus' }, 'cheong_read'], surprise: [{ want: 'cheong_surprise', img: 'cheong_neutral', fx: 'shock' }],
     fluster: [{ want: 'cheong_fluster', img: 'cheong_neutral', fx: ['sweat', 'blush'] }], stern: [{ want: 'cheong_explain', img: 'cheong_neutral', tone: 'cold' }],
-    tease: [{ img: 'cheong_neutral', fx: 'sweat' }], sly: ['cheong_neutral'],
+    tease: [{ want: 'cheong_fluster', img: 'cheong_neutral', fx: 'sweat' }], sly: ['cheong_neutral'],
+    soft: [{ want: 'cheong_quiet', img: 'cheong_neutral', tone: 'cold' }], pout: [{ want: 'cheong_fluster', img: 'cheong_neutral', fx: 'sweat' }],
   } },
   muk: { name: '묵 선생', faces: { calm: ['muk_calm'], neutral: ['muk_calm', 'muk_knowing'], smile: ['muk_smile'], think: ['muk_think'], surprise: ['muk_surprise'], stern: ['muk_stern'], sly: ['muk_sly', 'muk_pierce'] } },
 };
@@ -3076,7 +3089,7 @@ const SHAPE_AR = { tall: 2 / 3, sq: 1, land: 3 / 2, band: 16 / 9, wide: 16 / 7, 
 const probe = src => new Promise(res => { const im = new Image(); im.onload = () => res(true); im.onerror = () => res(false); im.src = src; });
 
 const Toon = (() => {
-  let who = 'dan', auto = false, lastFace = '', lastWho = '', sinceCut = 9, faceN = 0, tagShown = '', firstNew = null, nearEnd = true;
+  let who = 'dan', auto = false, lastFace = '', lastWho = '', lastImg = '', sinceCut = 9, faceN = 0, tagShown = '', firstNew = null, nearEnd = true;
   const turn = {};
   // 화면에 들어온 컷만 나타나고(in) 움직인다(live). 처음 들어올 때 그 컷의 소리를 낸다. 안 보이는 컷까지 움직이면 폰이 버거워한다
   const io = 'IntersectionObserver' in window
@@ -3193,9 +3206,9 @@ const Toon = (() => {
     if (o.pair) f.append(inkOf(o.pair[0], SPOT.paper2[0], o.names[0], 'sm a'), inkOf(o.pair[1], SPOT.paper2[1], o.names[1], 'sm b'));
     if (o.oh) f.append(...ohOf(o.oh));
     if (o.el2) f.append(...ringOf(o.el2, o.names));
-    if (o.seal) { const [x, y] = SPOT.seal, d = el('span', 'seal' + (o.seal.length > 1 ? ' two' : '')); d.textContent = o.seal; d.style.left = `${x * 100}%`; d.style.top = `${y * 100}%`; d.setAttribute('aria-hidden', 'true'); f.append(d); }
+    if (o.seal) { const [x, y] = o.sealAt || SPOT.seal, d = el('span', 'seal' + (o.seal.length > 1 ? ' two' : '')); d.textContent = o.seal; d.style.left = `${x * 100}%`; d.style.top = `${y * 100}%`; d.setAttribute('aria-hidden', 'true'); f.append(d); }
     sinceCut = 0; tagShown = '';
-    if (!o.face) { lastFace = ''; lastWho = ''; }
+    if (o.face) lastImg = name; else { lastFace = ''; lastWho = ''; lastImg = ''; }
     return add(f);
   }
   // 두 사람을 한 컷에: 사선으로 나눈 두 칸에 얼굴을 하나씩 (fx: [왼쪽, 오른쪽] 만화 기호)
@@ -3217,11 +3230,11 @@ const Toon = (() => {
   // 얼굴 컷: 크기를 바꿔 가며 넣는다. 큰 정사각은 가끔, 보통은 가로로 긴 컷과 눈 둘레 컷
   const SHAPES = ['sq', 'band', 'wide', 'band', 'wide', 'band'];
   function face(key, shape) {
-    const set = SPEAKERS[who].faces, list = set[key] || set.neutral;
-    const i = turn[who + key] = turn[who + key] === undefined ? 0 : turn[who + key] + 1;
-    let e = list[i % list.length];
-    if (typeof e === 'string') e = { img: e };
-    if (e.want && GM_EXTRA.has(e.want)) e = { img: e.want };          // 받은 표정 그림이 있으면 그것을 쓴다
+    const set = SPEAKERS[who].faces, list = set[key] || set.neutral, k = who + key;
+    const entry = j => { let x = list[j % list.length]; if (typeof x === 'string') x = { img: x }; return x.want && GM_EXTRA.has(x.want) ? { img: x.want } : x; };   // 받은 표정 그림이 있으면 그것을 쓴다
+    const i = turn[k] = turn[k] === undefined ? 0 : turn[k] + 1;
+    let e = entry(i);
+    if (e.img === lastImg && list.length > 1) e = entry(turn[k] = i + 1);     // 바로 앞 얼굴 컷과 같은 그림이면 다음 것
     const name = e.img, eyes = SPOT.eyes[name] || SPOT.eyes[who] || [.5, .33];
     shape = shape || SHAPES[faceN++ % SHAPES.length];
     const o = { shape, face: true, fx: e.fx, tone: e.tone };
@@ -3260,7 +3273,7 @@ const Toon = (() => {
     reset() {
       if (io) io.disconnect();
       stripEl.replaceChildren(); toonOpts.replaceChildren(); toonScroll.scrollTop = 0; toonMore.hidden = true;
-      who = 'dan'; auto = false; lastFace = ''; lastWho = ''; sinceCut = 9; faceN = 0; tagShown = ''; firstNew = null; nearEnd = true;
+      who = 'dan'; auto = false; lastFace = ''; lastWho = ''; lastImg = ''; sinceCut = 9; faceN = 0; tagShown = ''; firstNew = null; nearEnd = true;
       for (const k of Object.keys(turn)) delete turn[k];
     },
   };
@@ -3274,10 +3287,10 @@ new MutationObserver(() => { if (toonOpts.childElementCount) Toon.settle(); requ
 /* ── 그믐 골목 대본 (콘티: ROADMAP 8절) ── */
 const as = id => Toon.as(id);
 const DAN_CHIPS = [['돈 문제', 'money'], ['사람 문제', 'love'], ['일 문제', 'work']];
-const DAN_ACK = {
-  money: '돈이구나. 다들 그거 들고 와. 부끄러운 거 아니야.',
-  love: '사람이구나. 얼굴에 다 쓰여 있네. 누군지는 말 안 해도 돼.',
-  work: '일이구나. 어깨가 여기까지 올라와 있어. 좀 내려놔.',
+const DAN_ACK = {        // [대사, 표정]
+  money: ['돈이구나. 다들 그거 들고 와. 부끄러운 거 아니야.', 'think'],
+  love: ['사람이구나. 얼굴에 다 쓰여 있네. 누군지는 말 안 해도 돼.', 'tease'],
+  work: ['일이구나. 어깨가 여기까지 올라와 있어. 좀 내려놔.', 'smile'],
 };
 const MUK_CHIPS = [['재물', 'money'], ['인연', 'love'], ['일과 자리', 'work']];
 async function geumeumSession() {
@@ -3285,7 +3298,7 @@ async function geumeumSession() {
   Toon.auto(false); as('dan'); state.booth = 'dan';
   // 골목: 방울 소리를 따라 금줄 아래로
   Toon.cut('alley', { sound: 'bell', sfx: ['딸랑', 60, 30], narr: [['그믐. 달이 다 지고 없는 밤.']] });
-  Toon.cut('alley', { shape: 'band', at: [.5, .2], narr: [['앞이 보이지 않는 사람에게만, 그 소리가 들린다.', 'b']] });
+  Toon.cut('guest_feet', { narr: [['앞이 보이지 않는 사람에게만, 그 소리가 들린다.', 'b']] });
   Toon.cut('booth', { board: '그믐', narr: [['골목 끝, 천막 하나가 불을 켜고 있었다.', 'b']] });
   Toon.narr('…비어 있는 줄 알았다.');
   // 1장. 듣는 사람
@@ -3293,16 +3306,18 @@ async function geumeumSession() {
   await say('왔네? 방울이 울리길래 누군가 했지.', 'neutral');
   if (state.name) { state.call = callOf(state.name); await say(`${state.name}… 이름이 벌써 골목에 들어와 있네. 앉아.`, 'smile'); }
   else await askName('이름? 지어 대도 돼. 여기선 다들 그래.', n => (n ? `${n}. 좋네, 그렇게 부를게.` : '그럼 손님이라고 부르지 뭐.'), '그냥 손님으로');
+  Toon.cut('dan_tease', { shape: 'band', face: true, at: [.55, .42], sound: 'bell' });
   const mode = await choose('혼자 왔어? 아니면… 마음에 둔 사람 얘기야?', [['나 혼자 일이에요', 'solo'], ['둘 사이 일이에요 (궁합)', 'pair']], 'tease');
   if (mode === 'pair') return pairSession();
   await wait(done => { LLM.ready.then(done); });
   let live = LLM.on, asked = false;
   const ask = '자, 내려놔 봐. 여기선 무거운 거 들고 버티는 사람이 지는 거야. 뭘 들고 왔어?';
-  Toon.auto(true);
+  Toon.cut('dan_speak', { shape: 'band', face: true, at: [.5, .385] });
   if (live) {
     const a = await openingAsk(ask, DAN_CHIPS.map(c => c[0]));
     if (a === 'crisis') return 'crisis';
     asked = true; state.topic = (DAN_CHIPS.find(c => c[0] === a) || [0, 'flow'])[1];
+    Toon.auto(true);       // 손님이 답한 뒤부터 단의 표정 컷이 따라 붙는다
     const r = await interview();
     if (r === 'crisis') return 'crisis';
     live = r;
@@ -3310,10 +3325,11 @@ async function geumeumSession() {
   if (!asked) {
     const t = await choose(ask, DAN_CHIPS, 'smile');
     hear(DAN_CHIPS.find(c => c[1] === t)[0]); state.topic = t;
-    await say(DAN_ACK[t], 'smile');
+    Toon.auto(true);
+    await say(...DAN_ACK[t]);
   }
   Toon.auto(false);
-  Toon.cut('dan_neutral', { shape: 'sq', half: 'r', zoom: 3, at: SPOT.bell, sound: 'bell', sfx: ['딸랑', 6, 8], alt: '단의 방울' });
+  Toon.cut('bell', { shape: 'sq', half: 'r', sound: 'bell', sfx: ['딸랑', 6, 8] });
   Toon.say('…진짜네.', 'neutral', true);
   // 2장. 찾는 사람
   duoShot('dan_smile', 'cheong_read', { fx: ['note', 'sweat'] });
@@ -3334,7 +3350,7 @@ async function geumeumSession() {
   state.booth = 'muk'; state.call = state.name ? callOf(state.name) : '손님';
   const reading = live ? llm(prompt('풀이', '사주가 나왔다. 대화 기록 속 손님의 고민(문간에서 단이 먼저 들었다)에 맞춰 세 꼭지를 순서대로 푼다. 1) 일간: 타고난 바탕. 2) 오행: 많은 것과 없는 것. 3) 세운: 올해(또는 내년)의 기운. 각 꼭지는 [사실]의 글자, 십성, 개수만 근거로 삼고, 마지막에 셋을 이어 손님 고민에 대한 종합을 한다. 글자 이름은 종이에 써서 보여 줬으니 길게 읊지 않는다.', PARTS_FMT(3)), 'default') : null;
   if (!s.input.known) {       // 청도 태어난 시를 모른다
-    Toon.cut('cheong_neutral', { shape: 'wide', zoom: 1.5, at: SPOT.eyes.cheong_neutral, tone: 'cold', alt: '말을 멈춘 청' });
+    Toon.cut('cheong_quiet', { shape: 'wide', zoom: 1.35, at: SPOT.eyes.cheong_quiet, tone: 'cold' });
     Toon.say('…저도 그렇습니다.', 'neutral', true);
   }
   Toon.cut('cheong_read', { shape: 'band', zoom: 1.8, at: SPOT.book, sound: 'page', sfx: ['사락', 6, 12], alt: '만세력을 넘기는 손' });
@@ -3349,6 +3365,7 @@ async function geumeumSession() {
   Toon.cut('tea', { glow: true });
   await say('먼 길이었을 테니 차부터 드시오. 차가 식기 전에 다 말할 필요는 없소.', 'calm');
   const c = s.chart, names = s.pillars.filter(([, p]) => p).reverse().map(([n, p]) => `${n}주 ${p.hangul}`).join(', ');
+  if (gmHas('muk_grind')) Toon.cut('muk_grind', { sfx: ['스윽 스윽', 8, 12, 'ink'] });
   await say(`청이 찾은 ${s.input.known ? '여덟' : '여섯'} 글자를 쓰리다.`, 'calm');
   Toon.cut('brush', { ink: s, glow: true, sound: 'brush', sfx: ['사각 사각', 7, 34, 'ink'] });
   await say(`사주가 이리 나왔소. ${names}.`, 'calm');
@@ -3548,11 +3565,11 @@ function fixedPair() {
   };
 }
 const PAIR_CHIPS = [['사귀는 중', 'dating'], ['아직 마음만', 'crush'], ['오래된 사이', 'long'], ['헤어진 사이', 'past']];
-const PAIR_ACK = {
-  dating: '사귀는 중이구나. 좋을 때네. 그래도 걸리는 게 있으니까 왔겠지.',
-  crush: '아직 마음만이구나. 그게 제일 떨리지.',
-  long: '오래된 사이구나. 오래 간 만큼 쌓인 게 있겠다.',
-  past: '헤어진 사이구나. …괜찮아, 여기선 그런 얘기 많이 해.',
+const PAIR_ACK = {       // [대사, 표정]
+  dating: ['사귀는 중이구나. 좋을 때네. 그래도 걸리는 게 있으니까 왔겠지.', 'smile'],
+  crush: ['아직 마음만이구나. 그게 제일 떨리지.', 'tease'],
+  long: ['오래된 사이구나. 오래 간 만큼 쌓인 게 있겠다.', 'think'],
+  past: ['헤어진 사이구나. …괜찮아, 여기선 그런 얘기 많이 해.', 'soft'],
 };
 const THIRD_NOTE = '상대의 생년월일도 이 기기에서 계산에만 쓰고 저장하지 않아요. 상대가 모르는 풀이이니 재미로만 봐 주세요.';
 const PAIR_TASK = '두 사람의 사주가 나왔다. 대화 기록 속 고민에 맞춰 네 꼭지를 순서대로 푼다. 1) who=dan: 손님(홍실)의 바탕, 일간과 오행. 2) who=cheong: 상대(청실)의 바탕, 일간과 오행. 3) who=cheong: 둘 사이, 일간 관계(오행 생극, 천간합, 서로의 십성). 4) who=dan: 살면서 맞물리고 부딪히는 곳, 일지 관계, 띠 관계, 오행 보완. summary는 who=dan이 둘에게 하는 말. [사실]에 있는 관계만 근거로 삼고, 점수를 매기거나 단정하지 않는다. 글자 이름은 종이에 적어 보여 줬으니 길게 읊지 않는다.';
@@ -3584,17 +3601,19 @@ async function pairSession() {
   duoShot('dan_smile', 'cheong_neutral', { fx: ['note', ['sweat', 'blush']], narr: [['홍실과 청실.']] });
   Toon.narr('둘이 함께 보는 궁합은, 이 천막에서만 본다.');
   as('dan'); Toon.say('오, 둘 사이 일이구나. 그럼 오늘은 대문 안 가. 여기서 우리 둘이 봐.', 'tease');
+  Toon.cut('cheong_fluster', { shape: 'band', face: true, at: [.55, .42] });
   as('cheong'); Toon.say('…저도 말입니까?', 'fluster');
   as('dan'); Toon.say('방석이 왜 둘이겠어. 너는 그쪽 사람, 나는 이쪽 사람.', 'smile');
   // 듣는 사람: 어떤 사이인지
   await wait(done => { LLM.ready.then(done); });
   let live = LLM.on, asked = false;
   const ask = '어떤 사이야? 사귀는 중이야, 아직 마음만 있는 거야, 오래된 사이야?';
-  Toon.auto(true);
+  Toon.cut('dan_smile', { shape: 'sq', face: true });
   if (live) {
     const t = await openingAsk(ask, PAIR_CHIPS.map(c => c[0]));
     if (t === 'crisis') return 'crisis';
     asked = true; state.topic = (PAIR_CHIPS.find(c => c[0] === t) || [0, 'flow'])[1];
+    Toon.auto(true);
     const r = await interview();
     if (r === 'crisis') return 'crisis';
     live = r;
@@ -3602,11 +3621,12 @@ async function pairSession() {
   if (!asked) {
     const t = await choose(ask, PAIR_CHIPS, 'smile');
     hear(PAIR_CHIPS.find(c => c[1] === t)[0]); state.topic = t;
-    await say(PAIR_ACK[t], 'smile');
+    Toon.auto(true);
+    await say(...PAIR_ACK[t]);
   }
   // 찾는 사람: 두 사람의 생년월일
   Toon.auto(false); as('cheong');
-  Toon.cut('cheong_neutral', { shape: 'band', face: true, at: [.52, .42] });
+  Toon.cut('cheong_explain', { shape: 'band', face: true, at: [.53, .42] });
   const stuck = async () => { await say('…만세력이 펴지지 않습니다. 오늘은 찾을 수가 없겠습니다. (계산 엔진을 불러오지 못했어요.)', 'neutral'); return 'stuck'; };
   const sA = await birthOf('먼저 손님의 태어난 해와 달, 날과 시를 일러 주십시오.');
   if (!sA) return stuck();
@@ -3648,7 +3668,7 @@ async function pairFixed() {
   as('cheong'); await say(`${nb}의 일간은 ${stemKo(b.chart.dayMaster)}${EL_KO[rel.eB]}입니다. ${CHEONG_EL[rel.eB]}`, 'neutral');
   await say(rel.elFormal, 'think');
   await say(rel.hapFormal, rel.hap ? 'surprise' : 'neutral');
-  as('dan'); await say(rel.dayBan, 'tease');
+  as('dan'); await say(rel.dayBan, rel.day === '충' ? 'stern' : 'tease');
   await say(rel.yearBan, 'smile');
   await say(rel.fillBan, 'neutral');
   await say('궁합은 정답이 아니야. 둘이 맞춰 갈 자리를 보여 주는 거지.', 'smile');
@@ -3667,11 +3687,13 @@ async function giveLetterPair() {
   Toon.auto(false); as('cheong');
   Toon.cut('booth', { shape: 'band', at: [.5, .62], glow: true, alt: '천막의 낮은 상과 네 장의 종이' });
   await say('말로 나눈 궁합에는 값이 없습니다. 글로 남기시려면 청실홍실 한 쌍이 듭니다.', 'neutral');
+  Toon.cut('threads', { glow: true });
   as('dan'); Toon.say('실은 내가 꼬아 줄게. 홍실은 내 거, 청실은 쟤 거.', 'tease');
-  as('cheong'); await say('…편지는 제가 쓰겠습니다. 잠시 기다려 주십시오.', 'fluster');
+  Toon.cut('cheong_writing', { glow: true, sound: 'brush' });
+  as('cheong'); await say('…편지는 제가 쓰겠습니다. 잠시 기다려 주십시오.', 'neutral');
   const R = await writeReport(), L = makeLetter(R);
   renderLetter(L);
-  const env = Toon.cut('envelope', { glow: true, seal: '丹靑' });
+  const env = Toon.cut('pair_envelope', { glow: true, seal: '丹靑', sealAt: SPOT.seal2 });
   env.style.cursor = 'pointer';
   as('dan'); await say('자, 받아. 둘이 같이 열어 봐도 되고.', 'smile');
   for (;;) {
@@ -3693,20 +3715,20 @@ async function giveLetterPair() {
 /* ── 쿠키 컷: 상담이 끝나면 세 사람의 이야기가 한 토막. 음력 달마다 다음 토막이 열린다 ── */
 const COOKIES = [
   { title: '빈 종이', play() {
-    Toon.cut('desk', { narr: [['손님이 떠난 뒤.'], ['묵 선생은 상 위의 빈 한지 앞에 오래 앉아 있었다.', 'b']] });
+    Toon.cut('muk_pause', { narr: [['손님이 떠난 뒤.'], ['묵 선생은 빈 한지 앞에 오래 앉아 있었다.', 'b']] });
     Toon.cut('brush', { shape: 'band', at: [.5, .42], narr: [['붓끝이, 종이에 닿을 듯 말 듯.', 'b']] });
     Toon.narr('…그리고 붓을 내려놓았다.');
-    Toon.cut('dan_neutral', { shape: 'wide', zoom: 1.7, at: SPOT.eyes.dan_neutral, narr: [['문틈으로, 단이 보고 있었다.', 'b']] });
+    Toon.cut('dan_peek', { narr: [['문틈으로, 단이 보고 있었다.', 'b']] });
   } },
   { title: '여섯 글자', play() {
-    Toon.cut('cheong_read', { narr: [['그날 밤, 청은 만세력을 덮지 않았다.']] });
+    Toon.cut('cheong_night', { glow: true, narr: [['그날 밤, 청은 만세력을 덮지 않았다.']] });
     Toon.narr('여섯 글자 다음의 두 글자를 찾아서.');
-    Toon.cut('tea', { narr: [['새벽. 그의 곁에 식은 차 한 잔이 놓여 있었다.'], ['선생님의 찻잔이었다.', 'b']] });
+    Toon.cut('cheong_asleep', { narr: [['새벽. 그의 곁에 식은 차 한 잔이 놓여 있었다.']] });
+    Toon.narr('선생님의 찻잔이었다.');
   } },
   { title: '울지 않는 방울', play() {
-    Toon.cut('alley', { narr: [['아무도 없는 골목.']] });
-    Toon.cut('dan_smile', { shape: 'band', at: [.47, .4], narr: [['단은 혼자 방울을 흔들었다.', 'b']] });
-    Toon.cut('dan_neutral', { shape: 'sq', half: 'r', zoom: 3, at: SPOT.bell, alt: '단의 방울' });
+    Toon.cut('dan_back', { narr: [['아무도 없는 골목.'], ['단은 혼자 방울을 흔들었다.', 'b']] });
+    Toon.cut('bell', { shape: 'sq', half: 'r' });
     Toon.narr('……소리가 나지 않았다.');
   } },
 ];
