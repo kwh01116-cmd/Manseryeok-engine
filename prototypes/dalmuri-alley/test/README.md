@@ -23,6 +23,8 @@ node toon.js gunghap phone,desk             # 커플 궁합(단·청), LLM 없�
 node toon.js gunghap-llm phone,desk         # 커플 궁합, 가짜 sample로 (꼭지마다 단과 청이 번갈아)
 COOKIE=3 node toon.js gunghap phone         # 쿠키 컷 2, 3을 보려면 지난 그믐의 기록을 미리 넣는다
 CUTS=guest_feet,pair_envelope node toon.js gunghap phone   # 그 컷만 따로 찍는다 (<모드>-<크기>-cut-<이름>.png)
+BOOK=elements,months node toon.js geumeum-llm phone       # 풀이서의 그 장으로 내려가 찍는다 (<모드>-<크기>-book-<장>.png)
+DUMP=1 node playthrough.js star phone        # 편지와 풀이서 글 전체를 <모드>-<크기>-letter.txt로 (toon.js도 같다)
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.

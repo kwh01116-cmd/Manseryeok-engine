@@ -99,7 +99,13 @@ const ph = name => {
       await page.waitForSelector('#payOk', { state: 'visible' }); await shot('pay'); await page.click('#payOk');
       await page.waitForSelector('#report:not([hidden]) #view-letter:not([hidden])'); await page.waitForTimeout(300); await shot('letter');
       const rep = await page.evaluate(() => ({ text: document.querySelector('#report').dataset.plain, cls: document.querySelector('#sheet').className, calls: window.__calls || 0 }));
-      console.log(which, name, 'letter', JSON.stringify({ chars: rep.text.length, cls: rep.cls, calls: rep.calls, haoche: /하오|이오|소\.|구려|시오/.test(rep.text), banned: /대운|용신/.test(rep.text), head: rep.text.split('\n').slice(0, 5) }));
+      if (process.env.DUMP) fs.writeFileSync(`${which}-${name}-letter.txt`, rep.text);     // DUMP=1: 편지와 풀이서 글 전체
+      console.log(which, name, 'letter', JSON.stringify({ chars: rep.text.length, cls: rep.cls, calls: rep.calls, haoche: /하오|이오|소\.|구려|시오/.test(rep.text), banned: /대운|용신/.test(rep.text.split('=== 별지')[0]), book: (rep.text.split('=== 별지')[1] || '').length, head: rep.text.split('\n').slice(0, 5) }));
+      // BOOK=장,장: 풀이서의 그 장으로 내려가 찍는다
+      for (const id of (process.env.BOOK || '').split(',').filter(Boolean)) {
+        const ok = await page.evaluate(id => { const sh = document.querySelector('#sheet'), e = document.getElementById('bk-' + id); if (!e) return false; sh.scrollTop = e.offsetTop - 8; return true; }, id);
+        if (ok) { await page.waitForTimeout(250); await shot('book-' + id); }
+      }
       await page.click('#repClose');
       await page.waitForSelector('#toonLeave', { timeout: 20000 }); await readDown();
       // 컷에 쓰인 그림 순서. CUTS=이름,이름 이면 그 컷만 따로 찍는다

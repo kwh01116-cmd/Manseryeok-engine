@@ -42,7 +42,8 @@ if (require.main === module) (async () => {
       await page.waitForSelector('#report:not([hidden]) #view-letter:not([hidden])'); await page.waitForTimeout(300); await shot('8c-report');
       const rep = await page.evaluate(() => { const s = document.querySelector('#sheet'); s.scrollTop = 99999; return { text: document.querySelector('#report').dataset.plain, sw: s.scrollWidth, cw: s.clientWidth, calls: window.__calls, kept: (() => { try { return JSON.parse(localStorage.getItem('dalmuri-letters') || '[]').length; } catch (e) { return -1; } })() }; });
       await page.waitForTimeout(200); await shot('8d-report-end');
-      console.log(which, name, 'report', JSON.stringify({ chars: rep.text.length, quote: (rep.text.match(/「[^」]*」/) || [''])[0], fun: rep.text.includes('재미로 보는'), ai: rep.text.includes('AI(Claude)가'), banned: /대운|상승궁/.test(rep.text), sheetScroll: rep.sw - rep.cw, calls: rep.calls, kept: rep.kept }));
+      if (process.env.DUMP) fs.writeFileSync(`${which}-${name}-letter.txt`, rep.text);     // DUMP=1: 편지와 풀이서 글 전체
+      console.log(which, name, 'report', JSON.stringify({ chars: rep.text.length, quote: (rep.text.match(/「[^」]*」/) || [''])[0], fun: rep.text.includes('재미로 보는'), ai: rep.text.includes('AI(Claude)가'), banned: /대운|상승궁/.test(rep.text.split('=== 별지')[0]), book: (rep.text.split('=== 별지')[1] || '').length, sheetScroll: rep.sw - rep.cw, calls: rep.calls, kept: rep.kept }));
       await page.click('#repClose');
     };
     const line = async (snap) => { await page.waitForSelector('#next:not([hidden])', {timeout:40000}); if (snap) await shot(snap); await page.click('#next', {force:true}); await page.waitForTimeout(60); };
@@ -165,6 +166,7 @@ function fakeSample(mode) {
     if (stage === '풀이' && tag !== 'tarot') { const n = /세 꼭지/.test(p) ? 3 : 2; return { parts: Array.from({ length: n }, (_, i) => ({ lines: L(`가짜 ${tag} 풀이 ${i + 1}: 버거운 마음이 여기서도 보여요.`), mood: i ? 'think' : 'neutral' })), summary: { lines: L('이어 보면 숨 고르고 고르는 때예요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?'], crisis: false }; }
     if (stage === '풀이') return { cards: [0, 1, 2].map(i => ({ lines: L(`가짜 풀이 ${i + 1}: 버거운 마음이 이 자리에서 보여요. 무리하지 말라는 얘기죠.`, '자리 뜻과 엮으면 지금은 숨 고를 때예요.'), mood: i === 1 ? 'think' : 'neutral' })), summary: { lines: L('세 장을 이으면, 참는 데서 고르는 쪽으로 넘어가는 흐름이에요.', '서두르지 말고 하나씩 정리해요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?', '버티면 나아져요?'], crisis: false };
     if (stage === '궁합') return { parts: [['dan', 'tease', '가짜 궁합 1: 손님 바탕이야. 버거운 마음이 보여.'], ['cheong', 'fluster', '가짜 궁합 2: 상대의 바탕입니다.'], ['cheong', 'think', '가짜 궁합 3: 둘 사이는 서로 살리는 쪽입니다.'], ['dan', 'smile', '가짜 궁합 4: 맞물리는 데가 있어.']].map(([who, mood, l]) => ({ who, mood, lines: [l] })), summary: { who: 'dan', lines: ['둘이 맞춰 가면 돼.'], mood: 'smile' }, chips: ['언제 조심해야 해?'], crisis: false };
+    if (stage === '풀이서') { const ids = [...p.matchAll(/"id":"([a-z0-9]+)"/g)].map(m => m[1]); return { sections: ids.map(id => ({ id, text: `가짜 풀이서 ${id}: 버거운 마음을 오늘 계산에 비춰 본 풀이예요. `.repeat(4), basis: bas[0] })) }; }
     if (stage === '되묻기') return { lines: L('날짜를 딱 집어 줄 순 없어요. 다만 다가올 자리 카드는 정리하고 움직이라고 해요.'), mood: 'neutral', question: '', chips: ['정리부터 할게요'], crisis: false };
     if (stage === '레포트') {
       if (/레포트 앞부분/.test(p)) return { headline: '참던 자리에서 고르는 자리로 넘어가는 중이에요.', answer: [...bas.map(c => ({ text: '버거운 마음은 이 흐름과 맞닿아 있어요. 무리해서 버틸 일은 아니에요.', basis: c })), ...(tag === 'saju' ? [{ text: '대운이 바뀌는 해라 크게 움직여요.', basis: bas[0] }] : [])], timing: [{ text: '올해 남은 동안은 정리하는 때예요.', basis: bas[1] }, { text: '내년에는 움직여 볼 만해요.', basis: bas[2] }] };
