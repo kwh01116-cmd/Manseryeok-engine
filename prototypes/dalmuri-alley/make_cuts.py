@@ -38,6 +38,10 @@ SLOTS = {
     'dan_tease': SQ, 'dan_surprise': SQ, 'dan_serious': SQ, 'dan_pout': SQ,
     'cheong_smile': SQ, 'cheong_surprise': SQ, 'cheong_fluster': SQ, 'cheong_explain': SQ,
     'duo': LAND,        # 천막 상 뒤에 나란히 앉은 단과 청
+    # 콘티의 새 컷 (art/geumeum-storyboard.html). 넣은 뒤 index.html 대본에 컷을 잇는다
+    'dan_soft': SQ, 'cheong_quiet': SQ, 'cheong_writing': SQ,
+    'threads': LAND, 'pair_envelope': SQ, 'guest_feet': LAND, 'bell': SQ, 'dan_back': TALL,
+    'muk_grind': LAND, 'muk_pause': TALL, 'dan_peek': LAND, 'cheong_night': TALL, 'cheong_asleep': TALL,
 }
 
 

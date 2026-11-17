@@ -1,0 +1,513 @@
+<title>그믐 골목 콘티</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono&display=swap">
+<style>
+/* Layout: 한 줄로 읽는 콘티. 위에 길 탭(고정), 컷은 왼쪽 번호·모양 / 오른쪽 그림·연출·대사 두 칸, 프롬프트는 복사 단추가 달린 블록 */
+:root {
+  --bg: #f1f0ee; --surface: #ffffff; --ink: #18161d; --muted: #5f5a66; --line: #d9d6de;
+  --dan: #b3202a; --cheong: #2b4fa3; --have: #2f7d5b; --later: #8a6a1c; --code-bg: #17151d; --code-fg: #ece6d6;
+  --f-display: "Gowun Batang", "Nanum Myeongjo", "AppleMyungjo", serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1020; --surface: #171a2e; --ink: #ece6d6; --muted: #a7a3b4; --line: #2b2f4a;
+  --dan: #ff7a6b; --cheong: #8fb0ff; --have: #6fcf9c; --later: #e2b659; --code-bg: #0a0b16; --code-fg: #ece6d6; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1020; --surface: #171a2e; --ink: #ece6d6; --muted: #a7a3b4; --line: #2b2f4a;
+  --dan: #ff7a6b; --cheong: #8fb0ff; --have: #6fcf9c; --later: #e2b659; --code-bg: #0a0b16; --code-fg: #ece6d6; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.65 var(--f-body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 72px; }
+header h1 { margin: 0 0 8px; font: 700 clamp(30px, 7vw, 42px)/1.15 var(--f-display); text-wrap: balance; }
+header p { margin: 0 0 12px; max-width: 62ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+nav.paths { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 6px; margin-top: 18px; padding-block: 10px; overflow-x: auto; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.paths a { flex: 0 0 auto; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); text-decoration: none; font-size: 14px; }
+nav.paths a:hover, nav.paths a:focus-visible { border-color: var(--ink); }
+:focus-visible { outline: 2px solid var(--cheong); outline-offset: 2px; }
+section { padding-top: 34px; scroll-margin-top: 56px; }
+h2 { margin: 0 0 4px; font: 700 24px/1.3 var(--f-display); text-wrap: balance; }
+h3 { margin: 22px 0 6px; font: 700 18px/1.35 var(--f-display); }
+.lead { margin: 0 0 12px; color: var(--muted); max-width: 62ch; }
+ul.rules { margin: 0; padding-left: 20px; }
+ul.rules li { margin-bottom: 6px; }
+ol.cuts { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.cut { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.cn b { display: block; font: 600 15px/1.3 var(--f-mono); }
+.cn span { font-size: 12px; color: var(--muted); }
+.cb p { margin: 0 0 4px; }
+.tag { display: inline-block; margin-right: 6px; padding: 0 6px; border: 1px solid currentColor; border-radius: 4px; font-size: 12px; font-weight: 600; line-height: 1.6; }
+.tag.have { color: var(--have); } .tag.new { color: var(--dan); } .tag.later { color: var(--later); } .tag.crop { color: var(--muted); }
+.slot { font: 13px var(--f-mono); }
+.dir { font-size: 14px; color: var(--muted); }
+.who { margin-right: 6px; font-weight: 600; }
+.who.dan { color: var(--dan); } .who.cheong { color: var(--cheong); } .who.muk { color: var(--ink); } .who.nar { font-weight: 400; color: var(--muted); }
+.branch { margin: 8px 0 2px; padding: 10px 12px; background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; }
+.branch h4 { margin: 0 0 4px; font-size: 13px; letter-spacing: .03em; color: var(--muted); }
+.branch ul { margin: 0; padding-left: 18px; }
+.branch li { margin-bottom: 3px; }
+.tbl { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { font-size: 12px; letter-spacing: .03em; color: var(--muted); font-weight: 600; }
+td.slot { white-space: nowrap; }
+.steps { margin: 0 0 8px; padding-left: 20px; }
+.batch { margin-top: 22px; }
+.bhead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+.bhead h3 { margin: 0; }
+.bhead p { margin: 0; font-size: 13px; color: var(--muted); }
+.copy { padding: 6px 14px; border: 1px solid var(--ink); border-radius: 999px; background: var(--surface); color: var(--ink); font: 600 13px var(--f-body); cursor: pointer; }
+.copy:active { transform: translateY(1px); }
+pre.prompt { margin: 8px 0 0; padding: 14px; overflow-x: auto; background: var(--code-bg); color: var(--code-fg); border-radius: 8px; font: 12.5px/1.55 var(--f-mono); white-space: pre-wrap; word-break: break-word; }
+.attach { margin: 6px 0 0; font-size: 14px; }
+footer { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+@media (max-width: 420px) { .cut { grid-template-columns: 62px minmax(0, 1fr); gap: 10px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>그믐 골목 콘티</h1>
+    <p>혼자 온 손님은 대문 안 그믐당에서 묵 선생에게 사주를, 둘 사이를 들고 온 손님은 천막에서 단과 청에게 궁합을 본다. 컷마다 쓰는 그림, 연출, 대사와 갈래를 적었고, 새로 뽑을 그림 22장의 프롬프트는 맨 아래에 있다.</p>
+    <ul class="legend">
+      <li><span class="tag have">있음</span>지금 쓰는 그림</li>
+      <li><span class="tag new">★ 먼저</span>먼저 뽑을 새 그림</li>
+      <li><span class="tag later">☆ 나중</span>나중에 뽑을 새 그림</li>
+      <li><span class="tag crop">잘라 씀</span>있는 그림의 일부를 확대</li>
+    </ul>
+  </header>
+
+  <nav class="paths" aria-label="콘티 길">
+    <a href="#rules">그림 규칙</a><a href="#open">공통 도입</a><a href="#solo">혼자 · 사주</a><a href="#pair">둘 · 궁합</a><a href="#crisis">위급할 때</a><a href="#cookie">쿠키 컷</a><a href="#prompts">그림 프롬프트</a>
+  </nav>
+
+  <section id="rules">
+    <h2>그림 규칙</h2>
+    <ul class="rules">
+      <li><b>그림체 둘.</b> 골목과 천막(바깥)은 부드러운 채색, 대문 안 그믐당은 굵은 먹선. 단과 청도 대문 안에 있을 때는 먹선으로 그린다.</li>
+      <li><b>그림 안에 글자 없음.</b> 현판, 종이, 봉투, 밀랍은 비워 둔다. 이름, 여덟 글자, 오행 개수, 도장은 코드가 얹는다.</li>
+      <li><b>손님은 얼굴을 그리지 않는다.</b> 읽는 사람이 곧 손님이라 손, 발, 뒷모습만. 성별이 드러나지 않게.</li>
+      <li><b>크기.</b> 세로 1024×1536, 정사각 1024×1024, 가로 1536×1024.</li>
+      <li><b>같은 사람은 기준 그림을 첨부한다.</b> 단은 "붉은 옷에 방울" 첫 그림, 청은 "상투에 노란 책" 첫 그림, 묵 선생은 정면 기본 그림.</li>
+      <li><b>컷 모양.</b> 세로 큰 컷으로 공간을 열고, 대화는 정사각·가로 컷, 눈만 보이는 가로 띠는 결정적인 순간에만.</li>
+    </ul>
+  </section>
+
+  <section id="open">
+    <h2>공통 도입</h2>
+    <p class="lead">모든 손님이 지나는 길. 단이 이름을 받고, 혼자인지 둘인지 묻는다.</p>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>A1</b><span>세로 큰 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">alley</span> 골목 입구, 금줄, 청사초롱</p>
+        <p class="dir">방울 소리 "딸랑" (소리와 효과 글자)</p>
+        <p><span class="who nar">해설</span>그믐. 달이 다 지고 없는 밤.</p></div></li>
+      <li class="cut"><div class="cn"><b>A2</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">guest_feet</span> 젖은 돌길을 딛는 손님의 발 <span class="dir">(없으면 골목 위쪽 금줄을 잘라 씀)</span></p>
+        <p><span class="who nar">해설</span>앞이 보이지 않는 사람에게만, 그 소리가 들린다.</p></div></li>
+      <li class="cut"><div class="cn"><b>A3</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">booth</span> 골목 끝 천막, 빈 방석 둘 <span class="dir">(현판에 "그믐"을 코드가 얹음)</span></p>
+        <p><span class="who nar">해설</span>골목 끝, 천막 하나가 불을 켜고 있었다. / …비어 있는 줄 알았다.</p></div></li>
+      <li class="cut"><div class="cn"><b>A4</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">dan_neutral</span> 단</p>
+        <p><span class="who dan">단</span>왔네? 방울이 울리길래 누군가 했지.</p>
+        <p><span class="who dan">단</span>이름? 지어 대도 돼. 여기선 다들 그래. <span class="dir">(입력: 이름 또는 별명)</span></p></div></li>
+      <li class="cut"><div class="cn"><b>A5</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">dan_tease</span> 윙크하며 방울을 흔드는 단</p>
+        <p><span class="who dan">단</span>혼자 왔어? 아니면… 마음에 둔 사람 얘기야?</p>
+        <div class="branch"><h4>갈래</h4><ul><li>"나 혼자 일이에요" → <a href="#solo">혼자 · 사주</a></li><li>"둘 사이 일이에요 (궁합)" → <a href="#pair">둘 · 궁합</a></li></ul></div></div></li>
+    </ol>
+  </section>
+
+  <section id="solo">
+    <h2>혼자 · 그믐당 사주</h2>
+    <p class="lead">단이 듣고, 청이 찾고, 묵 선생이 읽는다. 대문을 넘는 B10부터 그림체가 먹선으로 바뀐다.</p>
+
+    <h3>1장. 듣는 사람</h3>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>B1</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">dan_speak</span> 웃으며 말하는 단</p>
+        <p><span class="who dan">단</span>자, 내려놔 봐. 여기선 무거운 거 들고 버티는 사람이 지는 거야. 뭘 들고 왔어?</p>
+        <p class="dir">입력: 돈 문제 / 사람 문제 / 일 문제 / 직접 쓰기</p>
+        <div class="branch"><h4>갈래 · 고민</h4><ul>
+          <li>돈 → <span class="tag new">★</span><span class="slot">dan_serious</span> <span class="who dan">단</span>돈이구나. 다들 그거 들고 와. 부끄러운 거 아니야.</li>
+          <li>사람 → <span class="tag new">★</span><span class="slot">dan_tease</span> + 반짝 <span class="who dan">단</span>사람이구나. 얼굴에 다 쓰여 있네. 누군지는 말 안 해도 돼.</li>
+          <li>일 → <span class="tag have">있음</span><span class="slot">dan_smile</span> <span class="who dan">단</span>일이구나. 어깨가 여기까지 올라와 있어. 좀 내려놔.</li>
+          <li>직접 쓴 고민 → AI 문진. 단이 두세 번 되묻고, 표정은 AI가 고른다: 보통·웃음·놀림·놀람(<span class="slot">dan_surprise</span> ★)·갸웃(<span class="slot">dan_serious</span> ★)·토라짐(<span class="slot">dan_pout</span> ★)</li>
+        </ul></div></div></li>
+      <li class="cut"><div class="cn"><b>B2</b><span>반폭 정사각</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">bell</span> 흔들리는 놋 방울 <span class="dir">(없으면 단 그림의 방울을 잘라 씀)</span></p>
+        <p class="dir">"딸랑"</p>
+        <p><span class="who dan">단</span>(작게) …진짜네.</p></div></li>
+    </ol>
+
+    <h3>2장. 찾는 사람</h3>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>B3</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">duo</span> 천막에 나란히 앉은 단과 청 <span class="dir">(없으면 사선으로 나눈 두 칸 + 단 ♪, 청 땀방울)</span></p>
+        <p><span class="who dan">단</span>청아, 손님이다. 책 그만 보고.</p>
+        <p><span class="who cheong">청</span>보던 게 아니라 찾던 겁니다.</p></div></li>
+      <li class="cut"><div class="cn"><b>B4</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">cheong_neutral</span> 청</p>
+        <p><span class="who cheong">청</span>태어난 해와 달, 날과 시를 일러 주십시오. 시를 모르시면 모른다고 하셔도 됩니다. <span class="dir">(입력: 생년월일)</span></p>
+        <div class="branch"><h4>갈래 · 태어난 시를 모를 때</h4><ul>
+          <li>눈만 보이는 가로 띠, 푸른 색조 → <span class="tag new">★</span><span class="slot">cheong_quiet</span> <span class="who cheong">청</span>(작게) …저도 그렇습니다.</li>
+        </ul></div></div></li>
+      <li class="cut"><div class="cn"><b>B5</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag crop">잘라 씀</span><span class="slot">cheong_read</span> 만세력을 넘기는 손</p>
+        <p class="dir">"사락"</p>
+        <p><span class="who cheong">청</span>찾았습니다. 틀림없습니다.</p></div></li>
+      <li class="cut"><div class="cn"><b>B6</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">cheong_guide</span> 손바닥으로 안쪽을 가리키는 청</p>
+        <p><span class="who cheong">청</span>선생님께서 기다리십니다. 대문으로 드시지요.</p></div></li>
+    </ol>
+
+    <h3>3장. 읽는 사람 (먹선)</h3>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>B7</b><span>세로 큰 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">gate</span> 열린 붉은 대문 <span class="dir">(현판 "그믐당"을 코드가 건다)</span></p>
+        <p><span class="who nar">해설</span>문턱을 넘자, / 모든 것이 먹으로 그은 듯 또렷해졌다.</p></div></li>
+      <li class="cut"><div class="cn"><b>B8</b><span>세로 큰 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">desk</span> 빈 한지 앞의 묵 선생, 병풍 속 달</p>
+        <p><span class="who nar">해설</span>달이 없는 골목에, 달은 하나뿐이었다. / 그의 뒤, 병풍 속에.</p>
+        <p><span class="who muk">묵 선생</span>어서 오시오.</p></div></li>
+      <li class="cut"><div class="cn"><b>B9</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">tea</span> 찻잔을 내미는 손 <span class="dir">(AI가 풀이를 쓰는 동안 이 컷이 기다림을 채운다)</span></p>
+        <p><span class="who muk">묵 선생</span>먼 길이었을 테니 차부터 드시오. 차가 식기 전에 다 말할 필요는 없소.</p></div></li>
+      <li class="cut"><div class="cn"><b>B10</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">muk_grind</span> 먹을 가는 손</p>
+        <p class="dir">"스윽, 스윽"</p>
+        <p><span class="who muk">묵 선생</span>청이 찾은 여덟 글자를 쓰리다. <span class="dir">(시를 모르면 "여섯 글자")</span></p></div></li>
+      <li class="cut"><div class="cn"><b>B11</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">brush</span> 붓과 한지 <span class="dir">(여덟 글자가 먹이 번지듯 한 자씩 나타남)</span></p>
+        <p class="dir">"사각 사각"</p>
+        <p><span class="who muk">묵 선생</span>사주가 이리 나왔소. 년주 ○○, 월주 ○○, 일주 ○○, 시주 ○○.</p>
+        <div class="branch"><h4>갈래 · 태어난 때</h4><ul>
+          <li>시를 모름 → 짚어 보는 얼굴 <span class="who muk">묵 선생</span>시를 모르니 시주는 비워 두었소. 여섯 글자로 보리다.</li>
+          <li>절기가 바뀌는 무렵 → 눈을 크게 뜬 얼굴 <span class="who muk">묵 선생</span>절기가 바뀌는 바로 그 무렵에 났구려…</li>
+          <li>옛 시절 생(서머타임 등) → 짚어 보는 얼굴 <span class="who muk">묵 선생</span>오늘은 시계의 시각 그대로 놓고 보았소.</li>
+        </ul></div></div></li>
+      <li class="cut"><div class="cn"><b>B12</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">ohaeng</span> 다섯 색 기운 <span class="dir">(개수를 코드가 얹음)</span></p>
+        <p><span class="who nar">해설</span>다섯 기운이 종이 위에서 갈라졌다.</p></div></li>
+      <li class="cut"><div class="cn"><b>B13</b><span>여러 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">muk_*</span> 묵 선생 표정 8장</p>
+        <p>풀이 세 꼭지(일간 → 오행 → 올해)와 종합, 되묻기 최대 3번. 표정은 내용에 맞춰: 차분, 다 안다는 얼굴, 옅은 미소, 눈 감고 짚어 봄, 흥미, 엄함(조심할 것), 곁눈질·꿰뚫는 눈(숨긴 마음을 짚을 때). 핵심은 눈만 보이는 가로 띠.</p>
+        <div class="branch"><h4>갈래 · AI가 없을 때</h4><ul>
+          <li>고정 대본: 일간 → 가장 많은 기운 → 없는 기운 → 올해(내년) → 단이 들은 고민 → "더 물을 것이 있소?" (재물 / 인연 / 일과 자리 / 이제 됐어요)</li>
+        </ul></div></div></li>
+      <li class="cut"><div class="cn"><b>B14</b><span>반폭 세로</span></div><div class="cb">
+        <p><span class="tag crop">잘라 씀</span><span class="slot">tea</span> 촛불</p>
+        <p><span class="who muk">묵 선생</span>말로 나눈 것엔 값이 없소. 글로 남기려면 초 한 자루가 드오.</p>
+        <p><span class="who muk">묵 선생</span>초가 다 타기 전에 쓰리다. 잠시 기다리시오.</p></div></li>
+      <li class="cut"><div class="cn"><b>B15</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">envelope</span> 밀랍 봉투 <span class="dir">(밀랍에 墨)</span></p>
+        <p><span class="who muk">묵 선생</span>받으시오. 오늘의 풀이요. 봉투를 열어 보시오.</p>
+        <p class="dir">→ 복채 "초 한 자루" (데모) → 편지(세로줄 한지, 墨 도장)</p>
+        <p><span class="who muk">묵 선생</span>사주는 먹일 뿐이오. 글씨는 그대가 쓰는 것이오.</p></div></li>
+      <li class="cut"><div class="cn"><b>B16</b><span>세로 큰 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">alley</span> 골목 (부드러운 채색으로 돌아옴)</p>
+        <p class="dir">"딸랑"</p>
+        <p><span class="who nar">해설</span>돌아보니 골목은 없었다. / 손에는 봉투 한 통.</p>
+        <p><span class="who dan">단</span>(멀리서) 다음 그믐에 또 와!</p>
+        <p class="dir">→ <a href="#cookie">쿠키 컷</a></p></div></li>
+    </ol>
+  </section>
+
+  <section id="pair">
+    <h2>둘 · 천막 궁합</h2>
+    <p class="lead">단과 청이 함께 본다. 단이 손님(홍실)을, 청이 상대(청실)를 맡는다. 성별과 상관없이 손님이 홍실이다. 대문 안으로 가지 않아서 처음부터 끝까지 부드러운 채색이다.</p>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>C1</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">duo</span> 나란히 앉은 단과 청, 단이 청을 놀린다 <span class="dir">(없으면 사선 두 칸 + 단 ♪, 청 땀방울·홍조)</span></p>
+        <p><span class="who nar">해설</span>홍실과 청실. / 둘이 함께 보는 궁합은, 이 천막에서만 본다.</p>
+        <p><span class="who dan">단</span>오, 둘 사이 일이구나. 그럼 오늘은 대문 안 가. 여기서 우리 둘이 봐.</p></div></li>
+      <li class="cut"><div class="cn"><b>C2</b><span>가로 띠</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">cheong_fluster</span> 얼굴이 붉어진 청</p>
+        <p><span class="who cheong">청</span>…저도 말입니까?</p>
+        <p><span class="who dan">단</span>방석이 왜 둘이겠어. 너는 그쪽 사람, 나는 이쪽 사람.</p></div></li>
+      <li class="cut"><div class="cn"><b>C3</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">dan_smile</span> 단</p>
+        <p><span class="who dan">단</span>어떤 사이야? 사귀는 중이야, 아직 마음만 있는 거야, 오래된 사이야?</p>
+        <div class="branch"><h4>갈래 · 사이</h4><ul>
+          <li>사귀는 중 → <span class="slot">dan_smile</span> <span class="who dan">단</span>사귀는 중이구나. 좋을 때네. 그래도 걸리는 게 있으니까 왔겠지.</li>
+          <li>아직 마음만 → <span class="tag new">★</span><span class="slot">dan_tease</span> + 반짝 <span class="who dan">단</span>아직 마음만이구나. 그게 제일 떨리지.</li>
+          <li>오래된 사이 → <span class="tag new">★</span><span class="slot">dan_serious</span> <span class="who dan">단</span>오래된 사이구나. 오래 간 만큼 쌓인 게 있겠다.</li>
+          <li>헤어진 사이 → <span class="tag new">★</span><span class="slot">dan_soft</span> <span class="who dan">단</span>헤어진 사이구나. …괜찮아, 여기선 그런 얘기 많이 해.</li>
+          <li>직접 쓴 고민 → AI 문진, 단이 두세 번 되묻는다.</li>
+        </ul></div></div></li>
+      <li class="cut"><div class="cn"><b>C4</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">cheong_explain</span> 진지하게 설명하는 청</p>
+        <p><span class="who cheong">청</span>먼저 손님의 태어난 해와 달, 날과 시를 일러 주십시오. <span class="dir">(입력)</span></p>
+        <p><span class="who cheong">청</span>그분은 어찌 부르면 되겠습니까? <span class="dir">(입력: 이름 또는 별명, 건너뛰면 "그분")</span></p>
+        <p><span class="who cheong">청</span>이제 그분의 것을 일러 주십시오. 모르는 칸은 모른다고 하셔도 됩니다. <span class="dir">(입력. 아래에 "상대가 모르는 풀이, 저장하지 않음" 안내)</span></p></div></li>
+      <li class="cut"><div class="cn"><b>C5</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag crop">잘라 씀</span><span class="slot">cheong_read</span> 만세력을 넘기는 손</p>
+        <p class="dir">"사락"</p>
+        <p><span class="who cheong">청</span>찾았습니다. 두 분 모두, 틀림없습니다.</p></div></li>
+      <li class="cut"><div class="cn"><b>C6</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">paper</span> 네 칸 한지 <span class="dir">(위는 손님, 아래는 상대의 여덟 글자를 코드가 씀)</span></p>
+        <p class="dir">"사각 사각"</p>
+        <p><span class="who cheong">청</span>위는 ○○, 아래는 ○○입니다.</p>
+        <p><span class="who dan">단</span>홍실은 내 쪽, 청실은 쟤 쪽.</p></div></li>
+      <li class="cut"><div class="cn"><b>C7</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">ring</span> 오행 고리 <span class="dir">(기운마다 손님 붉은 숫자, 상대 푸른 숫자)</span></p>
+        <p><span class="who nar">해설</span>두 사람의 다섯 기운이, 한 고리 안에 놓였다.</p></div></li>
+      <li class="cut"><div class="cn"><b>C8</b><span>여러 컷</span></div><div class="cb">
+        <p>풀이 네 꼭지: ① <span class="who dan">단</span>손님의 바탕 ② <span class="who cheong">청</span>상대의 바탕 ③ <span class="who cheong">청</span>둘 사이 ④ <span class="who dan">단</span>살면서 맞물리고 부딪히는 곳 → 단의 마무리. 말하는 사람이 바뀔 때마다 그 사람 얼굴 컷.</p>
+        <div class="branch"><h4>갈래 · 계산된 관계 (코드가 정한다)</h4><ul>
+          <li>천간합 → <span class="tag new">★</span><span class="slot">cheong_surprise</span> + 집중선 <span class="who cheong">청</span>게다가 두 분의 일간은 ○○합입니다. 처음부터 묘하게 끌리는 짝입니다. → 단 반짝</li>
+          <li>한쪽이 살림(상생) → <span class="slot">dan_smile</span> <span class="who cheong">청</span>○○ 쪽이 먼저 챙기고 북돋는 사이입니다.</li>
+          <li>한쪽이 누름(상극) → <span class="tag new">★</span><span class="slot">cheong_explain</span>, 이어 <span class="tag new">★</span><span class="slot">dan_tease</span> <span class="who dan">단</span>티격태격하겠다. 근데 그런 사이가 재밌어.</li>
+          <li>같은 기운 → <span class="slot">dan_speak</span> <span class="who dan">단</span>둘이 닮았네. 싸우면 둘 다 안 져.</li>
+          <li>일지나 띠가 충 → <span class="tag new">★</span><span class="slot">dan_serious</span> <span class="who dan">단</span>붙어 있을수록 부딪혀. 각자 시간을 꼭 지켜 줘.</li>
+          <li>둘 다 없는 기운 → <span class="slot">dan_smile</span> <span class="who dan">단</span>둘 다 목이 없네. 산책이나 화분 키우기, 같이 해 봐.</li>
+          <li>상대의 시를 모름 → 한지 아래 줄 시주 칸이 "모름"</li>
+        </ul></div>
+        <div class="branch"><h4>갈래 · AI가 없을 때</h4><ul>
+          <li>고정 대본: 단(손님 일간) → 청(상대 일간, 둘 사이, 천간합 또는 십성) → 단(일지, 띠, 채워 주는 기운) → "더 궁금한 거 있어?" (언제 조심해야 해? / 어떻게 하면 잘 지내? / 이제 됐어요)</li>
+        </ul></div></div></li>
+      <li class="cut"><div class="cn"><b>C9</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag crop">잘라 씀</span><span class="slot">booth</span> 천막의 낮은 상과 네 장의 종이</p>
+        <p><span class="who cheong">청</span>말로 나눈 궁합에는 값이 없습니다. 글로 남기시려면 청실홍실 한 쌍이 듭니다.</p></div></li>
+      <li class="cut"><div class="cn"><b>C10</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">threads</span> 홍실과 청실을 꼬는 단의 손</p>
+        <p><span class="who dan">단</span>실은 내가 꼬아 줄게. 홍실은 내 거, 청실은 쟤 거.</p></div></li>
+      <li class="cut"><div class="cn"><b>C11</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">cheong_writing</span> 붓으로 편지를 쓰는 청 <span class="dir">(없으면 당황한 청 얼굴)</span></p>
+        <p><span class="who cheong">청</span>…편지는 제가 쓰겠습니다. 잠시 기다려 주십시오.</p></div></li>
+      <li class="cut"><div class="cn"><b>C12</b><span>정사각</span></div><div class="cb">
+        <p><span class="tag new">★ 먼저</span><span class="slot">pair_envelope</span> 홍실과 청실로 묶은 봉투 <span class="dir">(밀랍에 丹靑)</span></p>
+        <p><span class="who dan">단</span>자, 받아. 둘이 같이 열어 봐도 되고.</p>
+        <p class="dir">→ 복채 "청실홍실 한 쌍" (데모) → 편지(청이 쓰고 단이 추신, 붉고 푸른 두 줄 테두리)</p></div></li>
+      <li class="cut"><div class="cn"><b>C13</b><span>세로 큰 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">alley</span> 골목</p>
+        <p><span class="who nar">해설</span>돌아보니 골목은 없었다. / 손에는 홍실과 청실로 묶은 봉투 한 통.</p>
+        <p><span class="who dan">단</span>(멀리서) 다음 그믐에 또 와! 둘이 같이 오면 더 좋고.</p>
+        <p class="dir">→ <a href="#cookie">쿠키 컷</a></p></div></li>
+    </ol>
+  </section>
+
+  <section id="crisis">
+    <h2>위급할 때 (모든 길)</h2>
+    <p class="lead">고민이나 되묻기에 스스로를 해치려는 말이 나오면, 상담사는 역할을 내려놓는다. 그림 없이 흰 안내 상자만 쓴다.</p>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>D1</b><span>안내 상자</span></div><div class="cb">
+        <p>"잠깐, 방울(붓)은 내려놓을게요…" → 자살예방 상담전화 109 안내 → "골목으로 나갈게요" → 골목 고르기. 새 그림 필요 없음.</p></div></li>
+    </ol>
+  </section>
+
+  <section id="cookie">
+    <h2>쿠키 컷</h2>
+    <p class="lead">상담이 끝나면 세 사람의 이야기가 한 토막씩. 음력 그믐마다 다음 토막이 열린다. 그믐당 안의 장면은 먹선이다.</p>
+
+    <h3>1. 빈 종이 (먹선)</h3>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>E1-1</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">muk_pause</span> 빈 한지 앞에서 붓을 든 채 멈춘 묵 선생, 옆모습 <span class="dir">(없으면 desk)</span></p>
+        <p><span class="who nar">해설</span>손님이 떠난 뒤. / 묵 선생은 상 위의 빈 한지 앞에 오래 앉아 있었다.</p></div></li>
+      <li class="cut"><div class="cn"><b>E1-2</b><span>가로 컷</span></div><div class="cb">
+        <p><span class="tag crop">잘라 씀</span><span class="slot">brush</span> 붓끝</p>
+        <p><span class="who nar">해설</span>붓끝이, 종이에 닿을 듯 말 듯. / …그리고 붓을 내려놓았다.</p></div></li>
+      <li class="cut"><div class="cn"><b>E1-3</b><span>가로 띠</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">dan_peek</span> 문틈 사이 단의 한쪽 눈 (먹선) <span class="dir">(없으면 단 눈 확대)</span></p>
+        <p><span class="who nar">해설</span>문틈으로, 단이 보고 있었다.</p></div></li>
+    </ol>
+
+    <h3>2. 여섯 글자 (먹선)</h3>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>E2-1</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">cheong_night</span> 촛불 하나 아래 만세력을 넘기는 청 (먹선)</p>
+        <p><span class="who nar">해설</span>그날 밤, 청은 만세력을 덮지 않았다. / 여섯 글자 다음의 두 글자를 찾아서.</p></div></li>
+      <li class="cut"><div class="cn"><b>E2-2</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">cheong_asleep</span> 새벽, 책 위에 엎드려 잠든 청, 곁에 식은 찻잔 (먹선)</p>
+        <p><span class="who nar">해설</span>새벽. 그의 곁에 식은 차 한 잔이 놓여 있었다. / 선생님의 찻잔이었다.</p></div></li>
+    </ol>
+
+    <h3>3. 울지 않는 방울 (부드러운 채색)</h3>
+    <ol class="cuts">
+      <li class="cut"><div class="cn"><b>E3-1</b><span>세로 큰 컷</span></div><div class="cb">
+        <p><span class="tag have">있음</span><span class="slot">alley</span> <span class="who nar">해설</span>아무도 없는 골목.</p></div></li>
+      <li class="cut"><div class="cn"><b>E3-2</b><span>세로 컷</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">dan_back</span> 빈 골목 한가운데 선 단의 뒷모습, 방울을 든 손</p>
+        <p><span class="who nar">해설</span>단은 혼자 방울을 흔들었다.</p></div></li>
+      <li class="cut"><div class="cn"><b>E3-3</b><span>반폭 정사각</span></div><div class="cb">
+        <p><span class="tag later">☆ 나중</span><span class="slot">bell</span> 방울 (효과음 없이)</p>
+        <p><span class="who nar">해설</span>……소리가 나지 않았다.</p></div></li>
+    </ol>
+
+    <h3>다음 토막 후보 (그림은 나중에)</h3>
+    <ul class="rules">
+      <li><b>4. 하얀 방석</b>: 아무도 앉지 않는 흰 방석에, 아침마다 온기가 남아 있다. 비어 있는 하양의 자리.</li>
+      <li><b>5. 안 될 사주</b>: 묵 선생 앞으로 온 오래된 편지. 그가 "안 될 사주"라고 단정했던 그 사람의 이름이 적혀 있다.</li>
+      <li><b>6. 처음 울린 날</b>: 단이 처음 골목에 온 밤. 끝내 말하지 못한 물음, 그리고 묵 선생이 건넨 방울.</li>
+    </ul>
+  </section>
+
+  <section id="prompts">
+    <h2>그림 프롬프트</h2>
+    <p class="lead">새 그림 22장. 먼저(★) 13장이면 표정과 궁합 장면이 거의 다 채워지고, 나중(☆) 9장은 도입과 쿠키 컷을 살린다.</p>
+    <ol class="steps">
+      <li>배치마다 ChatGPT 대화를 새로 열고, 적힌 기준 그림을 첨부한 뒤 블록을 통째로 붙여 넣는다.</li>
+      <li>한 장 나올 때마다 "다음". 고칠 점이 있으면 "다음" 대신 고칠 점을 말한다.</li>
+      <li>받은 그림은 배치별로, 번호 순서대로 보내 주면 칸 이름에 맞춰 넣는다.</li>
+    </ol>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>칸 이름</th><th>배치</th><th>순서</th><th>쓰이는 컷</th></tr></thead>
+        <tbody>
+          <tr><td class="slot">dan_tease</td><td>1 단</td><td>★</td><td>A5, B1 사람, C3 마음만, 상극</td></tr>
+          <tr><td class="slot">dan_surprise</td><td>1 단</td><td>★</td><td>문진의 놀람</td></tr>
+          <tr><td class="slot">dan_serious</td><td>1 단</td><td>★</td><td>B1 돈, C3 오래된 사이, 충</td></tr>
+          <tr><td class="slot">dan_pout</td><td>1 단</td><td>★</td><td>문진의 토라짐</td></tr>
+          <tr><td class="slot">dan_soft</td><td>1 단</td><td>★</td><td>C3 헤어진 사이</td></tr>
+          <tr><td class="slot">threads</td><td>1 단</td><td>★</td><td>C10</td></tr>
+          <tr><td class="slot">dan_back</td><td>1 단</td><td>☆</td><td>쿠키 3</td></tr>
+          <tr><td class="slot">bell</td><td>1 단</td><td>☆</td><td>B2, 쿠키 3</td></tr>
+          <tr><td class="slot">cheong_smile</td><td>2 청</td><td>★</td><td>청의 웃음</td></tr>
+          <tr><td class="slot">cheong_surprise</td><td>2 청</td><td>★</td><td>천간합</td></tr>
+          <tr><td class="slot">cheong_fluster</td><td>2 청</td><td>★</td><td>B3, C2, C11</td></tr>
+          <tr><td class="slot">cheong_explain</td><td>2 청</td><td>★</td><td>C4, 상극</td></tr>
+          <tr><td class="slot">cheong_quiet</td><td>2 청</td><td>★</td><td>B4 시를 모를 때</td></tr>
+          <tr><td class="slot">cheong_writing</td><td>2 청</td><td>☆</td><td>C11</td></tr>
+          <tr><td class="slot">duo</td><td>3 둘과 소품</td><td>★</td><td>B3, C1</td></tr>
+          <tr><td class="slot">pair_envelope</td><td>3 둘과 소품</td><td>★</td><td>C12</td></tr>
+          <tr><td class="slot">guest_feet</td><td>3 둘과 소품</td><td>☆</td><td>A2</td></tr>
+          <tr><td class="slot">muk_grind</td><td>4 그믐당</td><td>☆</td><td>B10</td></tr>
+          <tr><td class="slot">muk_pause</td><td>4 그믐당</td><td>☆</td><td>쿠키 1</td></tr>
+          <tr><td class="slot">dan_peek</td><td>4 그믐당</td><td>☆</td><td>쿠키 1</td></tr>
+          <tr><td class="slot">cheong_night</td><td>4 그믐당</td><td>☆</td><td>쿠키 2</td></tr>
+          <tr><td class="slot">cheong_asleep</td><td>4 그믐당</td><td>☆</td><td>쿠키 2</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="batch">
+      <div class="bhead"><h3>배치 1 · 단 (8장)</h3><button class="copy" type="button" data-copy="p1" id="c1">복사</button></div>
+      <p class="attach">첨부: 단의 첫 그림 (붉은 옷에 방울, 커튼 배경)</p>
+<pre class="prompt" id="p1">I will ask for 8 images of one existing character. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage or character sheet.
+- After each image, stop and wait. Make the next one only when I say "다음". If I give feedback instead, redo the same numbered image.
+- Keep exactly the same face, hair, clothes and art style as the attached reference image.
+- No text, letters or watermark anywhere.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, warm lantern and candle light against a deep navy night, rich traditional Korean details (dancheong patterns, hanji, brass, silk), gentle rim light.
+
+CHARACTER (attached reference)
+Dan: a Korean woman in her twenties, long dark wavy hair half-tied with a red ribbon, sly playful eyes, white jeogori with a black sash under a red outer robe with colorful cloud-pattern sleeves, holding a small brass bell on a red cord.
+
+DEFAULT for items 1-5: square 1024x1024, bust shot, the same framing and background as the reference (dark navy curtain with blank paper talismans, lanterns on both sides, painted eaves).
+
+1. dan_tease: playful grin, one eye winking, head tilted, ringing the bell beside her face.
+2. dan_surprise: eyes wide, eyebrows up, mouth slightly open, one hand near her mouth.
+3. dan_serious: no smile, calm attentive eyes, leaning slightly forward, listening closely.
+4. dan_pout: cheeks slightly puffed, looking away to the side, arms crossed.
+5. dan_soft: a gentle comforting half-smile, soft and slightly sad eyes, head a little bowed.
+6. threads (landscape 1536x1024): close-up of her hands only, red sleeves, twisting one red silk thread and one blue silk thread together above a low wooden table, candle light. No face.
+7. dan_back (portrait 1024x1536): seen from behind, standing alone in the middle of an empty wet stone hanok alley at night under red-and-blue silk lanterns, raising the brass bell on its red cord. Face not visible.
+8. bell (square 1024x1024): extreme close-up of the small brass bell hanging from a red cord, slightly swaying, dark navy background with soft lantern bokeh. No hands, no person.
+
+Start with image 1 now.</pre>
+    </div>
+
+    <div class="batch">
+      <div class="bhead"><h3>배치 2 · 청 (6장)</h3><button class="copy" type="button" data-copy="p2" id="c2">복사</button></div>
+      <p class="attach">첨부: 청의 첫 그림 (상투에 노란 책, 커튼 배경)</p>
+<pre class="prompt" id="p2">I will ask for 6 images of one existing character. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage or character sheet.
+- After each image, stop and wait. Make the next one only when I say "다음". If I give feedback instead, redo the same numbered image.
+- Keep exactly the same face, hair, clothes and art style as the attached reference image.
+- No text, letters or watermark anywhere.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, warm lantern and candle light against a deep navy night, rich traditional Korean details (dancheong patterns, hanji, brass, silk), gentle rim light.
+
+CHARACTER (attached reference)
+Cheong: a Korean man in his twenties, hair in a topknot held by a wooden pin with a few loose strands, calm earnest face, dark indigo robe with cloud and key-fret patterns over a white collar with red lining, holding a yellow thread-bound book.
+
+DEFAULT for items 1-5: square 1024x1024, bust shot, the same framing and background as the reference.
+
+1. cheong_smile: a small shy smile, eyes softened, the book held to his chest.
+2. cheong_surprise: eyes wide, leaning back slightly, the book clutched tightly.
+3. cheong_fluster: face flushed red, eyes looking away, one hand raised awkwardly.
+4. cheong_explain: serious, mouth open mid-sentence, one open hand toward the viewer.
+5. cheong_quiet: eyes lowered, a quiet lonely expression, lips closed, the book resting against his chest. Slightly cooler light.
+6. cheong_writing (square 1024x1024): seen from slightly above, sitting at the low wooden table of a street booth, writing on a sheet of hanji with an ink brush, focused. The paper stays blank.
+
+Start with image 1 now.</pre>
+    </div>
+
+    <div class="batch">
+      <div class="bhead"><h3>배치 3 · 둘과 소품 (3장)</h3><button class="copy" type="button" data-copy="p3" id="c3">복사</button></div>
+      <p class="attach">첨부: 단의 첫 그림, 청의 첫 그림, 천막 그림 (파란 차양, 빈 방석 둘)</p>
+<pre class="prompt" id="p3">I will ask for 3 images. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid or collage.
+- After each image, stop and wait. Make the next one only when I say "다음". If I give feedback instead, redo the same numbered image.
+- Characters must match the attached references exactly (faces, hair, clothes). The booth must match the attached booth image.
+- No text, letters or watermark anywhere. Signs, papers and seals stay blank.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, warm lantern and candle light against a deep navy night, rich traditional Korean details (dancheong patterns, hanji, brass, silk), gentle rim light.
+
+CHARACTERS (attached references)
+Dan: the woman in the red robe with a small brass bell on a red cord.
+Cheong: the young man with a topknot and a dark indigo robe holding a yellow book.
+
+1. duo (landscape 1536x1024): Dan and Cheong sitting side by side on cushions behind the low wooden table of the street booth (blue canopy with painted trim, red-and-blue lanterns, four blank paper slips and a yellow book on the table). Dan leans toward Cheong, teasing him with a grin; Cheong looks embarrassed. Warm candle light.
+2. pair_envelope (square 1024x1024): top view of a sealed hanji envelope tied with one red silk cord and one blue silk cord twisted together, a blank red wax seal in the center, on a dark wooden table beside a brass candle holder.
+3. guest_feet (landscape 1536x1024): low angle of a person's feet in plain sneakers stepping onto a wet stone path at night, a straw rope with white paper strips hanging above, lantern reflections in the puddles. Only feet and lower legs; gender not visible.
+
+Start with image 1 now.</pre>
+    </div>
+
+    <div class="batch">
+      <div class="bhead"><h3>배치 4 · 그믐당 안, 먹선 (5장)</h3><button class="copy" type="button" data-copy="p4" id="c4">복사</button></div>
+      <p class="attach">첨부: 묵 선생 정면 기본 그림, 단의 첫 그림, 청의 첫 그림</p>
+<pre class="prompt" id="p4">I will ask for 5 images. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid or collage.
+- After each image, stop and wait. Make the next one only when I say "다음". If I give feedback instead, redo the same numbered image.
+- Characters must keep the faces, hair and clothes of the attached references, but draw everyone in the STYLE below, even where a reference is painterly.
+- No text, letters or watermark anywhere. Papers stay blank.
+
+STYLE
+Korean webtoon illustration with bold confident ink outlines and flat cel shading, saturated traditional palette (crimson, indigo, ochre, bone white, ink black), warm candle light, dense traditional Korean patterns (dancheong, folk painting). This is the inside of an old hanok house at night.
+
+CHARACTERS (attached references)
+Muk: a Korean man in his late forties, hair tied back in a low ponytail, mustache and short goatee, sharp but kind eyes, black durumagi over white hanbok with a red cord knot at the chest.
+Dan: the woman in the red robe with a red hair ribbon and a brass bell.
+Cheong: the young man with a topknot and a dark indigo robe holding a yellow book.
+
+1. muk_grind (landscape 1536x1024): close-up of Muk's hands in black sleeves grinding an ink stick on an inkstone, candle light, a blank sheet of hanji beside it.
+2. muk_pause (portrait 1024x1536): side view of Muk sitting at his low desk before a blank sheet of hanji, holding a brush in the air without writing, a folding screen with a painted full moon behind him.
+3. dan_peek (landscape 1536x1024): a narrow gap between two paper-lattice doors; through it only one of Dan's eyes and a strand of hair with a red ribbon are visible, peeking in.
+4. cheong_night (portrait 1024x1536): Cheong in a small side room at night, turning the pages of the yellow book by a single candle, tired eyes.
+5. cheong_asleep (portrait 1024x1536): dawn, pale blue light through paper doors, Cheong asleep with his head on the open book, a celadon tea cup with no steam beside him, the candle burned down.
+
+Start with image 1 now.</pre>
+    </div>
+  </section>
+
+  <footer>그림이 들어오면 칸 이름에 맞춰 바꿔 넣는다. 기호로 대신하던 표정은 받은 그림으로 바뀌고, ☆ 컷은 콘티의 자리에 새로 들어간다.</footer>
+</div>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pre = document.getElementById(btn.dataset.copy);
+    const done = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = '복사'; }, 2600); };
+    const selectAll = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); done('선택해 뒀어요'); };
+    try { navigator.clipboard.writeText(pre.textContent).then(() => done('복사했어요'), selectAll); } catch (e) { selectAll(); }
+  });
+});
+</script>
