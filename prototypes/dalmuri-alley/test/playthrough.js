@@ -4,7 +4,7 @@ const fs = require('fs');
 // lips-<부스>: 말하는 구간을 연속 캡처해 입과 몸의 움직임을 본다
 const which = process.argv[2] || 'tarot', booth = which.startsWith('lips') ? (which.split('-')[1] || 'tarot') : which.startsWith('tarot') ? 'tarot' : which.split('-')[0], sizes = (process.argv[3] || 'phone,desk').split(',');
 const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
-(async () => {
+if (require.main === module) (async () => {
   const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY, bypass: '127.0.0.1,localhost' } : undefined;
   const browser = await chromium.launch({ proxy, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   for (const name of sizes) {
@@ -49,6 +49,8 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
     try {
     await page.goto('http://127.0.0.1:8765/test/page.html');
     await page.waitForSelector('.loading.done', {timeout: 30000});
+    await page.waitForSelector('#hub:not([hidden])', {timeout: 30000}); await page.waitForTimeout(600); await shot('0-hub');
+    await page.click('.hub-card[data-id="pocha"]');     // 골목 고르기 → 포차 골목
     await page.waitForTimeout(1500); await shot('0-intro');
     await page.waitForSelector('#alleyUi:not([hidden])', {timeout: 60000}); await page.waitForTimeout(800); await shot('1-alley');
     if (booth !== 'tarot') { await page.click(booth === 'saju' ? '#prev' : '#nextBooth'); await page.waitForTimeout(3000); await shot('1b-focus'); }
@@ -144,6 +146,8 @@ const SZ = { phone: {width:400,height:780}, desk: {width:1280,height:720} };
   await browser.close();
 })();
 
+module.exports = { fakeSample };
+
 // 페이지에 넣는 가짜 window.claude. 지연 후 단계에 맞는 JSON을 돌려준다
 function fakeSample(mode) {
   window.__calls = 0;
@@ -156,7 +160,7 @@ function fakeSample(mode) {
       return { lines: L(`버겁다는 말이 먼저 나오네요. 그만큼 오래 참았다는 거죠. (문진 ${turn})`), mood: 'think', question: turn < 3 ? (turn === 1 ? '버거운 게 일 자체예요, 사람이에요?' : '옮긴다면 뭐가 제일 겁나요?') : '', chips: ['일이 너무 많아요', '사람이 힘들어요', '둘 다요'], crisis: false };
     }
     const sign = (p.match(/태양 별자리: (\S+)/) || [])[1];
-    const tag = /사주 부스/.test(p) ? 'saju' : /별자리 부스/.test(p) ? 'star' : 'tarot';
+    const tag = /사주 (부스|집)/.test(p) ? 'saju' : /별자리 부스/.test(p) ? 'star' : 'tarot';
     const bas = tag === 'saju' ? ['일주 · 일간', '오행 개수', '세운 · 십성'] : tag === 'star' ? [`태양 ${sign} · 원소`, `태양 ${sign}`, '지금 해 · 원소'] : cards;
     if (stage === '풀이' && tag !== 'tarot') { const n = /세 꼭지/.test(p) ? 3 : 2; return { parts: Array.from({ length: n }, (_, i) => ({ lines: L(`가짜 ${tag} 풀이 ${i + 1}: 버거운 마음이 여기서도 보여요.`), mood: i ? 'think' : 'neutral' })), summary: { lines: L('이어 보면 숨 고르고 고르는 때예요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?'], crisis: false }; }
     if (stage === '풀이') return { cards: [0, 1, 2].map(i => ({ lines: L(`가짜 풀이 ${i + 1}: 버거운 마음이 이 자리에서 보여요. 무리하지 말라는 얘기죠.`, '자리 뜻과 엮으면 지금은 숨 고를 때예요.'), mood: i === 1 ? 'think' : 'neutral' })), summary: { lines: L('세 장을 이으면, 참는 데서 고르는 쪽으로 넘어가는 흐름이에요.', '서두르지 말고 하나씩 정리해요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?', '버티면 나아져요?'], crisis: false };

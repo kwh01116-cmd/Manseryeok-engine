@@ -15,6 +15,10 @@ node playthrough.js tarot-deny phone        # 첫 호출이 not_granted로 거�
 node playthrough.js saju-llm desk,phone     # 가짜 sample로 사주 대화 → 꼭지 풀이 → 되묻기 → 편지 (금지어 섞인 항목이 걸러지는지)
 node playthrough.js star-llm desk,phone     # 별자리 같은 경로
 node playthrough.js lips-tarot phone        # 말하는 구간 연속 캡처 → lips-tarot-phone-burst.png (lips-saju, lips-star)
+node toon.js geumeum phone,desk             # 그믐 골목(웹툰 컷) 고정 대본: 골목 고르기 → 컷 → 편지 → 골목 고르기
+node toon.js geumeum-llm phone,desk         # 같은 길을 가짜 sample로 (문진, 풀이, 되묻기, 편지)
+node toon.js geumeum-crisis phone           # 위급한 말 → 역할을 벗은 109 안내 → 골목 고르기 (LLM 호출 0번)
+node toon.js hub phone                      # 골목 고르기 ↔ 포차 골목 오가기
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.
@@ -27,3 +31,6 @@ node playthrough.js lips-tarot phone        # 말하는 구간 연속 캡처 →
 - 대사 한 줄을 넘길 때는 `#next`가 보일 때까지 기다린 뒤 누른다. 타이핑 중에 누르면 줄이 밀린다.
 - 모든 모드는 봉투 → 복채(데모) → 편지 → 골목 → 받은 편지함에서 다시 열기까지 간다. 출력의 `kept`는 저장된 편지 수, `banned`는 편지에 "대운/상승궁"이 들어갔는지 (고정 별자리 편지는 없음).
 - `lips-*`는 페이지의 rAF와 setTimeout을 40배 느리게 돌려 캡처 한 장이 페이지 시간 약 75ms가 되게 한다. 붙인 그림에서 입 부분만 잘라 크게 봐야 보인다.
+- `playthrough.js`의 모든 모드는 골목 고르기 화면에서 포차 골목 카드를 누르고 시작한다.
+- `toon.js`는 `img/gm_*.webp`가 없으면 그 자리에 이름이 적힌 빈 그림을 넣어 화면 짜임만 본다 (출력에 몇 장을 대신했는지 나온다). 한 화면씩 내려가며 `<모드>-<크기>-<번호>.png`로 찍는다.
+- 포차 골목 테스트의 콘솔 오류 `404`는 그믐 골목 카드가 `img/gm_alley.webp`가 있는지 알아보는 요청이다. 그림을 넣으면 사라진다.
