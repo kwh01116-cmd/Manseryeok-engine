@@ -87,7 +87,7 @@ const ph = name => {
         else await page.click('#toonOpts > .opt');
         await page.waitForTimeout(350);
       }
-      await page.click('#envOpen');
+      await readDown(); await page.click('#envOpen');
       await page.waitForSelector('#payOk', { state: 'visible' }); await shot('pay'); await page.click('#payOk');
       await page.waitForSelector('#report:not([hidden]) #view-letter:not([hidden])'); await page.waitForTimeout(300); await shot('letter');
       const rep = await page.evaluate(() => ({ text: document.querySelector('#report').dataset.plain, cls: document.querySelector('#sheet').className, calls: window.__calls || 0 }));
