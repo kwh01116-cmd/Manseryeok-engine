@@ -3023,16 +3023,16 @@ const GM = {
 };
 const GM_OPT = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'dan_soft', 'cheong_smile', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'cheong_quiet',
   'cheong_writing', 'duo', 'threads', 'pair_envelope', 'guest_feet', 'bell', 'dan_back', 'muk_grind', 'muk_pause', 'dan_peek', 'cheong_night', 'cheong_asleep']);
-// 콘티의 새 컷 가운데 받은 것 (22장 중 20장. 웃는 청, 먹 가는 손은 아직이라 대신하거나 건너뛴다)
-const GM_EXTRA = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'dan_soft', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'cheong_quiet',
-  'cheong_writing', 'duo', 'threads', 'pair_envelope', 'guest_feet', 'bell', 'dan_back', 'muk_pause', 'dan_peek', 'cheong_night', 'cheong_asleep']);
+// 콘티의 새 컷 가운데 받은 것 (2026-11-17: 22장 모두). 그림을 더 받으면 여기에 이름을 더한다
+const GM_EXTRA = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'dan_soft', 'cheong_smile', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'cheong_quiet',
+  'cheong_writing', 'duo', 'threads', 'pair_envelope', 'guest_feet', 'bell', 'dan_back', 'muk_grind', 'muk_pause', 'dan_peek', 'cheong_night', 'cheong_asleep']);
 const gmHas = n => GM_EXTRA.has(n);
 const GM_FIRST = ['alley', 'guest_feet', 'booth', 'dan_neutral', 'dan_tease', 'dan_speak'];     // 이것만 받고 시작한다. 나머지는 읽는 동안 받는다
 // 그림 안의 자리 (그림 너비·높이에 대한 비). 그림을 바꾸면 여기와 OHAENG, RING만 다시 맞춘다
 const SPOT = {
   eyes: { dan_neutral: [.5, .265], dan_speak: [.5, .265], dan_smile: [.47, .27], cheong_neutral: [.52, .3], cheong_read: [.48, .3], cheong_guide: [.5, .29], muk: [.5, .36], dan: [.5, .27], cheong: [.5, .3],
     dan_tease: [.55, .3], dan_surprise: [.53, .3], dan_serious: [.53, .3], dan_pout: [.52, .3], dan_soft: [.52, .31],
-    cheong_surprise: [.53, .3], cheong_fluster: [.55, .3], cheong_explain: [.53, .3], cheong_quiet: [.53, .3], cheong_writing: [.5, .26] },
+    cheong_smile: [.52, .31], cheong_surprise: [.53, .3], cheong_fluster: [.55, .3], cheong_explain: [.53, .3], cheong_quiet: [.53, .3], cheong_writing: [.5, .26] },
   bell: [.645, .68], book: [.63, .8], candle: [.06, .4],
   ink: [.07, .58, .59, .32],          // brush: 손과 소매가 가리지 않는 종이 아래쪽 (왼쪽, 위, 너비, 높이)
   paper2: [[.07, .3, .86, .2], [.07, .56, .86, .2]],     // paper: 위는 손님, 아래는 상대
@@ -3056,7 +3056,7 @@ const SPEAKERS = {
     soft: [{ want: 'dan_soft', img: 'dan_smile' }],
   } },
   cheong: { name: '청', faces: {
-    neutral: ['cheong_neutral', { want: 'cheong_explain', img: 'cheong_neutral' }], smile: [{ want: 'cheong_smile', img: 'cheong_guide' }],
+    neutral: ['cheong_neutral', { want: 'cheong_explain', img: 'cheong_neutral' }], smile: [{ want: 'cheong_smile', img: 'cheong_guide' }, 'cheong_guide'],
     think: [{ img: 'cheong_read', fx: 'focus' }, 'cheong_read'], surprise: [{ want: 'cheong_surprise', img: 'cheong_neutral', fx: 'shock' }],
     fluster: [{ want: 'cheong_fluster', img: 'cheong_neutral', fx: ['sweat', 'blush'] }], stern: [{ want: 'cheong_explain', img: 'cheong_neutral', tone: 'cold' }],
     tease: [{ want: 'cheong_fluster', img: 'cheong_neutral', fx: 'sweat' }], sly: ['cheong_neutral'],
@@ -3365,7 +3365,7 @@ async function geumeumSession() {
   Toon.cut('tea', { glow: true });
   await say('먼 길이었을 테니 차부터 드시오. 차가 식기 전에 다 말할 필요는 없소.', 'calm');
   const c = s.chart, names = s.pillars.filter(([, p]) => p).reverse().map(([n, p]) => `${n}주 ${p.hangul}`).join(', ');
-  if (gmHas('muk_grind')) Toon.cut('muk_grind', { sfx: ['스윽 스윽', 8, 12, 'ink'] });
+  if (gmHas('muk_grind')) Toon.cut('muk_grind', { glow: true, sfx: ['스윽 스윽', 48, 68, 'ink'] });     // 효과 글자는 밝은 한지 위에
   await say(`청이 찾은 ${s.input.known ? '여덟' : '여섯'} 글자를 쓰리다.`, 'calm');
   Toon.cut('brush', { ink: s, glow: true, sound: 'brush', sfx: ['사각 사각', 7, 34, 'ink'] });
   await say(`사주가 이리 나왔소. ${names}.`, 'calm');
