@@ -160,10 +160,11 @@ function fakeSample(mode) {
       return { lines: L(`버겁다는 말이 먼저 나오네요. 그만큼 오래 참았다는 거죠. (문진 ${turn})`), mood: 'think', question: turn < 3 ? (turn === 1 ? '버거운 게 일 자체예요, 사람이에요?' : '옮긴다면 뭐가 제일 겁나요?') : '', chips: ['일이 너무 많아요', '사람이 힘들어요', '둘 다요'], crisis: false };
     }
     const sign = (p.match(/태양 별자리: (\S+)/) || [])[1];
-    const tag = /사주 (부스|집)/.test(p) ? 'saju' : /별자리 부스/.test(p) ? 'star' : 'tarot';
-    const bas = tag === 'saju' ? ['일주 · 일간', '오행 개수', '세운 · 십성'] : tag === 'star' ? [`태양 ${sign} · 원소`, `태양 ${sign}`, '지금 해 · 원소'] : cards;
+    const tag = /함께 궁합을 보는/.test(p) ? 'pair' : /사주 (부스|집)/.test(p) ? 'saju' : /별자리 부스/.test(p) ? 'star' : 'tarot';
+    const bas = tag === 'pair' ? ['일간 관계 · 금·목', '일지 · 진·유', '띠 · 말·쥐'] : tag === 'saju' ? ['일주 · 일간', '오행 개수', '세운 · 십성'] : tag === 'star' ? [`태양 ${sign} · 원소`, `태양 ${sign}`, '지금 해 · 원소'] : cards;
     if (stage === '풀이' && tag !== 'tarot') { const n = /세 꼭지/.test(p) ? 3 : 2; return { parts: Array.from({ length: n }, (_, i) => ({ lines: L(`가짜 ${tag} 풀이 ${i + 1}: 버거운 마음이 여기서도 보여요.`), mood: i ? 'think' : 'neutral' })), summary: { lines: L('이어 보면 숨 고르고 고르는 때예요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?'], crisis: false }; }
     if (stage === '풀이') return { cards: [0, 1, 2].map(i => ({ lines: L(`가짜 풀이 ${i + 1}: 버거운 마음이 이 자리에서 보여요. 무리하지 말라는 얘기죠.`, '자리 뜻과 엮으면 지금은 숨 고를 때예요.'), mood: i === 1 ? 'think' : 'neutral' })), summary: { lines: L('세 장을 이으면, 참는 데서 고르는 쪽으로 넘어가는 흐름이에요.', '서두르지 말고 하나씩 정리해요.'), mood: 'smile' }, chips: ['언제 옮기면 좋아요?', '버티면 나아져요?'], crisis: false };
+    if (stage === '궁합') return { parts: [['dan', 'tease', '가짜 궁합 1: 손님 바탕이야. 버거운 마음이 보여.'], ['cheong', 'fluster', '가짜 궁합 2: 상대의 바탕입니다.'], ['cheong', 'think', '가짜 궁합 3: 둘 사이는 서로 살리는 쪽입니다.'], ['dan', 'smile', '가짜 궁합 4: 맞물리는 데가 있어.']].map(([who, mood, l]) => ({ who, mood, lines: [l] })), summary: { who: 'dan', lines: ['둘이 맞춰 가면 돼.'], mood: 'smile' }, chips: ['언제 조심해야 해?'], crisis: false };
     if (stage === '되묻기') return { lines: L('날짜를 딱 집어 줄 순 없어요. 다만 다가올 자리 카드는 정리하고 움직이라고 해요.'), mood: 'neutral', question: '', chips: ['정리부터 할게요'], crisis: false };
     if (stage === '레포트') {
       if (/레포트 앞부분/.test(p)) return { headline: '참던 자리에서 고르는 자리로 넘어가는 중이에요.', answer: [...bas.map(c => ({ text: '버거운 마음은 이 흐름과 맞닿아 있어요. 무리해서 버틸 일은 아니에요.', basis: c })), ...(tag === 'saju' ? [{ text: '대운이 바뀌는 해라 크게 움직여요.', basis: bas[0] }] : [])], timing: [{ text: '올해 남은 동안은 정리하는 때예요.', basis: bas[1] }, { text: '내년에는 움직여 볼 만해요.', basis: bas[2] }] };

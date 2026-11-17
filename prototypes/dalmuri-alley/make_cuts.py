@@ -25,6 +25,8 @@ SLOTS = {
     'ohaeng': TALL,     # 다섯 색 기운
     'envelope': SQ,     # 밀랍으로 봉한 봉투
     'sign': SIGN,       # 빈 현판 (투명 배경)
+    'paper': TALL,      # 궁합: 위에서 본 네 칸 한지 (두 사람의 여덟 글자를 쓴다)
+    'ring': SQ,         # 궁합: 다섯 기운 고리 (두 사람의 오행을 함께 얹는다)
     # 단: 듣는 사람
     'dan_neutral': SQ, 'dan_speak': SQ, 'dan_smile': SQ,
     # 청: 찾는 사람
@@ -32,6 +34,10 @@ SLOTS = {
     # 묵 선생: 읽는 사람
     'muk_calm': SQ, 'muk_knowing': SQ, 'muk_smile': SQ, 'muk_think': SQ,
     'muk_surprise': SQ, 'muk_stern': SQ, 'muk_sly': SQ, 'muk_pierce': SQ,
+    # 선택: 있으면 단과 청의 표정이 더 다양해진다. 넣은 뒤 index.html의 GM_EXTRA에 이름을 더한다
+    'dan_tease': SQ, 'dan_surprise': SQ, 'dan_serious': SQ, 'dan_pout': SQ,
+    'cheong_smile': SQ, 'cheong_surprise': SQ, 'cheong_fluster': SQ, 'cheong_explain': SQ,
+    'duo': LAND,        # 천막 상 뒤에 나란히 앉은 단과 청
 }
 
 

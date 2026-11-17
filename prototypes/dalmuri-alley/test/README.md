@@ -19,6 +19,8 @@ node toon.js geumeum phone,desk             # 그믐 골목(웹툰 컷) 고정 �
 node toon.js geumeum-llm phone,desk         # 같은 길을 가짜 sample로 (문진, 풀이, 되묻기, 편지)
 node toon.js geumeum-crisis phone           # 위급한 말 → 역할을 벗은 109 안내 → 골목 고르기 (LLM 호출 0번)
 node toon.js hub phone                      # 오늘의 한 장 뒤집기, 골목 고르기 ↔ 포차 골목 오가기
+node toon.js gunghap phone,desk             # 커플 궁합(단·청), LLM 없이. 두 번째 사람은 태어난 시를 모르는 걸로
+node toon.js gunghap-llm phone,desk         # 커플 궁합, 가짜 sample로 (꼭지마다 단과 청이 번갈아)
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.

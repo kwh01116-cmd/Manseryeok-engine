@@ -3,6 +3,8 @@
 //   node toon.js geumeum-llm [phone|desk]   가짜 sample로 LLM 대화 경로
 //   node toon.js geumeum-crisis             위급한 말이 나오면 역할을 벗고 109 안내 → 골목 고르기로
 //   node toon.js hub                        골목 고르기 ↔ 포차 골목 오가기
+//   node toon.js gunghap [phone|desk]       커플 궁합(단·청), LLM 없이. 상대는 태어난 시를 모르는 걸로
+//   node toon.js gunghap-llm [phone|desk]   커플 궁합, 가짜 sample로
 // img/gm_*.webp가 아직 없으면 그 자리에 이름이 적힌 빈 그림을 대신 넣어 화면 짜임만 본다.
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path');
@@ -19,7 +21,7 @@ const ph = name => {
   for (const name of sizes) {
     const ctx = await browser.newContext({ viewport: SZ[name], deviceScaleFactor: 1, ignoreHTTPSErrors: true });
     const page = await ctx.newPage();
-    if (which !== 'geumeum' && which !== 'hub') await page.addInitScript(fakeSample, which);
+    if (/-llm$|-crisis$/.test(which)) await page.addInitScript(fakeSample, which);
     const errs = [], fake = new Set();
     page.on('pageerror', e => errs.push('pageerror: ' + e.message));
     page.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') errs.push(m.type() + ': ' + m.text().slice(0, 200)); });
@@ -58,7 +60,7 @@ const ph = name => {
       await page.waitForTimeout(700); await shot('hub');
       await page.click('.hub-card[data-id="geumeum"]');
       await page.waitForSelector('#toon:not([hidden])', { timeout: 30000 });
-      let opened = false, asked = 0;
+      let opened = false, asked = 0, names = 0, births = 0;
       for (let guard = 0; guard < 60 && !(await has('#envOpen')); guard++) {
         // 입력 칸이 뜰 때까지 기다린다 (LLM 대기 중에는 건너뛰기 단추만 있다)
         await page.waitForFunction(() => { const o = document.querySelector('#toonOpts'); return o.querySelector('#envOpen, #by, input, .sug, :scope > .opt:not(.solo), #toonLeave'); }, null, { timeout: 60000 });
@@ -66,9 +68,11 @@ const ph = name => {
         if (await has('#envOpen')) break;
         if (await has('#toonLeave')) throw new Error('편지 전에 끝났다');
         if (await has('#toonOpts #by')) {
-          await page.fill('#by', '1990'); await page.selectOption('#bm', '5'); await page.selectOption('#bd', '15'); await page.fill('#bt', '14:30');
+          if (births++ === 0) { await page.fill('#by', '1990'); await page.selectOption('#bm', '5'); await page.selectOption('#bd', '15'); await page.fill('#bt', '14:30'); }
+          else { await page.fill('#by', '1992'); await page.selectOption('#bm', '8'); await page.selectOption('#bd', '3'); await page.check('#bu'); }
           await page.click('#toonOpts .birth button[type=submit]');
-        } else if (await has('#toonOpts input[maxlength="40"]')) { await page.fill('#toonOpts input', '민지'); await page.press('#toonOpts input', 'Enter'); }
+        } else if (await has('#toonOpts input[maxlength="40"]')) { await page.fill('#toonOpts input', ['민지', '준호'][names++ % 2]); await page.press('#toonOpts input', 'Enter'); }
+        else if (await page.$('#toonOpts button:has-text("둘 사이")')) await page.click(which.startsWith('gunghap') ? '#toonOpts button:has-text("둘 사이")' : '#toonOpts button:has-text("나 혼자")');
         else if (await page.$('#toonOpts button:has-text("이제 됐어요")')) {
           const first = await page.$('#toonOpts .sug, #toonOpts > .opt');
           if (asked++ < 1 && first) await first.click(); else await page.click('#toonOpts button:has-text("이제 됐어요")');

@@ -387,6 +387,46 @@ button { cursor: pointer; }
 .cookie-head { align-self: center; margin: 60px 16px 0; padding: 6px 14px 5px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px rgba(239, 230, 210, .55); font-family: var(--f-label); font-size: 13.5px; letter-spacing: .06em; color: #efe6d2; }
 .narr.end { background: none; box-shadow: none; font-weight: 400; font-size: 13.5px; color: rgba(239, 230, 210, .7); }
 #toonSound { margin-left: auto; }
+/* 만화 기호: 얼굴 둘레에 튀어나온다 */
+.mp { position: absolute; display: block; transform: translate(-50%, -50%) scale(.3); opacity: 0; transition: transform .45s cubic-bezier(.2, 1.6, .4, 1) .45s, opacity .3s ease .45s; pointer-events: none; }
+.in .mp { opacity: 1; transform: translate(-50%, -50%); }
+.mp svg { display: block; width: 100%; height: auto; }
+.mp.txt { font-family: "Yeon Sung", var(--f-sign); line-height: 1; color: #fff; text-shadow: 0 0 2px #17131a, .06em .06em 0 #17131a, -.04em -.04em 0 #17131a, .06em -.04em 0 #17131a, -.04em .06em 0 #17131a; }
+.mp.focus, .in .mp.focus { left: 0; top: 0; right: 0; bottom: 0; transform: none; }
+.mp.focus svg { width: 100%; height: 100%; }
+.in .mp.focus { opacity: .85; }
+/* 색조: 가라앉는 장면 */
+.cut .tint { position: absolute; inset: 0; pointer-events: none; }
+.tint.cold { background: rgba(34, 50, 120, .3); mix-blend-mode: multiply; }
+.cut.t-cold > img { filter: saturate(.6) brightness(.85); }
+/* 두 사람 컷: 사선으로 나눈 두 칸 */
+.cut.duo { background: #07060c; }
+.duo-h { position: absolute; top: 0; bottom: 0; width: 56%; overflow: hidden; container-type: inline-size; }
+.duo-h.l { left: 0; clip-path: polygon(0 0, 94.6% 0, 80.4% 100%, 0 100%); }
+.duo-h.r { right: 0; clip-path: polygon(19.6% 0, 100% 0, 100% 100%, 5.4% 100%); }
+.duo-h > img { position: absolute; max-width: none; object-fit: fill; }
+.cut.duo.live .duo-h > img { animation: kenburns 16s ease-in-out infinite alternate; }
+/* 궁합: 두 사람의 여덟 글자, 두 사람의 오행 */
+.ink.sm .gz { font-size: 9cqw; } .ink.sm .k { font-size: 2.8cqw; } .ink.sm .rd { font-size: 3cqw; }
+.ink .iname { position: absolute; left: 0; bottom: 100%; margin-bottom: .6cqw; font-family: var(--f-label); font-size: 3.4cqw; line-height: 1; color: #b3202a; opacity: 0; transition: opacity .6s ease .3s; }
+.ink.b .iname { color: #2b4fa3; }
+.in > .ink .iname { opacity: 1; }
+.oh2 { position: absolute; display: flex; align-items: baseline; gap: 1.6cqw; padding: 1.2cqw 2.6cqw; border-radius: 999px; background: rgba(10, 8, 16, .82); box-shadow: 0 0 0 .4cqw rgba(239, 230, 210, .35); color: #efe6d2; transform: translate(-50%, -50%) scale(.6); opacity: 0; transition: opacity .5s ease, transform .6s cubic-bezier(.2, 1.4, .4, 1); pointer-events: none; }
+.in > .oh2 { opacity: 1; transform: translate(-50%, -50%); }
+.oh2 b { font: 700 6cqw/1 "Noto Serif KR", serif; }
+.oh2 span { font-family: var(--f-label); font-size: 5cqw; line-height: 1; }
+.oh2 .a, .legend2 .a { color: #ff7a6b; } .oh2 .b, .legend2 .b { color: #8fb0ff; }
+.legend2 { position: absolute; left: 50%; top: 47%; display: grid; gap: 1.2cqw; transform: translate(-50%, -50%); font-family: var(--f-label); font-size: 4cqw; text-align: center; opacity: 0; transition: opacity .8s ease 1.2s; pointer-events: none; }
+.in > .legend2 { opacity: 1; }
+.seal.two { font-size: 4.6cqw; letter-spacing: .04em; }
+/* 단과 청의 궁합 편지: 붉고 푸른 두 줄 테두리 */
+.paper-pair { --pbg: #f5eedf; --ph2: #23203c; --ph3: #b3202a; --pmut: #5f5640; --pbasis: #2b4fa3; --pquote: rgba(43, 79, 163, .08); background: #f5eedf; }
+.sheet.paper-pair { box-shadow: inset 0 0 0 6px #f5eedf, inset 0 0 0 9px #b3202a, inset 0 0 0 12px #f5eedf, inset 0 0 0 15px #2b4fa3, 0 18px 50px rgba(0, 0, 0, .6); }
+.paper-pair .rep-sign::after { content: "丹靑"; display: inline-grid; place-items: center; width: 46px; height: 30px; margin-left: 10px; vertical-align: middle; background: linear-gradient(90deg, #b3202a 50%, #2b4fa3 50%); border-radius: 4px; color: #f5eedf; font: 700 14px/1 "Noto Serif KR", serif; letter-spacing: .1em; }
+.rep-pairs { display: grid; gap: 12px; margin: 14px 0 6px; }
+.rep-pair .who2 { margin: 0 0 4px !important; text-align: center; font-family: var(--f-label); font-size: 14px; color: #b3202a; }
+.rep-pair + .rep-pair .who2 { color: #2b4fa3; }
+.rep-pair .rep-pillars { margin: 0 auto; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: .01s !important; }
@@ -975,7 +1015,7 @@ async function askText(str, placeholder, skipLabel, m) {
     optsEl.append(form);
   });
 }
-async function askBirth(str, m) {
+async function askBirth(str, m, note) {
   await type(str, m);
   return wait(done => {
     const form = el('form', 'birth'), thisYear = new Date().getFullYear();
@@ -989,7 +1029,7 @@ async function askBirth(str, m) {
       <label>달력<select id="bc"><option value="solar">양력</option><option value="lunar">음력</option><option value="leap">음력 윤달</option></select></label>
       <span class="checks"><label><input id="bu" type="checkbox">태어난 시간은 몰라요</label></span>
       <button class="opt" type="submit">불러 드리기</button>
-      <p class="note">생년월일은 이 기기에서 사주 계산에만 쓰고 저장하지 않아요. AI에게는 계산된 간지와 십성만 보내요.</p>`;
+      <p class="note">${note || '생년월일은 이 기기에서 사주 계산에만 쓰고 저장하지 않아요. AI에게는 계산된 간지와 십성만 보내요.'}</p>`;
     const q = id => $('#' + id, form);
     q('bu').addEventListener('change', () => { q('bt').disabled = q('bu').checked; });
     form.addEventListener('submit', e => {
@@ -1109,7 +1149,7 @@ const COLS = {
   tarot: [
     ['#ffee4d', [{ t: '고민 한 장이면', c: '#150e28' }, { t: 'OK!!', c: '#e8322f', big: 1 }]],
     ['#e8322f', [{ t: '세 장 타로', c: '#ffee4d', big: 1 }, { t: '상담 무료', c: '#fff' }]],
-    ['#f4f7ff', [{ t: '커플 궁합', c: '#150e28' }, { t: '곧 열어요', c: '#e8322f', big: 1 }]],
+    ['#f4f7ff', [{ t: '커플 궁합은', c: '#150e28' }, { t: '그믐 골목', c: '#e8322f', big: 1 }]],
     ['#b23cf0', [{ t: '속마음 · 재회', c: '#fff' }, { t: '연애운', c: '#e6ff3d', big: 1 }]],
   ],
   saju: [
@@ -2015,7 +2055,7 @@ async function pondering(p, text, skipLabel) {
 const convo = { log: [], picks: null, saju: null, star: null };
 const hear = s => { if (s) convo.log.push({ who: '손님', said: String(s).slice(0, 200) }); };
 async function speak(s, m) { convo.log.push({ who: P().name, said: s }); await say(s, m); }
-const MOODS = ['neutral', 'smile', 'think', 'surprise', 'stern', 'sly'];
+const MOODS = ['neutral', 'smile', 'think', 'surprise', 'stern', 'sly', 'tease', 'fluster'];
 const txt = (v, max) => (typeof v === 'string' && v.trim() && v.trim().length <= max ? v.trim() : null);
 const linesOf = (v, n, max = 260) => { if (!Array.isArray(v) || !v.length || v.length > n) return null; const out = v.map(x => txt(x, max)); return out.every(Boolean) ? out : null; };
 const moodOf = v => (MOODS.includes(v) ? v : 'neutral');
@@ -2079,7 +2119,7 @@ PERSONA.dan = {
   who: '너는 "그믐 골목"의 문지기 "단"이다. 달 없는 밤에만 열리는 한옥 골목 끝 천막에서, 손님이 들고 온 고민을 듣는 사람이다. 붉은 옷에 긴 머리를 붉은 끈으로 묶었고, 붉은 끈에 단 놋쇠 방울을 들고 있다. 장난스럽고 말이 빠르지만 말 속에 숨은 진짜 고민을 잘 짚는다. 사주 풀이는 네 일이 아니다. 생년월일은 옆자리의 청이 받고, 풀이는 대문 안의 묵 선생이 한다.',
   talk: '말투: 처음 본 손님에게도 오래 안 사이처럼 반말을 쓴다("~야", "~지?", "~해 봐", "~거든"). 놀리듯 가볍게 받아 주되 고민을 가볍게 여기지는 않는다. 문장이 짧다. 귀신, 저주, 살, 굿, 부적, 신점 이야기는 꺼내지 않는다.',
   facts: '- 지금은 고민을 듣고 되묻기만 한다. 사주, 운세, 앞날에 대해서는 말하지 않는다.',
-  moods: 'neutral(보통), smile(웃음), surprise(놀람)',
+  moods: 'neutral(보통), smile(웃음), tease(놀림), surprise(놀람), think(갸웃)',
   call: n => n, hold: '알았어. 그 말, 대문 안으로 그대로 가져갈게.',
   ponder: '단이 방울을 만지작거렸다.',
   scene: '달이 없는 그믐밤이다. 한옥 골목 끝 천막 아래, 촛불 두 자루가 켜져 있다.',
@@ -2101,12 +2141,29 @@ PERSONA.muk = {
   payLine: '말로 나눈 상담에는 값이 없어요. 편지는 묵 선생이 초 한 자루가 다 타는 동안 오늘 대화를 짚어 쓴 것이고, 받은 편지함에 남아요.',
   scene: '달이 없는 그믐밤이다. 그믐당 방 안에 촛불 두 자루가 켜져 있고, 달은 병풍 속에만 떠 있다.',
 };
+PERSONA.pair = {
+  kind: 'gunghap', name: '단 · 청', label: '그믐 골목 궁합', place: '그믐 골목', put: '방울과 붓은', before: '두 사람의 생년월일을 받기 전에',
+  who: '너희는 "그믐 골목" 천막에서 함께 궁합을 보는 두 사람 "단"과 "청"이다. 단은 붉은 옷에 방울을 든 골목의 문지기로 손님의 고민을 듣는다. 청은 쪽빛 옷에 만세력을 든 그믐당 묵 선생의 제자로 사주를 찾고 적는다. 둘을 합쳐 단청(丹靑)이라 부르고, 궁합을 볼 때는 홍실과 청실처럼 단이 손님을, 청이 상대를 맡는다. 단은 청을 자주 놀리고 청은 반듯하게 받아친다.',
+  talk: '말투: 단은 반말("~야", "~지?", "~해 봐"), 청은 하십시오체("~습니다", "~십시오"). 대사마다 누가 하는지(who: dan 또는 cheong)를 정하고 그 사람 말투로만 쓴다. 형식에 who가 없는 대답(문진, 되묻기)은 단이 반말로 한다. 문장이 짧다. 귀신, 저주, 살, 굿, 부적, 신점 이야기는 꺼내지 않는다. 궁합을 점수로 매기거나 "헤어진다", "결혼한다"처럼 단정하지 않는다. 상대의 마음을 대신 말하지 않는다.',
+  facts: '- 궁합은 [사실]에 적힌 두 사람의 네 기둥, 오행 개수, 일간 관계(오행 생극, 천간합, 서로의 십성), 일지 관계, 띠 관계, 오행 보완, 세운만 쓴다. 관계를 지어내지 않는다. 생년월일을 아직 받지 않았으면 궁합 얘기를 하지 않는다.\n- [사실]에 없는 명리 개념(대운, 신강·신약, 격국, 용신, 신살, 12운성, 공망, 원진, 형·파·해)은 계산하지 않았으니 말하지 않는다.',
+  moods: 'neutral(보통), smile(웃음), think(생각), surprise(놀람), tease(단: 놀림), fluster(청: 당황)',
+  to: n => `${n} 님께`, toNone: '손님께', call: n => `${n} 님`, letterVoice: '청의 하십시오체',
+  bye: '추신. 둘이 같이 들어오면 방울이 두 번 울려. 다음 그믐에 또 와. — 단',
+  fun: '재미로 보는 궁합입니다. 두 사람의 사주는 서로를 비춰 볼 뿐, 인연을 정하지 않습니다.',
+  hold: '알았어. 둘 얘기, 청이랑 같이 볼게.', more: '또 궁금한 거 있어?',
+  cant: '그건 오늘 본 두 사람 사주로는 더 말하기 어려워. 다음 그믐에 다시 물어.',
+  ponder: '단과 청이 머리를 맞댔다.', writing: '청이 쓰고, 단이 홍실과 청실을 꼬았다.',
+  payTitle: '단과 청이 쓴 궁합 편지', priceLabel: '청실홍실 한 쌍',
+  payLine: '말로 나눈 궁합에는 값이 없어요. 편지는 청이 쓰고 단이 덧붙인 것이고, 받은 편지함에 남아요. 상대의 생년월일은 저장하지 않아요.',
+  scene: '달이 없는 그믐밤이다. 한옥 골목 끝 천막 아래, 촛불 두 자루와 방석 둘.',
+};
 const kind = () => P().kind || state.booth;
 const callOf = n => (P().call ? P().call(n) : state.booth === 'star' ? `${n} 님` : `${n} 씨`);
 // 받침이 있으면 '이', 없으면 '가'
 const ga = w => { const c = w.charCodeAt(w.length - 1) - 0xac00; return c >= 0 && c < 11172 && c % 28 ? w + '이' : w + '가'; };
 // 계산하지 않은 개념이 대사나 편지에 나오면 그 줄을 버린다 (코드가 확인)
 const BANNED = { saju: /대운|신강|신약|격국|용신|신살|12운성|십이운성|공망|삼합|육합|충살/, star: /상승궁|어센던트|달 ?별자리|하우스|역행|수성|금성|화성|목성|토성/, tarot: null };
+BANNED.gunghap = /대운|신강|신약|격국|용신|신살|12운성|십이운성|공망|원진|귀문|형살|육파|육해|충살/;
 const banned = s => { const re = BANNED[kind()]; return !!(re && re.test(s)); };
 
 /* ── 위급할 때: 역할을 벗고 고정 안내문 ── */
@@ -2156,6 +2213,9 @@ function facts() {
   if (kind() === 'saju') {
     if (convo.saju) f.push('사주 (엔진이 계산했다. 이것만 쓴다):', JSON.stringify(convo.saju.facts));
     else f.push('생년월일은 아직 받지 않았다.');
+  } else if (kind() === 'gunghap') {
+    if (convo.pair) f.push('궁합 (엔진과 코드가 계산했다. 이것만 쓴다):', JSON.stringify(convo.pair.facts));
+    else f.push('두 사람의 생년월일은 아직 받지 않았다.');
   } else if (kind() === 'star') {
     if (convo.star) f.push('별자리 (생일 날짜로 코드가 정했다. 이것만 쓴다):', `태양 별자리: ${convo.star.facts.태양별자리}`, JSON.stringify(convo.star.facts));
     else f.push('생일은 아직 받지 않았다.');
@@ -2253,7 +2313,9 @@ const BASIS_HOW = {
   star: 'basis는 "태양 황소자리 · 흙 원소", "지금 해 전갈자리 · 정반대 (180도)"처럼 [사실]의 항목과 값을 그대로 쓴다.',
 };
 // 근거로 인정하는 낱말: 그 상담에서 실제로 계산된 것들
+BASIS_HOW.gunghap = 'basis는 "일간 관계: 금·목", "천간합: 을경합", "일지: 진·유 육합", "띠: 말·쥐 충", "오행 보완: 수", "세운 2027 · 민지 편관"처럼 [사실]의 항목과 값을 그대로 쓴다.';
 function basisTokens() {
+  if (kind() === 'gunghap' && convo.pair) return convo.pair.tokens;
   if (kind() === 'saju' && convo.saju) {
     const s = convo.saju.s, t = ['일간', '오행', '세운', '십성'];
     s.pillars.forEach(([n, p]) => { if (p) t.push(n + '주', p.hangul, TG_KO[p.stemTenGod], TG_KO[p.branchTenGod]); });
@@ -2412,7 +2474,7 @@ function fixedMuk() {
     next: ['궁합: 마음 가는 이의 생년월일을 들고 오시오', '태어난 시를 알아 오면 시주까지 넣어 다시 쓰리다', '같은 고민을 카드로 보고 싶거든 포차 골목의 달무리를 찾으시오'],
   };
 }
-const fixedReport = () => (state.booth === 'muk' ? fixedMuk() : state.booth === 'saju' ? fixedSaju() : state.booth === 'star' ? fixedStar() : fixedTarot());
+const fixedReport = () => (state.booth === 'pair' ? fixedPair() : state.booth === 'muk' ? fixedMuk() : state.booth === 'saju' ? fixedSaju() : state.booth === 'star' ? fixedStar() : fixedTarot());
 function mergeReport(A, B) {
   const R = fixedReport(), toks = basisTokens(), okBasis = b => toks.some(n => b.includes(n));
   const items = (v, min, max) => {
@@ -2436,7 +2498,7 @@ function mergeReport(A, B) {
 }
 async function writeReport() {
   if (!LLM.on) return fixedReport();
-  const year = new Date().getFullYear(), nm = P().name, how = BASIS_HOW[kind()] + ' 모든 text에 basis가 있어야 한다.';
+  const year = new Date().getFullYear(), nm = P().letterVoice || P().name, how = BASIS_HOW[kind()] + ' 모든 text에 basis가 있어야 한다.';
   const a = llm(prompt('레포트 앞부분', `상담이 끝났다. 손님에게 건넬 편지의 앞부분을 쓴다. ${nm} 말투를 유지하되 글로 읽히게 쓴다.
 headline: 한 줄 결론. answer: 손님이 물은 것에 대한 답 4~6개 항목. timing: ${year}년 남은 기간과 ${year + 1}년, 조심할 때와 움직일 때 2~4개 항목. 날짜를 단정하지 말고 흐름으로 말한다.
 앞부분 전체 1,000~1,800자. ${how}`, REP_A_FMT), 'complex');
@@ -2450,16 +2512,18 @@ cautions: 조심할 것 정확히 3개. quote: 상담에서 손님이 한 말 �
 
 /* ── 편지 화면: 편지 한 통은 그 자체로 다시 그릴 수 있는 자료(L)다. 받은 편지함에 그대로 넣는다 ── */
 const repEl = $('#report'), sheetEl = $('#sheet');
+const pillarHead = s => s.pillars.map(([n, p]) => (p ? { n, stem: p.stem, branch: p.branch, se: p.stemElement, be: p.branchElement, hangul: p.hangul, tg: n === '일' ? '일간' : TG_KO[p.stemTenGod], btg: TG_KO[p.branchTenGod] || '' } : { n }));
 function letterHead() {
+  if (kind() === 'gunghap') return { pairs: convo.pair.s.map(pillarHead), names: convo.pair.names };
   if (kind() === 'saju') return { pillars: convo.saju.s.pillars.map(([n, p]) => (p ? { n, stem: p.stem, branch: p.branch, se: p.stemElement, be: p.branchElement, hangul: p.hangul, tg: n === '일' ? '일간' : TG_KO[p.stemTenGod], btg: TG_KO[p.branchTenGod] || '' } : { n })) };
   if (kind() === 'star') return { sign: convo.star.facts.태양별자리, el: convo.star.facts.원소, mode: convo.star.facts.성질, now: convo.star.facts.지금해 };
   return { cards: convo.picks.map(p => ({ num: p.num, rev: p.rev })) };
 }
 function makeLetter(R) {
   const d = new Date();
-  return { id: d.getTime(), booth: state.booth, to: state.name || '', date: `${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}.`, R, head: letterHead(), llm: !!R.llm };
+  return { id: d.getTime(), booth: state.booth, to: state.name || '', to2: kind() === 'gunghap' && convo.pair ? convo.pair.names[1] : undefined, date: `${d.getFullYear()}. ${d.getMonth() + 1}. ${d.getDate()}.`, R, head: letterHead(), llm: !!R.llm };
 }
-const toLine = L => (L.to ? PERSONA[L.booth].to(L.to) : PERSONA[L.booth].toNone || (L.booth === 'saju' ? '손님에게' : '손님께'));
+const toLine = L => (L.to2 ? `${L.to ? L.to + ' 님' : '손님'}과 ${L.to2}께` : L.to ? PERSONA[L.booth].to(L.to) : PERSONA[L.booth].toNone || (L.booth === 'saju' ? '손님에게' : '손님께'));
 function renderLetter(L) {
   const per = PERSONA[L.booth], R = L.R;
   sheetEl.className = 'sheet paper-' + L.booth;
@@ -2478,6 +2542,22 @@ function renderLetter(L) {
       f.append(face, cap); head.append(f);
     });
     headPlain = L.head.cards.map((x, i) => `${POS_NAME[i]}: ${CARDS[x.num].n} (${x.rev ? '역방향' : '정방향'})`).join(' / ');
+  } else if (L.head.pairs) {
+    head.classList.add('rep-pairs');
+    L.head.pairs.forEach((ps, k) => {
+      const box = el('div', 'rep-pair'), who = el('p', 'who2'), grid = el('div', 'rep-pillars');
+      who.textContent = `${k ? '청실' : '홍실'} · ${L.head.names[k]}`;
+      ps.forEach(p => {
+        const col = el('div', 'rep-pillar'), name = el('span', 'pn'); name.textContent = p.n + '주'; col.append(name);
+        if (!p.stem) { const e = el('span', 'blank'); e.textContent = '모름'; col.append(e); grid.append(col); return; }
+        const tg = el('span', 'tg'); tg.textContent = p.tg; col.append(tg);
+        [[p.stem, p.se], [p.branch, p.be]].forEach(([ch, e]) => { const g = el('span', 'gz ' + e.toLowerCase()); g.textContent = ch; col.append(g); });
+        const hg = el('span', 'tg'); hg.textContent = `${p.hangul} · ${p.btg}`; col.append(hg);
+        grid.append(col);
+      });
+      box.append(who, grid); head.append(box);
+    });
+    headPlain = L.head.pairs.map((ps, k) => `${L.head.names[k]}: ` + ps.filter(p => p.stem).map(p => `${p.n}주 ${p.hangul}`).join(' ')).join(' / ');
   } else if (L.head.pillars) {
     head.classList.add('rep-pillars');
     L.head.pillars.forEach(p => {
@@ -2927,34 +3007,76 @@ const GM = {
   gate: [1.5, '열린 붉은 대문 너머로 촛불 켜진 방이 보인다'], desk: [1.5, '오색 천 아래, 빈 한지를 앞에 두고 앉은 묵 선생. 뒤 병풍에 달이 떠 있다'],
   tea: [1.5, '촛불 옆에서 찻잔을 내미는 손'], brush: [1.5, '붓을 쥔 손과 한지'], ohaeng: [1.5, '다섯 색의 기운이 고리처럼 도는 그림'],
   envelope: [1, '붉은 끈으로 묶고 밀랍으로 봉한 한지 봉투'], sign: [.5, ''],
+  paper: [1.5, '위에서 본 네 칸 한지'], ring: [1, '나무, 불, 흙, 쇠, 물이 고리처럼 이어진 그림'],
   dan_neutral: [1, '붉은 옷에 방울을 든 단'], dan_speak: [1, '웃으며 말하는 단'], dan_smile: [1, '입을 다물고 웃는 단'],
   cheong_neutral: [1, '만세력을 든 청'], cheong_read: [1, '고개를 숙이고 만세력을 보는 청'], cheong_guide: [1, '손바닥으로 안쪽을 가리키는 청'],
   muk_calm: [1, '묵 선생'], muk_knowing: [1, '다 안다는 얼굴의 묵 선생'], muk_smile: [1, '옅게 웃는 묵 선생'], muk_think: [1, '눈을 감고 손가락을 짚어 보는 묵 선생'],
   muk_surprise: [1, '눈을 크게 뜬 묵 선생'], muk_stern: [1, '엄한 얼굴의 묵 선생'], muk_sly: [1, '곁눈질하는 묵 선생'], muk_pierce: [1, '꿰뚫어 보는 눈의 묵 선생'],
+  // 선택: 받으면 GM_EXTRA에 이름을 더한다. 없으면 있는 그림에 만화 기호를 얹어 대신한다
+  dan_tease: [1, '놀리듯 웃는 단'], dan_surprise: [1, '놀란 단'], dan_serious: [1, '진지하게 듣는 단'], dan_pout: [1, '토라진 단'],
+  cheong_smile: [1, '작게 웃는 청'], cheong_surprise: [1, '놀란 청'], cheong_fluster: [1, '얼굴이 붉어진 청'], cheong_explain: [1, '진지하게 설명하는 청'],
+  duo: [2 / 3, '천막 상 뒤에 나란히 앉은 단과 청'],
 };
+const GM_OPT = new Set(['dan_tease', 'dan_surprise', 'dan_serious', 'dan_pout', 'cheong_smile', 'cheong_surprise', 'cheong_fluster', 'cheong_explain', 'duo']);
+const GM_EXTRA = new Set([]);      // 선택 그림 가운데 실제로 넣은 것
 const GM_FIRST = ['alley', 'booth', 'dan_neutral', 'dan_speak', 'dan_smile'];     // 이것만 받고 시작한다. 나머지는 읽는 동안 받는다
-// 그림 안의 자리 (그림 너비·높이에 대한 비). 그림을 바꾸면 여기와 OHAENG만 다시 맞춘다
+// 그림 안의 자리 (그림 너비·높이에 대한 비). 그림을 바꾸면 여기와 OHAENG, RING만 다시 맞춘다
 const SPOT = {
-  eyes: { dan_neutral: [.5, .265], dan_speak: [.5, .265], dan_smile: [.47, .27], cheong_neutral: [.52, .3], cheong_read: [.48, .3], cheong_guide: [.5, .29], muk: [.5, .36] },
+  eyes: { dan_neutral: [.5, .265], dan_speak: [.5, .265], dan_smile: [.47, .27], cheong_neutral: [.52, .3], cheong_read: [.48, .3], cheong_guide: [.5, .29], muk: [.5, .36], dan: [.5, .27], cheong: [.5, .3] },
   bell: [.645, .68], book: [.63, .8], candle: [.06, .4],
   ink: [.07, .58, .59, .32],          // brush: 손과 소매가 가리지 않는 종이 아래쪽 (왼쪽, 위, 너비, 높이)
+  paper2: [[.07, .3, .86, .2], [.07, .56, .86, .2]],     // paper: 위는 손님, 아래는 상대
   seal: [.493, .553],                 // envelope: 밀랍 가운데
   hang: [.28, .125, .44],             // gate: 현판을 거는 자리 (왼쪽, 위, 너비)
   board: [.5, .232, .17, .058],       // booth: 그림 속 빈 현판 (가운데, 위, 너비, 높이)
 };
-// 다섯 기운: 오행 그림에서 각 색이 도는 자리 (%)
+// 다섯 기운: 오행 그림(ohaeng), 고리 그림(ring)에서 각 기운이 있는 자리 (%)
 const OHAENG = [['FIRE', '火', '화', '#e2493c', 70, 25], ['EARTH', '土', '토', '#e2b659', 82, 55], ['METAL', '金', '금', '#efe6d2', 46, 73], ['WATER', '水', '수', '#6f8fe8', 15, 57], ['WOOD', '木', '목', '#4fb07f', 29, 26]];
-// 말하는 사람: 이름표와 표정별 그림 (그림이 여럿이면 돌아가며 쓴다)
+const RING = [['WOOD', '木', 35, 15], ['FIRE', '火', 76, 22], ['EARTH', '土', 84, 60], ['METAL', '金', 44, 81], ['WATER', '水', 14, 47]];
+// 말하는 사람: 이름표와 표정별 그림. 그림이 여럿이면 돌아가며 쓴다.
+// { img, fx, tone }: 있는 그림에 만화 기호나 색조를 얹는다. want: 그 표정 그림을 받으면(GM_EXTRA) 그것을 쓴다
 const SPEAKERS = {
-  dan: { name: '단', faces: { neutral: ['dan_neutral'], smile: ['dan_smile', 'dan_speak'], think: ['dan_neutral'], surprise: ['dan_speak'], stern: ['dan_neutral'], sly: ['dan_neutral'] } },
-  cheong: { name: '청', faces: { neutral: ['cheong_neutral'], smile: ['cheong_guide'], think: ['cheong_read'], surprise: ['cheong_neutral'], stern: ['cheong_neutral'], sly: ['cheong_neutral'] } },
+  dan: { name: '단', faces: {
+    neutral: ['dan_neutral'], smile: ['dan_smile', { img: 'dan_speak', fx: 'spark' }],
+    tease: [{ want: 'dan_tease', img: 'dan_smile', fx: 'note' }, { want: 'dan_tease', img: 'dan_neutral', fx: 'spark' }],
+    surprise: [{ want: 'dan_surprise', img: 'dan_speak', fx: 'ex' }], think: [{ want: 'dan_serious', img: 'dan_neutral', fx: 'q' }],
+    stern: [{ want: 'dan_serious', img: 'dan_neutral', tone: 'cold' }], sly: [{ img: 'dan_neutral', fx: 'spark' }],
+    fluster: [{ want: 'dan_pout', img: 'dan_smile', fx: 'sweat' }],
+  } },
+  cheong: { name: '청', faces: {
+    neutral: ['cheong_neutral'], smile: [{ want: 'cheong_smile', img: 'cheong_guide' }],
+    think: [{ img: 'cheong_read', fx: 'focus' }, 'cheong_read'], surprise: [{ want: 'cheong_surprise', img: 'cheong_neutral', fx: 'shock' }],
+    fluster: [{ want: 'cheong_fluster', img: 'cheong_neutral', fx: ['sweat', 'blush'] }], stern: [{ want: 'cheong_explain', img: 'cheong_neutral', tone: 'cold' }],
+    tease: [{ img: 'cheong_neutral', fx: 'sweat' }], sly: ['cheong_neutral'],
+  } },
   muk: { name: '묵 선생', faces: { calm: ['muk_calm'], neutral: ['muk_calm', 'muk_knowing'], smile: ['muk_smile'], think: ['muk_think'], surprise: ['muk_surprise'], stern: ['muk_stern'], sly: ['muk_sly', 'muk_pierce'] } },
 };
+// 만화 기호: 얼굴(두 눈 사이) 기준 자리(dx, dy: 그림 비), 크기(그림 너비 비). 글자 기호(t)는 글꼴로, 나머지는 SVG로 그린다
+const MP = {
+  sweat: { svg: '<svg viewBox="0 0 40 56"><path d="M20 3C28 20 35 30 35 39a15 15 0 0 1-30 0C5 30 12 20 20 3z" fill="#cfe9ff" stroke="#17131a" stroke-width="3"/><path d="M12 38q1-7 7-11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>', dx: .17, dy: -.05, size: .085 },
+  spark: { svg: '<svg viewBox="0 0 64 64"><path d="M26 4l5 19 19 5-19 5-5 19-5-19-19-5 19-5z" fill="#fff6c8" stroke="#17131a" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 34l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#fff6c8" stroke="#17131a" stroke-width="2" stroke-linejoin="round"/></svg>', dx: -.21, dy: -.09, size: .13 },
+  shock: { svg: '<svg viewBox="0 0 80 44"><g stroke-linecap="round"><path d="M40 5v15M19 12l8 11M61 12l-8 11M6 28l12 4M74 28l-12 4" stroke="#17131a" stroke-width="8"/><path d="M40 5v15M19 12l8 11M61 12l-8 11M6 28l12 4M74 28l-12 4" stroke="#fff" stroke-width="4"/></g></svg>', dx: 0, dy: -.2, size: .3 },
+  blush: { svg: '<svg viewBox="0 0 120 26"><g stroke="#e0526a" stroke-width="3.5" stroke-linecap="round" opacity=".9"><path d="M8 22l7-15M18 22l7-15M28 22l7-15M85 22l7-15M95 22l7-15M105 22l7-15"/></g></svg>', dx: 0, dy: .075, size: .3 },
+  q: { t: '?', dx: .24, dy: -.12, size: .13 },
+  ex: { t: '!', dx: .24, dy: -.13, size: .15 },
+  note: { t: '♪', dx: .23, dy: .02, size: .1 },
+  focus: {},
+};
+// 집중선: 컷 가장자리에서 가운데로 모이는 선 (한 번만 만든다)
+const FOCUS_SVG = (() => {
+  let d = '', r = 7;
+  const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 60; i++) {
+    const a = i / 60 * Math.PI * 2 + (rnd() - .5) * .08, inner = 30 + rnd() * 16, c = Math.cos(a), sn = Math.sin(a);
+    d += `M${(50 + c * 75).toFixed(1)} ${(50 + sn * 75).toFixed(1)}L${(50 + c * inner).toFixed(1)} ${(50 + sn * inner).toFixed(1)}`;
+  }
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${d}" stroke="#efe6d2" stroke-width=".5" stroke-linecap="round" opacity=".6"/></svg>`;
+})();
 const SHAPE_AR = { tall: 2 / 3, sq: 1, land: 3 / 2, band: 16 / 9, wide: 16 / 7, slim: 1 / 2 };
 const probe = src => new Promise(res => { const im = new Image(); im.onload = () => res(true); im.onerror = () => res(false); im.src = src; });
 
 const Toon = (() => {
-  let who = 'dan', auto = false, lastFace = '', sinceCut = 9, faceN = 0, tagShown = '', firstNew = null, nearEnd = true;
+  let who = 'dan', auto = false, lastFace = '', lastWho = '', sinceCut = 9, faceN = 0, tagShown = '', firstNew = null, nearEnd = true;
   const turn = {};
   // 화면에 들어온 컷만 나타나고(in) 움직인다(live). 처음 들어올 때 그 컷의 소리를 낸다. 안 보이는 컷까지 움직이면 폰이 버거워한다
   const io = 'IntersectionObserver' in window
@@ -2985,19 +3107,34 @@ const Toon = (() => {
     if (!n || !nearEnd || !n.isConnected) return;
     toonScroll.scrollTo({ top: Math.max(0, toonScroll.scrollTop + n.getBoundingClientRect().top - box().top - 70), behavior: reduced ? 'auto' : 'smooth' });
   }
-  // 그림을 컷에 놓는다: 컷을 꽉 채우고 zoom배 더 키우되, 초점(at)을 가운데로 가져오면서 가장자리가 비지 않게
+  // 그림을 컷(또는 두 사람 컷의 한 칸)에 놓는다: 꽉 채우고 zoom배 더 키우되, 초점(at)을 가운데로 가져오면서 가장자리가 비지 않게.
+  // 돌려주는 값은 그림의 자리(칸 너비·높이에 대한 비). 겹쳐 얹는 것의 자리를 셀 때 쓴다
   function place(im, name, shape, zoom = 1, at = [.5, .5]) {
-    const ar = SHAPE_AR[shape], ir = (GM[name] || [1])[0];
-    const w = Math.max(1, 1 / (ar * ir)) * zoom, h = w * ir * ar;     // 컷 너비, 컷 높이에 대한 비
+    const ar = typeof shape === 'number' ? shape : SHAPE_AR[shape], ir = (GM[name] || [1])[0];
+    const w = Math.max(1, 1 / (ar * ir)) * zoom, h = w * ir * ar;
     const l = clamp(.5 - at[0] * w, 1 - w, 0), t = clamp(.5 - at[1] * h, 1 - h, 0);
     Object.assign(im.style, { width: `${w * 100}%`, height: `${h * 100}%`, left: `${l * 100}%`, top: `${t * 100}%` });
+    return { w, h, l, t };
+  }
+  function fxOf(list, [ex, ey], g) {
+    return [].concat(list || []).map(k => {
+      const d = MP[k];
+      if (!d) return null;
+      const m = el('span', 'mp ' + k); m.setAttribute('aria-hidden', 'true');
+      if (k === 'focus') { m.innerHTML = FOCUS_SVG; return m; }
+      m.style.left = `${clamp(g.l + (ex + d.dx) * g.w, .07, .93) * 100}%`; m.style.top = `${clamp(g.t + (ey + d.dy) * g.h, .07, .93) * 100}%`;
+      if (d.svg) { m.innerHTML = d.svg; m.style.width = `${d.size * g.w * 100}%`; }
+      else { m.textContent = d.t; m.classList.add('txt'); m.style.fontSize = `${d.size * g.w * 100}cqw`; }
+      return m;
+    }).filter(Boolean);
   }
   // 붓으로 쓴 사주: 년주부터 오른쪽에서 왼쪽으로, 위에서 아래로 먹이 번지며 나타난다
-  function inkOf(s) {
-    const [x, y, w, h] = SPOT.ink, grid = el('div', 'ink'), HJ = { 시: '時', 일: '日', 월: '月', 년: '年' };
+  function inkOf(s, rect = SPOT.ink, name = '', cls = '') {
+    const [x, y, w, h] = rect, grid = el('div', 'ink' + (cls ? ' ' + cls : '')), HJ = { 시: '時', 일: '日', 월: '月', 년: '年' };
     Object.assign(grid.style, { left: `${x * 100}%`, top: `${y * 100}%`, width: `${w * 100}%`, height: `${h * 100}%` });
     grid.setAttribute('role', 'img');
-    grid.setAttribute('aria-label', '사주: ' + s.pillars.filter(([, p]) => p).reverse().map(([n, p]) => `${n}주 ${p.hangul}`).join(', '));
+    grid.setAttribute('aria-label', `${name ? name + '의 ' : ''}사주: ` + s.pillars.filter(([, p]) => p).reverse().map(([n, p]) => `${n}주 ${p.hangul}`).join(', '));
+    if (name) { const t = el('span', 'iname'); t.textContent = name; grid.append(t); }
     s.pillars.forEach(([n, p], i) => {
       const col = el('div', 'col'), k = el('span', 'k'), d = .6 + (s.pillars.length - 1 - i) * .55;
       k.textContent = HJ[n] || n; col.append(k);
@@ -3015,13 +3152,28 @@ const Toon = (() => {
       return d;
     });
   }
+  // 두 사람의 오행: 기운마다 손님(붉은 숫자)과 상대(푸른 숫자)
+  function ringOf([a, b], [na, nb]) {
+    const out = RING.map(([k, hj, x, y], i) => {
+      const d = el('div', 'oh2'), h = el('b'), sa = el('span', 'a'), sb = el('span', 'b');
+      d.style.cssText = `left:${x}%;top:${y}%;transition-delay:${(.4 + i * .16).toFixed(2)}s`;
+      h.textContent = hj; sa.textContent = a.el[k] || 0; sb.textContent = b.el[k] || 0;
+      d.append(h, sa, sb); d.setAttribute('aria-hidden', 'true');
+      return d;
+    });
+    const lg = el('div', 'legend2'), la = el('span', 'a'), lb = el('span', 'b');
+    la.textContent = `● ${na}`; lb.textContent = `● ${nb}`; lg.append(la, lb); lg.setAttribute('aria-hidden', 'true');
+    return [...out, lg];
+  }
   function cut(name, o = {}) {
     const ir = (GM[name] || [1])[0], shape = o.shape || (ir > 1 ? 'tall' : ir < 1 ? 'land' : 'sq');
-    const f = el('figure', `cut ${shape}${o.glow ? ' glow' : ''}${o.half ? ' half ' + o.half : ''}`), im = el('img');
+    const f = el('figure', `cut ${shape}${o.glow ? ' glow' : ''}${o.half ? ' half ' + o.half : ''}${o.tone ? ' t-' + o.tone : ''}`), im = el('img');
     im.alt = o.alt != null ? o.alt : (GM[name] || [0, ''])[1]; im.decoding = 'async'; im.draggable = false;
-    place(im, name, shape, o.zoom, o.at);
+    const g = place(im, name, shape, o.zoom, o.at);
     im.src = gmSrc(name);
     f.append(im);
+    if (o.tone) f.append(el('i', 'tint ' + o.tone));
+    if (o.fx) f.append(...fxOf(o.fx, SPOT.eyes[name] || SPOT.eyes[who] || [.5, .3], g));
     if (o.sound) f.dataset.sound = o.sound;
     for (const [t, where] of o.narr || []) { const p = el('p', 'narr' + (where === 'b' ? ' b' : '')); p.textContent = t; f.append(p); }
     if (o.sfx) { const x = el('span', 'sfx' + (o.sfx[3] ? ' ' + o.sfx[3] : '')); x.textContent = o.sfx[0]; x.style.left = o.sfx[1] + '%'; x.style.top = o.sfx[2] + '%'; x.setAttribute('aria-hidden', 'true'); f.append(x); }
@@ -3038,10 +3190,28 @@ const Toon = (() => {
       f.append(b);
     }
     if (o.ink) f.append(inkOf(o.ink));
+    if (o.pair) f.append(inkOf(o.pair[0], SPOT.paper2[0], o.names[0], 'sm a'), inkOf(o.pair[1], SPOT.paper2[1], o.names[1], 'sm b'));
     if (o.oh) f.append(...ohOf(o.oh));
-    if (o.seal) { const [x, y] = SPOT.seal, d = el('span', 'seal'); d.textContent = o.seal; d.style.left = `${x * 100}%`; d.style.top = `${y * 100}%`; d.setAttribute('aria-hidden', 'true'); f.append(d); }
+    if (o.el2) f.append(...ringOf(o.el2, o.names));
+    if (o.seal) { const [x, y] = SPOT.seal, d = el('span', 'seal' + (o.seal.length > 1 ? ' two' : '')); d.textContent = o.seal; d.style.left = `${x * 100}%`; d.style.top = `${y * 100}%`; d.setAttribute('aria-hidden', 'true'); f.append(d); }
     sinceCut = 0; tagShown = '';
-    if (!o.face) lastFace = '';
+    if (!o.face) { lastFace = ''; lastWho = ''; }
+    return add(f);
+  }
+  // 두 사람을 한 컷에: 사선으로 나눈 두 칸에 얼굴을 하나씩 (fx: [왼쪽, 오른쪽] 만화 기호)
+  function duo(a, b, o = {}) {
+    const shape = o.shape || 'band', ar = SHAPE_AR[shape] * .56;
+    const f = el('figure', `cut ${shape} duo${o.glow ? ' glow' : ''}`);
+    [[a, 'l', o.fx && o.fx[0]], [b, 'r', o.fx && o.fx[1]]].forEach(([name, side, fx]) => {
+      const h = el('div', 'duo-h ' + side), im = el('img'), eyes = SPOT.eyes[name] || [.5, .3];
+      im.alt = (GM[name] || [0, ''])[1]; im.decoding = 'async'; im.draggable = false;
+      const g = place(im, name, ar, 1.2, [eyes[0], eyes[1] + .12]);
+      im.src = gmSrc(name); h.append(im);
+      if (fx) h.append(...fxOf(fx, eyes, g));
+      f.append(h);
+    });
+    for (const [t, where] of o.narr || []) { const p = el('p', 'narr' + (where === 'b' ? ' b' : '')); p.textContent = t; f.append(p); }
+    sinceCut = 0; tagShown = ''; lastFace = 'duo'; lastWho = 'both';
     return add(f);
   }
   // 얼굴 컷: 크기를 바꿔 가며 넣는다. 큰 정사각은 가끔, 보통은 가로로 긴 컷과 눈 둘레 컷
@@ -3049,19 +3219,24 @@ const Toon = (() => {
   function face(key, shape) {
     const set = SPEAKERS[who].faces, list = set[key] || set.neutral;
     const i = turn[who + key] = turn[who + key] === undefined ? 0 : turn[who + key] + 1;
-    const name = list[i % list.length], eyes = SPOT.eyes[name] || SPOT.eyes[who] || [.5, .33];
+    let e = list[i % list.length];
+    if (typeof e === 'string') e = { img: e };
+    if (e.want && GM_EXTRA.has(e.want)) e = { img: e.want };          // 받은 표정 그림이 있으면 그것을 쓴다
+    const name = e.img, eyes = SPOT.eyes[name] || SPOT.eyes[who] || [.5, .33];
     shape = shape || SHAPES[faceN++ % SHAPES.length];
-    if (shape === 'sq') cut(name, { shape, face: true });
-    else if (shape === 'band') cut(name, { shape, face: true, at: [eyes[0], eyes[1] + .12] });
-    else cut(name, { shape, face: true, zoom: 1.35, at: eyes });
-    lastFace = key;
+    const o = { shape, face: true, fx: e.fx, tone: e.tone };
+    if (shape === 'band') o.at = [eyes[0], eyes[1] + .12];
+    else if (shape === 'wide') { o.zoom = 1.35; o.at = eyes; }
+    cut(name, o);
+    lastFace = key; lastWho = who;
   }
-  // 말풍선. auto일 때만 얼굴 컷을 스스로 넣는다: 컷이나 손님 말 바로 뒤, 말풍선 셋마다, 표정이 바뀌고 둘 넘게 지났을 때
+  // 말풍선. auto일 때만 얼굴 컷을 스스로 넣는다: 컷이나 손님 말 바로 뒤, 말하는 사람이 바뀔 때, 말풍선 셋마다, 표정이 바뀌고 둘 넘게 지났을 때
   function say(text, m, small) {
     const tag = whoEl.textContent;
     if (tag === '안내') { const p = el('p', 'narr notice'); p.textContent = text; add(p); return; }     // 위급 안내는 역할 밖의 글상자
-    const faces = SPEAKERS[who].faces, key = faces[m] ? m : lastFace || 'neutral';
-    if (auto && (!lastFace || sinceCut >= 3 || (key !== lastFace && sinceCut >= 2))) face(key);
+    const faces = SPEAKERS[who].faces, key = faces[m] ? m : faces[lastFace] ? lastFace : 'neutral';
+    const changed = lastWho !== 'both' && lastWho !== who;
+    if (auto && (!lastFace || sinceCut >= 3 || (key !== lastFace && sinceCut >= 2) || (changed && sinceCut >= 1))) face(key);
     const first = sinceCut === 0, named = first || tag !== tagShown;
     const b = el('p', 'bub' + (first ? ' first' : named ? ' tagged' : '') + (small ? ' small' : ''));
     if (named) { const w = el('span', 'nm ' + who); w.textContent = tag; b.append(w); tagShown = tag; }
@@ -3070,10 +3245,10 @@ const Toon = (() => {
     add(b);
   }
   return {
-    cut, say, face, settle, more,
+    cut, duo, say, face, settle, more,
     as(id) { who = id; whoEl.textContent = SPEAKERS[id].name; },
     auto(on) { auto = on; },
-    me(text) { const b = el('p', 'bub me'); b.textContent = text; lastFace = ''; tagShown = ''; add(b); },
+    me(text) { const b = el('p', 'bub me'); b.textContent = text; lastFace = ''; lastWho = ''; tagShown = ''; add(b); },
     narr(text, cls) { const p = el('p', 'narr' + (cls ? ' ' + cls : '')); p.textContent = text; tagShown = ''; return add(p); },
     head(text) { const p = el('p', 'cookie-head'); p.textContent = text; return add(p); },
     think(text) {
@@ -3085,11 +3260,13 @@ const Toon = (() => {
     reset() {
       if (io) io.disconnect();
       stripEl.replaceChildren(); toonOpts.replaceChildren(); toonScroll.scrollTop = 0; toonMore.hidden = true;
-      who = 'dan'; auto = false; lastFace = ''; sinceCut = 9; faceN = 0; tagShown = ''; firstNew = null; nearEnd = true;
+      who = 'dan'; auto = false; lastFace = ''; lastWho = ''; sinceCut = 9; faceN = 0; tagShown = ''; firstNew = null; nearEnd = true;
       for (const k of Object.keys(turn)) delete turn[k];
     },
   };
 })();
+// 단과 청이 함께 나오는 컷: 둘이 앉은 그림을 받으면 그것을, 없으면 사선으로 나눈 두 칸
+const duoShot = (a, b, o = {}) => (GM_EXTRA.has('duo') ? Toon.cut('duo', { narr: o.narr }) : Toon.duo(a, b, o));
 toonScroll.addEventListener('scroll', () => Toon.more(), { passive: true });
 toonMore.addEventListener('click', () => toonScroll.scrollBy({ top: toonScroll.clientHeight * .75, behavior: reduced ? 'auto' : 'smooth' }));
 new MutationObserver(() => { if (toonOpts.childElementCount) Toon.settle(); requestAnimationFrame(Toon.more); }).observe(toonOpts, { childList: true });
@@ -3104,7 +3281,7 @@ const DAN_ACK = {
 };
 const MUK_CHIPS = [['재물', 'money'], ['인연', 'love'], ['일과 자리', 'work']];
 async function geumeumSession() {
-  convo.log = []; convo.saju = null; state.q = ''; state.topic = 'flow';
+  convo.log = []; convo.saju = null; convo.pair = null; state.q = ''; state.topic = 'flow';
   Toon.auto(false); as('dan'); state.booth = 'dan';
   // 골목: 방울 소리를 따라 금줄 아래로
   Toon.cut('alley', { sound: 'bell', sfx: ['딸랑', 60, 30], narr: [['그믐. 달이 다 지고 없는 밤.']] });
@@ -3116,6 +3293,8 @@ async function geumeumSession() {
   await say('왔네? 방울이 울리길래 누군가 했지.', 'neutral');
   if (state.name) { state.call = callOf(state.name); await say(`${state.name}… 이름이 벌써 골목에 들어와 있네. 앉아.`, 'smile'); }
   else await askName('이름? 지어 대도 돼. 여기선 다들 그래.', n => (n ? `${n}. 좋네, 그렇게 부를게.` : '그럼 손님이라고 부르지 뭐.'), '그냥 손님으로');
+  const mode = await choose('혼자 왔어? 아니면… 마음에 둔 사람 얘기야?', [['나 혼자 일이에요', 'solo'], ['둘 사이 일이에요 (궁합)', 'pair']], 'tease');
+  if (mode === 'pair') return pairSession();
   await wait(done => { LLM.ready.then(done); });
   let live = LLM.on, asked = false;
   const ask = '자, 내려놔 봐. 여기선 무거운 거 들고 버티는 사람이 지는 거야. 뭘 들고 왔어?';
@@ -3137,9 +3316,9 @@ async function geumeumSession() {
   Toon.cut('dan_neutral', { shape: 'sq', half: 'r', zoom: 3, at: SPOT.bell, sound: 'bell', sfx: ['딸랑', 6, 8], alt: '단의 방울' });
   Toon.say('…진짜네.', 'neutral', true);
   // 2장. 찾는 사람
-  Toon.cut('cheong_read', { shape: 'sq', face: true });
-  as('dan'); Toon.say('청아, 손님이다. 책 그만 보고.', 'neutral');
-  as('cheong'); Toon.say('보던 게 아니라 찾던 겁니다.', 'neutral');
+  duoShot('dan_smile', 'cheong_read', { fx: ['note', 'sweat'] });
+  as('dan'); Toon.say('청아, 손님이다. 책 그만 보고.', 'tease');
+  as('cheong'); Toon.say('보던 게 아니라 찾던 겁니다.', 'fluster');
   Toon.cut('cheong_neutral', { shape: 'band', face: true, at: [.52, .42] });
   let s = null, tries = 0;
   for (;;) {
@@ -3154,7 +3333,10 @@ async function geumeumSession() {
   // 여기부터는 묵 선생 몫. 풀이는 지금 부탁해 두고, 손님이 대문·찻잔·붓 컷을 읽는 동안 기다린다
   state.booth = 'muk'; state.call = state.name ? callOf(state.name) : '손님';
   const reading = live ? llm(prompt('풀이', '사주가 나왔다. 대화 기록 속 손님의 고민(문간에서 단이 먼저 들었다)에 맞춰 세 꼭지를 순서대로 푼다. 1) 일간: 타고난 바탕. 2) 오행: 많은 것과 없는 것. 3) 세운: 올해(또는 내년)의 기운. 각 꼭지는 [사실]의 글자, 십성, 개수만 근거로 삼고, 마지막에 셋을 이어 손님 고민에 대한 종합을 한다. 글자 이름은 종이에 써서 보여 줬으니 길게 읊지 않는다.', PARTS_FMT(3)), 'default') : null;
-  if (!s.input.known) Toon.say('…저도 그렇습니다.', 'neutral', true);        // 청도 태어난 시를 모른다
+  if (!s.input.known) {       // 청도 태어난 시를 모른다
+    Toon.cut('cheong_neutral', { shape: 'wide', zoom: 1.5, at: SPOT.eyes.cheong_neutral, tone: 'cold', alt: '말을 멈춘 청' });
+    Toon.say('…저도 그렇습니다.', 'neutral', true);
+  }
   Toon.cut('cheong_read', { shape: 'band', zoom: 1.8, at: SPOT.book, sound: 'page', sfx: ['사락', 6, 12], alt: '만세력을 넘기는 손' });
   await say('찾았습니다. 틀림없습니다.', 'neutral');
   Toon.cut('cheong_guide', { shape: 'sq', face: true });
@@ -3237,6 +3419,277 @@ async function giveLetterToon() {
   await say(PERSONA.muk.bye, 'smile');
 }
 
+/* ── 커플 궁합: 단과 청이 천막에서 함께 본다. 단이 손님(홍실)을, 청이 상대(청실)를 맡는다.
+   두 사람의 관계는 코드가 계산하고(천간합, 일지·띠의 육합·충·반합, 오행 생극, 서로의 십성, 오행 보완), LLM은 그것만 풀어 말한다 ── */
+const STEMS = '甲乙丙丁戊己庚辛壬癸', STEMS_KO = '갑을병정무기경신임계', BRANCHES = '子丑寅卯辰巳午未申酉戌亥', BRANCHES_KO = '자축인묘진사오미신유술해';
+const ANIMAL = '쥐 소 호랑이 토끼 용 뱀 말 양 원숭이 닭 개 돼지'.split(' ');
+const EL5 = ['WOOD', 'FIRE', 'EARTH', 'METAL', 'WATER'];
+const GEN = { WOOD: 'FIRE', FIRE: 'EARTH', EARTH: 'METAL', METAL: 'WATER', WATER: 'WOOD' }, CTRL = { WOOD: 'EARTH', EARTH: 'WATER', WATER: 'FIRE', FIRE: 'METAL', METAL: 'WOOD' };
+const stemEl = c => EL5[Math.floor(STEMS.indexOf(c) / 2)], stemYang = c => STEMS.indexOf(c) % 2 === 0;
+const stemKo = c => STEMS_KO[STEMS.indexOf(c)], brKo = c => BRANCHES_KO[BRANCHES.indexOf(c)], animal = c => ANIMAL[BRANCHES.indexOf(c)];
+// d(일간)에게 x(천간)가 어떤 십성인가
+function tenGodOf(d, x) {
+  const de = stemEl(d), xe = stemEl(x), same = stemYang(d) === stemYang(x);
+  if (de === xe) return same ? '比肩' : '劫財';
+  if (GEN[de] === xe) return same ? '食神' : '傷官';
+  if (CTRL[de] === xe) return same ? '偏財' : '正財';
+  if (CTRL[xe] === de) return same ? '七殺' : '正官';
+  return same ? '偏印' : '正印';
+}
+const GAN_HAP = ['甲己', '乙庚', '丙辛', '丁壬', '戊癸'], YUK_HAP = ['子丑', '寅亥', '卯戌', '辰酉', '巳申', '午未'], CHUNG = ['子午', '丑未', '寅申', '卯酉', '辰戌', '巳亥'], SAM_HAP = ['申子辰', '亥卯未', '寅午戌', '巳酉丑'];
+const inPair = (list, a, b) => list.some(p => p.includes(a) && p.includes(b));
+const brRel = (a, b) => (a === b ? '같은 글자' : inPair(YUK_HAP, a, b) ? '육합' : inPair(CHUNG, a, b) ? '충' : inPair(SAM_HAP, a, b) ? '반합' : '');
+// 받침에 맞는 조사 (받침이 있으면 a, 없으면 b)
+const jo = (w, a, b) => { const c = w.charCodeAt(w.length - 1) - 0xac00; return w + (c >= 0 && c < 11172 && c % 28 ? a : b); };
+const CHEONG_EL = {
+  WOOD: '나무의 일간입니다. 곧게 자라려는 사람이라, 방향이 정해지면 흔들리지 않습니다.',
+  FIRE: '불의 일간입니다. 마음이 밖으로 드러나는 사람이라, 숨기는 데 서툽니다.',
+  EARTH: '흙의 일간입니다. 쉽게 움직이지 않는 대신, 한번 믿으면 오래 받쳐 줍니다.',
+  METAL: '쇠의 일간입니다. 맺고 끊음이 분명해서, 말이 차갑게 들릴 때가 있습니다.',
+  WATER: '물의 일간입니다. 스며들 듯 맞춰 주지만, 속을 잘 보이지 않습니다.',
+};
+const TG_MEAN = { 비겁: '친구처럼 대등한 상대입니다.', 식상: '챙겨 주고 싶고, 표현하게 만드는 상대입니다.', 재성: '함께 현실을 꾸려 가는 상대입니다.', 관성: '기대고 싶고 믿음직한 상대입니다.', 인성: '나를 돌봐 주고 품어 주는 상대입니다.' };
+const TG_YEAR = { 비겁: '나와 같은 기운이 드는 해라, 고집이 세지기 쉽습니다.', 식상: '하고 싶은 말이 많아지는 해라, 말이 앞서지 않게 하십시오.', 재성: '돈과 살림, 현실의 일이 늘어나는 해입니다.', 관성: '책임과 일이 무거워지는 해라, 서로의 피로를 먼저 살피십시오.', 인성: '배우고 기대고 싶은 해라, 서로에게 기댈 곳이 되어 주기 좋습니다.' };
+const E_ACT = { WOOD: '산책이나 화분 키우기', FIRE: '햇볕 쬐기나 같이 웃을 일 만들기', EARTH: '집밥 같이 해 먹기', METAL: '방 정리나 약속 정해 두기', WATER: '아무것도 안 하고 푹 쉬는 날' };
+function pairOf(a, b, na, nb) {
+  const dA = a.chart.dayMaster, dB = b.chart.dayMaster, eA = stemEl(dA), eB = stemEl(dB), EA = EL_KO[eA], EB = EL_KO[eB];
+  const elRel = eA === eB ? 'same' : GEN[eA] === eB ? 'a-gen' : GEN[eB] === eA ? 'b-gen' : CTRL[eA] === eB ? 'a-ctl' : 'b-ctl';
+  const hap = GAN_HAP.find(p => dA !== dB && p.includes(dA) && p.includes(dB)) || '';
+  const tgBA = tenGodOf(dA, dB), tgAB = tenGodOf(dB, dA);
+  const yA = a.pillars.find(([n]) => n === '년')[1].branch, yB = b.pillars.find(([n]) => n === '년')[1].branch;
+  const xA = a.chart.day.branch, xB = b.chart.day.branch, day = brRel(xA, xB), year = brRel(yA, yB);
+  const AN = animal(yA), BN = animal(yB), ka = Object.keys(EL_KO);
+  const fill = [], none2 = [];
+  for (const k of ka) {
+    const ca = a.el[k] || 0, cb = b.el[k] || 0;
+    if (!ca && cb >= 2) fill.push([na, k, nb, cb]);
+    if (!cb && ca >= 2) fill.push([nb, k, na, ca]);
+    if (!ca && !cb) none2.push(k);
+  }
+  const y = new Date().getFullYear(), yrOf = s => y + (s.luckIsNext ? 1 : 0);
+  const side = (s, n) => ({
+    부르는이름: n, 네기둥: s.pillars.filter(([, p]) => p).reverse().map(([k, p]) => `${k}주 ${p.hangul}(${p.stem}${p.branch})`),
+    시주: s.input.known ? '있음' : '태어난 시를 몰라 비움', 일간: `${stemKo(s.chart.dayMaster)}${EL_KO[stemEl(s.chart.dayMaster)]}(${s.chart.dayMaster})`,
+    오행개수: Object.fromEntries(ka.map(k => [EL_KO[k], s.el[k] || 0])),
+    띠: `${animal(s.pillars.find(([k]) => k === '년')[1].branch)}`, 세운: `${yrOf(s)} ${s.luck.hangul} · ${TG_KO[s.luck.tenGod]}`,
+  });
+  const relTxt = {
+    same: `둘 다 ${EA}: 같은 기운`, 'a-gen': `${na}의 ${jo(EA, '이', '가')} ${nb}의 ${jo(EB, '을', '를')} 살린다 (상생)`, 'b-gen': `${nb}의 ${jo(EB, '이', '가')} ${na}의 ${jo(EA, '을', '를')} 살린다 (상생)`,
+    'a-ctl': `${na}의 ${jo(EA, '이', '가')} ${nb}의 ${jo(EB, '을', '를')} 누른다 (상극)`, 'b-ctl': `${nb}의 ${jo(EB, '이', '가')} ${na}의 ${jo(EA, '을', '를')} 누른다 (상극)`,
+  }[elRel];
+  const hapName = hap ? `${stemKo(hap[0])}${stemKo(hap[1])}합` : '';
+  const facts = {
+    손님: side(a, na), 상대: side(b, nb),
+    일간관계: { 오행: relTxt, 천간합: hap ? `${hapName}(${hap}): 서로 끌리는 짝` : '없음', 서로의십성: `${nb}의 일간은 ${na}에게 ${TG_KO[tgBA]}, ${na}의 일간은 ${nb}에게 ${TG_KO[tgAB]}` },
+    일지관계: `${brKo(xA)}·${brKo(xB)}: ${day || '뚜렷한 합이나 충 없음'}`,
+    띠관계: `${AN}·${BN}: ${year || '뚜렷한 합이나 충 없음'}`,
+    오행보완: fill.length ? fill.map(([w, k, g, n]) => `${w}에게 없는 ${jo(EL_KO[k], '을', '를')} ${jo(g, '이', '가')} ${n}개 가졌다`) : ['한쪽에 없는 기운을 다른 쪽이 크게 채우는 짝은 없다'],
+    둘다없는기운: none2.map(k => EL_KO[k]),
+    참고: '대운, 신강약, 격국, 용신, 신살, 12운성, 공망, 원진, 형·파·해는 계산하지 않았다. 점수는 매기지 않는다.',
+  };
+  const tokens = ['일간', '일지', '띠', '오행', '세운', '십성', '천간합', '육합', '충', '반합', na, nb, EA, EB, AN, BN];
+  [a, b].forEach(s => s.pillars.forEach(([, p]) => { if (p) tokens.push(p.hangul); }));
+  // 고정 대본과 고정 편지에 쓰는 문장
+  const gA = TG_GROUP[tgBA], rough = [a, b].some(s => ['劫財', '傷官', '七殺'].includes(s.luck.tenGod));
+  const elFormal = {
+    same: `두 분은 같은 ${EA} 기운입니다. 생각하는 결이 닮아 금방 편해지지만, 둘 다 물러서지 않을 때가 있습니다.`,
+    'a-gen': `${na}의 ${jo(EA, '이', '가')} ${nb}의 ${jo(EB, '을', '를')} 살립니다. ${na} 쪽이 먼저 챙기고 북돋는 사이입니다.`,
+    'b-gen': `${nb}의 ${jo(EB, '이', '가')} ${na}의 ${jo(EA, '을', '를')} 살립니다. ${nb} 쪽이 먼저 챙기고 북돋는 사이입니다.`,
+    'a-ctl': `${na}의 ${jo(EA, '이', '가')} ${nb}의 ${jo(EB, '을', '를')} 누르는 사이입니다. 한쪽이 이끌고 한쪽이 맞추기 쉬우니, 이끄는 쪽이 힘을 빼면 오래 갑니다.`,
+    'b-ctl': `${nb}의 ${jo(EB, '이', '가')} ${na}의 ${jo(EA, '을', '를')} 누르는 사이입니다. 한쪽이 이끌고 한쪽이 맞추기 쉬우니, 이끄는 쪽이 힘을 빼면 오래 갑니다.`,
+  }[elRel];
+  const hapFormal = hap ? `게다가 두 분의 일간은 ${hapName}입니다. 처음부터 묘하게 끌리는 짝입니다.` : `${nb}의 일간은 ${na}에게 ${TG_KO[tgBA]}입니다. ${TG_MEAN[gA]}`;
+  const dayFormal = {
+    육합: '두 분의 일지는 육합입니다. 함께 사는 자리에서 잘 맞물립니다.', 충: '두 분의 일지는 충입니다. 가까울수록 부딪히기 쉬우니, 각자의 시간을 지켜 주는 것이 오래 가는 길입니다.',
+    반합: '두 분의 일지는 삼합의 두 글자입니다. 함께 무언가를 이뤄 가는 힘이 있습니다.', '같은 글자': '두 분의 일지가 같은 글자입니다. 사는 방식이 닮았습니다.',
+    '': '두 분의 일지 사이에는 크게 끌거나 부딪히는 관계가 없습니다. 담담하게 맞춰 가는 사이입니다.',
+  }[day];
+  const yearFormal = {
+    육합: `띠로는 ${jo(AN, '과', '와')} ${BN}, 육합입니다. 두 집안이 편하게 섞이는 짝입니다.`, 충: `띠로는 ${jo(AN, '과', '와')} ${BN}, 충입니다. 집안 어른들 앞에서는 서로의 편을 먼저 들어 주십시오.`,
+    반합: `띠로는 ${jo(AN, '과', '와')} ${BN}, 삼합의 짝입니다. 같은 편이 되기 쉽습니다.`, '같은 글자': `두 분 모두 ${AN}띠입니다. 동갑내기 같은 사이입니다.`, '': `띠로는 ${jo(AN, '과', '와')} ${BN}, 무난한 사이입니다.`,
+  }[year];
+  const dayBan = { 육합: '일지가 육합이야. 같이 사는 자리가 잘 맞물려.', 충: '일지가 충이야. 붙어 있을수록 부딪혀. 각자 시간을 꼭 지켜 줘.', 반합: '일지가 삼합의 두 글자야. 둘이 같이 뭘 벌이면 잘 돼.', '같은 글자': '일지가 같은 글자네. 사는 방식이 닮았어.', '': '일지끼리는 크게 끌지도 밀지도 않아. 담담하게 맞춰 가는 사이야.' }[day];
+  const yearBan = { 육합: `띠로 보면 ${jo(AN, '이랑', '랑')} ${BN}, 육합이야. 집안끼리도 편하게 섞여.`, 충: `띠로 보면 ${jo(AN, '이랑', '랑')} ${BN}, 충이야. 어른들 앞에선 말 한마디 조심해.`, 반합: `띠로 보면 ${jo(AN, '이랑', '랑')} ${BN}, 삼합 짝이야. 같은 편이 되기 쉬워.`, '같은 글자': `둘 다 ${AN}띠네. 동갑내기 같은 사이야.`, '': '띠끼리는 무난해.' }[year];
+  const f0 = fill[0], fillBan = f0 ? `${f0[0]}한테 없는 ${jo(EL_KO[f0[1]], '을', '를')} ${jo(f0[2], '이', '가')} ${f0[3]}개나 가졌어. 옆에 있으면 빈자리가 채워져.`
+    : none2.length ? `둘 다 ${jo(EL_KO[none2[0]], '이', '가')} 없네. ${E_ACT[none2[0]]}, 같이 해 봐.` : '서로 크게 빈 데가 없어. 각자 가진 걸로 충분한 사이야.';
+  const whenBan = `${a.luckIsNext ? '내년' : '올해'} ${jo(na, '은', '는')} ${TG_KO[a.luck.tenGod]}운, ${jo(nb, '은', '는')} ${TG_KO[b.luck.tenGod]}운이야. ` + (rough ? '둘 중 한 사람이 예민해지기 쉬운 해야. 큰 결정은 한 철 묵혀.' : '크게 부딪힐 해는 아니야. 미뤄 둔 얘기 꺼내기 좋은 때야.');
+  const howBan = none2.length ? `둘 다 ${jo(EL_KO[none2[0]], '이', '가')} 없으니까 ${E_ACT[none2[0]]}, 같이 해 봐. 같이 채우는 게 제일 빨라.`
+    : f0 ? `${jo(f0[2], '이', '가')} 가진 ${jo(EL_KO[f0[1]], '을', '를')} ${f0[0]}한테 나눠 주는 쪽으로 지내 봐. 그게 이 둘한테 맞는 모양이야.` : '각자 시간을 지켜 주는 게 제일이야. 둘 다 너무 맞추려고 하지 마.';
+  const head = hap ? '처음부터 끌리는 두 사람입니다.' : elRel === 'same' ? '닮은 기운의 두 사람입니다.' : elRel.endsWith('gen') ? '한쪽이 다른 쪽을 살리는 사이입니다.' : '서로 다른 결이 맞물리는 사이입니다.';
+  const caution = day === '충' ? '가까이 붙어 있는 시간이 길수록 부딪히기 쉽습니다. 다툰 날은 그 밤을 넘기지 말고, 짧게라도 풀어 두십시오.'
+    : elRel.endsWith('ctl') ? '한쪽이 이끄는 사이라, 이끄는 쪽의 말이 명령처럼 들리지 않게 조심하십시오.' : '편한 사이일수록 고맙다는 말을 아끼기 쉽습니다. 작은 말이라도 꺼내 두십시오.';
+  const rel = { eA, eB, hap, hapName, tgBA, day, year, AN, BN, elFormal, hapFormal, dayFormal, yearFormal, dayBan, yearBan, fillBan, whenBan, howBan, head, caution, rough, y };
+  return { s: [a, b], names: [na, nb], facts, tokens, rel };
+}
+// LLM이 쓰지 못했을 때의 궁합 편지 (청이 하십시오체로 쓰고, 단이 추신을 단다)
+function fixedPair() {
+  const { s: [a, b], names: [na, nb], rel } = convo.pair, ya = rel.y + (a.luckIsNext ? 1 : 0), yb = rel.y + (b.luckIsNext ? 1 : 0);
+  const elB = `일간 관계: ${EL_KO[rel.eA]}·${EL_KO[rel.eB]}`, dayB = `일지: ${brKo(a.chart.day.branch)}·${brKo(b.chart.day.branch)}${rel.day ? ' ' + rel.day : ''}`;
+  return {
+    headline: rel.head,
+    answer: [
+      { text: `${na}의 일간은 ${stemKo(a.chart.dayMaster)}${EL_KO[rel.eA]}입니다. ${CHEONG_EL[rel.eA]}`, basis: `일간: ${na} ${stemKo(a.chart.dayMaster)}${EL_KO[rel.eA]}` },
+      { text: `${nb}의 일간은 ${stemKo(b.chart.dayMaster)}${EL_KO[rel.eB]}입니다. ${CHEONG_EL[rel.eB]}`, basis: `일간: ${nb} ${stemKo(b.chart.dayMaster)}${EL_KO[rel.eB]}` },
+      { text: rel.elFormal, basis: elB },
+      { text: rel.hapFormal, basis: rel.hap ? `천간합: ${rel.hapName}` : `십성: ${nb}의 일간 · ${TG_KO[rel.tgBA]}` },
+      { text: rel.dayFormal, basis: dayB },
+    ],
+    timing: [
+      { text: `${ya}년 ${jo(na, '은', '는')} ${a.luck.hangul}년, ${TG_KO[a.luck.tenGod]}의 해입니다. ${TG_YEAR[TG_GROUP[a.luck.tenGod]]}`, basis: `세운 ${ya} · ${na} ${TG_KO[a.luck.tenGod]}` },
+      { text: `${yb}년 ${jo(nb, '은', '는')} ${b.luck.hangul}년, ${TG_KO[b.luck.tenGod]}의 해입니다. ${TG_YEAR[TG_GROUP[b.luck.tenGod]]}`, basis: `세운 ${yb} · ${nb} ${TG_KO[b.luck.tenGod]}` },
+    ],
+    cautions: [
+      { text: rel.caution, basis: rel.day === '충' ? dayB : elB },
+      { text: rel.yearFormal, basis: `띠: ${rel.AN}·${rel.BN}${rel.year ? ' ' + rel.year : ''}` },
+      { text: '궁합은 두 분이 맞춰 갈 자리를 보여 줄 뿐, 인연의 끝을 정하지 않습니다. 상대의 마음은 사주가 아니라 상대에게 직접 물어보십시오.', basis: elB },
+    ],
+    quote: { said: mainWord(), note: '그 말을 들고 둘의 이야기를 하러 천막에 앉으신 것부터가, 이미 반은 맞춰 가고 있다는 뜻입니다.', basis: elB },
+    next: ['두 분 각자의 사주는 그믐당의 묵 선생에게 따로 보여 보십시오', '다음 그믐에, 두 분의 다음 해 흐름을 다시 보러 오십시오', '같은 고민을 카드로 보려면 포차 골목의 달무리를 찾으십시오'],
+  };
+}
+const PAIR_CHIPS = [['사귀는 중', 'dating'], ['아직 마음만', 'crush'], ['오래된 사이', 'long'], ['헤어진 사이', 'past']];
+const PAIR_ACK = {
+  dating: '사귀는 중이구나. 좋을 때네. 그래도 걸리는 게 있으니까 왔겠지.',
+  crush: '아직 마음만이구나. 그게 제일 떨리지.',
+  long: '오래된 사이구나. 오래 간 만큼 쌓인 게 있겠다.',
+  past: '헤어진 사이구나. …괜찮아, 여기선 그런 얘기 많이 해.',
+};
+const THIRD_NOTE = '상대의 생년월일도 이 기기에서 계산에만 쓰고 저장하지 않아요. 상대가 모르는 풀이이니 재미로만 봐 주세요.';
+const PAIR_TASK = '두 사람의 사주가 나왔다. 대화 기록 속 고민에 맞춰 네 꼭지를 순서대로 푼다. 1) who=dan: 손님(홍실)의 바탕, 일간과 오행. 2) who=cheong: 상대(청실)의 바탕, 일간과 오행. 3) who=cheong: 둘 사이, 일간 관계(오행 생극, 천간합, 서로의 십성). 4) who=dan: 살면서 맞물리고 부딪히는 곳, 일지 관계, 띠 관계, 오행 보완. summary는 who=dan이 둘에게 하는 말. [사실]에 있는 관계만 근거로 삼고, 점수를 매기거나 단정하지 않는다. 글자 이름은 종이에 적어 보여 줬으니 길게 읊지 않는다.';
+const PAIR_FMT = '{"parts":[{"who":"dan","lines":["이 꼭지를 두 사람 고민에 맞춰 푼 말 1~2개, 각 2~3문장"],"mood":"neutral|smile|think|surprise|tease|fluster"},{"who":"cheong","lines":["..."],"mood":"..."},{"who":"cheong","lines":["..."],"mood":"..."},{"who":"dan","lines":["..."],"mood":"..."}],"summary":{"who":"dan","lines":["둘에게 하는 말 1~2개, 각 2~3문장"],"mood":"smile"},"chips":["손님이 이어서 물을 만한 질문 2~3개, 각 15자 이내"],"crisis":false}';
+function checkPair(r) {
+  if (!r || typeof r !== 'object') return null;
+  if (r.crisis === true) return { crisis: true };
+  if (!Array.isArray(r.parts) || r.parts.length !== 4 || !r.summary) return null;
+  const WHO = ['dan', 'cheong', 'cheong', 'dan'];
+  const parts = r.parts.map((c, i) => { const l = c && cleanLines(c.lines, 2); return l ? { who: c.who === 'dan' || c.who === 'cheong' ? c.who : WHO[i], lines: l, mood: moodOf(c.mood) } : null; });
+  const sum = cleanLines(r.summary.lines, 2);
+  if (!parts.every(Boolean) || !sum) return null;
+  return { parts, summary: { who: r.summary.who === 'cheong' ? 'cheong' : 'dan', lines: sum, mood: moodOf(r.summary.mood) }, chips: chipsOf(r.chips) };
+}
+// 생년월일을 받아 사주를 계산한다. 계산 엔진이 없으면 null
+async function birthOf(str, note) {
+  for (let k = 0; ; k++) {
+    const birth = await askBirth(k ? '다시 일러 주십시오.' : str, 'neutral', note);
+    let s = null;
+    try { s = computeSaju(birth); } catch (e) { console.warn('사주 계산 실패', e); return null; }
+    if (s) return s;
+    await say('그런 날은 만세력에 없습니다. 날짜를 다시 살펴 주십시오.', 'surprise');
+  }
+}
+async function pairSession() {
+  state.booth = 'pair'; state.call = state.name ? callOf(state.name) : '손님';
+  const na = state.name || '손님';
+  Toon.auto(false);
+  duoShot('dan_smile', 'cheong_neutral', { fx: ['note', ['sweat', 'blush']], narr: [['홍실과 청실.']] });
+  Toon.narr('둘이 함께 보는 궁합은, 이 천막에서만 본다.');
+  as('dan'); Toon.say('오, 둘 사이 일이구나. 그럼 오늘은 대문 안 가. 여기서 우리 둘이 봐.', 'tease');
+  as('cheong'); Toon.say('…저도 말입니까?', 'fluster');
+  as('dan'); Toon.say('방석이 왜 둘이겠어. 너는 그쪽 사람, 나는 이쪽 사람.', 'smile');
+  // 듣는 사람: 어떤 사이인지
+  await wait(done => { LLM.ready.then(done); });
+  let live = LLM.on, asked = false;
+  const ask = '어떤 사이야? 사귀는 중이야, 아직 마음만 있는 거야, 오래된 사이야?';
+  Toon.auto(true);
+  if (live) {
+    const t = await openingAsk(ask, PAIR_CHIPS.map(c => c[0]));
+    if (t === 'crisis') return 'crisis';
+    asked = true; state.topic = (PAIR_CHIPS.find(c => c[0] === t) || [0, 'flow'])[1];
+    const r = await interview();
+    if (r === 'crisis') return 'crisis';
+    live = r;
+  }
+  if (!asked) {
+    const t = await choose(ask, PAIR_CHIPS, 'smile');
+    hear(PAIR_CHIPS.find(c => c[1] === t)[0]); state.topic = t;
+    await say(PAIR_ACK[t], 'smile');
+  }
+  // 찾는 사람: 두 사람의 생년월일
+  Toon.auto(false); as('cheong');
+  Toon.cut('cheong_neutral', { shape: 'band', face: true, at: [.52, .42] });
+  const stuck = async () => { await say('…만세력이 펴지지 않습니다. 오늘은 찾을 수가 없겠습니다. (계산 엔진을 불러오지 못했어요.)', 'neutral'); return 'stuck'; };
+  const sA = await birthOf('먼저 손님의 태어난 해와 달, 날과 시를 일러 주십시오.');
+  if (!sA) return stuck();
+  const nb = (await askText('그분은 어찌 부르면 되겠습니까?', '이름 또는 별명', '그냥 그분으로', 'neutral')) || '그분';
+  const sB = await birthOf(`이제 ${nb}의 것을 일러 주십시오. 모르는 칸은 모른다고 하셔도 됩니다.`, THIRD_NOTE);
+  if (!sB) return stuck();
+  convo.pair = pairOf(sA, sB, na, nb);
+  const reading = live ? llm(prompt('궁합 풀이', PAIR_TASK, PAIR_FMT), 'default') : null;
+  Toon.cut('cheong_read', { shape: 'band', zoom: 1.8, at: SPOT.book, sound: 'page', sfx: ['사락', 6, 12], alt: '만세력을 넘기는 손' });
+  await say('찾았습니다. 두 분 모두, 틀림없습니다.', 'neutral');
+  Toon.cut('paper', { pair: [sA, sB], names: [na, nb], glow: true, sound: 'brush', sfx: ['사각 사각', 6, 82, 'ink'] });
+  await say(`위는 ${na}, 아래는 ${nb}입니다.`, 'neutral');
+  as('dan'); Toon.say('홍실은 내 쪽, 청실은 쟤 쪽.', 'tease');
+  const elAlt = s => Object.keys(EL_KO).map(k => `${EL_KO[k]} ${s.el[k] || 0}`).join(', ');
+  Toon.cut('ring', { el2: [sA, sB], names: [na, nb], alt: `두 사람의 오행. ${na}: ${elAlt(sA)}. ${nb}: ${elAlt(sB)}.` });
+  Toon.narr('두 사람의 다섯 기운이, 한 고리 안에 놓였다.');
+  // 풀이: 단과 청이 번갈아
+  Toon.auto(true);
+  let R = null;
+  if (live) {
+    R = checkPair(await pondering(reading));
+    if (R && R.crisis) { await crisis(); return 'crisis'; }
+  }
+  if (R) {
+    for (const part of R.parts) { as(part.who); for (const l of part.lines) await speak(l, part.mood); }
+    as(R.summary.who); for (const l of R.summary.lines) await speak(l, R.summary.mood);
+    as('dan');
+    if (await followUps(R.chips, '[사실]의 두 사람 사주 안에서만 답하고, 답은 단이 반말로 한다. 궁합으로', '여기까지 듣고 더 궁금한 거 있으면 물어. 세 번까지 받아 줄게.') === 'crisis') return 'crisis';
+  } else await pairFixed();
+  await giveLetterPair();
+  Toon.cut('alley', { sound: 'bell', narr: [['돌아보니 골목은 없었다.'], ['손에는 홍실과 청실로 묶은 봉투 한 통.', 'b']] });
+  as('dan'); Toon.say('다음 그믐에 또 와! 둘이 같이 오면 더 좋고.', 'smile');
+  cookie();
+}
+// LLM 없이 보는 궁합: 단이 손님을, 청이 상대와 둘 사이를, 다시 단이 맞물리는 곳을
+async function pairFixed() {
+  const { s: [a, b], names: [na, nb], rel } = convo.pair;
+  as('dan'); await say(`${na}부터 볼게. ${DAY_MASTER[a.chart.dayMaster]}`, 'smile');
+  as('cheong'); await say(`${nb}의 일간은 ${stemKo(b.chart.dayMaster)}${EL_KO[rel.eB]}입니다. ${CHEONG_EL[rel.eB]}`, 'neutral');
+  await say(rel.elFormal, 'think');
+  await say(rel.hapFormal, rel.hap ? 'surprise' : 'neutral');
+  as('dan'); await say(rel.dayBan, 'tease');
+  await say(rel.yearBan, 'smile');
+  await say(rel.fillBan, 'neutral');
+  await say('궁합은 정답이 아니야. 둘이 맞춰 갈 자리를 보여 주는 거지.', 'smile');
+  for (let k = 0; k < 2; k++) {
+    const opts = [['언제 조심해야 해?', 'when'], ['어떻게 하면 잘 지내?', 'how'], ['이제 됐어요', 'done']];
+    const q = await choose(k ? '또 궁금한 거 있어?' : '더 궁금한 거 있어?', opts, 'smile');
+    if (q === 'done') break;
+    hear(opts.find(o => o[1] === q)[0]);
+    const ans = q === 'when' ? rel.whenBan : rel.howBan;
+    convo.log.push({ who: '단', said: ans });
+    await say(ans, q === 'when' ? 'think' : 'smile');
+  }
+}
+// 복채는 청실홍실 한 쌍: 청이 편지를 쓰고, 단이 실을 꼬아 묶는다
+async function giveLetterPair() {
+  Toon.auto(false); as('cheong');
+  Toon.cut('booth', { shape: 'band', at: [.5, .62], glow: true, alt: '천막의 낮은 상과 네 장의 종이' });
+  await say('말로 나눈 궁합에는 값이 없습니다. 글로 남기시려면 청실홍실 한 쌍이 듭니다.', 'neutral');
+  as('dan'); Toon.say('실은 내가 꼬아 줄게. 홍실은 내 거, 청실은 쟤 거.', 'tease');
+  as('cheong'); await say('…편지는 제가 쓰겠습니다. 잠시 기다려 주십시오.', 'fluster');
+  const R = await writeReport(), L = makeLetter(R);
+  renderLetter(L);
+  const env = Toon.cut('envelope', { glow: true, seal: '丹靑' });
+  env.style.cursor = 'pointer';
+  as('dan'); await say('자, 받아. 둘이 같이 열어 봐도 되고.', 'smile');
+  for (;;) {
+    await wait(done => {
+      const go = () => { optsEl.replaceChildren(); env.removeEventListener('click', go); done(); };
+      const btn = el('button', 'opt solo'); btn.type = 'button'; btn.id = 'envOpen'; btn.textContent = '봉투 열어 보기';
+      btn.addEventListener('click', go); env.addEventListener('click', go);
+      optsEl.append(btn);
+      return () => env.removeEventListener('click', go);
+    });
+    if (await payGate(L)) break;
+  }
+  env.style.cursor = '';
+  Letters.add(L);
+  renderLetter(L);
+  await openReport();
+}
+
 /* ── 쿠키 컷: 상담이 끝나면 세 사람의 이야기가 한 토막. 음력 달마다 다음 토막이 열린다 ── */
 const COOKIES = [
   { title: '빈 종이', play() {
@@ -3287,7 +3740,7 @@ function cookie() {
    골목마다 테마, 보는 방식, 화면 형식이 다르다. 골목을 늘릴 때는 ALLEYS에 한 줄을 더하고 enterAlley에 들어가는 길을 잇는다. */
 const ALLEYS = [
   { id: 'pocha', name: '포차 골목', line: '비 오는 밤, 네온 간판 아래 포장마차 점집 셋. 타로와 사주, 별자리를 본다.', tags: ['타로', '사주', '별자리'], img: 'img/hub_pocha.webp' },
-  { id: 'geumeum', name: '그믐 골목', line: '달 없는 밤에만 열리는 한옥 골목. 단이 듣고, 청이 찾고, 묵 선생이 읽는다.', tags: ['사주', '웹툰'], img: gmSrc('alley'), needs: gmSrc('alley') },
+  { id: 'geumeum', name: '그믐 골목', line: '달 없는 밤에만 열리는 한옥 골목. 혼자면 묵 선생이 사주를, 둘이면 단과 청이 궁합을 본다.', tags: ['사주', '커플 궁합', '웹툰'], img: gmSrc('alley'), needs: gmSrc('alley') },
   { id: 'next', name: '다음 골목', line: '아직 불이 꺼져 있어요. 골목은 하나씩 늘어납니다.', tags: [], locked: '준비 중' },
 ];
 function buildHub() {
@@ -3377,7 +3830,7 @@ async function enterToon() {
   const ok = (await Promise.all(GM_FIRST.map(n => probe(gmSrc(n)).then(v => v || probe(gmSrc(n)))))).every(Boolean);      // 실패하면 한 번 더
   loading.classList.add('done');
   if (!ok) { state.mode = 'hub'; show(hubEl, true); hubMsg.textContent = '그믐 골목의 그림을 불러오지 못했어요. 잠시 뒤에 다시 눌러 주세요.'; return; }
-  (async () => { for (const n of Object.keys(GM)) if (!GM_FIRST.includes(n)) await probe(gmSrc(n)); })();     // 나머지 그림은 읽는 동안 차례로 받는다
+  (async () => { for (const n of Object.keys(GM)) if (!GM_FIRST.includes(n) && (!GM_OPT.has(n) || GM_EXTRA.has(n))) await probe(gmSrc(n)); })();     // 나머지 그림은 읽는 동안 차례로 받는다
   Sfx.start(); Sfx.mute(!Voice.on); Sfx.rain(false);       // 그믐 골목은 비가 그친 밤: 방울, 붓, 책장 소리만
   state.mode = 'toon'; optsEl = toonOpts; activeReader = null;
   Toon.reset(); show(toonEl, true); paintSound();
@@ -3401,7 +3854,7 @@ $('#toonSound').addEventListener('click', () => { Voice.set(!Voice.on); if (Voic
 async function boot() {
   const loading = $('#loading');
   // 간판과 종이는 캔버스에 글자를 그리므로 글꼴이 먼저 와 있어야 한다
-  const sample = '세장곧열어요달무리보름타로사주궁합전문신점연애진로속마음평생수택일고민한장이면커플상담시손금무료재회운정통봐드림년세복채안내원카드이체가능노래방호프소포차약월일간나모름양력음윤달시지비견겁재식상편정관인계산절기바보마법여제황교연전차힘은둔자의레퀴매린람죽절악탑별태심판계샛별출생차트점성내이번흐름양황소쌍둥게처녀천칭갈염물병고기불흙바람태지금해부터시작하키꾸간이OK!!·0123456789';
+  const sample = '세장곧열어요그믐골목은달무리보름타로사주궁합전문신점연애진로속마음평생수택일고민한장이면커플상담시손금무료재회운정통봐드림년세복채안내원카드이체가능노래방호프소포차약월일간나모름양력음윤달시지비견겁재식상편정관인계산절기바보마법여제황교연전차힘은둔자의레퀴매린람죽절악탑별태심판계샛별출생차트점성내이번흐름양황소쌍둥게처녀천칭갈염물병고기불흙바람태지금해부터시작하키꾸간이OK!!·0123456789';
   try {
     await Promise.race([
       Promise.all(['48px "Black Han Sans"', '48px "Jua"', '24px "Gowun Dodum"'].map(f => document.fonts.load(f, sample))
