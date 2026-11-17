@@ -2,3 +2,4 @@ node_modules
 page.html
 *.png
 package-lock.json
+*-letter.txt
