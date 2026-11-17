@@ -284,6 +284,22 @@ button { cursor: pointer; }
 .alley-ui .title { top: clamp(52px, 9cqh, 74px); }
 .letters { top: clamp(10px, 2cqh, 18px); }
 
+/* ── 오늘의 한 장 (골목 고르기 화면) ── */
+.daily { border-radius: 16px; background: linear-gradient(135deg, #2a1a6e, #17132b 70%); box-shadow: inset 0 0 0 1.5px rgba(230, 255, 61, .35), 0 10px 28px rgba(0, 0, 0, .45); }
+.daily-back { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; padding: 14px 18px; border: 0; border-radius: inherit; background: none; text-align: left; color: var(--paper); }
+.daily-back[hidden], .daily-open[hidden] { display: none; }
+.daily-k { margin: 0; font-family: var(--f-label); font-size: 15px; color: var(--lime); }
+.daily-t { font-size: 14px; color: rgba(255, 244, 220, .85); }
+.daily-open { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px 16px; }
+.daily-face { flex: 0 0 74px; display: grid; place-items: center; aspect-ratio: 256 / 420; margin: 0; border: 4px solid var(--gold); border-radius: 6px; background: var(--paper); animation: flipin .6s ease; }
+.daily-face svg { width: 72%; height: auto; }
+.daily-face.rev svg { transform: rotate(180deg); }
+@keyframes flipin { from { transform: perspective(400px) rotateY(90deg); } to { transform: none; } }
+.daily-txt { flex: 1 1 auto; min-width: 0; }
+.daily-txt p { margin: 0 0 6px; font-size: 14.5px; line-height: 1.55; word-break: keep-all; }
+.daily-tip { color: var(--bulb); }
+#dailyMore { margin-top: 4px; }
+
 /* ── 웹툰 컷 화면 (그믐 골목): 세로로 내려가며 읽는다 ── */
 .toon { position: absolute; inset: 0; z-index: 6; display: flex; flex-direction: column; background: #07060c; color: #efe6d2; transition: opacity .5s ease; --bone: #efe6d2; --sumi: #0e0b10; --crimson: #b3202a; }
 .toon[hidden] { display: flex !important; opacity: 0; visibility: hidden; }
@@ -421,6 +437,21 @@ button { cursor: pointer; }
         <h1>달무리 골목</h1>
         <p class="hub-sub">오늘 밤은 어느 골목으로 갈까요?</p>
       </header>
+      <section class="daily" aria-label="오늘의 한 장">
+        <button class="daily-back" id="dailyBtn" type="button">
+          <span class="daily-k">오늘의 한 장 · 무료</span>
+          <span class="daily-t">하루 한 번, 달무리가 카드 한 장을 뒤집어 드려요.</span>
+        </button>
+        <div class="daily-open" id="dailyOpen" aria-live="polite" hidden>
+          <figure class="daily-face" id="dailyFace" aria-hidden="true"></figure>
+          <div class="daily-txt">
+            <p class="daily-k" id="dailyHead"></p>
+            <p id="dailyMean"></p>
+            <p class="daily-tip" id="dailyTip"></p>
+            <button class="pill" id="dailyMore" type="button">달무리에게 자세히 묻기 →</button>
+          </div>
+        </div>
+      </section>
       <div class="hub-list" id="hubList"></div>
       <p class="hub-msg" id="hubMsg" aria-live="polite"></p>
       <button class="pill" id="hubLetters" type="button" hidden>받은 편지 0</button>
@@ -3277,6 +3308,29 @@ function buildHub() {
     list.append(b);
   }
 }
+/* ── 오늘의 한 장: 하루 한 번 무료로 카드 한 장. 같은 날에는 같은 카드, 사람마다 다른 카드 (유입용 무료 미리보기) ── */
+function dailyPick() {
+  const d = new Date(), day = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  let salt;
+  try { salt = +localStorage.getItem('dalmuri-salt') || 0; if (!salt) { salt = 1 + Math.floor(Math.random() * 1e6); localStorage.setItem('dalmuri-salt', String(salt)); } }
+  catch (e) { salt = 1 + (day % 997); }      // 저장소가 막혀 있으면 날짜만으로
+  let h = Math.imul(day ^ salt, 2654435761) >>> 0;
+  h ^= h >>> 15; h = Math.imul(h, 2246822519) >>> 0; h ^= h >>> 13;
+  return { num: h % CARDS.length, rev: (h >>> 7) % 4 === 0 };     // 역방향은 네 번에 한 번쯤
+}
+function showDaily() {
+  const { num, rev } = dailyPick(), c = CARDS[num], face = $('#dailyFace');
+  face.className = 'daily-face' + (rev ? ' rev' : '');
+  face.innerHTML = `<svg viewBox="0 0 100 100" fill="none" stroke="#231a70" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round">${c.icon}</svg>`;   // 코드에 박힌 카드 그림만
+  $('#dailyHead').textContent = `오늘의 한 장 · ${c.n} (${rev ? '역방향' : '정방향'})`;
+  $('#dailyMean').textContent = rev ? c.rev : c.up;
+  $('#dailyTip').textContent = c.tip;
+  $('#dailyBtn').hidden = true; $('#dailyOpen').hidden = false;
+  try { localStorage.setItem('dalmuri-daily', new Date().toDateString()); } catch (e) { /* 저장 안 됨 */ }
+}
+$('#dailyBtn').addEventListener('click', showDaily);
+$('#dailyMore').addEventListener('click', () => enterAlley('pocha'));
+try { if (localStorage.getItem('dalmuri-daily') === new Date().toDateString()) showDaily(); } catch (e) { /* 처음처럼 */ }
 function enterAlley(id) {
   if (state.mode !== 'hub') return;
   hubMsg.textContent = '';

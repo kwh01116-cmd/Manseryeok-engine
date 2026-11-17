@@ -8,16 +8,18 @@
 | 골목 | 화면 | 보는 것 | 그림 |
 |---|---|---|---|
 | 포차 골목 | three.js(r128)로 그린 3D 골목과 부스 셋, 상담사는 2D 그림 | 타로, 사주, 별자리 | `img/{dalmuri,boreum,saetbyeol}_*.webp`, 벽 그림 |
-| 그믐 골목 | 세로로 내려가며 읽는 웹툰 컷과 말풍선 (3D 아님) | 사주 (그믐당, 묵 선생) | `img/gm_*.webp` 11장. 아직 없다. 없으면 카드가 잠긴다 |
+| 그믐 골목 | 세로로 내려가며 읽는 웹툰 컷과 말풍선 (3D 아님) | 사주 (단이 듣고, 청이 찾고, 묵 선생이 읽는다) | `img/gm_*.webp` 23장 (`make_cuts.py`) |
 
 상담 흐름(이름 → 고민 → 문진 → 생년월일 → 풀이 → 되묻기 → 봉투 속 편지)과 받은 편지함은 두 골목이 같은 코드를 쓴다.
+첫 화면(골목 고르기) 위에는 무료 "오늘의 한 장"이 있다. 하루 한 번, 같은 날에는 같은 카드, 사람마다 다른 카드.
+그믐 골목의 이야기(인물, 규칙, 콘티, 쿠키 컷)는 ROADMAP 8절이 정본이다.
 
 ## 구성
 
 - `index.html`: 페이지 전체. Claude Artifact 게시용 조각이라 `<html>`/`<body>` 태그가 없다.
 - `img/`: 포차 골목의 상담사 스프라이트와 벽 그림, 골목 고르기 카드 그림(`hub_pocha.webp`), 그믐 골목 컷(`gm_*.webp`).
 - `make_sprites.py`: 포차 골목 상담사 원본 PNG를 스프라이트로 가공한다. 원본은 용량이 커서 저장소에 넣지 않았다.
-- `make_cuts.py`: 그믐 골목 컷 원본을 `img/gm_*.webp`로 바꾼다 (크기 맞추기, webp). 그림을 바꾸면 `index.html`의 `GM_SPOT`을 맞춘다.
+- `make_cuts.py`: 그믐 골목 컷 원본을 `img/gm_<이름>.webp`로 바꾼다 (`python3 make_cuts.py alley=원본.png muk_calm=원본.png ...`). 그림을 바꾸면 `index.html`의 `SPOT`과 `OHAENG`을 맞춘다.
 - `engine-glue.ts`: Manseryeok-engine을 브라우저에서 부르는 얇은 접착층.
 - `build.mjs`: 엔진 소스와 접착층을 묶어 `index.html`의 `ENGINE_BUNDLE` 구간에 넣는다.
 - `test/`: 헤드리스 통과 테스트 ([test/README.md](test/README.md)).
@@ -28,7 +30,7 @@
 
 1. `ALLEYS`에 카드 한 줄 (이름, 한 줄 소개, 꼬리표, 카드 그림).
 2. `PERSONA`에 상담사 (이름, 말투, `kind`: 보는 방식. 사주면 `'saju'`).
-3. 화면: 3D 부스를 더 짓거나, 웹툰 컷이면 `mukSession()`처럼 `Toon.cut()`과 `say()`로 대본을 쓴다.
+3. 화면: 3D 부스를 더 짓거나, 웹툰 컷이면 `geumeumSession()`처럼 `Toon.cut()`, `Toon.as()`(말하는 사람), `say()`로 대본을 쓴다.
 4. LLM이 없을 때 쓸 고정 문장 (`MUK`, `fixedMuk()` 참고)과 편지 종이 (`.paper-<상담사>`).
 5. `enterAlley()`에 들어가는 길을 잇는다.
 

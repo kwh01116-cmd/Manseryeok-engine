@@ -45,6 +45,8 @@ const ph = name => {
       await page.goto('http://127.0.0.1:8765/test/page.html');
       await page.waitForSelector('#hub:not([hidden])', { timeout: 30000 });
       if (which === 'hub') {      // 포차 골목에 들어갔다가 나오고, 다시 들어간다
+        await page.click('#dailyBtn'); await page.waitForSelector('#dailyOpen:not([hidden])'); await page.waitForTimeout(700); await shot('daily');
+        console.log(which, name, 'daily', await page.textContent('#dailyHead'));
         for (let k = 0; k < 2; k++) {
           await page.click('.hub-card[data-id="pocha"]');
           await page.waitForSelector('#alleyUi:not([hidden])', { timeout: 120000 }); await page.waitForTimeout(700); await shot('alley' + k);
