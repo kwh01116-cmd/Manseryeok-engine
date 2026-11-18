@@ -1,6 +1,7 @@
-"""그믐 골목 컷 만들기.
+"""그믐 골목과 자정 우체국 컷 만들기.
 
-받은 그림(PNG/JPG)을 페이지가 쓰는 img/gm_<이름>.webp로 바꾼다. 비율이 다르면 가운데를 기준으로 잘라 맞춘다.
+받은 그림(PNG/JPG)을 페이지가 쓰는 img/gm_<이름>.webp로 바꾼다.
+그림 주문서의 새 칸(g_로 시작하는 그믐 시즌 1, a_로 시작하는 자정 우체국)은 img/<이름>.webp로 저장한다. 비율이 다르면 가운데를 기준으로 잘라 맞춘다.
 원본은 용량이 커서 저장소에 넣지 않는다.
 
 쓰는 법:  python3 make_cuts.py 이름=원본경로 [이름=원본경로 ...]
@@ -45,6 +46,24 @@ SLOTS = {
     'dan_soft': SQ, 'cheong_quiet': SQ, 'cheong_writing': SQ,
     'threads': LAND, 'pair_envelope': SQ, 'guest_feet': SQ, 'bell': SQ, 'dan_back': TALL,
     'muk_grind': LAND, 'muk_pause': TALL, 'dan_peek': LAND, 'cheong_night': TALL, 'cheong_asleep': TALL,
+    # 그림 주문서(art/image-order.html)의 새 칸. g_와 a_로 시작하는 이름은 img/<이름>.webp로 그대로 저장한다
+    # 그믐 시즌 1 4~12장 (G1~G4)
+    'g_so': SQ, 'g_so_tear': SQ, 'g_sleeve': SQ, 'g_so_hand_dan': SQ, 'g_studio': SQ,
+    'g_dawn_moon': TALL, 'g_yellow_lantern': LAND,
+    'g_so_smile': SQ, 'g_reunion': LAND, 'g_cheong_dust': TALL, 'g_seal_closeup': LAND, 'g_lantern_hang': TALL,
+    'g_dan_first': TALL, 'g_wall': TALL, 'g_wall_years': LAND,
+    'g_young_muk': TALL, 'g_so_hands': SQ, 'g_so_leaving': LAND, 'g_dan_seat': SQ, 'g_bell_give': LAND,
+    'g_baby_night': TALL, 'g_baby': SQ, 'g_baby_cushion': TALL,
+    # 자정 우체국 (A1~A5)
+    'a_hwang_neutral': SQ, 'a_naeil_neutral': SQ,
+    'a_hwang_smile': SQ, 'a_hwang_stern': SQ, 'a_hwang_think': SQ,
+    'a_naeil_smile': SQ, 'a_naeil_lost': SQ, 'a_naeil_quiet': SQ,
+    'a_alley': TALL, 'a_counter': TALL, 'a_out': TALL, 'a_naeil_bike': LAND, 'a_knock': LAND,
+    'a_returnbox': TALL, 'a_ledger': TALL,
+    'a_stamp': LAND, 'a_stamps': SQ, 'a_envelope': SQ, 'a_clock': SQ,
+    'a_s_rain': TALL, 'a_s_empty_house': LAND, 'a_s_exam': TALL, 'a_s_window_rain': TALL,
+    'a_s_yellow_letter': SQ, 'a_s_magnifier': SQ, 'a_s_studio_door': TALL, 'a_s_naeil_letter': SQ,
+    'a_s_clock_move': SQ,
 }
 
 
@@ -77,7 +96,7 @@ def main():
         if alpha:          # 투명 배경 가장자리에 남은 옅은 번짐을 지운다
             im.putalpha(im.getchannel('A').point(lambda v: 0 if v < 16 else v))
         ratio = (im.width / im.height) / (size[0] / size[1])
-        dst = out / f'gm_{name}.webp'
+        dst = out / (f'{name}.webp' if name[:2] in ('g_', 'a_') else f'gm_{name}.webp')
         fit(im, size).save(dst, 'WEBP', quality=80, method=6)
         note = '' if 0.97 < ratio < 1.03 else f'  (비율이 달라 잘랐다: {im.width}x{im.height})'
         print(f'{dst.name:24s} {dst.stat().st_size // 1024:4d}KB{note}')

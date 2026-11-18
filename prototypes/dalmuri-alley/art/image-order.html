@@ -1,0 +1,394 @@
+<title>달무리 골목 그림 주문서</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono&display=swap">
+<style>
+/* Layout: 한 줄로 읽는 주문서. 위에 고정된 배치 탭, 넘기는 순서 → 인수인계 메시지 → 배치별 프롬프트(복사 단추) → 칸 목록 → 받은 뒤 */
+:root {
+  --bg: #eceef5; --surface: #ffffff; --ink: #191a2c; --muted: #555a70; --line: #d5d9e6;
+  --red: #a3202a; --blue: #284a9c; --gold: #8a6a1c; --code-bg: #17151d; --code-fg: #ece6d6;
+  --f-display: "Gowun Batang", "Nanum Myeongjo", "AppleMyungjo", serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1020; --surface: #171a2e; --ink: #ece6d6; --muted: #a8a4b5; --line: #2b2f4a;
+  --red: #ff8a7a; --blue: #9db8ff; --gold: #e2b659; --code-bg: #0a0b16; --code-fg: #ece6d6; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1020; --surface: #171a2e; --ink: #ece6d6; --muted: #a8a4b5; --line: #2b2f4a;
+  --red: #ff8a7a; --blue: #9db8ff; --gold: #e2b659; --code-bg: #0a0b16; --code-fg: #ece6d6; color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.65 var(--f-body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 780px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 72px; }
+header h1 { margin: 0 0 8px; font: 700 clamp(30px, 7vw, 42px)/1.15 var(--f-display); text-wrap: balance; }
+header p { margin: 0; max-width: 62ch; }
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 6px; margin-top: 18px; padding-block: 10px; overflow-x: auto; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.tabs a { flex: 0 0 auto; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); text-decoration: none; font: 600 13px/1.4 var(--f-mono); }
+nav.tabs a:hover, nav.tabs a:focus-visible { border-color: var(--ink); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+section { padding-top: 30px; scroll-margin-top: 56px; }
+h2 { margin: 0 0 8px; font: 700 23px/1.3 var(--f-display); }
+h3 { margin: 0; font: 700 18px/1.35 var(--f-display); }
+.n { font: 400 13px var(--f-body); color: var(--muted); }
+ol.steps { margin: 0; padding-left: 20px; } ol.steps li { margin-bottom: 6px; }
+.bhead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 12px; }
+.copy { padding: 6px 16px; border: 1px solid var(--ink); border-radius: 999px; background: var(--surface); color: var(--ink); font: 600 13px var(--f-body); cursor: pointer; }
+.copy:active { transform: translateY(1px); }
+.attach { margin: 8px 0 2px; font-size: 14px; } .attach b { margin-right: 6px; color: var(--red); }
+.note { margin: 0 0 6px; font-size: 14px; color: var(--muted); }
+ol.items { margin: 6px 0 0; padding-left: 22px; font-size: 14px; }
+.slot { font: 13px var(--f-mono); color: var(--blue); }
+.sz { font-size: 12px; color: var(--gold); }
+pre.prompt { margin: 10px 0 0; padding: 14px; overflow-x: auto; background: var(--code-bg); color: var(--code-fg); border-radius: 8px; font: 12.5px/1.55 var(--f-mono); white-space: pre-wrap; word-break: break-word; }
+.handoff pre.prompt { font-family: var(--f-body); font-size: 13.5px; }
+.tbl { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { font-size: 12px; color: var(--muted); font-weight: 600; }
+td.slot { white-space: nowrap; }
+ul.after { margin: 0; padding-left: 20px; } ul.after li { margin-bottom: 6px; }
+code { font: 13px var(--f-mono); }
+footer { margin-top: 36px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+<div class="wrap">
+  <header>
+    <h1>달무리 골목 그림 주문서</h1>
+    <p>ChatGPT에 프로젝트를 넘기는 인수인계 메시지와, 새로 필요한 그림 51장의 프롬프트입니다. 그믐 골목 시즌 1 23장, 자정 우체국 28장이고, 이야기와 컷 순서는 「달무리 골목 대본집」 문서가 정본입니다.</p>
+  </header>
+  <nav class="tabs" aria-label="주문서 차례"><a href="#steps">순서</a><a href="#handoff">인수인계</a><a href="#g1">G1</a><a href="#g2">G2</a><a href="#g3">G3</a><a href="#g4">G4</a><a href="#a1">A1</a><a href="#a2">A2</a><a href="#a3">A3</a><a href="#a4">A4</a><a href="#a5">A5</a><a href="#slots">칸 목록</a><a href="#after">받은 뒤</a></nav>
+  <section id="steps"><h2>넘기는 순서</h2><ol class="steps"><li>「달무리 골목 대본집」 문서를 마크다운이나 PDF로 내보낸다.</li><li>ChatGPT 새 대화에 내보낸 파일을 올리고, 아래 &#x27;인수인계 메시지&#x27;를 붙여 넣는다. ChatGPT가 요약을 돌려주면 이해했는지 확인한다.</li><li>그림은 배치마다 새 대화에서 만든다. &#x27;첨부&#x27;에 적힌 기준 그림을 먼저 올리고 그 배치의 프롬프트를 붙여 넣은 뒤, 한 장 나올 때마다 &quot;다음&quot;이라고 한다. 고칠 점이 있으면 &quot;다음&quot; 대신 고칠 점을 말한다.</li><li>순서는 그믐 G1 → G2 → G3 → G4, 자정 우체국 A1 → A2 → A3 → A4 → A5. G1의 g_so와 A1의 두 장은 다음 배치에 첨부하는 기준 그림이라 먼저, 마음에 들 때까지 만든다.</li><li>받은 그림의 파일 이름을 칸 이름으로 바꿔 둔다 (예: g_so.png). 코드에 넣는 방법은 맨 아래 &#x27;그림을 받은 뒤&#x27;.</li></ol></section>
+  <section id="handoff" class="handoff">
+    <div class="bhead"><h2>인수인계 메시지</h2><button class="copy" type="button" data-copy="p-handoff">복사</button></div>
+    <p class="note">대본집 파일과 함께 ChatGPT 새 대화에 가장 먼저 붙여 넣습니다.</p>
+    <pre class="prompt" id="p-handoff">너는 지금부터 &#x27;달무리 골목&#x27; 프로젝트를 이어받는다. 함께 올린 「달무리 골목 대본집」이 이야기와 콘티의 정본이다. 먼저 이 메시지와 대본집을 읽고 이해한 것을 열 줄 안으로 요약해 줘. 그다음 내가 &#x27;그림 주문서&#x27;의 배치를 하나씩 붙여 넣으면, 그 규칙대로 그림을 한 장씩 만든다.
+
+1. 무엇인가
+- 웹에서 보는 가상의 점집 골목이다. 손님은 골목 하나를 골라 들어가 상담사와 대화하고, 마지막에 편지 모양의 결과지를 받는다. 결과지는 유료 상품이고 지금은 결제 없는 데모다.
+- 골목은 셋이다. 포차 골목(3D, 타로·사주·별자리), 그믐 골목(세로 웹툰 컷, 사주와 커플 궁합), 자정 우체국(세로 웹툰 컷, 택일과 미래로 부치는 편지, 이번에 새로 만든다).
+- 사주 계산은 직접 만든 만세력 엔진(Manseryeok-engine)이 하고, 대화와 풀이 문장은 AI가 쓴다. 계산하지 않은 명리 개념은 AI가 지어내지 못하게 코드가 막는다.
+
+2. 지금 어디까지 됐나 (2026-11-18)
+- 동작하는 프로토타입: 골목 고르기, 무료 오늘의 한 장, 포차 골목 세 부스, 그믐 골목(사주, 커플 궁합, 묵 선생의 명서, 단청의 연분첩, 쿠키 컷 1~3장), 긴 풀이서, 받은 편지함, 복채 데모.
+- 코드와 그림: GitHub 저장소 kwh01116-cmd/Manseryeok-engine, 브랜치 claude/virtual-fortune-telling-app-hw6bub, 폴더 prototypes/dalmuri-alley. 웹 페이지 전체가 index.html 한 파일이고, 그림은 img/, 그림 변환은 make_cuts.py, 이어받는 순서는 HANDOFF.md에 있다.
+- 아직 없는 것: 그믐 시즌 1의 4~12장과 메아리 장면, 자정 우체국 전체, 실제 결제·계정·서버.
+
+3. 네가 할 일
+- 그림: 그림 주문서의 배치(그믐 G1~G4 23장, 자정 우체국 A1~A5 28장)를 순서대로 만든다. 배치마다 첨부한 기준 그림과 똑같은 얼굴과 옷을 지킨다.
+- 대본: 대본집을 정본으로 지킨다. 고칠 때는 대본집의 표기(컷 번호, [모양 · 그림 칸], 해설과 대사)를 그대로 쓴다.
+- 코드: 저장소에 접근할 수 있으면 HANDOFF.md의 순서를 따른다.
+
+4. 반드시 지킬 것
+- 그림 안에는 글자를 넣지 않는다. 현판, 쪽지, 봉투, 소인, 장부, 포스터, 시계 숫자까지 모두 비운다. 글자는 코드가 그림 위에 얹는다.
+- 그믐 골목 하늘에는 달이 없다. 달은 그믐당 병풍 속 그림으로만 있고, 시즌 1 마지막 장의 가는 그믐달 한 컷만 예외다.
+- 그림체: 그믐당 대문 안은 굵은 먹선, 대문 밖 골목과 천막, 자정 우체국은 부드러운 채색, 지나간 일을 보여 주는 회상은 세피아.
+- 겁주지 않는다. 귀신, 저주, 부적, 굿, 신점은 없다. 앞날을 단정하지 않는다.
+- 인물의 비밀은 대본집의 장 순서대로만 드러낸다.</pre>
+  </section>
+  <section><h2>그림 프롬프트</h2><p class="note">배치마다 ChatGPT 새 대화를 열고, 첨부할 그림을 올린 뒤 복사한 프롬프트를 붙여 넣습니다.</p></section>
+  
+  <section id="g1" class="batch">
+    <div class="bhead"><h3>G1 · 그믐 골목 · 지금 · 부드러운 채색 <span class="n">7장</span></h3><button class="copy" type="button" data-copy="p-g1">복사</button></div>
+    <p class="attach"><b>첨부</b> 단 첫 그림(붉은 옷에 방울), 청 첫 그림(상투에 노란 책), 골목 입구 그림, 천막 그림(파란 차양에 빈 방석 둘)</p>
+    <p class="note">1번 g_so가 새 인물 소의 기준 그림입니다. 마음에 들 때까지 고친 뒤 &quot;다음&quot;으로 넘어가세요. G2, G3, G4, A5에서 이 그림을 첨부합니다.</p>
+    <ol class="items"><li><span class="slot">g_so</span> <span class="sz">정사각</span> 지금의 소, 기준 그림</li><li><span class="slot">g_so_tear</span> <span class="sz">정사각</span> 눈가가 붉어진 소</li><li><span class="slot">g_sleeve</span> <span class="sz">정사각</span> 청의 소매 안감(낡은 쪽빛 강보 천)</li><li><span class="slot">g_so_hand_dan</span> <span class="sz">정사각</span> 소가 단의 두 손을 잡는다</li><li><span class="slot">g_studio</span> <span class="sz">정사각</span> 작업실, 빈 전시 포스터, 붓을 내려놓는 손</li><li><span class="slot">g_dawn_moon</span> <span class="sz">세로</span> 새벽 하늘의 가는 그믐달, 대문 앞의 단·청·묵</li><li><span class="slot">g_yellow_lantern</span> <span class="sz">가로</span> 골목 끝에 켜진 노란 등과 노란 우체통</li></ol>
+    <pre class="prompt" id="p-g1">I will ask for 7 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, warm lantern and candle light against a deep navy night, rich traditional Korean details (dancheong patterns, hanji paper, brass, silk), gentle rim light. Match the rendering quality of the attached references.
+
+CHARACTERS
+So: a Korean woman of forty-nine, chin-length black bob with a few white strands, calm tired eyes with faint smile lines, no makeup, a white cotton shirt with sleeves rolled up under a canvas apron stained with ochre, indigo and crimson paint, paint on her fingertips.
+Dan (attached reference): a Korean woman in her late twenties, long dark wavy hair half-tied with a red ribbon, sly playful eyes, a white jeogori with a black sash under a red outer robe with colorful cloud-pattern sleeves, a small brass bell on a red cord.
+Cheong (attached reference): a Korean man of twenty-one, hair in a topknot held by a wooden pin with a few loose strands, calm earnest face, a dark indigo robe with cloud and key-fret patterns over a white collar, often holding a yellow thread-bound book.
+
+IMAGES
+1. g_so (square 1024x1024): CHARACTER REFERENCE for So. Bust portrait facing the viewer, a calm tired expression with the faintest smile, sitting in the street booth at night (blue canopy, red-and-blue silk lanterns, low wooden table) like the attached booth image.
+2. g_so_tear (square 1024x1024): The same So, same framing and booth background, eyes reddened and wet, holding back tears, looking slightly down at someone across the table.
+3. g_sleeve (square 1024x1024): Close-up of Cheong&#x27;s forearm with the dark indigo sleeve turned back, showing the hidden inner lining: an old faded indigo-blue cotton cloth with a small white cloud pattern, patched by hand. Lantern light. No face.
+4. g_so_hand_dan (square 1024x1024): Close-up of So&#x27;s paint-stained hands firmly holding both of Dan&#x27;s hands (red robe sleeves, the brass bell on a red cord hanging from Dan&#x27;s wrist), warm lantern light, a quiet promise.
+5. g_studio (square 1024x1024): A small painter&#x27;s studio late at night: canvases leaning on the walls, a blank exhibition poster pinned up, a single desk lamp, So&#x27;s hand laying a paintbrush down on the table. Tired, about to give up.
+6. g_dawn_moon (portrait 1024x1536): Pre-dawn deep blue sky over the hanok alley. A hair-thin waning crescent moon low in the eastern sky (this is the only image of the batch with a moon in the sky). Dan, Cheong and Muk stand in front of the open red gate, seen from behind, looking up at it. The white paper lantern above the gate is unlit. Quiet, hopeful.
+7. g_yellow_lantern (landscape 1536x1024): The far end of the night alley: one yellow paper lantern we have never seen before glows above an old yellow cast-iron mailbox, mist over the wet stone path. No people.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="g2" class="batch">
+    <div class="bhead"><h3>G2 · 그믐 골목 · 지금 · 먹선 <span class="n">5장</span></h3><button class="copy" type="button" data-copy="p-g2">복사</button></div>
+    <p class="attach"><b>첨부</b> 묵 선생 정면 그림, 상 앞의 묵 선생 그림(뒤에 달 병풍), 대문 그림, 청 첫 그림, G1에서 만든 g_so</p>
+    <p class="note">대문 안의 장면이라 모두 굵은 먹선입니다. 달은 병풍 속 그림으로만 나옵니다.</p>
+    <ol class="items"><li><span class="slot">g_so_smile</span> <span class="sz">정사각</span> 옅게 웃는 소 (먹선)</li><li><span class="slot">g_reunion</span> <span class="sz">가로</span> 상을 사이에 두고 마주 앉은 묵과 소</li><li><span class="slot">g_cheong_dust</span> <span class="sz">세로</span> 그믐당을 닦는 청의 뒷모습, 달 병풍 앞</li><li><span class="slot">g_seal_closeup</span> <span class="sz">가로</span> 병풍 달 그림 귀퉁이의 작은 빈 붉은 낙관</li><li><span class="slot">g_lantern_hang</span> <span class="sz">세로</span> 대문 처마에 흰 등을 거는 묵의 뒷모습</li></ol>
+    <pre class="prompt" id="p-g2">I will ask for 5 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Korean webtoon illustration with bold confident ink outlines and flat cel shading, saturated traditional palette (crimson, indigo, ochre, bone white, ink black), warm candle light, dense traditional Korean patterns (dancheong, folk painting). This is the inside of an old hanok house called Geumeumdang at night. The moon appears only as a painting on the folding screen, never in a sky.
+
+CHARACTERS
+Muk (attached reference): a Korean man in his late forties, hair tied back in a low ponytail, mustache and short goatee, sharp but kind eyes, a black durumagi over white hanbok with a red cord knot at the chest.
+Cheong (attached reference): a Korean man of twenty-one, hair in a topknot held by a wooden pin with a few loose strands, calm earnest face, a dark indigo robe with cloud and key-fret patterns over a white collar, often holding a yellow thread-bound book.
+So (attached reference image g_so): the woman of forty-nine with the chin-length bob, white shirt and paint-stained apron. Keep her face exactly.
+
+IMAGES
+1. g_so_smile (square 1024x1024): So (attached g_so) redrawn in this ink style, bust shot inside the candle-lit room, a faint warm smile, eyes softened.
+2. g_reunion (landscape 1536x1024): Muk and So sitting face to face across Muk&#x27;s low writing desk, a blank sheet of hanji and an inkstone between them, the folding screen with the painted full moon behind Muk, two candles. A tense, quiet reunion after twenty years.
+3. g_cheong_dust (portrait 1024x1536): Cheong seen from behind, wiping the room with a cloth, stopping in front of the folding screen with the painted full moon, careful not to touch it.
+4. g_seal_closeup (landscape 1536x1024): Extreme close-up of the lower corner of the folding-screen moon painting: painted clouds, the edge of the moon, and a tiny blank red seal stamp (a small red square with no characters) in the corner.
+5. g_lantern_hang (portrait 1024x1536): Muk seen from behind, standing on a low step, hanging a white paper lantern on the eave of the red gate beside a red lantern and a blue lantern. Night.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="g3" class="batch">
+    <div class="bhead"><h3>G3 · 그믐 골목 · 회상 · 부드러운 채색 <span class="n">3장</span></h3><button class="copy" type="button" data-copy="p-g3">복사</button></div>
+    <p class="attach"><b>첨부</b> 단 첫 그림, 골목 입구 그림, G1에서 만든 g_so</p>
+    <p class="note">지나간 일이라 세피아입니다. 3번은 일부러 세 칸으로 나눈 한 장입니다.</p>
+    <ol class="items"><li><span class="slot">g_dan_first</span> <span class="sz">세로</span> 7년 전, 스무 살 단이 젖은 골목에 서 있다</li><li><span class="slot">g_wall</span> <span class="sz">세로</span> 그믐밤 담벼락 앞에 선 여자, 얼굴은 그늘</li><li><span class="slot">g_wall_years</span> <span class="sz">가로</span> 같은 벽 앞, 세 칸에 걸쳐 머리가 희어지는 여자</li></ol>
+    <pre class="prompt" id="p-g3">I will ask for 3 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, warm lantern and candle light against a deep navy night, rich traditional Korean details (dancheong patterns, hanji paper, brass, silk), gentle rim light. Match the rendering quality of the attached references. These images are memories: render each one in faded warm sepia tones with a soft vignette, like an old photograph, while keeping the style above.
+
+CHARACTERS
+Dan at twenty: the same face as the Dan reference but younger and tired, hair in a plain short ponytail, an ordinary cheap black padded jacket over a gray hoodie, no red robe, no bell yet.
+So when young (her face is never shown): long black hair in a low ponytail, a white blouse, paint-stained fingertips.
+
+IMAGES
+1. g_dan_first (portrait 1024x1536): Seven years ago: Dan at twenty standing alone in the wet hanok alley at night, hands in the pockets of her cheap padded jacket, lost and tired, the red-and-blue lanterns far behind her.
+2. g_wall (portrait 1024x1536): Twenty years ago: a woman (So at twenty-eight, chin-length black hair, white blouse, holding a paint bucket and a rolled brush bag) stands at night in front of a plain old brick-and-plaster wall where an alley entrance should be, looking up at it. Her face is hidden in shadow.
+3. g_wall_years (landscape 1536x1024): This one image is intentionally a triptych of three vertical panels: the same woman standing before the same wall at night, same pose, same paint-stained apron, as the years pass. Panel 1: black hair. Panel 2: a few gray strands. Panel 3: streaks of white. Face mostly in shadow.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="g4" class="batch">
+    <div class="bhead"><h3>G4 · 그믐 골목 · 회상 · 먹선 <span class="n">8장</span></h3><button class="copy" type="button" data-copy="p-g4">복사</button></div>
+    <p class="attach"><b>첨부</b> 묵 선생 정면 그림, 상 앞의 묵 선생 그림(달 병풍), 대문 그림, 단 첫 그림, G1에서 만든 g_so</p>
+    <p class="note">22년 전, 21년 전, 7년 전의 장면입니다. 굵은 먹선에 세피아를 입힙니다. 젊은 소의 얼굴은 보이지 않게 합니다.</p>
+    <ol class="items"><li><span class="slot">g_young_muk</span> <span class="sz">세로</span> 22년 전의 젊은 묵, 수염 없음, 화려한 방</li><li><span class="slot">g_so_hands</span> <span class="sz">정사각</span> 찻잔을 쥔 젊은 여자의 손, 손끝에 물감</li><li><span class="slot">g_so_leaving</span> <span class="sz">가로</span> 일어서 나가는 여자의 뒷모습, 바닥의 붓 한 자루</li><li><span class="slot">g_dan_seat</span> <span class="sz">정사각</span> 상 앞에 앉아 두 손을 꽉 쥔 스무 살 단</li><li><span class="slot">g_bell_give</span> <span class="sz">가로</span> 방울을 건네는 묵의 손과 받는 단의 손</li><li><span class="slot">g_baby_night</span> <span class="sz">세로</span> 아기를 안고 대문 앞에 선 여자의 뒷모습, 말아 든 병풍</li><li><span class="slot">g_baby</span> <span class="sz">정사각</span> 쪽빛 강보 속에 잠든 아기</li><li><span class="slot">g_baby_cushion</span> <span class="sz">세로</span> 흰 방석 위의 아기, 접힌 빈 쪽지, 달 병풍</li></ol>
+    <pre class="prompt" id="p-g4">I will ask for 8 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Korean webtoon illustration with bold confident ink outlines and flat cel shading, saturated traditional palette (crimson, indigo, ochre, bone white, ink black), warm candle light, dense traditional Korean patterns (dancheong, folk painting). This is the inside of an old hanok house called Geumeumdang at night. These images are memories: render each one in faded warm sepia tones with a soft vignette, like an old photograph, while keeping the style above.
+
+CHARACTERS
+Muk at twenty-six: the same face as the Muk reference but younger and clean-shaven (no mustache, no beard), hair tied back neatly, sharp proud eyes, a luxurious black silk durumagi with gold embroidery.
+So when young (her face is never shown): long black hair in a low ponytail, a white blouse, paint-stained fingertips.
+Dan at twenty: the same face as the Dan reference but younger and tired, hair in a plain short ponytail, an ordinary cheap black padded jacket over a gray hoodie, no red robe, no bell yet.
+The baby&#x27;s swaddling cloth is indigo-blue cotton with a small white cloud pattern. The same cloth later lines the inside of Cheong&#x27;s sleeves.
+
+IMAGES
+1. g_young_muk (portrait 1024x1536): Twenty-two years ago: Muk at twenty-six sits proudly behind a lacquered desk in a luxurious fortune-telling room; many pairs of guests&#x27; shoes are lined up at the door and silhouettes queue outside.
+2. g_so_hands (square 1024x1024): Close-up of a young woman&#x27;s hands holding a celadon tea cup across a desk; her fingertips are stained with paint. Her face is not shown.
+3. g_so_leaving (landscape 1536x1024): The young woman seen from behind, rising and walking out through a paper-lattice door; a single paintbrush lies on the floor where she sat.
+4. g_dan_seat (square 1024x1024): Seven years ago: Dan at twenty kneeling at Muk&#x27;s low desk, both hands clenched tightly on her knees, eyes down, unable to speak. Candlelight.
+5. g_bell_give (landscape 1536x1024): Close-up over the desk: Muk&#x27;s hand in a black sleeve placing a small brass bell on a red cord into Dan&#x27;s open palm (plain jacket sleeve).
+6. g_baby_night (portrait 1024x1536): Twenty-one years ago, a moonless night: a young woman seen from behind at the open red gate, holding a newborn in the indigo-blue swaddling cloth with the small white cloud pattern, a rolled-up folding screen under her arm.
+7. g_baby (square 1024x1024): A newborn asleep in the indigo-blue swaddling cloth with the small white cloud pattern, one tiny fist out, candlelight.
+8. g_baby_cushion (portrait 1024x1536): The newborn in the indigo swaddle lying on a white floor cushion in Muk&#x27;s room, a folded blank note beside the baby, and the folding screen with the painted full moon standing open behind.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="a1" class="batch">
+    <div class="bhead"><h3>A1 · 자정 우체국 · 사람 기준 <span class="n">2장</span></h3><button class="copy" type="button" data-copy="p-a1">복사</button></div>
+    <p class="attach"><b>첨부</b> 청 첫 그림 (그림체만 참고, 인물은 따라 그리지 않음)</p>
+    <p class="note">두 장이 자정 우체국 두 사람의 기준 그림입니다. 한 장씩 마음에 들 때까지 고친 뒤 넘어가세요. A2~A5에서 이 두 장을 첨부합니다.</p>
+    <ol class="items"><li><span class="slot">a_hwang_neutral</span> <span class="sz">정사각</span> 국장 황, 기준 그림</li><li><span class="slot">a_naeil_neutral</span> <span class="sz">정사각</span> 집배원 내일, 기준 그림</li></ol>
+    <pre class="prompt" id="p-a1">I will ask for 2 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, the same rendering quality as the attached references. Setting: a small 1990s-style Korean post office hidden at the end of a night alley, open only while the midnight bell rings. Palette: warm yellow lamplight, mint-green plaster walls, dark varnished wood, red cast iron, deep navy night outside. Cozy, nostalgic and a little magical, never scary. The attached image is for rendering style only; do not copy its character.
+
+CHARACTERS
+Hwang, the postmaster: a Korean woman in her mid-sixties, short silver-gray permed hair, small round reading glasses low on her nose, a brass magnifying glass on a cord around her neck, a mustard-yellow knitted shawl over a dark green 1990s Korean postal uniform jacket with a small brass badge, kind but exacting eyes.
+Naeil, the night postman: a Korean man of twenty-six, messy black hair with bangs over his eyes, lanky, a dark green postal uniform jacket with rolled-up sleeves, a canvas mail bag across his chest, cheerful and a little clumsy, a folded paper map often held upside down.
+
+IMAGES
+1. a_hwang_neutral (square 1024x1024): CHARACTER REFERENCE for Hwang. Bust portrait behind the wooden post office counter at midnight, facing the viewer, a composed neutral expression, warm lamp light, pigeonhole shelves full of envelopes behind her.
+2. a_naeil_neutral (square 1024x1024): CHARACTER REFERENCE for Naeil. Bust portrait in the same post office, facing the viewer, a friendly neutral expression, the mail bag strap across his chest.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="a2" class="batch">
+    <div class="bhead"><h3>A2 · 자정 우체국 · 표정 <span class="n">6장</span></h3><button class="copy" type="button" data-copy="p-a2">복사</button></div>
+    <p class="attach"><b>첨부</b> A1에서 만든 a_hwang_neutral, a_naeil_neutral</p>
+    <p class="note">모두 기준 그림과 같은 구도와 배경에서 표정만 바뀝니다.</p>
+    <ol class="items"><li><span class="slot">a_hwang_smile</span> <span class="sz">정사각</span> 눈가로 웃는 국장</li><li><span class="slot">a_hwang_stern</span> <span class="sz">정사각</span> 돋보기 너머로 보는 엄한 국장</li><li><span class="slot">a_hwang_think</span> <span class="sz">정사각</span> 장부를 짚으며 생각하는 국장</li><li><span class="slot">a_naeil_smile</span> <span class="sz">정사각</span> 활짝 웃는 내일</li><li><span class="slot">a_naeil_lost</span> <span class="sz">정사각</span> 지도를 거꾸로 들고 당황한 내일</li><li><span class="slot">a_naeil_quiet</span> <span class="sz">정사각</span> 눈을 내리깐 내일</li></ol>
+    <pre class="prompt" id="p-a2">I will ask for 6 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, the same rendering quality as the attached references. Setting: a small 1990s-style Korean post office hidden at the end of a night alley, open only while the midnight bell rings. Palette: warm yellow lamplight, mint-green plaster walls, dark varnished wood, red cast iron, deep navy night outside. Cozy, nostalgic and a little magical, never scary. Same framing and background as the references; only the expression and hands change.
+
+CHARACTERS
+Hwang (attached reference image a_hwang_neutral): keep her face, glasses, magnifier, yellow shawl and green uniform exactly.
+Naeil (attached reference image a_naeil_neutral): keep his face, bangs, green uniform and mail bag exactly.
+
+IMAGES
+1. a_hwang_smile (square 1024x1024): Hwang smiling with her eyes, warm and kind.
+2. a_hwang_stern (square 1024x1024): Hwang looking over her reading glasses, stern, one eyebrow raised.
+3. a_hwang_think (square 1024x1024): Hwang looking down at a big open ledger on the counter, one finger on a page, thinking.
+4. a_naeil_smile (square 1024x1024): Naeil with a wide cheerful grin, holding up a letter.
+5. a_naeil_lost (square 1024x1024): Naeil flustered and blushing, holding a paper map upside down, scratching his head.
+6. a_naeil_quiet (square 1024x1024): Naeil with lowered eyes, a quiet lonely expression, lips closed.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="a3" class="batch">
+    <div class="bhead"><h3>A3 · 자정 우체국 · 장면 <span class="n">7장</span></h3><button class="copy" type="button" data-copy="p-a3">복사</button></div>
+    <p class="attach"><b>첨부</b> A1의 두 기준 그림, 그믐 골목 입구 그림(골목 그림체 참고)</p>
+    <p class="note">1번 a_alley는 골목 고르기 카드에도 쓰입니다.</p>
+    <ol class="items"><li><span class="slot">a_alley</span> <span class="sz">세로</span> 자정 직전의 골목, 노란 우체통과 노란 등, 멀리 시계탑</li><li><span class="slot">a_counter</span> <span class="sz">세로</span> 우체국 안, 열두 시에 멈춘 벽시계, 나무 창구</li><li><span class="slot">a_out</span> <span class="sz">세로</span> 우체국이 사라진 골목, 홀로 선 노란 우체통</li><li><span class="slot">a_naeil_bike</span> <span class="sz">가로</span> 우체국 문을 박차고 나오는 자전거와 내일</li><li><span class="slot">a_knock</span> <span class="sz">가로</span> 문 앞에서 봉투를 내미는 내일</li><li><span class="slot">a_returnbox</span> <span class="sz">세로</span> 늦은 편지가 쌓인 낡은 빨간 철제 함</li><li><span class="slot">a_ledger</span> <span class="sz">세로</span> 위에서 본 빈 일진 장부</li></ol>
+    <pre class="prompt" id="p-a3">I will ask for 7 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, the same rendering quality as the attached references. Setting: a small 1990s-style Korean post office hidden at the end of a night alley, open only while the midnight bell rings. Palette: warm yellow lamplight, mint-green plaster walls, dark varnished wood, red cast iron, deep navy night outside. Cozy, nostalgic and a little magical, never scary.
+
+CHARACTERS
+Hwang (attached reference image a_hwang_neutral): keep her face, glasses, magnifier, yellow shawl and green uniform exactly.
+Naeil (attached reference image a_naeil_neutral): keep his face, bangs, green uniform and mail bag exactly.
+
+IMAGES
+1. a_alley (portrait 1024x1536): A narrow old Korean alley at midnight (brick walls, tiled roofs, wet stone path). At its end, a small old post office with warm yellow windows; a yellow cast-iron mailbox stands at the entrance under a single glowing yellow paper lantern; a distant clock tower whose hands both point to twelve. No people. No moon.
+2. a_counter (portrait 1024x1536): Inside the post office: a big round wall clock stopped at twelve, a wooden counter with a brass grille, pigeonhole shelves full of envelopes, an old brass scale, warm lamps, mint-green walls. No people.
+3. a_out (portrait 1024x1536): The same alley entrance after midnight: the post office is gone, only a plain wall stands where it was; the yellow mailbox stands alone under the lantern on the empty wet street. No people. No moon.
+4. a_naeil_bike (landscape 1536x1024): Naeil bursting out of the post office door on an old black bicycle with a mail basket, letters fluttering, motion lines, comic energy.
+5. a_knock (landscape 1536x1024): At the door of an ordinary apartment at night, Naeil out of breath, holding out a yellow envelope with both hands, slightly sweaty, smiling.
+6. a_returnbox (portrait 1024x1536): In a corner of the post office, an old red steel box overflowing with faded undelivered letters, dust floating in the lamp light.
+7. a_ledger (portrait 1024x1536): Top view of a huge open ledger on the counter, its pages ruled into a blank grid of day cells, a fountain pen and a brass magnifier beside it.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="a4" class="batch">
+    <div class="bhead"><h3>A4 · 자정 우체국 · 소품 <span class="n">4장</span></h3><button class="copy" type="button" data-copy="p-a4">복사</button></div>
+    <p class="attach"><b>첨부</b> A1의 a_hwang_neutral</p>
+    <p class="note">소인, 우표, 봉투, 시계는 모두 글자와 숫자 없이 그립니다.</p>
+    <ol class="items"><li><span class="slot">a_stamp</span> <span class="sz">가로</span> 소인을 내려찍는 손</li><li><span class="slot">a_stamps</span> <span class="sz">정사각</span> 열두 띠 우표 한 장</li><li><span class="slot">a_envelope</span> <span class="sz">정사각</span> 노란 등기 봉투</li><li><span class="slot">a_clock</span> <span class="sz">정사각</span> 열두 시에 멈춘 시계</li></ol>
+    <pre class="prompt" id="p-a4">I will ask for 4 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, the same rendering quality as the attached references. Setting: a small 1990s-style Korean post office hidden at the end of a night alley, open only while the midnight bell rings. Palette: warm yellow lamplight, mint-green plaster walls, dark varnished wood, red cast iron, deep navy night outside. Cozy, nostalgic and a little magical, never scary.
+
+CHARACTERS
+Hwang (attached reference image a_hwang_neutral): keep her face, glasses, magnifier, yellow shawl and green uniform exactly.
+
+IMAGES
+1. a_stamp (landscape 1536x1024): Close-up of Hwang&#x27;s hand (green sleeve, edge of the yellow shawl) slamming a round brass postmark stamp onto a yellow envelope, motion lines and a small puff of ink. The postmark circle is blank.
+2. a_stamps (square 1024x1024): A sheet of twelve small postage stamps with perforated edges, each illustrating one of the twelve Korean zodiac animals in a warm vintage style. No numbers or letters on the stamps.
+3. a_envelope (square 1024x1024): A yellow registered envelope lying on dark wood, tied with string, one zodiac stamp in the corner and a blank round postmark circle.
+4. a_clock (square 1024x1024): Close-up of the round wall clock with plain tick marks, both hands exactly at twelve, a tiny tremble line beside the minute hand.
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="a5" class="batch">
+    <div class="bhead"><h3>A5 · 자정 우체국 · 시즌 「반송함」 <span class="n">9장</span></h3><button class="copy" type="button" data-copy="p-a5">복사</button></div>
+    <p class="attach"><b>첨부</b> A1의 두 기준 그림, G1의 g_so</p>
+    <p class="note">1~3번은 회상이라 세피아입니다. 7번은 그믐 골목의 소가 나옵니다.</p>
+    <ol class="items"><li><span class="slot">a_s_rain</span> <span class="sz">세로</span> 1996 장마, 끊긴 다리 앞의 젊은 황</li><li><span class="slot">a_s_empty_house</span> <span class="sz">가로</span> 1996, 비어 있는 집과 문틈의 빈 안내문</li><li><span class="slot">a_s_exam</span> <span class="sz">세로</span> 세 해 전 독서실, 편지를 쓰는 수험생 내일</li><li><span class="slot">a_s_window_rain</span> <span class="sz">세로</span> 비 오는 자정, 창가에서 숄을 여미는 국장</li><li><span class="slot">a_s_yellow_letter</span> <span class="sz">정사각</span> 반송함 맨 밑의 번진 노란 봉투</li><li><span class="slot">a_s_magnifier</span> <span class="sz">정사각</span> 돋보기로 봉투를 비추는 국장의 손</li><li><span class="slot">a_s_studio_door</span> <span class="sz">세로</span> 새벽 작업실 문 앞, 봉투를 내미는 내일과 소</li><li><span class="slot">a_s_naeil_letter</span> <span class="sz">정사각</span> 자기 편지를 읽는 내일</li><li><span class="slot">a_s_clock_move</span> <span class="sz">정사각</span> 시계 바늘을 미는 국장의 손</li></ol>
+    <pre class="prompt" id="p-a5">I will ask for 9 images for a Korean webtoon called Dalmuri Alley. Follow these rules strictly.
+
+RULES
+- Generate ONE image at a time, in order. Each is a single full image, never a grid, collage, comic page or character sheet, unless an item says it is a triptych.
+- After each image, stop and wait. Make the next one only when I say &quot;다음&quot;. If I give feedback instead, redo the same numbered image.
+- Use exactly the size given for each image.
+- No text anywhere: no letters, numbers, signatures, logos or watermarks. Signs, notes, posters, envelopes, postmarks, seals, ledgers and clock faces stay blank; clock faces use plain tick marks without numerals.
+- No moon in any sky unless an item asks for one.
+- Characters must match the attached reference images exactly: same face, hairstyle, clothes and colors, in every image.
+
+STYLE
+Soft painterly Korean webtoon illustration, semi-realistic faces, the same rendering quality as the attached references. Setting: a small 1990s-style Korean post office hidden at the end of a night alley, open only while the midnight bell rings. Palette: warm yellow lamplight, mint-green plaster walls, dark varnished wood, red cast iron, deep navy night outside. Cozy, nostalgic and a little magical, never scary.
+
+CHARACTERS
+Hwang (attached reference image a_hwang_neutral): keep her face, glasses, magnifier, yellow shawl and green uniform exactly.
+Naeil (attached reference image a_naeil_neutral): keep his face, bangs, green uniform and mail bag exactly.
+Hwang at thirty-four (1996): the same face as the Hwang reference but younger, short black hair, a dark green postal uniform and cap under a clear plastic raincoat.
+Naeil at twenty-three: the same face as the Naeil reference, with glasses and a gray hoodie, a tired exam student.
+So (attached reference image g_so): the woman of forty-nine with the chin-length bob, white shirt and paint-stained apron. Keep her face exactly.
+
+IMAGES
+1. a_s_rain (portrait 1024x1536): Memory in faded sepia: a 1996 monsoon night, young Hwang in a postal uniform and clear raincoat stops her bicycle before a washed-out bridge over a raging river, clutching a yellow envelope inside her raincoat.
+2. a_s_empty_house (landscape 1536x1024): Memory in faded sepia: the next morning, an empty old house with the gate ajar and the furniture gone, a blank moving notice tucked into the door gap.
+3. a_s_exam (portrait 1024x1536): Memory in faded sepia: three years ago, Naeil at twenty-three at a small study-cubicle desk late at night, piles of exam books, writing a letter, a yellow envelope ready beside him.
+4. a_s_window_rain (portrait 1024x1536): Midnight rain on the post office window; Hwang stands at the window pulling her yellow shawl tighter, looking out, melancholy.
+5. a_s_yellow_letter (square 1024x1024): The faded yellow envelope at the very bottom of the return box, its address line smudged and blurred by old water stains so that nothing is readable.
+6. a_s_magnifier (square 1024x1024): Hwang&#x27;s hand holding the brass magnifier over the smudged address of the faded yellow envelope under lamp light. Nothing is readable.
+7. a_s_studio_door (portrait 1024x1536): Dawn at a painter&#x27;s studio door in an old building: Naeil hands the faded yellow envelope to So (attached reference, white shirt, paint-stained apron), who has just opened the door.
+8. a_s_naeil_letter (square 1024x1024): Naeil reading his own letter (a blank sheet) in the post office, eyes wet, smiling at last.
+9. a_s_clock_move (square 1024x1024): Close-up of Hwang&#x27;s hand pushing the minute hand of the big wall clock just past twelve (tick marks only).
+
+Start with image 1 now.</pre>
+  </section>
+  <section id="slots"><h2>칸 목록 (51장)</h2><div class="tbl"><table><thead><tr><th>칸 이름</th><th>배치</th><th>크기</th><th>그림</th><th>대본의 자리</th></tr></thead><tbody><tr><td class="slot">g_so</td><td>G1</td><td>정사각</td><td>지금의 소, 기준 그림</td><td>그믐 10·12장, 우체국 11장</td></tr><tr><td class="slot">g_so_tear</td><td>G1</td><td>정사각</td><td>눈가가 붉어진 소</td><td>그믐 10장, 우체국 11장</td></tr><tr><td class="slot">g_sleeve</td><td>G1</td><td>정사각</td><td>청의 소매 안감(낡은 쪽빛 강보 천)</td><td>그믐 10장</td></tr><tr><td class="slot">g_so_hand_dan</td><td>G1</td><td>정사각</td><td>소가 단의 두 손을 잡는다</td><td>그믐 12장</td></tr><tr><td class="slot">g_studio</td><td>G1</td><td>정사각</td><td>작업실, 빈 전시 포스터, 붓을 내려놓는 손</td><td>그믐 9장</td></tr><tr><td class="slot">g_dawn_moon</td><td>G1</td><td>세로</td><td>새벽 하늘의 가는 그믐달, 대문 앞의 단·청·묵</td><td>그믐 12장</td></tr><tr><td class="slot">g_yellow_lantern</td><td>G1</td><td>가로</td><td>골목 끝에 켜진 노란 등과 노란 우체통</td><td>그믐 12장 마지막 컷</td></tr><tr><td class="slot">g_so_smile</td><td>G2</td><td>정사각</td><td>옅게 웃는 소 (먹선)</td><td>그믐 11장</td></tr><tr><td class="slot">g_reunion</td><td>G2</td><td>가로</td><td>상을 사이에 두고 마주 앉은 묵과 소</td><td>그믐 11장</td></tr><tr><td class="slot">g_cheong_dust</td><td>G2</td><td>세로</td><td>그믐당을 닦는 청의 뒷모습, 달 병풍 앞</td><td>그믐 4장</td></tr><tr><td class="slot">g_seal_closeup</td><td>G2</td><td>가로</td><td>병풍 달 그림 귀퉁이의 작은 빈 붉은 낙관</td><td>그믐 4장</td></tr><tr><td class="slot">g_lantern_hang</td><td>G2</td><td>세로</td><td>대문 처마에 흰 등을 거는 묵의 뒷모습</td><td>그믐 5장</td></tr><tr><td class="slot">g_dan_first</td><td>G3</td><td>세로</td><td>7년 전, 스무 살 단이 젖은 골목에 서 있다</td><td>그믐 7장</td></tr><tr><td class="slot">g_wall</td><td>G3</td><td>세로</td><td>그믐밤 담벼락 앞에 선 여자, 얼굴은 그늘</td><td>그믐 9장</td></tr><tr><td class="slot">g_wall_years</td><td>G3</td><td>가로</td><td>같은 벽 앞, 세 칸에 걸쳐 머리가 희어지는 여자</td><td>그믐 9장</td></tr><tr><td class="slot">g_young_muk</td><td>G4</td><td>세로</td><td>22년 전의 젊은 묵, 수염 없음, 화려한 방</td><td>그믐 6장</td></tr><tr><td class="slot">g_so_hands</td><td>G4</td><td>정사각</td><td>찻잔을 쥔 젊은 여자의 손, 손끝에 물감</td><td>그믐 6장</td></tr><tr><td class="slot">g_so_leaving</td><td>G4</td><td>가로</td><td>일어서 나가는 여자의 뒷모습, 바닥의 붓 한 자루</td><td>그믐 6장</td></tr><tr><td class="slot">g_dan_seat</td><td>G4</td><td>정사각</td><td>상 앞에 앉아 두 손을 꽉 쥔 스무 살 단</td><td>그믐 7장</td></tr><tr><td class="slot">g_bell_give</td><td>G4</td><td>가로</td><td>방울을 건네는 묵의 손과 받는 단의 손</td><td>그믐 7장</td></tr><tr><td class="slot">g_baby_night</td><td>G4</td><td>세로</td><td>아기를 안고 대문 앞에 선 여자의 뒷모습, 말아 든 병풍</td><td>그믐 8장</td></tr><tr><td class="slot">g_baby</td><td>G4</td><td>정사각</td><td>쪽빛 강보 속에 잠든 아기</td><td>그믐 8장</td></tr><tr><td class="slot">g_baby_cushion</td><td>G4</td><td>세로</td><td>흰 방석 위의 아기, 접힌 빈 쪽지, 달 병풍</td><td>그믐 8장</td></tr><tr><td class="slot">a_hwang_neutral</td><td>A1</td><td>정사각</td><td>국장 황, 기준 그림</td><td>자정 8번, 시즌 4·8장</td></tr><tr><td class="slot">a_naeil_neutral</td><td>A1</td><td>정사각</td><td>집배원 내일, 기준 그림</td><td>자정 5번, 시즌 8장</td></tr><tr><td class="slot">a_hwang_smile</td><td>A2</td><td>정사각</td><td>눈가로 웃는 국장</td><td>시즌 1·12장</td></tr><tr><td class="slot">a_hwang_stern</td><td>A2</td><td>정사각</td><td>돋보기 너머로 보는 엄한 국장</td><td>자정 14번, 시즌 2·9장</td></tr><tr><td class="slot">a_hwang_think</td><td>A2</td><td>정사각</td><td>장부를 짚으며 생각하는 국장</td><td>메아리 A2, 시즌 3·5장</td></tr><tr><td class="slot">a_naeil_smile</td><td>A2</td><td>정사각</td><td>활짝 웃는 내일</td><td>자정 3·12번, 시즌 4·5·10장</td></tr><tr><td class="slot">a_naeil_lost</td><td>A2</td><td>정사각</td><td>지도를 거꾸로 들고 당황한 내일</td><td>자정 5번, 시즌 1·4장</td></tr><tr><td class="slot">a_naeil_quiet</td><td>A2</td><td>정사각</td><td>눈을 내리깐 내일</td><td>메아리 A1, 시즌 2·4·8·11·12장</td></tr><tr><td class="slot">a_alley</td><td>A3</td><td>세로</td><td>자정 직전의 골목, 노란 우체통과 노란 등, 멀리 시계탑</td><td>자정 1번, 골목 카드</td></tr><tr><td class="slot">a_counter</td><td>A3</td><td>세로</td><td>우체국 안, 열두 시에 멈춘 벽시계, 나무 창구</td><td>자정 4번, 시즌 2·7·8·12장</td></tr><tr><td class="slot">a_out</td><td>A3</td><td>세로</td><td>우체국이 사라진 골목, 홀로 선 노란 우체통</td><td>자정 17번, 시즌 12장</td></tr><tr><td class="slot">a_naeil_bike</td><td>A3</td><td>가로</td><td>우체국 문을 박차고 나오는 자전거와 내일</td><td>자정 2번, 시즌 1·10장</td></tr><tr><td class="slot">a_knock</td><td>A3</td><td>가로</td><td>문 앞에서 봉투를 내미는 내일</td><td>배달되는 날, 시즌 1장</td></tr><tr><td class="slot">a_returnbox</td><td>A3</td><td>세로</td><td>늦은 편지가 쌓인 낡은 빨간 철제 함</td><td>메아리 A3, 시즌 3장</td></tr><tr><td class="slot">a_ledger</td><td>A3</td><td>세로</td><td>위에서 본 빈 일진 장부</td><td>자정 9번, 시즌 10장</td></tr><tr><td class="slot">a_stamp</td><td>A4</td><td>가로</td><td>소인을 내려찍는 손</td><td>자정 11번</td></tr><tr><td class="slot">a_stamps</td><td>A4</td><td>정사각</td><td>열두 띠 우표 한 장</td><td>자정 13번</td></tr><tr><td class="slot">a_envelope</td><td>A4</td><td>정사각</td><td>노란 등기 봉투</td><td>자정 15번</td></tr><tr><td class="slot">a_clock</td><td>A4</td><td>정사각</td><td>열두 시에 멈춘 시계</td><td>자정 7번, 시즌 2장</td></tr><tr><td class="slot">a_s_rain</td><td>A5</td><td>세로</td><td>1996 장마, 끊긴 다리 앞의 젊은 황</td><td>시즌 6장</td></tr><tr><td class="slot">a_s_empty_house</td><td>A5</td><td>가로</td><td>1996, 비어 있는 집과 문틈의 빈 안내문</td><td>시즌 7장</td></tr><tr><td class="slot">a_s_exam</td><td>A5</td><td>세로</td><td>세 해 전 독서실, 편지를 쓰는 수험생 내일</td><td>시즌 4장</td></tr><tr><td class="slot">a_s_window_rain</td><td>A5</td><td>세로</td><td>비 오는 자정, 창가에서 숄을 여미는 국장</td><td>시즌 5장</td></tr><tr><td class="slot">a_s_yellow_letter</td><td>A5</td><td>정사각</td><td>반송함 맨 밑의 번진 노란 봉투</td><td>시즌 3·7·9·11장</td></tr><tr><td class="slot">a_s_magnifier</td><td>A5</td><td>정사각</td><td>돋보기로 봉투를 비추는 국장의 손</td><td>시즌 9장</td></tr><tr><td class="slot">a_s_studio_door</td><td>A5</td><td>세로</td><td>새벽 작업실 문 앞, 봉투를 내미는 내일과 소</td><td>시즌 11장</td></tr><tr><td class="slot">a_s_naeil_letter</td><td>A5</td><td>정사각</td><td>자기 편지를 읽는 내일</td><td>시즌 12장</td></tr><tr><td class="slot">a_s_clock_move</td><td>A5</td><td>정사각</td><td>시계 바늘을 미는 국장의 손</td><td>시즌 12장</td></tr></tbody></table></div></section>
+  <section id="after"><h2>그림을 받은 뒤</h2><ul class="after"><li>하늘에 달이 그려져 오면 다시 뽑게 하거나, 달이 안 보이게 잘라 쓴다 (make_cuts.py의 경로@x,y,너비,높이).</li><li>글자가 들어간 그림은 다시 뽑는다. 현판, 쪽지, 소인, 장부의 글자는 코드가 얹는다.</li><li>저장소 prototypes/dalmuri-alley에서 python3 make_cuts.py g_so=g_so.png a_alley=a_alley.png …로 img/에 넣는다. 칸 이름과 크기는 make_cuts.py의 SLOTS에 이미 있다.</li><li>그다음 index.html의 그림 목록에 이름을 더하고 대본집의 컷 순서대로 잇는다. 순서는 저장소의 HANDOFF.md.</li></ul></section>
+  <footer>저장소 사본: prototypes/dalmuri-alley/story/image-prompts.md · 대본 사본: story/script-book.md · 이어받는 순서: HANDOFF.md</footer>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pre = document.getElementById(btn.dataset.copy);
+    const done = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = '복사'; }, 2600); };
+    const selectAll = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); done('선택해 뒀어요'); };
+    try { navigator.clipboard.writeText(pre.textContent).then(() => done('복사했어요'), selectAll); } catch (err) { selectAll(); }
+  });
+});
+</script>

@@ -12,14 +12,15 @@
 
 상담 흐름(이름 → 고민 → 문진 → 생년월일 → 풀이 → 되묻기 → 봉투 속 편지)과 받은 편지함은 두 골목이 같은 코드를 쓴다.
 첫 화면(골목 고르기) 위에는 무료 "오늘의 한 장"이 있다. 하루 한 번, 같은 날에는 같은 카드, 사람마다 다른 카드.
-그믐 골목의 이야기(인물, 규칙, 콘티, 쿠키 컷)는 ROADMAP 8절이 정본이다.
+골목 이야기(인물, 규칙, 콘티, 시즌)의 정본은 `story/script-book.md`(claude.ai 문서 「달무리 골목 대본집」의 사본)이다. 셋째 골목 자정 우체국은 대본과 그림 프롬프트(`art/image-order.html`)까지 되어 있고 코드는 아직이다. 이어받는 순서는 [HANDOFF.md](HANDOFF.md).
 
 ## 구성
 
 - `index.html`: 페이지 전체. Claude Artifact 게시용 조각이라 `<html>`/`<body>` 태그가 없다.
 - `img/`: 포차 골목의 상담사 스프라이트와 벽 그림, 골목 고르기 카드 그림(`hub_pocha.webp`), 그믐 골목 컷(`gm_*.webp`).
 - `make_sprites.py`: 포차 골목 상담사 원본 PNG를 스프라이트로 가공한다. 원본은 용량이 커서 저장소에 넣지 않았다.
-- `make_cuts.py`: 그믐 골목 컷 원본을 `img/gm_<이름>.webp`로 바꾼다 (`python3 make_cuts.py alley=원본.png muk_calm=원본.png ...`). 그림을 바꾸면 `index.html`의 `SPOT`과 `OHAENG`을 맞춘다.
+- `art/image-order.html`: ChatGPT 인수인계 메시지와 새 그림 51장의 프롬프트 (그림 주문서). `story/`: 대본집과 주문서의 사본.
+- `make_cuts.py`: 그믐 골목 컷 원본을 `img/gm_<이름>.webp`로 바꾼다 (주문서의 새 칸 `g_*`, `a_*`는 `img/<이름>.webp`) (`python3 make_cuts.py alley=원본.png muk_calm=원본.png ...`). 그림을 바꾸면 `index.html`의 `SPOT`과 `OHAENG`을 맞춘다.
 - `engine-glue.ts`: Manseryeok-engine을 브라우저에서 부르는 얇은 접착층.
 - `build.mjs`: 엔진 소스와 접착층을 묶어 `index.html`의 `ENGINE_BUNDLE` 구간에 넣는다.
 - `test/`: 헤드리스 통과 테스트 ([test/README.md](test/README.md)).
