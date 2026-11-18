@@ -25,6 +25,7 @@ COOKIE=3 node toon.js gunghap phone         # 쿠키 컷 2, 3을 보려면 지�
 CUTS=guest_feet,pair_envelope node toon.js gunghap phone   # 그 컷만 따로 찍는다 (<모드>-<크기>-cut-<이름>.png)
 BOOK=elements,months node toon.js geumeum-llm phone       # 풀이서의 그 장으로 내려가 찍는다 (<모드>-<크기>-book-<장>.png)
 DUMP=1 node playthrough.js star phone        # 편지와 풀이서 글 전체를 <모드>-<크기>-letter.txt로 (toon.js도 같다)
+BOOK=.ms-fig,.yb-head node toon.js gunghap phone   # BOOK에는 장 id 대신 선택자(.으로 시작)도 쓸 수 있다
 ```
 
 - `playwright`는 전역에 설치된 것을 쓴다. WebGL은 소프트웨어 렌더링(swiftshader)으로 돈다.
@@ -39,3 +40,4 @@ DUMP=1 node playthrough.js star phone        # 편지와 풀이서 글 전체를
 - `lips-*`는 페이지의 rAF와 setTimeout을 40배 느리게 돌려 캡처 한 장이 페이지 시간 약 75ms가 되게 한다. 붙인 그림에서 입 부분만 잘라 크게 봐야 보인다.
 - `playthrough.js`의 모든 모드는 골목 고르기 화면에서 포차 골목 카드를 누르고 시작한다.
 - `toon.js`는 `img/gm_*.webp`가 없으면 그 자리에 이름이 적힌 빈 그림을 넣어 화면 짜임만 본다 (출력에 몇 장을 대신했는지 나온다). 한 화면씩 내려가며 `<모드>-<크기>-<번호>.png`로 찍는다.
+- `toon.js`는 그믐 골목 결과지의 봉인(밀랍·매듭)을 길게 눌러 열고, 숨은 한 줄을 드러내고(촛불은 끌기, 방울은 세 번), 끝까지 내려 초가 꺼지는지 보고(`letter-fx`), 받은 편지함에서 다시 열어 봉인 없이 펼쳐지는지(`reopen`) 본다. 결과지는 봉인 아래에 숨어 있으니 기다릴 때 `state: 'attached'`로 기다린다.

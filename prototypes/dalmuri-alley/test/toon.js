@@ -97,15 +97,30 @@ const ph = name => {
       }
       await readDown(); await page.click('#envOpen');
       await page.waitForSelector('#payOk', { state: 'visible' }); await shot('pay'); await page.click('#payOk');
-      await page.waitForSelector('#report:not([hidden]) #view-letter:not([hidden])'); await page.waitForTimeout(300); await shot('letter');
+      await page.waitForSelector('#report:not([hidden]) #view-letter:not([hidden])', { state: 'attached' }); await page.waitForTimeout(300);
+      // 그믐 골목 결과지는 봉인(밀랍, 매듭)을 길게 눌러 연다
+      if (await page.$('#repCover:not([hidden])')) { await page.waitForTimeout(500); await shot('seal'); const wb = await page.locator('#cvWax').boundingBox(), wx = wb.x + wb.width / 2, wy = wb.y + wb.height / 2;
+        console.log(which, name, 'seal', JSON.stringify(await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return { at: e && (e.id || e.className), down: !!document.querySelector('#cvWax').onpointerdown }; }, [wx, wy])));
+        await page.mouse.move(wx, wy); await page.mouse.down(); await page.waitForTimeout(900); await page.mouse.up(); await page.waitForSelector('#repCover', { state: 'hidden' }); await page.waitForTimeout(2600); }
+      await shot('letter');
       const rep = await page.evaluate(() => ({ text: document.querySelector('#report').dataset.plain, cls: document.querySelector('#sheet').className, calls: window.__calls || 0 }));
       if (process.env.DUMP) fs.writeFileSync(`${which}-${name}-letter.txt`, rep.text);     // DUMP=1: 편지와 풀이서 글 전체
       console.log(which, name, 'letter', JSON.stringify({ chars: rep.text.length, cls: rep.cls, calls: rep.calls, haoche: /하오|이오|소\.|구려|시오/.test(rep.text), banned: /대운|용신/.test(rep.text.split('=== 별지')[0]), book: (rep.text.split('=== 별지')[1] || '').length, head: rep.text.split('\n').slice(0, 5) }));
       // BOOK=장,장: 풀이서의 그 장으로 내려가 찍는다
       for (const id of (process.env.BOOK || '').split(',').filter(Boolean)) {
-        const ok = await page.evaluate(id => { const sh = document.querySelector('#sheet'), e = document.getElementById('bk-' + id); if (!e) return false; sh.scrollTop = e.offsetTop - 8; return true; }, id);
+        const ok = await page.evaluate(id => { const sh = document.querySelector('#sheet'), e = id.startsWith('.') ? document.querySelector(id) : document.getElementById('bk-' + id); if (!e) return false; sh.scrollTop = e.offsetTop - 8; return true; }, id);
         if (ok) { await page.waitForTimeout(250); await shot('book-' + id); }
       }
+      // 숨은 한 줄: 촛불이면 눌러 끌고, 방울이면 세 번 누른다. 끝까지 내리면 초가 꺼진다
+      const sec = await page.$('#repSecret .secret');
+      if (sec) {
+        await sec.scrollIntoViewIfNeeded(); await page.waitForTimeout(300); const bb = await sec.boundingBox();
+        if (await page.$('#repSecret .secret.bell')) { for (let k = 0; k < 3; k++) { await page.mouse.click(bb.x + bb.width / 2, bb.y + 24); await page.waitForTimeout(250); } }
+        else { await page.mouse.move(bb.x + 24, bb.y + bb.height * .6); await page.mouse.down(); for (let k = 0; k < 10; k++) { await page.mouse.move(bb.x + 24 + k * (bb.width - 48) / 10, bb.y + bb.height * .65); await page.waitForTimeout(110); } await page.waitForTimeout(500); await page.mouse.up(); }
+        await page.waitForTimeout(1500); await shot('secret');
+      }
+      await page.evaluate(() => { const sh = document.querySelector('#sheet'); sh.scrollTop = sh.scrollHeight; }); await page.waitForTimeout(800);
+      console.log(which, name, 'letter-fx', JSON.stringify(await page.evaluate(() => ({ sheet: document.querySelector('#sheet').className, scroll: document.querySelector('#report').classList.contains('scroll'), secret: !!document.querySelector('#repSecret .secret.revealed'), candleOut: !!document.querySelector('#repCandle.out'), msg: document.querySelector('#repMsg').textContent }))));
       await page.click('#repClose');
       await page.waitForSelector('#toonLeave', { timeout: 20000 }); await readDown();
       // 컷에 쓰인 그림 순서. CUTS=이름,이름 이면 그 컷만 따로 찍는다
@@ -116,7 +131,11 @@ const ph = name => {
       }
       await page.click('#toonLeave');
       await page.waitForSelector('#hub:not([hidden])'); await page.waitForTimeout(600); await shot('back');
-      if (await has('#hubLetters:not([hidden])')) { await page.click('#hubLetters'); await page.waitForSelector('#view-list:not([hidden]) .letter-item'); await shot('letters'); await page.click('#listClose'); }
+      if (await has('#hubLetters:not([hidden])')) { await page.click('#hubLetters'); await page.waitForSelector('#view-list:not([hidden]) .letter-item'); await shot('letters');
+        // 받은 편지함에서 다시 열면 봉인 없이 바로 펼쳐진다
+        await page.click('.letter-item'); await page.waitForSelector('#view-letter:not([hidden])'); await page.waitForTimeout(600); await shot('reopen');
+        console.log(which, name, 'reopen', JSON.stringify(await page.evaluate(() => ({ cover: !document.querySelector('#repCover').hidden, sheet: document.querySelector('#sheet').className, scroll: document.querySelector('#report').classList.contains('scroll') }))));
+        await page.click('#repClose'); await page.waitForTimeout(300); if (await page.$('#listClose:visible')) await page.click('#listClose'); }
     } catch (e) { if (!e.done) { await shot('FAIL'); errs.push('TEST STOPPED: ' + e.message.split('\n')[0]); } }
     const info = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, cuts: document.querySelectorAll('#strip .cut').length, bubs: document.querySelectorAll('#strip .bub').length, mode: document.querySelector('#hub').hidden ? 'not hub' : 'hub' }));
     console.log(which, name, JSON.stringify(info), 'shots', n, fake.size ? `(빈 그림 ${fake.size}장으로 대신함)` : '', errs.length ? errs : 'no errors');
