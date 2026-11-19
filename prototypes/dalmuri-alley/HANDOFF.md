@@ -27,6 +27,13 @@
 5. **자정 우체국.** `ALLEYS`의 '준비 중' 카드를 자정 우체국 카드로 바꾸고 `enterAlley('post')`에서 새 대본 함수로 들어간다. 택일은 대본집 '택일 규칙' 다섯 줄을 코드로 계산한다 (앞으로 90일의 일진은 lunar-javascript의 `getDayInGanZhiExact`). 미래 편지는 받은 편지함에 잠가 두었다가 고른 날 연다. 결과지는 배달 예정 증명서와 노란 등기 봉투로, 그믐의 명서(`renderMyeongseo`)처럼 물건으로 만든다.
 6. **테스트.** `test/toon.js`에 모드를 더한다 (`geumeum`, `gunghap` 모드 참고). 실행법은 `test/README.md`.
 
+## Codex로 이어갈 때
+
+- Codex에 이 저장소를 연결하고 브랜치를 `claude/virtual-fortune-telling-app-hw6bub`로 고른다.
+- 새 그림은 먼저 `img/`에 들어 있어야 한다 (`make_cuts.py`로 바꾼 webp). Codex가 원본 PNG를 받아 바꿀 때는 원본을 커밋하지 않는다.
+- 상담의 AI 대화는 claude.ai 아티팩트의 `sample` 기능이다 (`index.html`의 `LLM`). claude.ai 밖(로컬, GitHub Pages)에서는 저절로 고정 대본으로 돈다. 다른 AI를 붙이려면 `LLM.ask` 안쪽만 자체 서버 호출로 바꾼다.
+- 바꾼 페이지를 claude.ai 링크로 보려면 Claude에서 다시 게시해야 한다. Codex는 claude.ai에 게시하지 못한다.
+
 ## 지킬 것
 
 - 그림 안에는 글자와 숫자를 넣지 않는다. 현판, 쪽지, 편지, 소인, 낙관 글자는 코드가 얹는다.
