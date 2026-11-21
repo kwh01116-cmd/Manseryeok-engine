@@ -1,5 +1,9 @@
 # Manseryeok-engine — current execution handoff
 
+**현재 단계 · Sprint 9, 2026-11-22.** 가상 자료용 독자·전문가 평가 환경과 환불 중단 파일 정리를 검증했다. 코드 `668e0fcc4c30dcb8aa39d09204512232c7cc6aed`, 전체 1103/1103 통과. 실제 독자·전문가 각 0명, 실참여 승인 대기. 유료 제공·운영 결제·공개 출시 NO-GO. [연구실 실행](product/SPRINT9_BETA_LOCAL_GUIDE.md) · [검증·실패·측정](engineering/SPRINT9_EXECUTION_20261122.md)
+
+### 이전 Sprint 8 인계 기록
+
 **2026-11-22 Sprint8: 로컬 TEST 구매부터 S7 생성·저장·재열람까지 구현·검증. 실판매는 차단.** 승인 브랜치 `agent/kasi-local-1950-2026-20261109`, 시작 local/directremote `4083e4d6f6a6a105a57614165c51dc275957a82d` clean. 검증 코드 **`ab6cf0ffa4635921556f3a54353565b357185435`**. 후속은 문서뿐이며 마지막 remote는 전달 영수증/최종 답변으로 구분한다. 이전 [handoff 원byte archive](archive/EXECUTION_HANDOFF_BEFORE_SPRINT8_20261122.md)를 보존했다.
 
 - **고정 계획:** [SAJU-ROADMAP-V1 / 2026-11-15](product/SAJU_ROADMAP_LOCKED_V1_20261115.md), LOCKED_UNTIL_EXPLICIT_USER_APPROVAL. Sprint8 진행 상태만 바꿨다. Sprint5.1 13HTTP시도/재시도0 수집은 여전히 별도 승인 대기다. Sprint9 실제 사용자/전문가 베타·10 출시를 수행하지 않았다.
