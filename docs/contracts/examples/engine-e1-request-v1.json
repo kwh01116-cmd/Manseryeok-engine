@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "manseryeok-engine-e1-request-v1",
+  "selection": {
+    "profileId": "ENGINE-PARITY-E1-V01",
+    "version": "0.1.0",
+    "strengthPolicyId": "M3-PRODUCT-POSITIONAL-STRENGTH-V01",
+    "eokbuPolicyId": "M5-EOKBU-CAUSE-CANDIDATE-V01",
+    "innerPatternProfileId": "M4-INNER-EIGHT-MONTH-STRUCTURE-V01"
+  },
+  "birth": {
+    "schemaVersion": "manseryeok-server-analysis-request-v1",
+    "analysisProfileId": "KASI-SERVER-API-ONLY-ANALYSIS-V01",
+    "calendarProfileId": "kasi-api-1989-2026-local-v1",
+    "jurisdiction": "KR",
+    "timeZone": "Asia/Seoul",
+    "calendar": "GREGORIAN",
+    "date": "2026-01-08",
+    "time": "12:00",
+    "policies": {
+      "clockPolicyId": "KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1",
+      "dayRollover": "CIVIL_MIDNIGHT",
+      "hourStemReference": "SELECTED_DAY_PILLAR"
+    }
+  }
+}
