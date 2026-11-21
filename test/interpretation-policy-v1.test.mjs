@@ -134,3 +134,21 @@ test('S7 required fact references and nonnegative discrete context counts must n
     const c=makeContext(valid[0]);mutate(c);assert.throws(()=>solve(c),Error);
   }
 });
+
+test('S7 own day-stem combination remains counter-context while domain support still uses only year month hour positions',()=>{
+  const row={id:'P23-OWN-DAY-GENG-YEAR-YI',dayStem:'庚',
+    visible:[{role:'year',stem:'乙',tenGod:'正財'},{role:'month',stem:'己',tenGod:'正印'},{role:'hour',stem:'壬',tenGod:'食神'}],
+    monthly:{branch:'丑',mainStem:'己',mainTenGod:'正印',status:'MAIN_QI_STRUCTURAL_ANCHOR',exactExposures:[{role:'month',stem:'己',type:'正印'}],competingExposures:[]}};
+  const context=makeContext(row),claims=solve(context);
+  assert.deepEqual(claims.map(c=>c.confidenceOrApplicabilityStatus),['LIMITED','LIMITED','LIMITED','LIMITED']);
+  for(const claim of claims){
+    const combinations=claim.competingConditions.filter(c=>c.code==='STEM_COMBINATION_MEMBERSHIP');
+    assert.equal(combinations.length,1);
+    assert.deepEqual(combinations[0].locations,[{role:'year',stem:'乙',tenGod:'正財'},{role:'day',stem:'庚',tenGod:null}]);
+    assert.ok(combinations[0].factRefs.includes(context.factRefs.day));
+    assert.ok(claim.supportingConditions.flatMap(c=>c.locations).every(p=>['year','month','hour'].includes(p.role)));
+    assert.equal(claim.supportingConditions.flatMap(c=>c.locations).some(p=>p.role==='day'),false);
+    assert.ok(claim.forbiddenConclusions.includes('ROOT_OR_RELATION_EFFICACY'));
+  }
+  assert.deepEqual(context.visible.map(v=>v.role),['year','month','hour'],'Day master must not become a fourth symbolic support target');
+});

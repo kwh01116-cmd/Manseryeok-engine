@@ -12,7 +12,7 @@
 
 `src/report/interpretationPolicyV1.ts`는 사전 결정표의 실제 적용 조건과 LIMITED/HOLD를 실행한다. `src/report/narrativePipelineV1.ts`는 여섯 장·요약·반대 문맥을 같은 claim에서 구성한다. `scripts/product/interpreted-report.mjs`는 기존 서버/소비자 어댑터를 재사용한다. 새 계산기·십성/장간표·강약 점수·격 성패/용신·사건 예측을 만들지 않는다.
 
-프로필은 `SAJU-TRADITIONAL-REFLECTION-REPORT-V01`/0.1.0, 생성기0.1.0, artifact1.0.0이다. 정책 미선택 시 기존 S6 엔트리/출력은 변하지 않는다. 새 엔트리는 모든 옵션을 명시하며 로그·배너를 stdout에 섞지 않는다. 기본 자동 저장은 없다.
+프로필은 `SAJU-TRADITIONAL-REFLECTION-REPORT-V01`/0.1.0, 해석 resolver0.1.1, 생성기0.1.1, artifact1.0.1이다. 최초 개발본의 일간 포함 오합 문맥 누락을 고친 버전을 구별한다. 선택 정책의 영역별 if/else·LIMITED/HOLD는 변경하지 않았다. 정책 미선택 시 기존 S6 엔트리/출력은 변하지 않는다. 새 엔트리는 모든 옵션을 명시하며 로그·배너를 stdout에 섞지 않는다. 기본 자동 저장은 없다.
 
 첫 문단은 적용 영역의 개수보다 실제 선택된 역할 대비를 먼저 말한다. 이 표시 순서는 힘의 순위가 아니다. 동일 종류의 여러 위치 쌍은 위치를 모두 보여 주고 의미 설명은 한 번만 한다. 장6은 중요한 합/병존/기존 지원 보류를 한 번 모아 설명한다. 복수 원국은 독립 경로, 하나의 원국의 계절 대안은 기존 장2 문맥이다.
 

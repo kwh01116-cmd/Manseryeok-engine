@@ -6,6 +6,7 @@ import {areStemCombinationPartners} from "../domain/stemCombinations.js";
 import {validateReportProjection, type ReportProjection, type RecordValue} from "./consumerReportV1.js";
 
 export const INTERPRETATION_VERSION = "0.1.0" as const;
+export const INTERPRETATION_RESOLVER_VERSION = "0.1.1" as const;
 export const INTERPRETATION_PROFILE_ID = "SAJU-TRADITIONAL-REFLECTION-REPORT-V01" as const;
 export const DOMAINS = Object.freeze(["BEHAVIOR", "COMMUNICATION", "WORK", "MONEY"] as const);
 export type InterpretationDomain = typeof DOMAINS[number];
@@ -50,10 +51,12 @@ export interface SymbolicContext {
   existingSupport:ExistingSupport[];inputSourceRefs:string[];
   factOwnership?:{id:string;candidateId:string}[];
 }
-export interface InterpretationCondition {code:string;factRefs:string[];locations:RoleLocation[];detail:string;}
+export type ConditionLocation = RoleLocation | {role:"day";stem:string;tenGod:null};
+export interface InterpretationCondition {code:string;factRefs:string[];locations:ConditionLocation[];detail:string;}
 export interface GroundedInterpretationClaim {
   claimId:string;chartCandidateRef:string;domain:InterpretationDomain;
   interpretationPolicyId:string;interpretationPolicyVersion:typeof INTERPRETATION_VERSION;
+  resolverVersion:typeof INTERPRETATION_RESOLVER_VERSION;
   sourceRefs:string[];inputSourceRefs:string[];inputFactRefs:string[];
   supportingConditions:InterpretationCondition[];competingConditions:InterpretationCondition[];
   interpretationScope:string;allowedMeaning:string[];forbiddenConclusions:readonly string[];
@@ -149,7 +152,7 @@ const PAIR_MEANING:Record<string,{meaning:string;question:string}>={
   WEALTH_RESOURCE:{meaning:"자원의 배분과 자료·지원에 쓰는 과정을 나란히 놓고 읽습니다.",question:"배우거나 도움을 받는 데 쓸 자원과 다른 쓰임 사이에서 무엇을 비교하는지 돌아보세요."},
 };
 function pairsFor(c:SymbolicContext,domain:InterpretationDomain):Pair[]{const out:Pair[]=[];for(const [a,b] of PAIRS[domain])for(const left of c.visible.filter(v=>roleFamily(v.tenGod)===a))for(const right of c.visible.filter(v=>roleFamily(v.tenGod)===b))if(left.role!==right.role)out.push({left,right,kind:a+"_"+b});return out;}
-const condition=(code:string,factRefs:string[],locations:RoleLocation[],detail:string):InterpretationCondition=>({code,factRefs:unique(factRefs),locations,detail});
+const condition=(code:string,factRefs:string[],locations:ConditionLocation[],detail:string):InterpretationCondition=>({code,factRefs:unique(factRefs),locations,detail});
 
 /** Pure chosen-policy consistency only; callers must supply trusted classifications. */
 export function resolveSymbolicInterpretation(context:SymbolicContext,{profileId}:{profileId:string}):GroundedInterpretationClaim[]{
@@ -160,7 +163,11 @@ export function resolveSymbolicInterpretation(context:SymbolicContext,{profileId
   const competing:InterpretationCondition[]=[];
   for(const e of c.monthly.competingExposures)competing.push(condition("COMPETING_MONTH_EXPOSURE",[ref.pattern,ref.pillars],[e],"다른 월령 투출도 관측됨; 지배력·성향 우열 미판정"));
   if(c.monthly.unresolvedTypes.length)competing.push(condition("MONTH_COMPATIBILITY_UNRESOLVED",[ref.pattern],[],c.monthly.unresolvedTypes.join(" / ")));
-  for(let i=0;i<c.visible.length;i++)for(let j=i+1;j<c.visible.length;j++)if(areStemCombinationPartners(c.visible[i]!.stem as HeavenlyStem,c.visible[j]!.stem as HeavenlyStem))competing.push(condition("STEM_COMBINATION_MEMBERSHIP",[ref.pillars],[c.visible[i]!,c.visible[j]!],"기존 오합 helper의 짝; 합거·합화·갈등 효력은 평가하지 않음"));
+  const allSurfaceStems:ConditionLocation[]=[c.visible[0]!,c.visible[1]!,{role:"day",stem:c.dayStem,tenGod:null},c.visible[2]!];
+  for(let i=0;i<allSurfaceStems.length;i++)for(let j=i+1;j<allSurfaceStems.length;j++)if(areStemCombinationPartners(allSurfaceStems[i]!.stem as HeavenlyStem,allSurfaceStems[j]!.stem as HeavenlyStem)){
+    const locations=[allSurfaceStems[i]!,allSurfaceStems[j]!],includesDay=locations.some(l=>l.role==="day");
+    competing.push(condition("STEM_COMBINATION_MEMBERSHIP",includesDay?[ref.pillars,ref.day]:[ref.pillars],locations,includesDay?"일간 본신을 포함한 기존 오합 짝; 일간을 별도 지원 천간으로 추가하거나 합거·합화 효력을 판정하지 않음":"기존 오합 helper의 타간 짝; 합거·합화·갈등 효력은 평가하지 않음"));
+  }
   for(const r of c.existingSupport)if(r.decision!=="NO_HOLD_BY_THIS_RULE")competing.push(condition("EXISTING_RESOURCE_SUPPORT_LIMITATION",[ref.pillars,ref.root],c.visible.filter(v=>v.role===r.role),r.decision+"; "+r.upstreamRef));
   if(c.relationCount)competing.push(condition("BRANCH_RELATIONS_EFFECT_UNEVALUATED",[ref.relations],[],`${c.relationCount}개 위치 관계 보존; 실제 손상·활성 미평가`));
   if(c.visible.some(v=>v.tenGod==="正官")&&c.visible.some(v=>v.tenGod==="七殺"))competing.push(condition("OFFICER_KILLINGS_COEXISTENCE",[ref.pillars],c.visible.filter(v=>["正官","七殺"].includes(v.tenGod)),"관살 병존; 격 실패·성격 혼란을 판단하지 않음"));
@@ -186,7 +193,7 @@ export function resolveSymbolicInterpretation(context:SymbolicContext,{profileId
     if(pairs.length>1)localCompeting.push(condition("MULTIPLE_ROLE_PATHS_PRESERVED",[ref.pillars],unique(pairs.flatMap(p=>[p.left,p.right])),"여러 쌍을 합산·우열화하지 않고 모두 보존"));
     const text=paragraphs.join("\n");
     return {claimId:c.contextId+"/"+c.candidateId+"/interpretation/"+domain.toLowerCase(),chartCandidateRef:c.candidateId,domain,interpretationPolicyId:INTERPRETATION_POLICIES[domain],interpretationPolicyVersion:INTERPRETATION_VERSION,
-      sourceRefs:INTERPRETATION_SOURCES.map(s=>s.id),inputSourceRefs:c.inputSourceRefs,inputFactRefs:unique([ref.day,ref.pillars,ref.pattern,...supports.flatMap(s=>s.factRefs),...localCompeting.flatMap(s=>s.factRefs)]),supportingConditions:supports,competingConditions:localCompeting,
+      resolverVersion:INTERPRETATION_RESOLVER_VERSION,sourceRefs:INTERPRETATION_SOURCES.map(s=>s.id),inputSourceRefs:c.inputSourceRefs,inputFactRefs:unique([ref.day,ref.pillars,ref.pattern,...supports.flatMap(s=>s.factRefs),...localCompeting.flatMap(s=>s.factRefs)]),supportingConditions:supports,competingConditions:localCompeting,
       interpretationScope:"SELECTED_TRADITIONAL_SYMBOLIC_ROLE_PERSPECTIVE_NOT_DIAGNOSIS_OR_PREDICTION",allowedMeaning:status==="LIMITED"?paragraphs:["HOLD_RETAINS_UNASSESSED_NOT_ABSENCE",...paragraphs],forbiddenConclusions:FORBIDDEN_CONCLUSIONS,
       confidenceOrApplicabilityStatus:status,decisionCode,narrativeTemplateId:domain.toLowerCase()+"/"+decisionCode.toLowerCase()+"@"+INTERPRETATION_VERSION,consumerText:text,alternativeText:status==="LIMITED"?"이 배치를 한 가지 성격으로 정하지 않고 다음 관점으로 살펴봅니다.\n"+text:text,
       unresolvedEffects:["ACTUAL_SUPPORT_AND_CONTROL_TRANSMISSION","ROOT_STRENGTH_AND_RELATION_EFFICACY","FINAL_STRENGTH_PATTERN_SUCCESS_YONGSHEN"],unusedAsDeterminant:["UNWEIGHTED_ELEMENT_COUNTS","SEASONAL_STATE","GONGMANG","FORTUNE_PILLARS","ROOT_PRESENCE_AS_STRENGTH_SCORE"]};

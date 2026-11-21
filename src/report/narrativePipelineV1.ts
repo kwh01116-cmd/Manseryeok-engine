@@ -1,9 +1,9 @@
 import {buildConsumerReport,validateConsumerReport,validateReportProjection,type ConsumerReport,type ReportProjection,type ReportState} from "./consumerReportV1.js";
-import {INTERPRETATION_PROFILE_ID,INTERPRETATION_VERSION,INTERPRETATION_POLICIES,INTERPRETATION_SOURCES,DOMAINS,contextsFromProjection,resolveSymbolicInterpretation,assertInterpretationJson,canonicalInterpretation,freezeInterpretation,type ExistingSupport,type GroundedInterpretationClaim} from "./interpretationPolicyV1.js";
+import {INTERPRETATION_PROFILE_ID,INTERPRETATION_VERSION,INTERPRETATION_RESOLVER_VERSION,INTERPRETATION_POLICIES,INTERPRETATION_SOURCES,DOMAINS,contextsFromProjection,resolveSymbolicInterpretation,assertInterpretationJson,canonicalInterpretation,freezeInterpretation,type ExistingSupport,type GroundedInterpretationClaim} from "./interpretationPolicyV1.js";
 
 export const INTERPRETED_REPORT_SCHEMA="saju-interpreted-consumer-report-v1" as const;
-export const NARRATIVE_GENERATOR_VERSION="0.1.0" as const;
-export const NARRATIVE_ARTIFACT_VERSION="1.0.0" as const;
+export const NARRATIVE_GENERATOR_VERSION="0.1.1" as const;
+export const NARRATIVE_ARTIFACT_VERSION="1.0.1" as const;
 export interface InterpretationBasis {projection:ReportProjection;baseReport:ConsumerReport;existingSupport:Record<string,ExistingSupport[]>;}
 export interface ReportBlock {blockId:string;chartCandidateRef:string|null;claimRefs:string[];policyRefs:{id:string;version:string}[];status:ReportState;text:string;variantId:"STANDARD"|"REFLECTIVE";kind:"EXISTING_READING"|"SYMBOLIC_INTERPRETATION"|"COMPOSITION";}
 export interface NarrativeIssue {category:"FACT"|"CLAIM"|"QUALITY"|"SAFETY"|"GENERATOR";code:string;blockId:string|null;}
@@ -14,7 +14,7 @@ export interface InterpretedReport {
   sections:{id:string;chapter:number;title:string;status:ReportState;blocks:ReportBlock[]}[];
   opening:ReportBlock[];domainAssessments:{candidateRef:string;domains:{domain:string;status:string;decisionCode:string;claimRef:string}[]}[];
   eligibility:ConsumerReport["eligibility"];
-  provenance:{calculationSourceDigest:string;dataVersion:string;dataFingerprint:string;interpretationSources:typeof INTERPRETATION_SOURCES;policies:{id:string;version:string}[];generatorVersion:string;artifactVersion:string;validationScope:string};
+  provenance:{calculationSourceDigest:string;dataVersion:string;dataFingerprint:string;interpretationSources:typeof INTERPRETATION_SOURCES;policies:{id:string;version:string}[];interpretationResolverVersion:string;generatorVersion:string;artifactVersion:string;validationScope:string};
   generation:GenerationTrace;qa:{status:"PASS";meaningValidation:string;warnings:string[]};
 }
 const check=(ok:unknown,code:string):void=>{if(!ok)throw new RangeError(code);};
@@ -69,7 +69,7 @@ function compose(basis:InterpretationBasis,variants:Record<string,"STANDARD"|"RE
     const conditions=own.flatMap(c=>c.competingConditions),codes=unique(conditions.map(c=>c.code));
     const contextParts:string[]=[];
     const combinations=conditions.filter(c=>c.code==="STEM_COMBINATION_MEMBERSHIP");
-    if(combinations.length)contextParts.push(unique(combinations.map(c=>c.locations.map(l=>`${l.stem}(${l.role==="year"?"연":l.role==="month"?"월":"시"})`).join("·"))).join(" / ")+"의 오합 짝");
+    if(combinations.length)contextParts.push(unique(combinations.map(c=>c.locations.map(l=>`${l.stem}(${l.role==="year"?"연":l.role==="month"?"월":l.role==="day"?"일":"시"})`).join("·"))).join(" / ")+"의 오합 짝");
     if(codes.includes("OFFICER_KILLINGS_COEXISTENCE"))contextParts.push("정관·칠살의 표면 병존");
     if(codes.includes("OUTPUT_OFFICER_COEXISTENCE"))contextParts.push("상관·정관의 표면 병존");
     if(codes.includes("EXISTING_RESOURCE_SUPPORT_LIMITATION"))contextParts.push("기존 인성 합 규칙의 채택 유보 또는 효력 미정");
@@ -81,7 +81,7 @@ function compose(basis:InterpretationBasis,variants:Record<string,"STANDARD"|"RE
   const warnings=[...(!contexts.length?["INPUT_NOT_CALCULATED_NO_INTERPRETATION_CLAIMS"]:[]),...(!claims.some(c=>c.confidenceOrApplicabilityStatus==="LIMITED")?["NO_APPLICABLE_SYMBOLIC_DOMAIN"]:[]),"CLOSED_CATALOG_QA_NOT_HUMAN_EXPERT_OR_BUYER_VALIDATION","SHARED_ROLE_EXPLANATIONS_MAY_REPEAT_ACROSS_REPORTS"];
   return {schemaVersion:INTERPRETED_REPORT_SCHEMA,profile:{id:INTERPRETATION_PROFILE_ID,version:INTERPRETATION_VERSION},contextId:input.contextId,basis:structuredClone(basis),interpretationClaims:claims,sections,opening,
     domainAssessments:contexts.map(c=>({candidateRef:c.candidateId,domains:claims.filter(x=>x.chartCandidateRef===c.candidateId).map(x=>({domain:x.domain,status:x.confidenceOrApplicabilityStatus,decisionCode:x.decisionCode,claimRef:x.claimId}))})),
-    eligibility:{...structuredClone(base.eligibility),chapters:sections.map(s=>({chapter:s.chapter,status:s.status})),reasons:unique([...base.eligibility.reasons.filter(r=>r!=="PERSONAL_TRAIT_AND_TOPIC_CHAPTERS_HAVE_NO_ACCEPTED_POLICY"),"SYMBOLIC_PERSPECTIVE_NOT_DIAGNOSIS_OR_PREDICTION","EXPERT_AND_CONSUMER_BETA_NOT_RUN"])},provenance:{calculationSourceDigest:input.provenance.sourceDigest,dataVersion:input.provenance.dataVersion,dataFingerprint:input.provenance.dataFingerprint,interpretationSources:INTERPRETATION_SOURCES,policies:DOMAINS.map(d=>({id:INTERPRETATION_POLICIES[d],version:INTERPRETATION_VERSION})),generatorVersion:NARRATIVE_GENERATOR_VERSION,artifactVersion:NARRATIVE_ARTIFACT_VERSION,validationScope:"ISSUED_ADAPTER_THEN_DETERMINISTIC_INTERNAL_CONSISTENCY_NOT_RAW_API_AUTHENTICATION_OR_PREDICTIVE_VALIDITY"},generation:structuredClone(generation),qa:{status:"PASS",meaningValidation:"RECONSTRUCTED_CLAIMS_AND_CLOSED_APPROVED_VARIANTS_NOT_OPEN_ENDED_LANGUAGE_UNDERSTANDING",warnings}};
+    eligibility:{...structuredClone(base.eligibility),chapters:sections.map(s=>({chapter:s.chapter,status:s.status})),reasons:unique([...base.eligibility.reasons.filter(r=>r!=="PERSONAL_TRAIT_AND_TOPIC_CHAPTERS_HAVE_NO_ACCEPTED_POLICY"),"SYMBOLIC_PERSPECTIVE_NOT_DIAGNOSIS_OR_PREDICTION","EXPERT_AND_CONSUMER_BETA_NOT_RUN"])},provenance:{calculationSourceDigest:input.provenance.sourceDigest,dataVersion:input.provenance.dataVersion,dataFingerprint:input.provenance.dataFingerprint,interpretationSources:INTERPRETATION_SOURCES,policies:DOMAINS.map(d=>({id:INTERPRETATION_POLICIES[d],version:INTERPRETATION_VERSION})),interpretationResolverVersion:INTERPRETATION_RESOLVER_VERSION,generatorVersion:NARRATIVE_GENERATOR_VERSION,artifactVersion:NARRATIVE_ARTIFACT_VERSION,validationScope:"ISSUED_ADAPTER_THEN_DETERMINISTIC_INTERNAL_CONSISTENCY_NOT_RAW_API_AUTHENTICATION_OR_PREDICTIVE_VALIDITY"},generation:structuredClone(generation),qa:{status:"PASS",meaningValidation:"RECONSTRUCTED_CLAIMS_AND_CLOSED_APPROVED_VARIANTS_NOT_OPEN_ENDED_LANGUAGE_UNDERSTANDING",warnings}};
 }
 
 export function buildInterpretedReport(basis:InterpretationBasis,{profileId}:{profileId:string}):InterpretedReport {

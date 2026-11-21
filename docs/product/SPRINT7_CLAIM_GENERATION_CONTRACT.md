@@ -16,6 +16,7 @@
 | --- | --- |
 | claimId / chartCandidateRef / domain | 요청 문맥과 부모를 식별. domain은 BEHAVIOR/COMMUNICATION/WORK/MONEY |
 | interpretationPolicyId / Version | 네 선택 정책 중 실제 적용한 ID/0.1.0 |
+| resolverVersion | 관측/검증 버그 수정을 구별하는0.1.1. 일간 포함 오합 문맥 보완은 영역 선택 정책 변경이 아님 |
 | sourceRefs | 역할 비유/원저·주석/PROJECT_POLICY의 해석 출처. 달력 API를 해석 출처로 쓰지 않음 |
 | inputSourceRefs / inputFactRefs | 같은 부모의 원 계산/분류 근거. 해석 출처와 구별 |
 | supportingConditions | 실제 월령·정확 투출·역할 쌍의 위치·문자·분류 |
@@ -41,5 +42,7 @@
 허용하는 것은 같은 사실과 정책에서 생성한 사전 등록 STANDARD/REFLECTIVE 표현뿐이다. 자유 문장을 정규식으로 검사해 의미가 증명됐다고 하지 않는다. 임의 성격 형용사·무근거 칭찬·성별 위계·건강/사망·혼인/임신·투자 손익·공포를 이용하는 문장은 허용된 의미에 없다.
 
 상세 claim·반대 조건을 JSON에 남기고 기본 본문에서는 기술 ID를 숨긴다. 소통/활동/자원 선택 소제목과 중요한 반대 문맥을 표시하고, 동일한 정의를 여러 위치 쌍마다 반복하지 않는다. 문체 개선은 새 해석 규칙이 아니다.
+
+원국 오합 문맥은 연·월·일·시 네 천간에서 수집한다. 해석 선택의 표면 역할 쌍은 여전히 일간을 제외한 세 위치다. 본신합의 day location은 원 M2의 day visibleTenGod와 같은 null이며, 일간을 별도 비겁 지원으로 추가하지 않는다. 타간합/본신합 모두 관측만 보존하고 실제 합거·합화·지배력은 판단하지 않는다.
 
 [정책/사전 반례](SPRINT7_INTERPRETATION_POLICY_V01.md) · [파이프라인](SPRINT7_NARRATIVE_PIPELINE.md) · [QA](SPRINT7_CONTENT_QA_MATRIX.md) · [저장](SPRINT7_STORAGE_CONTRACT.md)
