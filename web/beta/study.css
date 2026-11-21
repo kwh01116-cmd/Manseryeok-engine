@@ -1,0 +1,22 @@
+main {max-width:1000px;margin:auto}
+#enter {align-self:center}
+#notice:not(:empty), #error:not(:empty) {padding:12px 18px;margin-bottom:20px;border-radius:8px}
+#notice:not(:empty) {background:#eaf2e7}
+#error:not(:empty) {background:#ffede8;color:#812f29}
+.study-head {max-width:760px;margin-bottom:28px}
+.study-head h1 {margin-bottom:12px}
+.status-panel {white-space:pre-line}
+.reading {padding:14px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
+.reading p {white-space:pre-line;line-height:1.95}
+.assessment {display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.65fr);gap:16px;align-items:start;border-top:1px solid var(--line);padding:15px 0}
+.assessment input,.assessment select,.assessment textarea {width:100%;min-width:0;border-radius:7px;border:1px solid #aebfb2;background:white;color:var(--ink);font:inherit;padding:9px}
+.assessment textarea {min-height:72px;resize:vertical}
+.assessment input:focus-visible,.assessment textarea:focus-visible {outline:3px solid #78a18a}
+.evidence {background:var(--paper);border-radius:8px;padding:12px 16px;margin:12px 0;overflow-wrap:anywhere}
+.evidence dd {margin:0 0 10px}
+.study-footer {border-top:1px solid var(--line);margin:24px 0;padding:20px 0}
+.review-nav {display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.review-nav a {padding:4px 10px;background:white;border:1px solid var(--line);border-radius:7px}
+.study-actions {display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+h3 {margin-top:16px}
+@media(max-width:650px){.assessment {grid-template-columns:1fr;gap:6px}.panel{padding:18px 15px}.hero h1{font-size:34px}}
