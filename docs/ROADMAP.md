@@ -1,5 +1,15 @@
 # Manseryeok-engine — engine reliability roadmap
 
+## 2026-11-22 current checkpoint — Sprint8 로컬 TEST 구매·생성·재열람
+
+고정 Sprint8 범위의 실제 웹 UI/서버를 추가했다. 입력과 정책 확인→무료 미리보기→NOT_FOR_SALE_YET→별도 TEST 주문/서명 Fake 승인→실제 S7 생성/claim 검수→암호화 저장→게스트 재열람·취소/환불을 연결한다. 주문/결제/생성/환불을 별도 상태로 보존하고 소유권·CSRF·중복/위조·중단·저장 실패·버전 충돌을 검사했다. 기존 엔진·S6/S7 정책의 뜻은 바뀌지 않는다.
+
+**실행 코드 `ab6cf0ffa4635921556f3a54353565b357185435`: 전체1,079/1,079, M2·기존Lab/KASI·신규Chromium PASS.** 실제 HTTP 두 TZ각19입력/12문서가 동일했고 서버 강제 종료2구간과 브라우저 완전 종료 후 재열람을 확인했다. S7/S8를 포함한 새116파일 내부 payload를 저장소 밖에 복원해 키/원본import/외부통신·npm/Git 없이 실제 웹 생성했다. 이전 v4는 보존한다.
+
+**로컬 기술 여정 GO, PAID_REPORT_READY/LIVE_PAYMENT_ALLOWED/PUBLIC_RELEASE NO-GO.** 콘텐츠 PARTIAL, 실제 PG·운영 DB·계정 복구·키관리·법률/운영·실제 고객/전문가 검토는 남아 있다. 자동 보존 파기/분산 트랜잭션을 완료했다고 하지 않는다. 고정 로드맵의 Sprint8 **진행 상태만** 갱신하며 목표/순서/수락은 유지한다. Sprint5.1의13회 수집 승인 대기·1950–61/2027공백·데이터 재배포/출시 게이트도 유지한다.
+
+[실행 기록](engineering/SPRINT8_EXECUTION_20261122.md) · [로컬 웹 가이드](product/SPRINT8_LOCAL_WEB_GUIDE.md) · [API](product/SPRINT8_SERVER_API_CONTRACT.md). 다음 고정 단계는9의 실제 콘텐츠/이해도/전문가 검토이며 이번에 수행하거나 자동 승인하지 않았다.
+
 ## 2026-11-21 — 사용자 승인 고정 제품 로드맵
 
 현재 기준은 [SAJU-ROADMAP-V1 / 2026-11-15](product/SAJU_ROADMAP_LOCKED_V1_20261115.md), 상태는 LOCKED_UNTIL_EXPLICIT_USER_APPROVAL이다. Sprint 5.1 → 6 → 7 → 8 → 9 → 10의 목표·순서·핵심 수락 조건·주요 상품 전략·공개 출시 조건은 사용자 명시 요청 없이는 변경하지 않는다. 아래 과거 제안은 당시 기록으로 보존하며 고정 계획의 변경 승인이 아니다. Sprint 5.1 수집 승인은 대기 중이고, 별도 승인 없이 Sprint 6 시제품을 진행한다.
