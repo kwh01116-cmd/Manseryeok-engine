@@ -1,0 +1,15 @@
+# Manseryeok-engine — current execution handoff
+
+**2026-11-15 Sprint5: P0/P2/P3 수락, P1 PARTIAL.** 승인 브랜치는 `agent/kasi-local-1950-2026-20261109`이며, 시작 local/directremote는 `9aa28925a2726b5fc121a319591b801d08b7b5a2` clean이다. 최종 실행 SHA는 **`a0bb716e4a496135c205f7f360179b8735dd219c`**다. 후속 문서 HEAD/원격은 전달 영수증·최종 답변과 구분한다. 이전 checkpoint는 [원byte archive](archive/EXECUTION_HANDOFF_BEFORE_SPRINT5_20261115.md)에 보존했다.
+
+- **서버 API-only 팩 GO(조건부 내부 사용):** KASI-SERVER-API-ONLY-1950-2027-V01/1.0.0, content `a2bfbf35aff7bb8b11aef277a7be8d5ea5204c786a9142649bec23d27dfd289a`. 5파일 25,384,499bytes/실제 응답 1,002개/29,996행. 15012679·15012690만 재정규화하고 혼합 comparisons/exceptions/TXT/OSS 표/보정·운영 파일은 제외했다. startup에서 고정 pin/원문/행/출처를 검증한다. 고객 재배포는 UNRESOLVED이며, 법률/기관 서명/G0 인증은 아니다.
+- **1962–2026 연속 출생 범위:** 1962–86은 기존 안정 역사, 1987–88은 새 `kasi-api-1987-1988-dst-local-v1`/`KR_API_PUBLISHED_KST_DST_1987_1988_STANDARD_REFERENCE_V1`, 1989–26은 기존 현대 V1이다. 한국/Seoul/표준 KST의 일·시 참조를 명시해야 한다. DST gap에서는 원국을 0개 생성한다. fold 추가 정보가 없으면 두 시간 대응을 남기고 보류하며, 540/600 선택 후에도 원래의 모호성을 보존한다. 네 자시 정책은 환산한 표준 분에 적용한다. 1950–61은 미지원이다.
+- **분 발표 한계:** 1987/88의 당대 공식표 48행 중 47행의 분 표기가 일치했다. 1988 한로 API 10:44/비교표 10:45의 차이는 유지한다. API 발표값을 선택한 시간 정책이며, 초·유일한 천문 정답/진태양시 인증은 아니다.
+- **2027 PARTIAL:** 기존 양력 V2/annual 24행을 새 팩에서 실행했다. 음력은 NEEDS_DATA이며, 월운 V2는 2026 표 12개 정상/2027 표 10개 정상+마지막 2개 부족이다. 2028 출생은 미지원이다. 기존 V1 범위를 몰래 확대하지 않는다.
+- **서버 DTO/v4:** `manseryeok-server-analysis-{request,result}-v1`. 서버 설정 dataDirectory와 클라이언트 출생 입력을 분리한다. M1은 요청당 1회이며 시각 미상은 0회다. 기존 M2~M7·공망·한정 M5/summary/detailed를 재사용하고, 새 범위에 채택하지 않은 M5/M7 시계 정책은 HOLD로 둔다. Node22 독립 payload 96파일+별도 팩 5파일, artifact SHA `c63ce817fd85c6711d72e4b04b2fa700802c2f489187b1cc42ad97859e4383b3`. 저장소 밖 실행·네트워크/키/원본 import/Git/npm 차단 검사를 통과했다. v4에서 새 독립 M1/자격증명 카운터를 계측한 것은 아니다. Workers/실제 HTTP/클라우드 배포는 미검증/미수행이다.
+- **최종 검증:** 965/965·M2·Lab/KASI PASS. 현대 49,799쌍/TZ를 세 engine에서 비교했고, 2027 전 365일×4정책·12절 경계/1962–86 대표 25 G/L쌍/TZ와 DST 731일+태양 576쌍+전환 512쌍/TZ를 검사했다. DST 성공 13,414/gap 240/fold 240/오류 8/범위 밖 1은 구분한다. 단위·메모리·실패·독립 CLI 실제 수는 [실행 기록](engineering/SPRINT5_EXECUTION_20261115.md)을 참조한다.
+- **보존/한계:** 원본 2086/a,b 각 8/보강 5파일·고정 pin·기존 127생성물의 원byte를 유지했다. private 추적/API·키·재수집/기관 연락/Actions/배포는 0이다. 기존 M3 grid 신약 0건·추가 8경로가 한 날짜의 반복이라는 기록과 finalStrength/격국 성패/M5 전체 용신/G0·G1-P2 NO-GO를 유지한다.
+
+**다음 최소 조치:** 미확보한 2027 음양력 12개월+2028 태양 연간의 13 HTTP시도 이내·재시도 0 [계획](research/SPRINT5_MISSING_DATA_COLLECTION_PLAN.md)은 dry-run 완료/별도 승인 대기 상태다. execute 연결·2028 transport/자료 수락은 아직 완료하지 않았다. 승인 없이 키에 접근하거나 호출하지 않으며, 자료 부족 상태를 유지한다. 그다음 서버 운영의 요청 제한/개인정보/용량 검증을 마치고, 선택 강약·격국·목적별 도움 요소를 소비자 설명으로 묶는 유한한 제품 마일스톤을 정한다. 소규모 명리 규칙을 무한히 추가하는 것을 기본 다음 단계로 삼지 않는다.
+
+[가이드](SPRINT5_SERVER_ENGINE_GUIDE.md) · [팩계약](contracts/SERVER_API_ONLY_DATA_PACK_V01.md) · [DTO](contracts/SERVER_INTEGRATION_DTO_V01.md) · [v4](contracts/OFFLINE_SERVER_API_ONLY_V4.md) · [DST](research/KOREAN_DST_1987_1988_POLICY_V01.md) · [연도행렬](research/EXTENDED_YEAR_SUPPORT_MATRIX.md) · [로드맵](ROADMAP.md) · [일지](DEVLOG.md)
