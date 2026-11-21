@@ -7,7 +7,7 @@ import {timingSafeEqual} from 'node:crypto';
 import {createPurchaseVault,loadOrCreatePurchaseKeys} from './vault.mjs';
 import {createGuestSessions} from './sessions.mjs';
 import {createFakePaymentProvider} from './fake-payment.mjs';
-import {createLocalReportStore} from '../product/report-store.mjs';
+import {createExclusivePurchaseReportStore} from '../product/report-store.mjs';
 import {validateInterpretedReport,interpretedReportVersions} from '../../dist/report/narrativePipelineV1.js';
 import {canonicalInterpretation} from '../../dist/report/interpretationPolicyV1.js';
 import {LIVE_SALE_GATES,assertLiveSaleAllowed,validateTestOrder} from '../../dist/purchase/orderStateV1.js';
@@ -29,7 +29,8 @@ export async function createPurchaseWeb({stateDirectory,ports,mode,now=()=>new D
   vault=await createPurchaseVault({directory:join(resolve(stateDirectory),'vault'),encryptionKey:keys.encryptionKey,initialState:{sessions:{},drafts:{},orders:{},events:{}},now,
    validateState(s){if(!s||Object.keys(s).sort().join(',')!=='drafts,events,orders,sessions')return false;for(const o of Object.values(s.orders))validateTestOrder(o);return true;}});
   sessions=createGuestSessions({vault,indexKey:keys.indexKey,now,...(sessionTtlMs?{ttlMs:sessionTtlMs}:{})});
-  reportStore=storeWrapper(await createLocalReportStore({directory:join(resolve(stateDirectory),'reports'),encryptionKey:keys.reportEncryptionKey,indexKey:keys.reportIndexKey,now,
+  reportStore=storeWrapper(await createExclusivePurchaseReportStore({directory:join(resolve(stateDirectory),'reports'),encryptionKey:keys.reportEncryptionKey,indexKey:keys.reportIndexKey,now,
+   ...(faults?{afterTemporarySync:()=>faults('REPORT_TEMP_SYNCED')}:{}),
    validateReport(r,v){validateInterpretedReport(r);if(canonicalInterpretation(v)!==canonicalInterpretation(interpretedReportVersions(r)))throw new Error('REPORT_VERSIONS');return true;}}));
   service=await createPurchaseService({vault,reportStore,provider,...ports,now,autoRun,...(faults?{faults}:{})});
   let origin=null,inflight=0;

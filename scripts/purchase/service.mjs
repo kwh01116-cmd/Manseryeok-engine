@@ -32,12 +32,25 @@ export function createEnginePorts(engine){
 }
 export async function loadPurchaseEnginePorts(dataDirectory){return createEnginePorts(await loadApiOnlyServerEngine({dataDirectory}));}
 
+// A revoked order remains a durable deletion intent even if the file was stored
+// just before the process died, before COMPLETE could set reportRef.
+function storageDisposition(order) {
+ if(order.accessStatus==='REVOKED'||order.generationStatus==='FAILED_FINAL'||order.refundStatus!=='NOT_REQUESTED'||order.orderStatus==='CANCELLED')return 'REVOKED';
+ if(order.accessStatus==='AVAILABLE')return 'PUBLISHED';
+ return order.generationAttempts>0?'RETRYABLE':'UNWRITTEN';
+}
 export async function createPurchaseService({vault,reportStore,provider,calculatePreview,generateReport,now=()=>new Date(),faults=async()=>{},autoRun=true}){
  let closed=false,active=null,wakeup=false;
  const own=(s,id,actor)=>{const o=s.orders[id];check(o&&o.actorRef===actor,'ORDER_NOT_FOUND',404);return o;};
  const draft=(s,id,actor)=>{const d=s.drafts[id];check(d&&d.actorId===actor,'REVIEW_NOT_FOUND',404);check(Date.parse(d.expiresAt)>now().getTime(),'REVIEW_EXPIRED',410);return d;};
  const dto=o=>({id:o.id,mode:'TEST',orderStatus:o.orderStatus,paymentStatus:o.paymentStatus,generationStatus:o.generationStatus,refundStatus:o.refundStatus,accessStatus:o.accessStatus,reportAvailable:o.generationStatus==='COMPLETED'&&o.accessStatus==='AVAILABLE',canRetry:o.generationStatus==='FAILED_RETRYABLE'&&o.refundStatus==='NOT_REQUESTED',errorCode:o.errorCode,createdAt:o.createdAt,updatedAt:o.updatedAt,history:clone(o.transitionHistory)});
  const change=(s,id,actor,event)=>{const o=transitionOrder(own(s,id,actor),event,stamp(now));s.orders[id]=o;return dto(o);};
+ async function removeRevoked(order,actor) {
+  if(storageDisposition(order)!=='REVOKED')return;
+  const recordId=reportStore.recordIdFor({actorId:actor,idempotencyKey:'s8-'+order.id});
+  await faults('AFTER_REVOCATION',order.id);
+  await reportStore.remove({actorId:actor,recordId});
+ }
  const dispatch=()=>{if(closed||!autoRun)return;if(active){wakeup=true;return;}active=new Promise(resolve=>setImmediate(resolve)).then(async()=>{
   while(!closed){const s=await vault.read(),next=Object.values(s.orders).find(o=>o.generationStatus==='QUEUED'&&o.paymentStatus==='APPROVED'&&o.refundStatus==='NOT_REQUESTED');if(!next)break;await runJob(next.id,next.actorRef);}
  }).finally(()=>{active=null;if(wakeup&&!closed){wakeup=false;dispatch();}});active.catch(()=>{});};
@@ -60,12 +73,17 @@ export async function createPurchaseService({vault,reportStore,provider,calculat
   }catch(error){
    if(savedRef){const current=(await vault.read()).orders[id];if(current&&current.refundStatus!=='NOT_REQUESTED')await reportStore.remove({actorId:actor,recordId:savedRef});}
    const permanent=phase==='VALIDATE'||error instanceof RangeError||['INPUT_MISSING','GENERATION_VERSION_OR_CONTEXT_CONFLICT','REPORT_NOT_PROVIDABLE'].includes(error.code);
-   await vault.mutate(s=>{const o=s.orders[id];if(!o||!['QUEUED','GENERATING','VALIDATING'].includes(o.generationStatus))return;
-    const terminal=permanent||o.generationAttempts>=3;change(s,id,actor,{type:terminal?'FAIL_FINAL':'FAIL_RETRYABLE',code:permanent?'CLAIM_OR_POLICY_VALIDATION_FAILED':phase==='STORE'?'RESULT_STORAGE_FAILED':'GENERATION_INTERRUPTED'});}).catch(()=>{});
+   const failed=await vault.mutate(s=>{const o=s.orders[id];if(!o||!['QUEUED','GENERATING','VALIDATING'].includes(o.generationStatus))return;
+    const terminal=permanent||o.generationAttempts>=3;return change(s,id,actor,{type:terminal?'FAIL_FINAL':'FAIL_RETRYABLE',code:permanent?'CLAIM_OR_POLICY_VALIDATION_FAILED':phase==='STORE'?'RESULT_STORAGE_FAILED':'GENERATION_INTERRUPTED'});});
+   if(failed)await removeRevoked(failed,actor);
   }
  }
  // Exclusive vault ownership makes interrupted work from the previous process safe to requeue.
- await vault.mutate(s=>{for(const o of Object.values(s.orders)){if(['GENERATING','VALIDATING'].includes(o.generationStatus))s.orders[o.id]=transitionOrder(o,{type:'RECOVER_INTERRUPTED'},stamp(now));}});
+ const records=await vault.mutate(s=>{
+  for(const o of Object.values(s.orders)){if(['GENERATING','VALIDATING'].includes(o.generationStatus))s.orders[o.id]=transitionOrder(o,{type:'RECOVER_INTERRUPTED'},stamp(now));}
+  return Object.values(s.orders).map(o=>({actorId:o.actorRef,idempotencyKey:'s8-'+o.id,recordId:o.reportRef,disposition:storageDisposition(o)}));
+ });
+ await reportStore.recoverExclusive(records);
  dispatch();
  return Object.freeze({
   gates:LIVE_SALE_GATES,product:TEST_PRODUCT,
@@ -79,8 +97,8 @@ export async function createPurchaseService({vault,reportStore,provider,calculat
     check(Object.values(s.orders).filter(o=>o.actorRef===actor).length<100,'ORDER_LIMIT',429);const o=createTestOrder({id:randomUUID(),actorRef:actor,inputRef:d.reviewId,idempotencyKey:input.idempotencyKey,createdAt:stamp(now)});s.orders[o.id]=o;return dto(o);});},
   async list(actor){return {orders:Object.values((await vault.read()).orders).filter(o=>o.actorRef===actor).map(dto)};},
   async get(actor,id){return dto(own(await vault.read(),id,actor));},
-  async command(actor,id,type){const value=await vault.mutate(s=>change(s,id,actor,{type}));dispatch();return value;},
-  async receive(envelope){const event=provider.verifyEvent(envelope);const value=await vault.mutate(s=>{const o=s.orders[event.orderId];check(o,'ORDER_NOT_FOUND',404);let next=applyVerifiedPaymentEvent(o,event,stamp(now));if(next.paymentStatus==='APPROVED'&&next.generationStatus==='NOT_STARTED'&&next.refundStatus==='NOT_REQUESTED'&&next.orderStatus!=='CANCELLED')next=transitionOrder(next,{type:'QUEUE'},stamp(now));s.orders[o.id]=next;return dto(next);});dispatch();return value;},
+  async command(actor,id,type){const value=await vault.mutate(s=>change(s,id,actor,{type}));await removeRevoked(value,actor);dispatch();return value;},
+  async receive(envelope){const event=provider.verifyEvent(envelope);const value=await vault.mutate(s=>{const o=s.orders[event.orderId];check(o,'ORDER_NOT_FOUND',404);let next=applyVerifiedPaymentEvent(o,event,stamp(now));if(next.paymentStatus==='APPROVED'&&next.generationStatus==='NOT_STARTED'&&next.refundStatus==='NOT_REQUESTED'&&next.orderStatus!=='CANCELLED')next=transitionOrder(next,{type:'QUEUE'},stamp(now));s.orders[o.id]=next;return dto(next);});await removeRevoked(value,event.actorRef);dispatch();return value;},
   async simulate(actor,id,action){check(['APPROVE','FAIL','CANCEL','DELAY','REPLAY','BAD_SIGNATURE','REFUND_APPROVE','REFUND_FAIL'].includes(action),'INVALID_SIMULATION',422);
    const o=own(await vault.read(),id,actor);if(action==='DELAY')return dto(o);
    const type={APPROVE:'PAYMENT_APPROVED',FAIL:'PAYMENT_FAILED',CANCEL:'PAYMENT_CANCELLED',REFUND_APPROVE:'REFUND_APPROVED',REFUND_FAIL:'REFUND_FAILED',REPLAY:'PAYMENT_APPROVED',BAD_SIGNATURE:'PAYMENT_APPROVED'}[action];
@@ -98,7 +116,7 @@ export async function createPurchaseService({vault,reportStore,provider,calculat
    const stored=await reportStore.get({actorId:actor,recordId:o.reportRef});check(stored.status==='FOUND',stored.status==='EXPIRED'?'REPORT_EXPIRED':'REPORT_NOT_FOUND',stored.status==='EXPIRED'?410:404);
    const r=stored.report;validateInterpretedReport(r);const view={schemaVersion:'saju-purchase-report-view-v1',reportProfile:r.profile,sections:buildInterpretedSections(r),opening:r.opening.map(b=>b.text),candidates:charts(r.basis.projection),domainAssessments:r.domainAssessments,versions:stored.versions,eligibility:r.eligibility,text:renderInterpretedReport(r),claims:r.interpretationClaims};
    const current=own(await vault.read(),id,actor);check(current.accessStatus==='AVAILABLE'&&current.refundStatus==='NOT_REQUESTED'&&current.reportRef===o.reportRef,'REPORT_ACCESS_UNAVAILABLE',403);return view;},
-  async deleteReport(actor,id){const ref=await vault.mutate(s=>{const o=own(s,id,actor);check(o.reportRef,'REPORT_NOT_FOUND',404);o.accessStatus='REVOKED';o.updatedAt=stamp(now);return o.reportRef;});await reportStore.remove({actorId:actor,recordId:ref});return {status:'DELETED'};},
+  async deleteReport(actor,id){const value=await vault.mutate(s=>{const o=own(s,id,actor);check(o.reportRef,'REPORT_NOT_FOUND',404);o.accessStatus='REVOKED';o.updatedAt=stamp(now);return dto(o);});await removeRevoked(value,actor);return {status:'DELETED'};},
   async drain(){dispatch();if(active)await active;},
   async close(){closed=true;if(active)await active;},
  });

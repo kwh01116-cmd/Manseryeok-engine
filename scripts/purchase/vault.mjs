@@ -1,5 +1,5 @@
 import {constants} from 'node:fs';
-import {mkdir,lstat,realpath,open,unlink,rename} from 'node:fs/promises';
+import {mkdir,lstat,realpath,open,unlink,rename,readdir} from 'node:fs/promises';
 import {resolve,join,dirname} from 'node:path';
 import {createCipheriv,createDecipheriv,randomBytes} from 'node:crypto';
 
@@ -49,6 +49,14 @@ async function writeAtomic(root,path,bytes){
   const temporary=join(root,'.pending-'+randomBytes(16).toString('hex'));let file;
   try{file=await open(temporary,constants.O_CREAT|constants.O_EXCL|constants.O_WRONLY|(constants.O_NOFOLLOW??0),0o600);await file.writeFile(bytes);await file.sync();await file.close();file=null;await directory(root);const latest=await info(path);if(latest)checkedFile(latest,MAX_BYTES*2);await rename(temporary,path);}finally{await file?.close();try{await unlink(temporary);}catch(error){if(!missing(error))throw error;}}
 }
+async function removeUncommittedSnapshots(root,entries) {
+  for(const name of entries){
+    await directory(root);
+    const path=join(root,name);
+    checkedFile(await lstat(path),MAX_BYTES*2);
+    await unlink(path);
+  }
+}
 function base64(value,size){check(typeof value==='string'&&/^[A-Za-z0-9_-]+$/.test(value),'PURCHASE_VAULT_INTEGRITY_FAILED');const bytes=Buffer.from(value,'base64url');check(bytes.toString('base64url')===value&&(size===null||bytes.length===size),'PURCHASE_VAULT_INTEGRITY_FAILED');return bytes;}
 function objectFields(value,fields,code){check(plain(value)&&Object.keys(value).length===fields.length&&fields.every(key=>Object.hasOwn(value,key)),code);}
 const alive=pid=>{try{process.kill(pid,0);return true;}catch(error){return error.code!=='ESRCH';}};
@@ -95,7 +103,18 @@ export async function createPurchaseVault({directory:directoryInput,encryptionKe
     try{const sealed=JSON.parse(bytes.toString('utf8'));objectFields(sealed,['schemaVersion','algorithm','iv','tag','ciphertext'],'PURCHASE_VAULT_INTEGRITY_FAILED');check(sealed.schemaVersion===PURCHASE_VAULT_SCHEMA&&sealed.algorithm==='AES-256-GCM','PURCHASE_VAULT_INTEGRITY_FAILED');const decipher=createDecipheriv('aes-256-gcm',key,base64(sealed.iv,12));decipher.setAAD(aad);decipher.setAuthTag(base64(sealed.tag,16));const clear=Buffer.concat([decipher.update(base64(sealed.ciphertext,null)),decipher.final()]);try{check(clear.length<=maxStateBytes,'PURCHASE_VAULT_TOO_LARGE');payload=JSON.parse(clear.toString('utf8'));}finally{clear.fill(0);}objectFields(payload,['schemaVersion','revision','createdAt','updatedAt','state'],'PURCHASE_VAULT_INTEGRITY_FAILED');check(payload.schemaVersion===PURCHASE_VAULT_SCHEMA&&Number.isSafeInteger(payload.revision)&&payload.revision>=0&&new Date(payload.createdAt).toISOString()===payload.createdAt&&new Date(payload.updatedAt).toISOString()===payload.updatedAt,'PURCHASE_VAULT_INTEGRITY_FAILED');payload.state=purchaseJsonClone(payload.state,maxStateBytes);}catch(error){if(error instanceof PurchaseVaultError&&error.code==='PURCHASE_VAULT_UNSAFE_FILE')throw error;throw new PurchaseVaultError('PURCHASE_VAULT_INTEGRITY_FAILED');}
     validate(payload.state);return payload;
   }
-  try{await rootDirectory(root);release=await acquire(root);if(await info(path)===null){const state=purchaseJsonClone(initialState,maxStateBytes);validate(state);const date=instant();await writeAtomic(root,path,seal({schemaVersion:PURCHASE_VAULT_SCHEMA,revision:0,createdAt:date,updatedAt:date,state}));}else await load();}catch(error){try{await release?.();}catch{}key.fill(0);throw safe(error);}
+  try{
+    await rootDirectory(root);release=await acquire(root);
+    const pending=(await readdir(root)).filter(name=>/^\.pending-[a-f0-9]{32}$/.test(name));
+    if(await info(path)===null){
+      check(!pending.length,'PURCHASE_VAULT_STARTUP_REVIEW_REQUIRED');
+      const state=purchaseJsonClone(initialState,maxStateBytes);validate(state);const date=instant();
+      await writeAtomic(root,path,seal({schemaVersion:PURCHASE_VAULT_SCHEMA,revision:0,createdAt:date,updatedAt:date,state}));
+    }else{
+      await load();
+      await removeUncommittedSnapshots(root,pending);
+    }
+  }catch(error){try{await release?.();}catch{}key.fill(0);throw safe(error);}
   function operation(fn){check(!closing&&!closed,'PURCHASE_VAULT_CLOSED');const result=queue.then(async()=>{try{return await fn();}catch(error){throw error instanceof MutatorFailure?error.error:safe(error);}});queue=result.catch(()=>{});return result;}
   function read(){return operation(async()=>purchaseJsonClone((await load()).state,maxStateBytes));}
   function mutate(mutator){check(typeof mutator==='function'&&mutator.constructor.name!=='AsyncFunction','PURCHASE_VAULT_SYNC_MUTATOR');return operation(async()=>{const payload=await load(),draft=purchaseJsonClone(payload.state,maxStateBytes);let result;try{result=mutator(draft);}catch(error){throw new MutatorFailure(error);}if(result instanceof Promise){result.catch(()=>{});throw new PurchaseVaultError('PURCHASE_VAULT_SYNC_MUTATOR');}const state=purchaseJsonClone(draft,maxStateBytes);validate(state);const output=result===undefined?undefined:purchaseJsonClone(result,maxStateBytes);check(payload.revision<Number.MAX_SAFE_INTEGER,'PURCHASE_VAULT_REVISION_LIMIT');await writeAtomic(root,path,seal({...payload,revision:payload.revision+1,updatedAt:instant(),state}));return output;});}

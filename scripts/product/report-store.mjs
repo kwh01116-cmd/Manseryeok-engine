@@ -1,5 +1,5 @@
 import {constants} from 'node:fs';
-import {mkdir,lstat,realpath,open,unlink,rename} from 'node:fs/promises';
+import {mkdir,lstat,realpath,open,unlink,rename,readdir} from 'node:fs/promises';
 import {resolve,join,dirname} from 'node:path';
 import {createCipheriv,createDecipheriv,createHmac,randomBytes,timingSafeEqual} from 'node:crypto';
 import {setTimeout as pause} from 'node:timers/promises';
@@ -70,12 +70,21 @@ async function infoOrNull(path){try{return await lstat(path);}catch(error){if(ab
 
 /** Explicit local persistence only. The caller authenticates actorId and supplies keys. */
 export async function createLocalReportStore(options){
+  return openReportStore(options,false);
+}
+/** Only for the purchase server's dedicated reports directory, under its vault writer lock. */
+export async function createExclusivePurchaseReportStore(options){
+  return openReportStore(options,true);
+}
+async function openReportStore(options,exclusivePurchaseDirectory){
   check(plain(options),'REPORT_STORE_OPTIONS');const allowed=['directory','encryptionKey','indexKey','validateReport','now','maxRecordBytes'];
+  if(exclusivePurchaseDirectory)allowed.push('afterTemporarySync');
   for(const key of Reflect.ownKeys(options)){const d=Object.getOwnPropertyDescriptor(options,key);check(typeof key==='string'&&allowed.includes(key)&&d.enumerable&&Object.hasOwn(d,'value'),'REPORT_STORE_OPTIONS');}
   string(options.directory,'REPORT_STORE_DIRECTORY',4096);
   check(Buffer.isBuffer(options.encryptionKey)&&options.encryptionKey.length===32&&Buffer.isBuffer(options.indexKey)&&options.indexKey.length===32&&!timingSafeEqual(options.encryptionKey,options.indexKey),'REPORT_STORE_DISTINCT_KEYS_REQUIRED');
   check(typeof options.validateReport==='function'&&options.validateReport.constructor.name!=='AsyncFunction','REPORT_STORE_SYNC_VALIDATOR_REQUIRED');
   check(options.now===undefined||typeof options.now==='function','REPORT_STORE_CLOCK');
+  check(options.afterTemporarySync===undefined||typeof options.afterTemporarySync==='function','REPORT_STORE_OPTIONS');
   const maxRecordBytes=options.maxRecordBytes??DEFAULT_BYTES;check(Number.isSafeInteger(maxRecordBytes)&&maxRecordBytes>=1024&&maxRecordBytes<=MAX_BYTES,'REPORT_STORE_SIZE_LIMIT');
   const root=resolve(options.directory),encryptionKey=Buffer.from(options.encryptionKey),indexKey=Buffer.from(options.indexKey),validateReport=options.validateReport,clock=options.now??(()=>new Date());
   const maxFileBytes=Math.ceil(maxRecordBytes*4/3)+4096;let closed=false,active=0;
@@ -139,7 +148,7 @@ export async function createLocalReportStore(options){
         const ciphertext=Buffer.concat([cipher.update(clear),cipher.final()]);clear.fill(0);
         const sealed=JSON.stringify({schemaVersion:REPORT_STORE_FILE_SCHEMA,algorithm:'AES-256-GCM',iv:iv.toString('base64url'),tag:cipher.getAuthTag().toString('base64url'),ciphertext:ciphertext.toString('base64url')});check(Buffer.byteLength(sealed)<=maxFileBytes,'REPORT_STORE_TOO_LARGE');
         const path=join(dir,recordId+'.json'),temporary=join(dir,recordId+'.pending-'+randomBytes(12).toString('hex'));let file=null;
-        try{file=await open(temporary,constants.O_CREAT|constants.O_EXCL|constants.O_WRONLY|(constants.O_NOFOLLOW??0),0o600);await file.writeFile(sealed);await file.sync();await file.close();file=null;check(await infoOrNull(path)===null,'REPORT_STORE_IDEMPOTENCY_CONFLICT');await directory(dir);await rename(temporary,path);}
+        try{file=await open(temporary,constants.O_CREAT|constants.O_EXCL|constants.O_WRONLY|(constants.O_NOFOLLOW??0),0o600);await file.writeFile(sealed);await file.sync();await file.close();file=null;if(options.afterTemporarySync)await options.afterTemporarySync();check(await infoOrNull(path)===null,'REPORT_STORE_IDEMPOTENCY_CONFLICT');await directory(dir);await rename(temporary,path);}
         finally{await file?.close();try{await unlink(temporary);}catch(error){if(!absent(error))throw error;}}
         return receipt('CREATED',payload);
       });
@@ -157,6 +166,61 @@ export async function createLocalReportStore(options){
       return await withLock(owner,recordId,false,async dir=>{const payload=await readRecord(dir,owner,recordId);if(!payload)return freeze({status:'NOT_FOUND'});await directory(dir);await unlink(join(dir,recordId+'.json'));return freeze({status:'DELETED',recordId});});
     }catch(error){throw safeError(error);}finally{done();}
   }
+  // The purchase server calls this once, under its exclusive vault writer lock,
+  // before accepting requests. The authenticated order ledger supplies all keys.
+  async function recoverExclusive(records) {
+    check(active===0,'REPORT_STORE_BUSY');
+    const done=operation();
+    try {
+      const expected=new Map(), disposable=[], discard=[];
+      for(const record of records) {
+        const owner=ownerOf(record.actorId), recordId=recordOf(owner,record.idempotencyKey);
+        check(record.recordId===null||record.recordId===recordId,'REPORT_STORE_RECONCILIATION_REQUIRED');
+        check(['PUBLISHED','RETRYABLE','REVOKED','UNWRITTEN'].includes(record.disposition),'REPORT_STORE_RECONCILIATION_REQUIRED');
+        if(!expected.has(owner))expected.set(owner,new Map());
+        const entries=expected.get(owner);
+        check(!entries.has(recordId),'REPORT_STORE_RECONCILIATION_REQUIRED');
+        entries.set(recordId,{...record,recordId,present:false});
+      }
+      await directory(root);
+      for(const owner of await readdir(root)) {
+        const entries=expected.get(owner);
+        check(entries,'REPORT_STORE_RECONCILIATION_REQUIRED');
+        const dir=await ownerDirectory(owner,false);
+        for(const name of await readdir(dir)) {
+          const match=/^([0-9a-f]{64})\.(json|lock|pending-[0-9a-f]{24})$/.exec(name);
+          const entry=match&&entries.get(match[1]);
+          check(entry,'REPORT_STORE_RECONCILIATION_REQUIRED');
+          const path=join(dir,name), meta=await lstat(path);
+          check(meta.isFile()&&!meta.isSymbolicLink()&&meta.nlink===1&&meta.size<=maxFileBytes,'REPORT_STORE_UNSAFE_FILE');
+          if(match[2]==='json') {
+            check(entry.disposition!=='UNWRITTEN','REPORT_STORE_RECONCILIATION_REQUIRED');
+            entry.present=true;
+            if(entry.disposition==='REVOKED')discard.push(entry);
+          } else {
+            check(match[2]!=='lock'||meta.size===0,'REPORT_STORE_UNSAFE_FILE');
+            disposable.push({dir,path,meta});
+          }
+        }
+      }
+      for(const entries of expected.values())for(const entry of entries.values())
+        check(entry.disposition!=='PUBLISHED'||entry.present,'REPORT_STORE_PUBLISHED_RECORD_MISSING');
+      // Verify all names, types and ledger links before reclaiming any stale artifacts.
+      for(const {dir,path,meta} of disposable) {
+        await directory(dir);
+        const latest=await lstat(path);
+        check(latest.isFile()&&latest.nlink===1&&latest.dev===meta.dev&&latest.ino===meta.ino&&latest.size===meta.size,'REPORT_STORE_UNSAFE_FILE');
+        await unlink(path);
+      }
+      for(const {actorId,recordId} of discard)await remove({actorId,recordId});
+      return {temporaryFilesRemoved:disposable.length,revokedRecordsRemoved:discard.length};
+    } catch(error) {throw safeError(error);} finally {done();}
+  }
+  function recordIdFor({actorId,idempotencyKey}) {
+    check(!closed,'REPORT_STORE_CLOSED');
+    return recordOf(ownerOf(actorId),idempotencyKey);
+  }
   function close(){check(active===0,'REPORT_STORE_BUSY');encryptionKey.fill(0);indexKey.fill(0);closed=true;}
-  return Object.freeze({schemaVersion:REPORT_STORE_SCHEMA,version:REPORT_STORE_VERSION,put,get,remove,close});
+  return Object.freeze({schemaVersion:REPORT_STORE_SCHEMA,version:REPORT_STORE_VERSION,put,get,remove,close,
+    ...(exclusivePurchaseDirectory?{recordIdFor,recoverExclusive}:{})});
 }
