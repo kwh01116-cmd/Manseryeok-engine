@@ -48,3 +48,9 @@ $s7Common = @(
 1950–61/2027음력·월운 끝2 등 기존 미지원·자료 부족은 그대로다. 역사시 원국 계산과 모든 M3/M5/M7 해석 정책 지원은 별개다. DST gap은 거절하고 fold/입춘/토왕의 불확실성을 보존한다. 새 리포트를 기존 독립v4에 포함했다고 주장하지 않는다. 이번 저장은 가상 사용자·합성 출생정보로 검증하는 로컬 구현이며 운영 인증/DB/결제는 없다.
 
 [정책](SPRINT7_INTERPRETATION_POLICY_V01.md) · [Claim](SPRINT7_CLAIM_GENERATION_CONTRACT.md) · [파이프라인](SPRINT7_NARRATIVE_PIPELINE.md) · [QA](SPRINT7_CONTENT_QA_MATRIX.md) · [실행 기록](../engineering/SPRINT7_EXECUTION_20261121.md)
+
+## 실제 수락과 남은 범위
+
+실행 SHA는 `39a81fd744d5094eb8a4602cd2ca6383faff302a`, 정책0.1.0/resolver·generator0.1.1/artifact1.0.1이다. 전체1,030/1,030·M2·Lab/KASI와 실제새CLI35회/기존S6·v4각2회·두TZ40출력 쌍을 확인했다. 초기ebaf코드는 본신합 문맥 누락 때문에 검증을 중단했고, 해당로그는 최종통과로 세지 않는다.
+
+새 역할 관점은 LIMITED이며 근거가 없는 영역은 HOLD다. 상품성은PARTIAL/완전유료제공은NO-GO다. 실제고객·전문가/구매·실제외부LLM 품질/운영인증·DB·키관리·결제는 미검증 또는 미구현이다. 생성만으로파일을저장하지않으며, 로컬저장 키는테스트용메모리에만주입했다. KASI/API키사용0과 저장용암호화키사용을혼동하지않는다.

@@ -6,6 +6,16 @@
 
 
 
+## 2026-11-21 current checkpoint — Sprint7 개인화 역할 해석·생성·저장
+
+고정 Sprint7 범위에서 네 선택 정책의 전통적 역할 해석을 추가했다. 행동은 월령 본기와 정확 투출, 소통/활동/자원 선택은 명시한 표면 역할 쌍으로 관점을 고른다. 근거/반대조건·허용 의미·금지 결론을 가진 claim→6장 view→닫힌 표현 검수·명시 fallback→로컬 암호화 저장/재열람을 연결했다. 실제 성격·직업·재산/사건·전체 강약/격성패·최종 용신을 판정한 것은 아니다.
+
+**최종 실행 `39a81fd744d5094eb8a4602cd2ca6383faff302a`:1,030/1,030·M2·Lab/KASI PASS.** 실제37입력/29다른팔자/12월지10일간8내격·33부모132claim, 새CLI35/S6기존2/v4기존2·두TZ40출력 쌍을 검사했다. 행동L12/H21·소통L19/H14·활동L16/H17·자원L14/H19이며 새영역의SUPPORTED는0이다. 원국이 없는5입력은 claim을 만들지 않았다. 초기ebaf의 본신합 문맥 누락·검증중단/P23추가·새SHA재검사는 [실행 기록](engineering/SPRINT7_EXECUTION_20261121.md)에 보존했다.
+
+**상품성 PARTIAL / PAID_REPORT_READY NO-GO.** 이전HOLD 장에 실제 전통적 관점은 추가됐지만 좁은 적용/같은역할 템플릿/추상적질문이 남아 있다. 인간전문가·실사용자/구매·외부LLM 품질은 미검증이다. Sprint8은 회원/주문/결제·복구계약을 이 적격성/버전/저장 경계와 연결하되, 실제베타9·공개유료출시10의 수락을 앞당기지 않는다. Sprint5.1 수집은13시도/재시도0 별도승인 대기다. 기존코어/S6·M2~M7·133생성물/자료팩/v4·권리/연도·G1-P2 게이트는 유지한다.
+
+[정책](product/SPRINT7_INTERPRETATION_POLICY_V01.md) · [Claim](product/SPRINT7_CLAIM_GENERATION_CONTRACT.md) · [생성/검수](product/SPRINT7_NARRATIVE_PIPELINE.md) · [저장](product/SPRINT7_STORAGE_CONTRACT.md) · [실행 가이드](product/SPRINT7_REPORT_GUIDE.md). 아래는 당시 체크포인트다.
+
 ## 2026-11-21 current checkpoint — Sprint6 소비자 리포트 시제품
 
 고정 계획의 목표·순서·수락 조건을 바꾸지 않고 Sprint6의 기술 시제품을 구현했다. 발급된 서버 분석→사실/전통 분류/선택 정책→같은 후보의 claim→6장 TEXT/JSON/sections로 연결한다. 단일 상품 PRD·무료/유료 가설·제공 적격성·콘텐츠 공백을 문서화했다. 가격·브랜드·분량·PG는 미확정이다.
