@@ -1,0 +1,18 @@
+# Manseryeok-engine — current execution handoff
+
+**2026-11-21 Sprint6: 작동하는 소비자 리포트 시제품 / 상품성 PARTIAL / 완전 유료 제공 NO-GO.** 승인 브랜치 `agent/kasi-local-1950-2026-20261109`, 시작 local/directremote `2b87fd004e1ac496533188cc391ad6de96ba8474` clean, 최종 실행 코드 **`ba700772c30cf21ee6ba3b3e1383591108c77ca8`**. 후속 문서 commit/원격 HEAD는 전달 영수증·최종 답변과 구분한다. 이전 Sprint5 handoff는 [원byte archive](archive/EXECUTION_HANDOFF_BEFORE_SPRINT6_20261121.md)에 보존했다.
+
+- **고정 계획:** [SAJU-ROADMAP-V1 / 2026-11-15](product/SAJU_ROADMAP_LOCKED_V1_20261115.md), `LOCKED_UNTIL_EXPLICIT_USER_APPROVAL`. Sprint5.1→6→7→8→9→10 목표/순서/수락/주요 전략/출시 조건은 사용자 명시 요청 없이는 변경하지 않는다. 이번에는 Sprint6 진행 상태만 갱신했다. 자료13HTTP시도/재시도0는 별도 승인 대기이며 키·수집0이다.
+- **단일 상품:** 한국어 일회성 웹 열람 리포트 가설. 가격/브랜드/총쪽수/PDF/PG/전환율 미확정. 무료 preview와 상세 본문 구획은 콘텐츠 가설이며 실제 entitlement/결제는 아니다. 성향/행동·관계/일/재물 개인별 해석은 정책이 없어 HOLD이며, 모든 입력에서 `fullPaidReport=false`, `paymentGate=NO_GO_PROTOTYPE_NOT_FOR_SALE`다.
+- **새 실행 경로:** `scripts/product/consumer-report.mjs`의 명시적 `SAJU-CONSUMER-EVIDENCE-REPORT-V01`/0.1.0. 기존 서버 발급 결과를 재사용해 순수 `src/report/consumerReportV1.ts`의 사실/전통 분류/선택 정책/claim/6장 서술 모델을 만든다. 기존 서버/코어/기본 CLI·M2~M7 정책은 바꾸지 않았다. JSON/TEXT/sections, preview/full, report/dialogue, summary/evidence를 같은 모델에서 생성한다. 기본 자동 저장/LLM/새 UI/API/결제는 없다.
+- **참조·격리:** claim→같은 부모·fact·policy/version·source·원 경로를 검증한다. 장간/계절/투출 경쟁을 원 정책대로 보존한다. 순수 모델의 정합성 검사는 API/G0 인증이 아니며 어댑터가 원 발급 결과·요청 문맥을 확인한다. 원 JSON을 저장 후 검증하려면 원 projection이 필요하다. hash는 암호화·익명화가 아니다. JSON은 operator 전체 모델이며 무료/유료 인증 필터가 아니다.
+- **실제 결과:** 겨울甲의 무화→온기 후보, 같은날 정오의 丁 존재→충분성 HOLD, 정관/정재의 월령 기준·투출/경쟁을 연결해 읽는다. 첫 문단이 같은 사례 한 쌍과 공통 보류 문장은 개인화 성과로 세지 않는다. 사실·구조 설명을 넘어선 개인 성향·주제 풀이/구매 가치는 아직 검증하지 않았다. 같은 AI의 3전문42claim+경계 검토를 인간 전문가/독립 학파/실사용자 검증으로 세지 않는다.
+- **적격성:** 주요17가상 입력의 제한 제공12/제공 불가3/추가 정보2. 계산 성공12입력은13원국 부모/14계절 대안이다. 입춘2원국과 토왕1원국·2계절을 보존한다. gap은 원국0, fold는 두 시간 대응과 추가 정보 필요, 선택 offset 뒤에도 원 모호성을 남긴다. 성별·현재 시각·출생 시각을 추정하지 않는다.
+- **검증:** 전체 **985/985**, M2 감사 `CATALOG_CONSISTENT_EVIDENCE_OPEN`, Lab/KASI 실제Chromium PASS. 신규CLI49=정상39+입력보류10, 기존v4 JSON/TEXT2 별도. UTC/Seoul 주요17+probe3 JSON/TEXT20쌍 일치. 양음력3쌍/네자시/교대·반복/교차요청거절/변조를 검사했다. 자세한 단위·메모리·SHA는 [실행 기록](engineering/SPRINT6_EXECUTION_20261121.md)에 둔다.
+- **실패 보존:** 통합r1의 fold 동의어 private regex 오류를 고치고 수동r2 검사를 했다. Lab r1은 기능검사 뒤 owned Chromium 종료 실패였고 신원 확인한 이번 Node9796 하나만 정리/프로필 보존했다. 코드·기대값·시간제한 변경 없이 일반 OS권한에서 브라우저만1회 재실행해 Lab/KASI 정상 종료를 확인했다. 전체985/M2를 두 번 실행했다고 표시하지 않는다. 자동retry/heap증설/사용자 프로세스 일괄 종료는0이다.
+- **원본·이전 실행 보존:** 4자료트리2,107파일/API-only5/v4 97/기존131생성물은 원byte 불변이다. 기존49,799쌍/TZ 전수·저장소 밖 v4 복원은 Sprint5 `a0bb716e4a496135c205f7f360179b8735dd219c`의 과거 실행이며 이번에는 재실행하지 않았다. 새 소비자 모듈은 저장소 CLI/import이며 기존 v4에 포함하거나 새 독립 복원했다고 주장하지 않는다.
+- **지원·권리 불변:** 1950–61 미지원, 명시 정책의1962–86/1987–88 DST/1989–26 지원,2027 양력 PARTIAL·음력 NEEDS_DATA/월운10+끝2부족,2028출생 미지원. 원국 계산과 M3/M5/M7 시계 적용은 별도다. 서버 API-only 조건부 내부 사용과 고객 데이터팩 재배포 UNRESOLVED를 구별한다. G1-P2 NO-GO·기본 엔진·M3 좁은 grid신약0/추가8한날짜 반복·전체 강약/격 성패/최종 용신·출시 게이트는 유지한다.
+
+**다음은 고정 Sprint7 범위:** (1) 구조에서 허용하는 유한한 성향/주제 선택 정책의 조건·반대 근거/대안·대표 반례를 먼저 수락, (2) 같은 사실/claim을 소비하는 규칙 또는 AI 생성과 계산 변경·모순/단정 검수, 재생성/안전 실패, (3) 정책·자료·후보를 보존하는 버전형 결과 저장과 개인정보 보관/삭제/접근통제 설계. 미지원 강약·격국 성패·용신/사건을 LLM으로 보충하지 않는다. 실제 전문가·사용자/구매 검증은 미실행이며 고정 Sprint9 목표를 앞당겨 완료했다고 쓰지 않는다. 이번에는 후속 기능을 구현하지 않았다.
+
+[제품 PRD](product/SPRINT6_SINGLE_REPORT_PRD.md) · [가이드/복사 명령](product/SPRINT6_REPORT_GUIDE.md) · [스키마](product/REPORT_SCHEMA_V01.md) · [문장 계약](product/REPORT_CLAIM_CONTRACT_V01.md) · [콘텐츠 공백](product/REPORT_CONTENT_GAP_MATRIX.md) · [사업 체크리스트](product/SPRINT6_BUSINESS_READINESS.md) · [Sprint5/팩 가이드](SPRINT5_SERVER_ENGINE_GUIDE.md) · [로드맵](ROADMAP.md) · [일지](DEVLOG.md)

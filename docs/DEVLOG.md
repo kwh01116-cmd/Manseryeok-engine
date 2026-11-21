@@ -912,3 +912,15 @@ Report Evidence Model은 기존 발급 서버 결과를 한 번 소비하며 계
 **보존·미실행:** 기존코어/서버/M2~M7·정책·131생성물·원본4자료트리2107/API팩5/v4 97파일의 원byte 불변을 확인했다. 전체 현재 tracked510/emit133도 검증 전후 같다. 변경은 새report 모듈/어댑터/합성검사·문서이며, 49,799쌍 전수와 저장소 밖v4 복원은 이번 미실행/Sprint5과거기록 유지다. 신규 소비자 기능을 기존artifact에 넣었다고 표시하지 않는다. 통합53child의network/key/credential접근0, KASI API·키·수집/LLM/기관·고객연락/실결제/UI/Actions/배포0이며 loopback Chromium/Git까지 전체네트워크0이라고 하지 않는다.
 
 **계획 유지:** SAJU-ROADMAP-V1/2026-11-15 잠금은 Sprint6 진행 상태만 갱신했다. Sprint5.1은13HTTP시도·재시도0 수집 승인 대기다. 다음은 고정 Sprint7의 유한 해석정책→claim/문장·자동검수/재생성/안전실패·버전형저장이며, 미지원 강약/격성패/최종용신/성향·주제 판단을 AI로 채우지 않는다. 정책·운영·법률·가격·실구매 검토는 미완료다. 실행 단위/전문 증거/정확 SHA/미실행은 [Sprint6 기록](engineering/SPRINT6_EXECUTION_20261121.md), [가이드](product/SPRINT6_REPORT_GUIDE.md), [현재 인수인계](EXECUTION_HANDOFF.md)에 연결했다. 이후 문서만 커밋하고 실행파일/원본/팩/기존artifact불변·workflow분기조건·직접원격을 확인해 승인브랜치 일반Push한다.
+
+## 2026-11-21 — Sprint7 개발: 역할 해석·검수·로컬 저장
+
+실제 시작 local/directremote d50841f3ac27c2a365c088eb53cf2612bd50b349/승인브랜치 clean을 확인했다. 고정 SAJU-ROADMAP-V1의 Sprint7 범위만 수행하며 Sprint5.1 수집/외부LLM/결제/주문/베타/출시는 실행하지 않는다. 원 S6 보고서를 바꾸는 대신 같은 발급서버 결과→새 선택형 profile의 역할 claim/6장 view로 연결했다.
+
+**사전 선택:** 원저·徐주석·전사·프로젝트현대어휘/ifelse를 분리한 정책P01–P22와 별도 최소구조24계약/6대조쌍을 먼저 고정했다. 행동은 유효월령MAIN의 정확투출, 소통·활동·자원선택은 정해진 표면역할쌍을 요구한다. 상징의 반성관점은 LIMITED이고 객관적성격/직업/돈/사건 결론은 아니다. 실제37입력(성공32/보류5, 서로다른8글자29/12월지/10일간/내격8) literal기대도 새출력에서 생성하지 않았다.
+
+**개발·반례:** 독립검토가 누락7참조/holes+extra배열/foreign지원·중복위치/월지·음수count/조사·반복/원S6opaque factID 호환 문제를 찾았다. 참조소유를 ID철자만이아닌 원 registry candidate로 확인하고, 복사된 인성 제한은 원 위치·근·기존오합helper의 닫힌조건과 대조한다. 순수JSON검사와 API원문진위를 혼동하지 않는다. 첫TS빌드의괄호오류를 고쳤다. 생성기14집중의첫12/14에서 S6복사본문맥없는렌더 하니스오류와 아직갱신안된emit의traceguard를 구분해 수정/최신compile후14/14를 확인했다. 잘못된 응답계약을 연결불능으로 세던 분류, unknown block의raw문자열을fallback에남기던 위험도닫았다.
+
+**파일럿:** 합성정책9/저장15/새어댑터5/서술14집중이통과했다. 실제37개발파일럿의33부모·132claim은 행동L12/H21,소통L19/H14,활동L16/H17,자원L14/H19였고 원S6JSON은바이트동일했다. 이수를최종SHA의전체검사/외부해석정답률로세지않는다. 별도AI가개발4전문16claim과경계3전문을읽고검토했다. 같은role쌍반복·영역소제목/ALL_HOLD비문/첫문단의domain목록을보완하고, 같은 WORK/MONEY쌍재사용은새독립근거처럼세지않는다. 현재상품성판정은PARTIAL/실제유료준비NO-GO이며 인간전문가·실사용자·가격검증은미실행이다.
+
+로컬저장은 명시적호출만있고 AES-GCM/별도HMAC/만료/idempotency·버전충돌·재열람·삭제·접근반례를 합성자료로검사했다. 운영회원인증/DB/키관리/자동sweep은미구현이다. 원본/팩/v4·기존코어/정책은보존하고 최종코드SHA·전체check/M2/Chromium·두TZ/실제CLI·실제report저장/4전문·보존·정확원격은 [Sprint7실행기록](engineering/SPRINT7_EXECUTION_20261121.md)에 후속 누적한다.
