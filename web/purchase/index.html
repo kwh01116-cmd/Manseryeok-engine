@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>나의 사주 해석 리포트 · 로컬 시제품</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <div class="shell">
+    <header class="site-header">
+      <a class="brand" href="#intro" id="brand-link"><span class="brand-mark" aria-hidden="true">曆</span><span>MANSE RYEOK<small>나의 사주 해석 리포트</small></span></a>
+      <nav aria-label="주 메뉴"><button class="text-button" type="button" id="new-report">새 리포트</button><button class="text-button" type="button" id="open-library">내 보관함</button><span class="test-chip">로컬 테스트</span></nav>
+    </header>
+    <div class="environment-note"><span class="status-dot" aria-hidden="true"></span>실제 판매 전 시제품입니다. 가상 출생정보만 사용하며, 결제 시뮬레이션에서 실제 금전은 이동하지 않습니다.</div>
+    <main id="main" tabindex="-1">
+      <div id="notice" class="notice hidden" role="status" aria-live="polite"></div>
+      <div id="error" class="error hidden" role="alert" tabindex="-1"></div>
+
+      <section id="step-intro" class="screen" aria-labelledby="intro-heading">
+        <div class="hero">
+          <div><p class="eyebrow">계산에서 시작하는, 나를 이해하는 읽기</p><h1 id="intro-heading">나의 사주를,<br>근거와 함께 읽다.</h1><p class="hero-description">태어난 시간의 네 기둥을 확인하고, 명식의 배치를 전통 명리의 관점으로 읽습니다. 어떤 근거로 설명했는지, 어디까지 알 수 있는지 함께 보여드립니다.</p><div class="hero-actions"><button type="button" class="primary" id="start-input">무료 미리보기 시작</button><button type="button" class="secondary" id="show-sample">예시 구성 살펴보기</button></div><p class="fine">판매 가격은 미정입니다. 현재는 무료 미리보기와 개발용 테스트 여정만 제공합니다.</p></div>
+          <aside class="intro-summary" aria-label="리포트 안내"><p class="eyebrow">한 사람의 명식, 여섯 장의 읽기</p><ol class="chapter-list"><li><span>01</span>나의 사주 이해</li><li><span>02</span>명식의 구조</li><li><span>03</span>성향과 행동</li><li><span>04</span>관계·일·재물</li><li><span>05</span>시간의 흐름</li><li><span>06</span>종합 해석</li></ol><div class="sale-status"><span class="badge hold">판매 준비 중</span><strong>NOT_FOR_SALE_YET</strong><p>완성된 유료 리포트의 판매가 아닙니다. 지원되는 전통 해석과 보류된 판단을 구분하는 시제품입니다.</p></div></aside>
+        </div>
+        <div class="intro-features"><article><span class="feature-number">01</span><h2>무료로 확인하는 기초</h2><p>사주팔자, 일간, 기초 구조와 개인화된 미리보기를 확인합니다. 출생 시각과 계산 정책부터 직접 선택합니다.</p></article><article><span class="feature-number">02</span><h2>목록을 연결한 설명</h2><p>표면의 십성과 월령의 배치를 연결해 해석 관점을 제공합니다. 관계·일·재물의 실제 성과를 예측하지 않습니다.</p></article><article><span class="feature-number">03</span><h2>모르는 부분도 분명하게</h2><p>제한적 해석과 판단 보류를 숨기지 않습니다. 전통적 상징을 객관적인 성격 진단이나 미래의 정답으로 설명하지 않습니다.</p></article></div>
+        <section id="sample" class="sample hidden" aria-labelledby="sample-heading"><p class="eyebrow">가상 출생정보로 확인하기</p><h2 id="sample-heading">다른 시간, 다른 설명</h2><p>1992년 11월 24일의 00:30과 12:00은 시주가 다릅니다. 기존 정책에서 온기 검토 후보와 판단 보류가 달라지는 예시입니다. 같은 날 태어났다는 이유로 같은 결과를 정하지 않습니다.</p><p class="fine">이 문장은 예시 안내입니다. 아래 버튼을 누르면 해당 입력으로 서버에서 실제 미리보기를 계산합니다.</p><button type="button" class="secondary" id="load-sample">가상 예시 입력하기</button></section>
+      </section>
+
+      <section id="step-input" class="screen hidden" aria-labelledby="input-heading">
+        <div class="screen-heading"><p class="eyebrow">01 / 출생정보</p><h1 id="input-heading">먼저, 계산할 정보를 알려주세요.</h1><p>입력한 시각을 임의로 보정하지 않습니다. 시계 정책을 직접 선택하고 다음 화면에서 확인하세요.</p></div>
+        <div class="form-layout"><form id="birth-form" class="panel" autocomplete="off">
+          <div class="panel-title"><h2>가상 출생정보 입력</h2><button type="button" class="text-button" id="fill-example">예시 불러오기</button></div>
+          <div class="two-column"><label class="field">달력<select id="calendar" required><option value="GREGORIAN">양력</option><option value="KOREAN_LUNAR">음력</option></select></label><label class="field">생년월일<input id="birth-date" type="text" inputmode="numeric" required placeholder="YYYY-MM-DD" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" aria-describedby="date-help"></label></div>
+          <p class="field-help" id="date-help">예: 2026-01-08. 음력을 고른 경우 음력 날짜를 그대로 입력합니다.</p>
+          <label class="checkline hidden" id="leap-wrap"><input id="leap" type="checkbox">윤달(윤월)입니다</label>
+          <div class="two-column time-row"><label class="field">태어난 시각<input id="birth-time" type="time" required aria-describedby="time-help"></label><label class="checkline unknown-time"><input id="unknown-time" type="checkbox">출생 시각을 모릅니다</label></div><p class="field-help" id="time-help">시각 미상은 정오로 바꾸지 않습니다. 현재는 전체 시각 리포트를 제공할 수 없습니다.</p>
+          <label class="field">출생 시계·지원 프로필<select id="calendar-profile" required aria-describedby="clock-help"><option value="">직접 선택하세요</option><option value="kasi-api-1989-2026-local-v1">1989~2026 · 한국 표준시 (UTC+09:00)</option><option value="kasi-api-1962-1986-standard-local-v1">1962~1986 · 한국 역사 표준시</option><option value="kasi-api-1987-1988-dst-local-v1">1987~1988 · 한국 서머타임 확인</option><option value="kasi-api-1989-2027-solar-local-v1">2027 · 양력 확장 프로필 (일부 자료 부족)</option></select></label><p class="field-help" id="clock-help">출생 장소와 기록 시각은 한국(Asia/Seoul) 기준입니다. 다른 지역의 시각을 한국 시각으로 추정하지 않습니다.</p>
+          <div id="dst-wrap" class="inset hidden"><label class="field">중복 시각의 당시 오프셋<select id="dst-offset"><option value="">모름 · 중복되면 추가 확인</option><option value="540">표준시 UTC+09:00</option><option value="600">서머타임 UTC+10:00</option></select></label><p class="field-help">당시 기록을 근거로 선택하세요. 존재하지 않는 시각은 이 선택으로 정상 시각이 되지 않습니다. 일·시주는 기존 표준시 기준 정책을 사용합니다.</p></div>
+          <div class="two-column"><label class="field">일주 변경 기준<select id="day-rollover" required><option value="">직접 선택하세요</option><option value="CIVIL_MIDNIGHT">자정 00:00에 변경</option><option value="ZI_START">자시 시작 23:00에 변경</option></select></label><label class="field">시주 천간 기준<select id="hour-reference" required><option value="">직접 선택하세요</option><option value="SELECTED_DAY_PILLAR">선택한 일주의 천간</option><option value="CIVIL_DATE_DAY_PILLAR">시계 기준 날짜의 일주 천간</option></select></label></div>
+          <details class="optional-input"><summary>운의 시간축 추가하기 (선택)</summary><p class="field-help">선택한 항목만 계산합니다. 전통적 성별 구분이나 조회 시기를 임의로 추정하지 않습니다.</p><label class="checkline"><input id="include-dayun" type="checkbox">대운을 함께 확인합니다</label><div class="two-column"><label class="field">대운 방향 계산용 전통 성별<select id="traditional-sex"><option value="">직접 선택하세요</option><option value="MALE">남</option><option value="FEMALE">여</option></select></label><label class="field">대운 구간 수<select id="dayun-count"><option value="3">3구간</option><option value="5">5구간</option></select></label></div><label class="checkline"><input id="include-seyun" type="checkbox">세운을 함께 확인합니다</label><label class="field">세운 조회 연도<input id="seyun-year" type="number" min="1962" max="2027" value="2026"></label><label class="checkline"><input id="include-monthly" type="checkbox">월운을 함께 확인합니다</label><label class="field">월운 조회 연도<input id="monthly-year" type="number" min="1962" max="2027" value="2025"></label><p class="field-help">월운은 달력의 매월 1일이 아니라 절입 경계로 나뉩니다. 선택 프로필에서 자료가 부족하면 그대로 표시합니다.</p></details>
+          <p class="privacy-note">이 로컬 시제품에는 실제 고객의 출생정보를 입력하지 마세요. 테스트 주문의 입력·결과는 서버에서 암호화해 보관하며, 브라우저 URL에는 넣지 않습니다.</p><div class="actions"><button type="button" class="secondary" data-back="intro">이전</button><button type="submit" class="primary" id="calculate">입력 확인하기</button></div>
+        </form><aside class="side-note"><p class="eyebrow">확인하고 진행합니다</p><h2>계산 가능과<br>판매 가능은 다릅니다.</h2><p>원국이 계산되어도 모든 해석이 제공되지는 않습니다. 다음 화면에서 후보 수, 제공 범위와 보류 항목을 먼저 확인합니다.</p><dl><dt>1962~1988</dt><dd>선택한 역사시·DST 정책이 필요합니다.</dd><dt>1989~2026</dt><dd>기존 현대 시계 프로필로 계산합니다.</dd><dt>1950~1961 / 2028 이후</dt><dd>현재 지원하지 않습니다.</dd><dt>2027 음력</dt><dd>추가 자료가 필요합니다.</dd></dl></aside></div>
+      </section>
+
+      <section id="step-confirm" class="screen hidden" aria-labelledby="confirm-heading"><div class="screen-heading"><p class="eyebrow">02 / 입력과 제공 범위</p><h1 id="confirm-heading">이 정보로 읽어볼까요?</h1><p>원국 후보가 여러 개면 각각 보존합니다. 확정되지 않은 입력이나 판단을 하나로 합치지 않습니다.</p></div><div id="confirmation" class="panel"></div><div class="actions section-actions"><button type="button" class="secondary" data-back="input">입력 수정</button><button type="button" class="primary" id="confirm-input">확인하고 무료 결과 보기</button></div></section>
+
+      <section id="step-preview" class="screen hidden" aria-labelledby="preview-heading"><div class="screen-heading"><p class="eyebrow">03 / 무료 미리보기</p><h1 id="preview-heading">먼저, 나의 명식에서 확인된 것.</h1><p>원국과 기초 설명은 계산 결과에 근거합니다. 추가 해석은 선택한 전통 정책의 범위로 읽어주세요.</p></div><div id="preview-content"></div><aside class="checkout-box"><div><span class="badge hold">판매 준비 중 · NOT_FOR_SALE_YET</span><h2>실제 유료 구매는 열려 있지 않습니다.</h2><p>콘텐츠·결제·법률·공개 출시 승인 전입니다. 서버에서도 실제 주문과 결제 요청을 차단합니다.</p></div><div class="test-checkout"><span class="eyebrow">개발용 · 실제 금전 이동 없음</span><button type="button" class="test-button" id="test-checkout">테스트 구매 여정 시작</button><p class="fine">아래 테스트 주문은 실제 판매 기록과 분리됩니다.</p></div></aside><button type="button" class="text-button" data-back="input">출생정보 수정하기</button></section>
+
+      <section id="step-order" class="screen hidden" aria-labelledby="order-heading"><div class="screen-heading"><p class="eyebrow">04 / 테스트 주문</p><h1 id="order-heading">결제와 생성은, 각각 확인합니다.</h1><p>브라우저의 성공 화면으로 결제를 확정하지 않습니다. 서버가 검증한 테스트 이벤트를 기준으로 진행합니다.</p></div><div id="order-status" class="panel" aria-live="polite"></div><div id="payment-controls" class="panel simulation-panel"><div class="panel-title"><h2>Fake Provider · 테스트 결제</h2><span class="badge test">실제 결제 아님</span></div><p>결과를 선택하면 서버의 테스트 Provider가 이벤트를 발급하고 검증합니다. 금액과 상품은 서버의 테스트 fixture로 정합니다.</p><div class="actions wrap"><button type="button" class="test-button" data-payment="approve">테스트 승인</button><button type="button" class="secondary" data-payment="fail">테스트 실패</button><button type="button" class="secondary" data-payment="delay">승인 지연</button><button type="button" class="secondary" data-payment="duplicate">중복 승인</button></div><p class="fine">테스트 금액은 판매 가격이 아닙니다. 위조·변조 이벤트 검증은 서버 테스트로 별도 확인합니다.</p></div><div class="actions section-actions wrap"><button type="button" class="secondary" id="cancel-order">주문 취소 요청</button><button type="button" class="secondary hidden" id="retry-generation">생성 다시 시도</button><button type="button" class="primary hidden" id="read-report">저장된 리포트 열기</button><button type="button" class="text-button" id="refresh-order">상태 다시 확인</button></div><div id="refund-controls" class="panel hidden"><h2>취소·환불 시뮬레이션</h2><p>실제 법적 환불 정책을 확정한 기능이 아닙니다. 테스트 Provider에서만 상태 전이를 확인합니다. 환불 처리 중에는 콘텐츠 접근이 제한될 수 있습니다.</p><div class="actions wrap"><button type="button" class="secondary" id="request-refund">테스트 환불 요청</button><button type="button" class="secondary" id="approve-refund">환불 처리 시뮬레이션</button><button type="button" class="secondary" id="fail-refund">환불 실패 시뮬레이션</button></div></div></section>
+
+      <section id="step-report" class="screen hidden" aria-labelledby="report-heading"><div class="screen-heading report-heading"><div><p class="eyebrow">05 / 저장된 나의 리포트</p><h1 id="report-heading">나의 사주 해석 리포트</h1><p>선택한 전통 해석을 자기 이해와 성찰의 관점으로 읽어주세요.</p></div><span class="badge test">테스트 제공 · 유료 완성품 아님</span></div><div class="report-layout"><nav id="report-toc" class="report-toc" aria-label="리포트 목차"></nav><article id="report-content" class="report-content"></article></div><div class="actions section-actions wrap"><button type="button" class="secondary" id="back-order">주문·환불 상태</button><button type="button" class="secondary" id="delete-report">테스트 결과 삭제</button><button type="button" class="text-button" id="library-after-report">내 보관함</button></div></section>
+
+      <section id="step-library" class="screen hidden" aria-labelledby="library-heading"><div class="screen-heading"><p class="eyebrow">보관함</p><h1 id="library-heading">다시 읽는 나의 리포트.</h1><p>이 브라우저의 게스트 세션으로 접근할 수 있는 테스트 주문입니다. 로그인 없는 영구 보관이나 다른 기기 복구를 보장하지 않습니다.</p></div><div id="library-content"></div><button type="button" class="primary" id="library-new">새 리포트 입력</button></section>
+    </main>
+    <footer class="site-footer"><p>로컬 개발 시제품 · 외부 결제·외부 LLM·공개 서비스 연결 없음</p><p>전통 명리는 과학적으로 검증된 성격 진단이나 현실 예측이 아닙니다. 계산 사실, 선택 정책의 해석, 아직 판단하지 못한 부분을 구분합니다.</p></footer>
+  </div>
+</body>
+</html>

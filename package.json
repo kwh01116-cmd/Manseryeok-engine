@@ -27,7 +27,8 @@
     "kasi:chart": "npm run build --silent && node scripts/kasi/local-chart.mjs",
     "kasi:explain": "npm run build --silent && node scripts/kasi/local-explain.mjs",
     "kasi:luck": "npm run build --silent && node scripts/kasi/local-luck.mjs",
-    "kasi:evidence": "npm run build --silent && node scripts/kasi/local-m3-evidence.mjs"
+    "kasi:evidence": "npm run build --silent && node scripts/kasi/local-m3-evidence.mjs",
+    "purchase:web": "npm run build --silent && node scripts/purchase/web.mjs"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
