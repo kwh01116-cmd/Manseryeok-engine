@@ -1,5 +1,7 @@
 # Manseryeok-engine — current execution handoff
 
+**엔진 트랙 E6.** 검증 코드 `336de8aec49ca392f610ad969074887cd99878b6`. 명시 시각·두 시점·최대 366일의 원국과 운 관계를 조회한다. 기존 E5는 중첩 원본대로 읽고, 신규 `candidates[i]`에서 원국별 시계·운 구간·관계·변화·목적별 상태를 읽는다. 입춘의 연·월 대안을 연동하며, 일부 자료 부족에서도 가능한 층을 반환한다. [Schema 및 실행 API](contracts/ENGINE_E6_API_V01.md) · [기존 결과·복원·성능](engineering/ENGINE_E6_EXECUTION_20261123.md)
+
 **엔진 트랙 E5.** 실행 코드 `f288bbfb3a638e2e2817cf3c37767447718532e7`. 선택형 E5는 기존 E3 전체와 격국 v2, 조후 v2, 통관 원국 경로, 목적별 비교를 함께 제공한다. 기존 E1 억부 순위는 그대로다. 실제 격국 성패·통관 효력·최종 용신과 희기 순위는 미결정이다. 배포팀은 `candidates[i].features`의 정책·상태·근거를 참조한다. [실행 계약](contracts/ENGINE_E5_API_V01.md) · [출생·문헌 검증 및 패키지](engineering/ENGINE_E5_EXECUTION_20261122.md)
 
 **엔진 트랙 E4.** 실행 코드 `861674df66cd77c5798db2d8f434599602bba431`. 선택형 개발 비교 도구로 공개 사례 9건과 같은 생시의 정책 차이를 재생할 수 있다. E1 240건의 독립 산술과 E3 276건의 의미 회귀를 통과했다. 상용 강약 두 차이의 원인은 미확정이고, E3 문헌 표본과 프로젝트 조건의 간극을 기록했다. 사용 앱은 E1 점수를 위치별 생조 배분으로, E3 상태를 선택 규칙에 대한 판정으로 읽는다. E4는 런타임 정책을 추가하지 않는다. [도구와 계약](contracts/ENGINE_E4_COMPARISON_HARNESS.md) · [검증과 패키지](engineering/ENGINE_E4_EXECUTION_20261122.md)
