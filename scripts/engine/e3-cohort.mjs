@@ -82,7 +82,7 @@ function run(dates, certifyPrevious) {
         [ruleId,countBy(local.filter(rule => rule.ruleId === ruleId).map(rule => rule.status))])),
       coobservedParentCount:observedRows.length,
       coobservedByRuleStatus:countBy(observedRows.flatMap(row => row.rules.filter(rule =>
-        row.coobserved.includes(rule.patternType)).map(rule => rule.status))),
+        types.includes(rule.patternType) && row.coobserved.includes(rule.patternType)).map(rule => rule.status))),
     }];
   }));
   return { chartCount:rows.length, chartStates:countBy(rows.map(row => row.state)),

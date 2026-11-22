@@ -1,5 +1,7 @@
 # Manseryeok-engine — current execution handoff
 
+**엔진 트랙 E3.** 런타임 검증·독립 패키지 소스 `a4a863feef172f965c00ec82515acea0628e8ec3`. 명시적 E3 선택으로 정관·재격·칠살의 9개 규칙, 적용 범위, 후보별 경로 근거와 E1 탐침 결과를 읽을 수 있다. 독립 Node 22 복원과 전체 검사 1,194/1,194 통과. 상용 강약 공식의 미공개 부분과 실제 성패·구응 효력은 미확정이다. [규칙](research/ENGINE_E3_PATTERN_RULES_V01.md) · [입력 및 결과](contracts/ENGINE_E3_FEATURE_API_V01.md) · [검증과 한계](engineering/ENGINE_E3_EXECUTION_20261122.md)
+
 앱이 E2 응답을 수신할 때 적용할 [JSON Schema v1](contracts/engine-e2-result-v1.schema.json)과 [19개 가상 출생 입력 요약](engineering/ENGINE_E2_EXAMPLES.md)이 있다. 업체가 공개한 원국은 정해·별코드·사주록 3건까지 비교했다.
 
 **엔진 트랙 E2.** 검증 코드 `f80ed4418141b443f0fbdea0e7e87fac07418e6c`. 19개 합성 출생 요청에 대해 원국별 기능 결과와 근거를 한 번에 조회할 수 있다. 다음 개발팀은 `features.<key>.availability`와 결과 자체의 상태를 함께 읽고, 대운 순역·시계·E1을 명시한다. 양인표의 음간 처리와 도화·역마·화개의 기준 지지에 따라 다른 프로그램과 결과가 다를 수 있다. E3에서는 같은 월령 위치의 경합을 출발점으로 실제 효력의 필요조건을 검토한다. [기술 계약과 요청 예시](contracts/ENGINE_E2_FEATURE_API_V01.md) · [실행 기록](engineering/ENGINE_E2_EXECUTION_20261122.md)
