@@ -49,3 +49,15 @@ $report.candidates[0].features.sinsal.result.observations | Format-Table name, b
 | 자료·이전 API 동등 | 복원 데이터 파일 바이트 일치. 직전 E1 독립본에 같은 요청을 보낸 기존 서버 DTO, E1 강약·억부가 깊은 비교에서 일치했다. 입춘 두 원국의 전체 stdout은 서울·UTC에서 같은 SHA-256 `7498d4430d4eff1df8d66fec9ea0ce804eb5894ed5f6402992d0a0e56af7b2ee`였다. 윤6월 1일과 양력의 비교 대상 의미 지문은 `46fa90efb38f6a738299a1ea5e38855d1bc5445f949a70fbcc76a7f591d54a47`였다. |
 | 소비자 계약 | 저장한 20개 실제 JSON이 [E2 결과 JSON Schema](../contracts/engine-e2-result-v1.schema.json)를 충족했다. PowerShell 7.6.9 Test-Json에서 엉뚱한 featureId, 필수 기능 누락, AVAILABLE/null, 구버전 정책, 원국 상태 모순, 임의 추가 기능 등 변형 6개를 거절했다. 스키마는 외곽 필드와 정책 버전을 확인한다. 각 후보의 근거 경로는 별도 실제 실행 검사가 확인했다. |
 | 증거 파일 | 저장소 밖 `../.private/engine-e2-f80ed44/receipt.json` SHA-256 `4e5d66ee6f3d549a6164a77460cd915692103c7e9b208fa0863d23845b1f19d9`. 일곱 기능 단일 호출 원문 `results/BUNDLED_ALL_SEVEN.json` 2,045,817바이트, SHA-256 `9beb17aa7abbf800d910ce6a152dadd4abf485806292567216b60aeb4391ef69`. E2 패키지 모듈을 사용한 240건 요약은 `.private/engine-e2-20261122/e2-grid-f80ed44.json`에 있다. |
+
+## 최종 회귀 및 인계
+
+| 검사 | 결과 |
+|---|---|
+| 검증 SHA | `6460bfd0053fae39586b9e757770c7e4aed5fa83`. 독립 엔진 코드 SHA `f80ed4418141b443f0fbdea0e7e87fac07418e6c`와의 차이는 문서·개발팀용 JSON Schema뿐이다. |
+| 전체 검사 | 해당 SHA의 깨끗한 브랜치에서 Node 22.23.3, TypeScript 5.8.3으로 `npm run check`를 실행했다. 1,162/1,162 PASS. 기존 1,138개와 신규 24개, 실패·취소·건너뜀·todo 각 0. 테스트 818.5초. 파일 순차 실행, 필터·자동 재시도·시간 제한 변경 없음. 처음 실패한 재현성 검사도 이 전체 실행에서 통과했다. |
+| 기존 M2·브라우저 | M2 감사 `CATALOG_CONSISTENT_EVIDENCE_OPEN`. Lab EP0–EP4·M1 S4 및 KASI 합성 데이터 페이지의 실제 Chromium 회귀 통과. KASI 페이지 24개 정규화 행 및 320/360/390px 확인. |
+| 보존 | E1 당시 문서 외 추적 파일 382개와 기존 생성물 143개가 모두 바이트 일치했다. 현재 코드의 전체 검사 전후 추적 파일·생성물·달력 데이터 지문이 동일했다. 원본·후보 a/b·보강 4개 자료군 2,107개 파일 및 채택 export·manifest 검사 통과. 비공개 Git 추적 0. KASI API·키 사용·Actions·배포 0. |
+| 최종 영수증 | `.private/engine-e2-20261122/qa-6460bfd-frozen-final.json`, SHA-256 `5e278252521972247817567c383cfc2d4d01bd332191ff4a441dd35883dbc9b3`. 검증 이후 커밋에는 이 실행 기록만 추가한다. |
+
+지원 범위에서 일곱 기능 노출, 대운, 강약, 억부 목적 후보, 십이운성, 여섯 신살, 지장간, 구성 관계, 통합 API와 독립 엔진은 GO다. 격국의 실제 성패·구응 효력 및 전체 상용 동등성은 NO-GO다. E3에서는 구조가 같고 효력이 갈리는 반례와 성립 전제를 먼저 검토하고, 그다음 조후와 통관의 독립 목적 정책을 확장한다.
