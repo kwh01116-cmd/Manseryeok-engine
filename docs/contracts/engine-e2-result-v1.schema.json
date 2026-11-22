@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Manseryeok E2 candidate feature projection v0.1.0",
+  "description": "Envelope for the engine-only E2 response. Native M1–M7 results retain their own schemas. Evidence authenticity and JSON Pointer resolution require the runtime checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "track",
+    "selection",
+    "status",
+    "existing",
+    "candidates",
+    "unavailableFeatures",
+    "unimplementedFeatures",
+    "inputContext",
+    "purposeScope"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "manseryeok-engine-e2-result-v1"
+    },
+    "track": {
+      "const": "ENGINE-PARITY-TRACK-V1"
+    },
+    "selection": {
+      "type": "object",
+      "required": [
+        "profileId",
+        "version",
+        "sinsal",
+        "patternReviewPolicyId"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "profileId": {
+          "const": "ENGINE-PARITY-E2-V01"
+        },
+        "version": {
+          "const": "0.1.0"
+        },
+        "patternReviewPolicyId": {
+          "const": "E2-MONTH-PATTERN-SHARED-LOCATION-V01"
+        },
+        "sinsal": {
+          "type": "object",
+          "required": [
+            "policyId",
+            "policyVersion",
+            "branchReference"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "policyId": {
+              "const": "E2-SINSAL-SIX-NATAL-V01"
+            },
+            "policyVersion": {
+              "const": "0.1.0"
+            },
+            "branchReference": {
+              "enum": [
+                "YEAR",
+                "DAY",
+                "BOTH"
+              ]
+            }
+          }
+        },
+        "e1": {
+          "const": {
+            "profileId": "ENGINE-PARITY-E1-V01",
+            "version": "0.1.0",
+            "strengthPolicyId": "M3-PRODUCT-POSITIONAL-STRENGTH-V01",
+            "eokbuPolicyId": "M5-EOKBU-CAUSE-CANDIDATE-V01",
+            "innerPatternProfileId": "M4-INNER-EIGHT-MONTH-STRUCTURE-V01"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "existing": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "status",
+        "candidates",
+        "analysisData",
+        "holds"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "manseryeok-server-analysis-result-v1"
+        }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidateRef",
+          "features"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "candidateRef": {
+            "type": "string",
+            "pattern": "^chart\\.candidates\\[[0-9]+\\]$"
+          },
+          "features": {
+            "$ref": "#/$defs/features"
+          }
+        }
+      }
+    },
+    "unavailableFeatures": {
+      "type": "object"
+    },
+    "unimplementedFeatures": {
+      "type": "object",
+      "required": [
+        "integratedUsefulGod",
+        "favorableUnfavorableRanking",
+        "patternUsefulGod",
+        "mediationUsefulGod"
+      ],
+      "properties": {
+        "integratedUsefulGod": {
+          "$ref": "#/$defs/feature",
+          "properties": {
+            "featureId": {
+              "const": "integratedUsefulGod"
+            },
+            "availability": {
+              "const": "NOT_IMPLEMENTED"
+            },
+            "result": {
+              "type": "null"
+            }
+          }
+        },
+        "favorableUnfavorableRanking": {
+          "$ref": "#/$defs/feature",
+          "properties": {
+            "featureId": {
+              "const": "favorableUnfavorableRanking"
+            },
+            "availability": {
+              "const": "NOT_IMPLEMENTED"
+            },
+            "result": {
+              "type": "null"
+            }
+          }
+        },
+        "patternUsefulGod": {
+          "$ref": "#/$defs/feature",
+          "properties": {
+            "featureId": {
+              "const": "patternUsefulGod"
+            },
+            "availability": {
+              "const": "NOT_IMPLEMENTED"
+            },
+            "result": {
+              "type": "null"
+            }
+          }
+        },
+        "mediationUsefulGod": {
+          "$ref": "#/$defs/feature",
+          "properties": {
+            "featureId": {
+              "const": "mediationUsefulGod"
+            },
+            "availability": {
+              "const": "NOT_IMPLEMENTED"
+            },
+            "result": {
+              "type": "null"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "inputContext": {
+      "type": "object",
+      "required": [
+        "pendingDayunRequest"
+      ],
+      "properties": {
+        "pendingDayunRequest": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "purposeScope": {
+      "type": "object"
+    }
+  },
+  "if": {
+    "properties": {
+      "status": {
+        "const": "CALCULATED_UNDER_SELECTED_POLICIES"
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "candidates": {
+        "minItems": 1
+      },
+      "unavailableFeatures": {
+        "maxProperties": 0
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "candidates": {
+        "maxItems": 0
+      },
+      "unavailableFeatures": {
+        "$ref": "#/$defs/features"
+      }
+    }
+  },
+  "$defs": {
+    "features": {
+      "type": "object",
+      "required": [
+        "chart",
+        "elementsTenGods",
+        "hiddenStems",
+        "twelveStages",
+        "relations",
+        "gongmang",
+        "sinsal",
+        "daeun",
+        "seyun",
+        "monthly",
+        "strength",
+        "eokbu",
+        "climate",
+        "pattern",
+        "patternReview"
+      ],
+      "properties": {
+        "chart": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "chart" } } },
+        "elementsTenGods": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "elementsTenGods" } } },
+        "hiddenStems": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "hiddenStems" } } },
+        "twelveStages": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "twelveStages" } } },
+        "relations": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "relations" } } },
+        "gongmang": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "gongmang" } } },
+        "sinsal": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "sinsal" } } },
+        "daeun": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "daeun" } } },
+        "seyun": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "seyun" } } },
+        "monthly": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "monthly" } } },
+        "strength": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "strength" } } },
+        "eokbu": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "eokbu" } } },
+        "climate": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "climate" } } },
+        "pattern": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "pattern" } } },
+        "patternReview": { "$ref": "#/$defs/feature", "properties": { "featureId": { "const": "patternReview" } } }
+      },
+      "additionalProperties": false
+    },
+    "feature": {
+      "type": "object",
+      "required": [
+        "featureId",
+        "availability",
+        "policyId",
+        "policyVersion",
+        "result",
+        "factRefs",
+        "limitationCodes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "featureId": {
+          "type": "string"
+        },
+        "availability": {
+          "enum": [
+            "AVAILABLE",
+            "PARTIAL",
+            "HOLD",
+            "NEEDS_INPUT",
+            "NEEDS_DATA",
+            "POLICY_UNRESOLVED",
+            "NOT_IMPLEMENTED",
+            "INVALID_INPUT",
+            "NOT_SELECTED"
+          ]
+        },
+        "policyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policyVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "type": [
+            "object",
+            "array",
+            "null"
+          ]
+        },
+        "factRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^/"
+          }
+        },
+        "limitationCodes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "availability": {
+            "const": "AVAILABLE"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "result": {
+            "type": [
+              "object",
+              "array"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

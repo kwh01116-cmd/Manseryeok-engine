@@ -1,5 +1,9 @@
 # Manseryeok-engine — current execution handoff
 
+앱이 E2 응답을 수신할 때 적용할 [JSON Schema v1](contracts/engine-e2-result-v1.schema.json)과 [19개 가상 출생 입력 요약](engineering/ENGINE_E2_EXAMPLES.md)이 있다. 업체가 공개한 원국은 정해·별코드·사주록 3건까지 비교했다.
+
+**엔진 트랙 E2.** 검증 코드 `f80ed4418141b443f0fbdea0e7e87fac07418e6c`. 19개 합성 출생 요청에 대해 원국별 기능 결과와 근거를 한 번에 조회할 수 있다. 다음 개발팀은 `features.<key>.availability`와 결과 자체의 상태를 함께 읽고, 대운 순역·시계·E1을 명시한다. 양인표의 음간 처리와 도화·역마·화개의 기준 지지에 따라 다른 프로그램과 결과가 다를 수 있다. E3에서는 같은 월령 위치의 경합을 출발점으로 실제 효력의 필요조건을 검토한다. [기술 계약과 요청 예시](contracts/ENGINE_E2_FEATURE_API_V01.md) · [실행 기록](engineering/ENGINE_E2_EXECUTION_20261122.md)
+
 **엔진 트랙 · ENGINE-PARITY-TRACK-V1 / E1.** 기존 보고 기준에서 시작한 정책 사전 등록은 `b1a79cd976a704d683d10d7ab3e72ec15c6293aa`, E1 실행 코드는 `063cdc1f1e162a7d3c37c8a0e92ac667f6702bb3`이다. 제품 기본 프로필은 기존 엔진을 호출한다. E1을 선택하면 후보별 강약·억부·조후와 월령 구조를 각각 조회할 수 있다. 일반 원국에서 184/231개가 억부 후보를 냈고 47개는 경계에 남았다. 외부 상용 대조는 업체가 직접 게재한 원국 1개까지다. E2에서는 격국 성립 조건의 적용 범위와 반례를 먼저 검증한다. [정책·기술 검증 기록](engineering/ENGINE_E1_EXECUTION_20261122.md) · [실행 가이드](contracts/ENGINE_E1_API_V01.md) · [고정 코호트·외부 대조](engineering/ENGINE_E1_COMPARISON_20261122.md)
 
 **현재 단계 · Sprint 9, 2026-11-22.** 가상 자료용 독자·전문가 평가 환경과 환불 중단 파일 정리를 검증했다. 코드 `668e0fcc4c30dcb8aa39d09204512232c7cc6aed`, 전체 1103/1103 통과. 실제 독자·전문가 각 0명, 실참여 승인 대기. 유료 제공·운영 결제·공개 출시 NO-GO. [연구실 실행](product/SPRINT9_BETA_LOCAL_GUIDE.md) · [검증·실패·측정](engineering/SPRINT9_EXECUTION_20261122.md)
