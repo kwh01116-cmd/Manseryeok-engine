@@ -187,7 +187,7 @@ export async function verifyDetachedE5({ artifact, pin, dataPack, out, legacyExa
     const badPolicy = structuredClone(request); badPolicy.selection.climate.policyVersion = '9';
     const badPolicyPath = join(requests, 'INVALID_POLICY.json'), foreignPath = join(requests, 'FOREIGN_CANDIDATE.json');
     await save(badPolicyPath, badPolicy);
-    await save(foreignPath, { ...request, candidates: base.candidates });
+    await save(foreignPath, { ...request, candidates: [{ candidateRef: base.candidates[0].candidateRef }] });
     await run('INVALID_POLICY', bootstrap, runArgs(badPolicyPath), { code: 1, stderr: /E5_EXPLICIT_POLICY_VERSION_REQUIRED/ });
     await run('FOREIGN_CANDIDATE', bootstrap, runArgs(foreignPath), { code: 1, stderr: /E5_REQUEST_SCHEMA/ });
 
