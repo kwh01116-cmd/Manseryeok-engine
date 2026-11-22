@@ -170,3 +170,12 @@ Verification level: public transcription only. NCC immutable revision, critical 
 | M4-C0-PROJECT-WEALTH-RESOURCE-POSITION-V01 | `M4-ZHENGGUAN-WEALTH-RESOURCE-POSITION-REVIEW-V01` / 0.1.0, 정책 문서·사전 22기대·순수 모듈 | 표면 양투 전제와 8행 위치 검토 문맥. 재격의 관 중간 문맥을 정관격 위치형으로 옮긴 부분은 PROJECT_POLICY이며 실제 통관·무간섭의 정관격 충분조건으로 취급하지 않음 |
 
 원전의 인물 품계·질병·직업·사건은 기대 결과로 사용하지 않는다. 동리 직접 502/검색 캐시, PDF OCR 접근/판면 미판독을 구별한 상세는 [정책 연구](M4_C0_WEALTH_RESOURCE_POSITION_POLICY_V01.md)를 참조한다. 새 모듈 버전으로 기존 7개 null 규칙 버전을 채우거나 상용 해석을 승인하지 않는다.
+
+## E3 월령 조건 출처 · 2026-11-22
+
+| ID | 출처 | 범위 |
+| --- | --- | --- |
+| ZPZQ-SHEN-CH9-CHENGBAI | [NCC 『子平真詮評註』 제3권 제9절](https://ncc.com.tw/fate/paleo/bg/bg_033.htm)의 沈孝瞻 원저 | 정관·재·칠살의 성립·방해·구응 조건의 출발점. 기존 M4 원저 참조와 동일 전사. |
+| ZPZQ-XU-CH9-EXAMPLES | 위 전사의 徐樂吾 주석과 예증 | 위치와 합, 역방향을 읽는 사례. 웹 전사의 표기와 발행 정보 범위에서 확인. |
+| ZPZQ-SHEN-XU-CH39-PIANGUAN | [NCC 제5권 제39절 論偏官](https://ncc.com.tw/fate/paleo/bg/bg_035.htm)의 원저·주석 | 칠살이 무겁고 일간이 약한 경우 인성을 검토하는 대안. 재성이 인성을 제어하여 식신을 보존하는 제9절 구응과 구분. E1 신약 조건은 프로젝트 정의. |
+| E3-PROJECT-NATAL-LOCAL-CHANNELS | [E3 사전 고정 운영 규칙](ENGINE_E3_PATTERN_RULES_V01.md) | 위치 거리, 정확근, 경쟁, E1 방향 의존 및 미확정 전파. PROJECT_POLICY · 0.1.0. |

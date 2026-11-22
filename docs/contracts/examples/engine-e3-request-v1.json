@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "manseryeok-engine-e3-request-v1",
+  "selection": {
+    "profileId": "ENGINE-PARITY-E3-V01",
+    "version": "0.1.0",
+    "patternRulePolicyId": "E3-NATAL-PATTERN-CONDITIONS-V01",
+    "e2": {
+      "profileId": "ENGINE-PARITY-E2-V01",
+      "version": "0.1.0",
+      "sinsal": {
+        "policyId": "E2-SINSAL-SIX-NATAL-V01",
+        "policyVersion": "0.1.0",
+        "branchReference": "BOTH"
+      },
+      "patternReviewPolicyId": "E2-MONTH-PATTERN-SHARED-LOCATION-V01",
+      "e1": {
+        "profileId": "ENGINE-PARITY-E1-V01",
+        "version": "0.1.0",
+        "strengthPolicyId": "M3-PRODUCT-POSITIONAL-STRENGTH-V01",
+        "eokbuPolicyId": "M5-EOKBU-CAUSE-CANDIDATE-V01",
+        "innerPatternProfileId": "M4-INNER-EIGHT-MONTH-STRUCTURE-V01"
+      }
+    }
+  },
+  "birth": {
+    "schemaVersion": "manseryeok-server-analysis-request-v1",
+    "analysisProfileId": "KASI-SERVER-API-ONLY-ANALYSIS-V01",
+    "calendarProfileId": "kasi-api-1989-2026-local-v1",
+    "jurisdiction": "KR",
+    "timeZone": "Asia/Seoul",
+    "calendar": "GREGORIAN",
+    "date": "2026-01-08",
+    "time": "12:00",
+    "policies": {
+      "clockPolicyId": "KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1",
+      "dayRollover": "CIVIL_MIDNIGHT",
+      "hourStemReference": "SELECTED_DAY_PILLAR"
+    },
+    "luckOptions": {
+      "luckPolicyId": "M7-TRADITIONAL-YEAR-STEM-JIE-3D-V01",
+      "calendarProjectionPolicyId": "M7-CALENDAR-NOMINAL-YMDH-SEQUENTIAL-CLAMP-V02",
+      "asOfMinute": "2026-12-11T14:00",
+      "features": {
+        "dayun": {
+          "traditionalSex": "MALE",
+          "count": 3
+        },
+        "seyun": {
+          "yearLabel": 2026,
+          "queryMinute": "2026-02-04T05:02"
+        }
+      }
+    },
+    "monthlyOptions": {
+      "policyId": "M7-MONTHLY-TWELVE-JIE-PUBLISHED-MINUTE-V01",
+      "year": 2026,
+      "queryMinute": "2026-02-04T05:02"
+    }
+  }
+}
