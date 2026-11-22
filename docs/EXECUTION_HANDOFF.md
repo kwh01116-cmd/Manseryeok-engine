@@ -1,5 +1,7 @@
 # Manseryeok-engine — current execution handoff
 
+**엔진 트랙 E4.** 실행 코드 `861674df66cd77c5798db2d8f434599602bba431`. 선택형 개발 비교 도구로 공개 사례 9건과 같은 생시의 정책 차이를 재생할 수 있다. E1 240건의 독립 산술과 E3 276건의 의미 회귀를 통과했다. 상용 강약 두 차이의 원인은 미확정이고, E3 문헌 표본과 프로젝트 조건의 간극을 기록했다. 사용 앱은 E1 점수를 위치별 생조 배분으로, E3 상태를 선택 규칙에 대한 판정으로 읽는다. E4는 런타임 정책을 추가하지 않는다. [도구와 계약](contracts/ENGINE_E4_COMPARISON_HARNESS.md) · [검증과 패키지](engineering/ENGINE_E4_EXECUTION_20261122.md)
+
 **엔진 트랙 E3.** 런타임 검증·독립 패키지 소스 `a4a863feef172f965c00ec82515acea0628e8ec3`. 명시적 E3 선택으로 정관·재격·칠살의 9개 규칙, 적용 범위, 후보별 경로 근거와 E1 탐침 결과를 읽을 수 있다. 독립 Node 22 복원과 전체 검사 1,194/1,194 통과. 상용 강약 공식의 미공개 부분과 실제 성패·구응 효력은 미확정이다. [규칙](research/ENGINE_E3_PATTERN_RULES_V01.md) · [입력 및 결과](contracts/ENGINE_E3_FEATURE_API_V01.md) · [검증과 한계](engineering/ENGINE_E3_EXECUTION_20261122.md)
 
 앱이 E2 응답을 수신할 때 적용할 [JSON Schema v1](contracts/engine-e2-result-v1.schema.json)과 [19개 가상 출생 입력 요약](engineering/ENGINE_E2_EXAMPLES.md)이 있다. 업체가 공개한 원국은 정해·별코드·사주록 3건까지 비교했다.
