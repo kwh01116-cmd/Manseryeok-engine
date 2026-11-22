@@ -1,0 +1,245 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "manseryeok-engine-e6-result-v1"
+    },
+    "selection": {
+      "type": "object"
+    },
+    "clockPolicyId": {
+      "enum": [
+        "KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1",
+        "KR_API_PUBLISHED_KST_MODERN_1989_2027_NO_DST_V2"
+      ]
+    },
+    "query": {
+      "type": "object"
+    },
+    "scopes": {
+      "type": "object"
+    },
+    "e5": {
+      "type": "object",
+      "required": [
+        "schemaVersion"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "manseryeok-engine-e5-result-v1"
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "birth",
+        "query",
+        "features"
+      ]
+    },
+    "hasTimeAlternatives": {
+      "type": "boolean"
+    },
+    "hold": {
+      "type": ["object", "null"]
+    },
+    "status": {
+      "type": "string"
+    },
+    "limitationCodes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "relationshipRows": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 8192
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/candidate"
+      },
+      "maxItems": 2
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "selection",
+    "clockPolicyId",
+    "query",
+    "scopes",
+    "e5",
+    "coverage",
+    "hasTimeAlternatives",
+    "hold",
+    "status",
+    "limitationCodes",
+    "relationshipRows",
+    "candidates"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "natalCandidateRef": {
+          "type": "string"
+        },
+        "pillars": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "seasonal": {
+          "type": "object"
+        },
+        "classifications": {
+          "type": "array"
+        },
+        "natalFactRefs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "purposeStatuses": {
+          "type": "object"
+        },
+        "diagnostics": {
+          "type": "object"
+        },
+        "timeContexts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/context"
+          },
+          "maxItems": 128
+        },
+        "selection": {
+          "type": "object"
+        },
+        "dayunEvidence": {
+          "type": ["object", "null"]
+        },
+        "observationSummary": {
+          "type": ["object", "array"]
+        },
+        "comparison": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "natalCandidateRef",
+        "pillars",
+        "seasonal",
+        "classifications",
+        "natalFactRefs",
+        "purposeStatuses",
+        "diagnostics",
+        "timeContexts",
+        "selection",
+        "dayunEvidence",
+        "observationSummary",
+        "comparison"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "natalCandidateRef": {
+          "type": "string"
+        },
+        "timeContextRef": {
+          "type": "string"
+        },
+        "asOf": {
+          "type": "string"
+        },
+        "positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "layer",
+              "periodRef",
+              "stem",
+              "branch",
+              "policyId",
+              "policyVersion"
+            ],
+            "properties": {
+              "layer": {
+                "enum": [
+                  "DAEUN",
+                  "SEYUN",
+                  "MONTHLY"
+                ]
+              },
+              "periodRef": {
+                "type": "string"
+              },
+              "stem": {
+                "type": "string"
+              },
+              "branch": {
+                "type": "string"
+              },
+              "policyId": {
+                "type": "string"
+              },
+              "policyVersion": {
+                "type": "string"
+              }
+            }
+          },
+          "maxItems": 3
+        },
+        "layers": {
+          "type": "object",
+          "required": [
+            "DAEUN",
+            "SEYUN",
+            "MONTHLY"
+          ]
+        },
+        "assumptions": {
+          "type": "array"
+        },
+        "unavailableLayers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "observations": {
+          "type": "object",
+          "required": [
+            "pairs",
+            "triads",
+            "transitPositions"
+          ]
+        }
+      },
+      "required": [
+        "natalCandidateRef",
+        "timeContextRef",
+        "asOf",
+        "positions",
+        "layers",
+        "assumptions",
+        "unavailableLayers",
+        "observations"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

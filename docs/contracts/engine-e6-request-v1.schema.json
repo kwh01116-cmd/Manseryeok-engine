@@ -1,0 +1,274 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "manseryeok-engine-e6-request-v1"
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "profileId": {
+          "const": "ENGINE-PARITY-E6-V01"
+        },
+        "version": {
+          "const": "0.1.0"
+        },
+        "relationPolicyId": {
+          "const": "E6-NATAL-TRANSIT-M2-MEMBERSHIP-V01"
+        },
+        "e5": {
+          "type": "object",
+          "properties": {
+            "profileId": {
+              "const": "ENGINE-PARITY-E5-V01"
+            },
+            "version": {
+              "const": "0.1.0"
+            },
+            "pattern": {
+              "type": "object"
+            },
+            "climate": {
+              "type": "object"
+            },
+            "tongguan": {
+              "type": "object"
+            },
+            "e3": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "profileId",
+            "version",
+            "pattern",
+            "climate",
+            "tongguan",
+            "e3"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "profileId",
+        "version",
+        "relationPolicyId",
+        "e5"
+      ],
+      "additionalProperties": false
+    },
+    "birth": {
+      "$ref": "#/$defs/birth"
+    },
+    "clockPolicyId": {
+      "enum": [
+        "KR_API_PUBLISHED_KST_MODERN_1988_POST_DST_V1",
+        "KR_API_PUBLISHED_KST_MODERN_1989_2027_NO_DST_V2"
+      ]
+    },
+    "query": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "AS_OF"
+            },
+            "asOf": {
+              "$ref": "#/$defs/minute"
+            }
+          },
+          "required": [
+            "kind",
+            "asOf"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "COMPARE"
+            },
+            "from": {
+              "$ref": "#/$defs/minute"
+            },
+            "to": {
+              "$ref": "#/$defs/minute"
+            }
+          },
+          "required": [
+            "kind",
+            "from",
+            "to"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "RANGE"
+            },
+            "from": {
+              "$ref": "#/$defs/minute"
+            },
+            "to": {
+              "$ref": "#/$defs/minute"
+            }
+          },
+          "required": [
+            "kind",
+            "from",
+            "to"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "dayun": {
+      "type": "object",
+      "properties": {
+        "traditionalSex": {
+          "enum": [
+            "MALE",
+            "FEMALE"
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "selection",
+    "birth",
+    "clockPolicyId",
+    "query"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "minute": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
+    },
+    "birth": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "manseryeok-server-analysis-request-v1"
+        },
+        "analysisProfileId": {
+          "const": "KASI-SERVER-API-ONLY-ANALYSIS-V01"
+        },
+        "calendarProfileId": {
+          "type": "string"
+        },
+        "jurisdiction": {
+          "const": "KR"
+        },
+        "timeZone": {
+          "const": "Asia/Seoul"
+        },
+        "calendar": {
+          "enum": [
+            "GREGORIAN",
+            "KOREAN_LUNAR"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "lunarDate": {
+          "type": "object",
+          "properties": {
+            "lunarYear": {
+              "type": "integer"
+            },
+            "lunarMonth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "lunarDay": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "leap": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "lunarYear",
+            "lunarMonth",
+            "lunarDay",
+            "leap"
+          ],
+          "additionalProperties": false
+        },
+        "time": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "policies": {
+          "type": "object"
+        },
+        "experimentalPolicyId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "analysisProfileId",
+        "calendarProfileId",
+        "jurisdiction",
+        "timeZone",
+        "calendar",
+        "time",
+        "policies"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "calendar": {
+                "const": "GREGORIAN"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "date"
+            ],
+            "not": {
+              "required": [
+                "lunarDate"
+              ]
+            }
+          },
+          "else": {
+            "required": [
+              "lunarDate"
+            ],
+            "not": {
+              "required": [
+                "date"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
