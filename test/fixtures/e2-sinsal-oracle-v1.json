@@ -1,0 +1,135 @@
+{
+  "basis": "Hand-transcribed rule expectations, fixed before the resolver. In branch rows the fields are reference / peach blossom / travelling horse / canopy. In stem rows they are day stem / both nobleman targets / literary star / blade.",
+  "branchRows": [
+    "子酉寅辰",
+    "丑午亥丑",
+    "寅卯申戌",
+    "卯子巳未",
+    "辰酉寅辰",
+    "巳午亥丑",
+    "午卯申戌",
+    "未子巳未",
+    "申酉寅辰",
+    "酉午亥丑",
+    "戌卯申戌",
+    "亥子巳未"
+  ],
+  "stemRows": [
+    "甲丑未巳卯",
+    "乙子申午辰",
+    "丙亥酉申午",
+    "丁亥酉酉未",
+    "戊丑未申午",
+    "己子申酉未",
+    "庚丑未亥酉",
+    "辛寅午子戌",
+    "壬卯巳寅子",
+    "癸卯巳卯丑"
+  ],
+  "contracts": [
+    {
+      "id": "E1-JAN08-HAND",
+      "pillars": [
+        "乙巳",
+        "己丑",
+        "壬午",
+        "丙午"
+      ],
+      "matches": [
+        [
+          "day",
+          "hour"
+        ],
+        [],
+        [
+          "month"
+        ],
+        [],
+        [],
+        [],
+        [
+          "year"
+        ],
+        [],
+        []
+      ]
+    },
+    {
+      "id": "JEONGHAE-PUBLISHED-PILLARS-HAND-NO-EXTERNAL-STAR-OUTPUT",
+      "pillars": [
+        "甲午",
+        "己巳",
+        "丁卯",
+        "庚子"
+      ],
+      "matches": [
+        [
+          "day"
+        ],
+        [],
+        [],
+        [
+          "hour"
+        ],
+        [
+          "month"
+        ],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "id": "SELF-EXCLUSION-REPEATED-BRANCH-AND-DAY-STEM-SELF",
+      "pillars": [
+        "戊辰",
+        "甲寅",
+        "乙丑",
+        "壬辰"
+      ],
+      "matches": [
+        [],
+        [
+          "month"
+        ],
+        [
+          "hour"
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [
+          "year",
+          "hour"
+        ]
+      ]
+    },
+    {
+      "id": "STEM-REFERENCE-DAY-BRANCH-IS-A-TARGET",
+      "pillars": [
+        "乙卯",
+        "甲午",
+        "丁酉",
+        "庚寅"
+      ],
+      "matches": [
+        [],
+        [],
+        [],
+        [
+          "month"
+        ],
+        [],
+        [],
+        [
+          "day"
+        ],
+        ["day"],
+        []
+      ]
+    }
+  ]
+}
