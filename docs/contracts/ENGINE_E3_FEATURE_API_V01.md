@@ -22,7 +22,7 @@ Node 22의 예시 입력은 역법·신살·격국 규칙과 선택형 E1을 명
 
 `RULE_SATISFIED`는 해당 정책 버전의 전제 및 예외 처리에 부합했다는 뜻이다. `NOT_TRIGGERED`는 평가 가능한 필수 조건이 거짓, `UNRESOLVED`는 결론에 필요한 조건이 미확정, `OUT_OF_SCOPE`는 규칙의 대상이 아님을 뜻한다. 서로 다른 후보나 경로가 겨루는 경우 상위 `COMPETING_RULES`가 각각의 판정을 보존한다. 경쟁이 없는 경우에도 상위 `RULE_SATISFIED`는 방해 규칙을 포함한 규칙 중 하나 이상이 충족됐다는 뜻이다. 성립·방해·구제의 구별은 규칙의 `target`에서 읽는다.
 
-각 `rules[j].paths[k].conditions[l].value`는 TRUE·FALSE·UNKNOWN이다. 규칙 행의 `conditions`는 경로별 값이 갈리면 `VARIES_BY_PATH`를 표시한다. 규칙 또는 경쟁 경로가 남아 있어도 원국과 기존 E2 기능 결과를 조회할 수 있다. 실질 효력의 판단 범위는 각 규칙 문서와 `limitationCodes`를 따른다.
+각 `rules[j].paths[k].conditions[l].value`는 TRUE·FALSE·UNKNOWN이다. 규칙 행의 `conditions`도 같은 세 값을 사용한다. 경로별 값이 갈리면 `value: "UNKNOWN"`과 `variesByPath: true`를 함께 기록한다. 모든 경로가 UNKNOWN이면 `variesByPath: false`다. 개별 경로의 근거와 상태는 `paths`에서 읽는다. 규칙 또는 경쟁 경로가 남아 있어도 원국과 기존 E2 기능 결과를 조회할 수 있다. 실질 효력의 판단 범위는 각 규칙 문서와 `limitationCodes`를 따른다.
 
 wrapper의 `factRefs`는 E3 응답 루트에 있는 JSON Pointer다. 규칙 아래의 참조는 그 후보에 대한 M2·M3·M4·E1 원래 식별자다. 이 경로는 검산에 쓸 수 있으며 외부 JSON을 발급된 입력으로 바꾸는 인터페이스는 제공하지 않는다. 격국 분석과 억부·조후 결과는 모두 원래 권한 및 적용 범위를 유지한다. [선택 규칙 및 출처](../research/ENGINE_E3_PATTERN_RULES_V01.md)
 

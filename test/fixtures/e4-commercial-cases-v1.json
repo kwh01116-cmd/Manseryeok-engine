@@ -1,0 +1,507 @@
+{
+  "schemaVersion": "engine-comparison-commercial-corpus-v1",
+  "cases": [
+    {
+      "caseId": "BYULCODE-19960402",
+      "source": {
+        "provider": "별코드",
+        "url": "https://byulcode.kr/manse/",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "丙子",
+          "辛卯",
+          "己巳",
+          "己巳"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1996-04-02",
+          "time": "10:30",
+          "place": "서울"
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "한국 표준시 및 시행 당시 서머타임",
+        "longitude": "지역 경도 보정. 서울 구 선택과 예시의 보정 토글은 미확인",
+        "dayBoundary": "자시 23시 이후 다음 일주",
+        "hiddenStems": "가상 예시 子 壬癸, 卯 甲乙, 巳 戊庚丙",
+        "strength": "득령·득지·득시·득세 및 여덟 등급 소개. 계수·문턱·해당 예시의 옵션 미공개",
+        "differenceEvidence": {
+          "hiddenStems": {
+            "reason": "공개 子의 壬과 卯의 甲이 M2 기본 비월률 장간표에는 없다. 네 기둥 자체는 동일하다.",
+            "ref": "https://byulcode.kr/manse/"
+          }
+        }
+      },
+      "external": {
+        "pillars": [
+          "丙子",
+          "辛卯",
+          "己巳",
+          "己巳"
+        ],
+        "visibleTenGods": [
+          "正印",
+          "食神",
+          null,
+          "比肩"
+        ],
+        "twelveGrowth": [
+          "絕",
+          "病",
+          "帝旺",
+          "帝旺"
+        ],
+        "strength": {
+          "label": "중화신강",
+          "direction": "STRONG"
+        },
+        "hiddenStems": [
+          [
+            "壬",
+            "癸"
+          ],
+          [
+            "甲",
+            "乙"
+          ],
+          [
+            "戊",
+            "庚",
+            "丙"
+          ],
+          [
+            "戊",
+            "庚",
+            "丙"
+          ]
+        ]
+      },
+      "evidenceRefs": [
+        "https://byulcode.kr/manse/"
+      ]
+    },
+    {
+      "caseId": "JEONGHAE-ORIGIN",
+      "source": {
+        "provider": "정해",
+        "url": "https://doc.8-codes.com/docs/origin/yongsin/",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_PILLARS_ARCHIVED_SCORE"
+      },
+      "input": {
+        "pillars": [
+          "甲午",
+          "己巳",
+          "丁卯",
+          "庚子"
+        ]
+      },
+      "externalPolicyKnownFields": {
+        "clock": "표본 생시·시계 방식 미공개",
+        "longitude": "표본별 미확인",
+        "dayBoundary": "표본별 미확인",
+        "hiddenStems": "기본 설명의 子에 초기 壬, 본기 癸",
+        "strength": "월지·일지 고비중. 득지 인성 또는 비겁, 득세 월·일지 외 인성·비겁 2개 이상. 수치 척도·절단값은 미공개",
+        "differenceEvidence": {
+          "hiddenStems": {
+            "reason": "시지 子의 초기 壬을 표시하는 표와 M2 기본 비월률 장간표의 차이",
+            "ref": "https://doc.8-codes.com/docs/origin/default/"
+          }
+        }
+      },
+      "external": {
+        "pillars": [
+          "甲午",
+          "己巳",
+          "丁卯",
+          "庚子"
+        ],
+        "visibleTenGods": [
+          "正印",
+          null,
+          null,
+          null
+        ],
+        "strength": {
+          "label": "신강한 편",
+          "direction": "STRONG",
+          "score": 69,
+          "scale": "PROPRIETARY_UNDISCLOSED"
+        },
+        "relations": [
+          "STEM_COMBINATION:year:month:甲己"
+        ],
+        "twelveGrowth": [
+          "臨官",
+          null,
+          null,
+          null
+        ],
+        "hiddenStems": [
+          null,
+          null,
+          null,
+          [
+            "壬",
+            "癸"
+          ]
+        ]
+      },
+      "evidenceRefs": [
+        "https://doc.8-codes.com/docs/origin/yongsin/",
+        "https://doc.8-codes.com/docs/origin/default/",
+        "https://doc.8-codes.com/docs/lecture/15/",
+        "https://doc.8-codes.com/origin/ukboo.jpg"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-19950320",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/saju-wonguk-reading-guide",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "乙亥",
+          "己卯",
+          "庚戌",
+          "庚辰"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1995-03-20",
+          "time": "08:30",
+          "place": "서울"
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "공개 무료 만세력의 분 입력 경로에서 한국 표준시·해당 연도 서머타임",
+        "longitude": "공개 설명은 출생지 경도에 따른 보정. 경도 이외 보정 여부는 각 사례 설명에 따름",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개"
+      },
+      "external": {
+        "pillars": [
+          "乙亥",
+          "己卯",
+          "庚戌",
+          "庚辰"
+        ],
+        "visibleTenGods": [
+          "正財",
+          "正印",
+          null,
+          "比肩"
+        ],
+        "elements": {
+          "WOOD": 2,
+          "FIRE": 0,
+          "EARTH": 3,
+          "METAL": 2,
+          "WATER": 1
+        },
+        "relations": [
+          "STEM_COMBINATION:year:day:乙庚",
+          "LIUHE:month:day:卯戌",
+          "LIUCHONG:day:hour:戌辰",
+          "SANHE_PARTIAL:year:month:亥卯"
+        ]
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/saju-wonguk-reading-guide"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-20000101",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/saju-reading-beginner-guide",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "己卯",
+          "丙子",
+          "戊午",
+          "丁巳"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "2000-01-01",
+          "time": "10:30",
+          "place": "서울"
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "공개 무료 만세력의 분 입력 경로에서 한국 표준시·해당 연도 서머타임",
+        "longitude": "공개 설명은 출생지 경도에 따른 보정. 경도 이외 보정 여부는 각 사례 설명에 따름",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개"
+      },
+      "external": {
+        "pillars": [
+          "己卯",
+          "丙子",
+          "戊午",
+          "丁巳"
+        ],
+        "visibleTenGods": [
+          "劫財",
+          "偏印",
+          null,
+          "正印"
+        ],
+        "elements": {
+          "WOOD": 1,
+          "FIRE": 4,
+          "EARTH": 2,
+          "METAL": 0,
+          "WATER": 1
+        }
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/saju-reading-beginner-guide"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-DST-19870616",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/gungeop-jaengjae-meaning-guide",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "丁卯",
+          "丙午",
+          "丙申",
+          "甲午"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1987-06-16",
+          "time": "13:30",
+          "place": "서울",
+          "profileId": "kasi-api-1987-1988-dst-local-v1",
+          "policies": {
+            "clockPolicyId": "KR_API_PUBLISHED_KST_DST_1987_1988_STANDARD_REFERENCE_V1",
+            "dayRollover": "CIVIL_MIDNIGHT",
+            "hourStemReference": "SELECTED_DAY_PILLAR",
+            "dayHourReference": "STANDARD_KST"
+          }
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "1987년 서머타임 1시간 및 서울 경도 보정. 업체는 서울·부산·인천·제주에서 각 예시의 기둥을 교차 확인",
+        "longitude": "공개 설명은 출생지 경도에 따른 보정. 경도 이외 보정 여부는 각 사례 설명에 따름",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개"
+      },
+      "external": {
+        "pillars": [
+          "丁卯",
+          "丙午",
+          "丙申",
+          "甲午"
+        ]
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/gungeop-jaengjae-meaning-guide"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-DST-19870617",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/gungeop-jaengjae-meaning-guide",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "丁卯",
+          "丙午",
+          "丁酉",
+          "丁未"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1987-06-17",
+          "time": "15:30",
+          "place": "서울",
+          "profileId": "kasi-api-1987-1988-dst-local-v1",
+          "policies": {
+            "clockPolicyId": "KR_API_PUBLISHED_KST_DST_1987_1988_STANDARD_REFERENCE_V1",
+            "dayRollover": "CIVIL_MIDNIGHT",
+            "hourStemReference": "SELECTED_DAY_PILLAR",
+            "dayHourReference": "STANDARD_KST"
+          }
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "1987년 서머타임 1시간 및 서울 경도 보정. 업체는 서울·부산·인천·제주에서 각 예시의 기둥을 교차 확인",
+        "longitude": "공개 설명은 출생지 경도에 따른 보정. 경도 이외 보정 여부는 각 사례 설명에 따름",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개"
+      },
+      "external": {
+        "pillars": [
+          "丁卯",
+          "丙午",
+          "丁酉",
+          "丁未"
+        ]
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/gungeop-jaengjae-meaning-guide"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-DAEUN-19900715",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/daeun-reading-how-to-guide",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "庚午",
+          "癸未",
+          "辛巳",
+          "甲午"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1990-07-15",
+          "time": "12:00",
+          "place": "서울"
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "공개 무료 만세력의 분 입력 경로에서 한국 표준시·해당 연도 서머타임",
+        "longitude": "공개 설명은 출생지 경도에 따른 보정. 경도 이외 보정 여부는 각 사례 설명에 따름",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개"
+      },
+      "external": {
+        "pillars": [
+          "庚午",
+          "癸未",
+          "辛巳",
+          "甲午"
+        ]
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/daeun-reading-how-to-guide"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-LONGITUDE-19900515",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/chatgpt-saju-prompt-guide",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "庚午",
+          "辛巳",
+          "庚辰",
+          "己卯"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1990-05-15",
+          "time": "07:30",
+          "place": "서울"
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "공개 무료 만세력의 분 입력 경로에서 한국 표준시·해당 연도 서머타임",
+        "longitude": "공개 사례의 서울 경도 보정은 06:57. 경도 미보정 경로는 07:30으로 辰시",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개",
+        "differenceEvidence": {
+          "pillars": {
+            "reason": "공개 사례가 같은 입력에서 서울 경도 보정 시주 己卯, 경도 미보정 시주 庚辰을 각각 제시한다.",
+            "ref": "https://sajurok.com/column/chatgpt-saju-prompt-guide",
+            "internalPillars": [
+              "庚午",
+              "辛巳",
+              "庚辰",
+              "庚辰"
+            ]
+          }
+        }
+      },
+      "external": {
+        "pillars": [
+          "庚午",
+          "辛巳",
+          "庚辰",
+          "己卯"
+        ]
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/chatgpt-saju-prompt-guide"
+      ]
+    },
+    {
+      "caseId": "SAJUROK-19950417",
+      "source": {
+        "provider": "사주록",
+        "url": "https://sajurok.com/column/sajudanja-meaning-how-to-write",
+        "checkedAt": "2026-11-22",
+        "referenceKind": "PUBLISHED_BIRTH_OUTPUT"
+      },
+      "input": {
+        "pillars": [
+          "乙亥",
+          "庚辰",
+          "戊寅",
+          "丁巳"
+        ],
+        "birth": {
+          "calendar": "GREGORIAN",
+          "date": "1995-04-17",
+          "time": "10:40",
+          "place": "서울"
+        }
+      },
+      "externalPolicyKnownFields": {
+        "clock": "공개 무료 만세력의 분 입력 경로에서 한국 표준시·해당 연도 서머타임",
+        "longitude": "서울 사례. 시각 보정의 계산식이나 상세 옵션 미기재",
+        "dayBoundary": "경도 보정 후 23시부터 다음 일주인 분 입력 경로",
+        "hiddenStems": "지지 대표 십성은 순서 음양. 장간표의 출현 목록과 별개의 분류",
+        "strength": "이 원국의 업체 강약 산식·출력 미공개"
+      },
+      "external": {
+        "pillars": [
+          "乙亥",
+          "庚辰",
+          "戊寅",
+          "丁巳"
+        ]
+      },
+      "evidenceRefs": [
+        "https://sajurok.com/column/sajudanja-meaning-how-to-write"
+      ]
+    }
+  ]
+}
